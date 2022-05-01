@@ -1,19 +1,21 @@
-import { Message } from 'discord.js'
+import {
+  ApplicationCommandData,
+  CommandInteraction,
+} from 'discord.js'
 
 // interfeiss priekš bota komandu objektiem
-export interface Command {
-  // nosaukums
+interface Command {
+  // nosaukums priekš /palīdzība
   title: string
 
-  // apraksts
+  // apraksts priekš /palīdzība
   description: string
 
-  // vai komanda ir domāta priekš bota izstrādātāja (komandas priekš testēšanas)
-  devCommand: boolean
-
-  // komandu alternatīvi piemēram ".zvejot", ".copēt", ".zveja" utt.
-  aliases: string[]
+  // konfigurācija / komandām priekš reģistrēšanas
+  config: ApplicationCommandData
 
   // komandas galvenais kods
-  run: (msg: Message, args: string[]) => void
+  run: (i: CommandInteraction) => void
 }
+
+export default Command

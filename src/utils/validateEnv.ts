@@ -2,7 +2,7 @@ export default function(): boolean {
   let isValid = true
 
   const requiredEnvVars = [
-    'BOT_TOKEN', 'DEV_SERVER_ID', 'DEV_ID'
+    'BOT_TOKEN', 'DEV_SERVER_ID', 'DEV_ID', 'MONGO_PATH', 'BOT_ID'
   ]
 
   for (const envVar of requiredEnvVars) {
@@ -11,6 +11,8 @@ export default function(): boolean {
       isValid = false
     }
   }
+
+
 
   return isValid
 }

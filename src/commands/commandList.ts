@@ -1,7 +1,8 @@
+import Command from '../interfaces/Command'
 import { ping } from './ping/ping'
-import { Command } from '../interfaces/Command'
+import { maks } from './maks/maks'
 
 // komandu objektu saraksts
 export const commandList: Command[] = [
-  ping
+  ping, maks
 ]
