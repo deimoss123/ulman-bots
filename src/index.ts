@@ -13,6 +13,3 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
 client.login(process.env.BOT_TOKEN).then(() => console.log('logged in'))
 
 eventListeners(client)
-
-
-
