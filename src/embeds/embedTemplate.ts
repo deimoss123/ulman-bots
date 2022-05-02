@@ -10,26 +10,17 @@ interface EmbedTemplateOptions {
 }
 
 export default function(options: EmbedTemplateOptions): MessageOptions {
-  const {
-    i,
-    content, // = '\u200B',
-    title = '',
-    description = '',
-    fields = [],
-    color = 0x000000,
-  } = options
-
   return {
-    content,
+    content: options.content,
     embeds: [
       {
-        title,
-        description,
-        color,
-        fields,
+        title: options.title || '',
+        description: options.description || '',
+        color: options.color || 0x000,
+        fields: options.fields || [],
         author: {
-          name: i.user.username,
-          icon_url: i.user.displayAvatarURL({ dynamic: true }),
+          name: options.i.user.username,
+          icon_url: options.i.user.displayAvatarURL({ dynamic: true }),
         },
       },
     ],
