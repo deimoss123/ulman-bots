@@ -35,7 +35,7 @@ export const maks: Command = {
 
     let targetText = 'Tev'
     if (targetId === process.env.BOT_ID) targetText = 'Valsts bankai'
-    else if (targetId !== i.user.id) targetText = `<@${targetId}>`
+    else if (targetId !== i.user.id) targetText = `**${i.user.username}#${i.user.discriminator}**`
 
     await i.reply(embedTemplate({
       i,

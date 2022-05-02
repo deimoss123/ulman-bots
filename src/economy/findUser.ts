@@ -1,24 +1,26 @@
 import UserProfile from '../interfaces/UserProfile'
-import profileSchema from '../schemas/profile-schema'
+import User from '../schemas/User'
 
 export default async function(guildId: string, userId: string) {
   try {
-    let result = await profileSchema.findOne({ guildId, userId })
+    let result = await User.findOne({ guildId, userId })
 
     if (result) {
       return result as UserProfile
     }
 
     const newSchema: UserProfile = {
-      _id: `${guildId}-${userId}`,
       guildId,
       userId,
-      lati: 0
+      lati: 0,
     }
 
-    await new profileSchema(newSchema).save()
-    return JSON.parse(JSON.stringify(newSchema)) as UserProfile
+    const newUser = await new User(newSchema)
+    newUser.save()
+
+    return newUser as UserProfile
   } catch (e) {
-    console.log(e, new Date().toString())
+    // @ts-ignore
+    console.log(e.message, new Date().toString())
   }
 }

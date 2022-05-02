@@ -12,7 +12,5 @@ export default function(): boolean {
     }
   }
 
-
-
   return isValid
 }

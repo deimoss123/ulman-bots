@@ -1,5 +1,4 @@
 interface UserProfile {
-  _id: string,
   guildId: string,
   userId: string,
   lati: number
