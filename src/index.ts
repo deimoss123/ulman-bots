@@ -1,7 +1,8 @@
 import { Client, Intents } from 'discord.js'
 import dotenv from 'dotenv'
 import validateEnv from './utils/validateEnv'
-import eventListeners from './eventListeners'
+import mongo from './economy/mongo'
+import commandHandler from './commands/commandHandler'
 
 dotenv.config()
 
@@ -12,4 +13,16 @@ if (!validateEnv()) process.exit()
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
 client.login(process.env.BOT_TOKEN).then(() => console.log('logged in'))
 
-eventListeners(client)
+client.on('ready', async () => {
+  console.log('bot ready')
+  await mongo().then(() => {
+    console.log('connected to mongo')
+  })
+})
+
+// bots gaida komandas
+client.on('interactionCreate', async i => {
+  if (i.isCommand()) {
+    await commandHandler(i)
+  }
+})
