@@ -5,6 +5,7 @@ import embedTemplate from '../../embeds/embedTemplate'
 import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums'
 import errorEmbed from '../../embeds/errorEmbed'
 import latiString from '../../utils/latiString'
+import userString from '../../utils/userString'
 
 export const maks: Command = {
   title: 'Maks',
@@ -21,21 +22,21 @@ export const maks: Command = {
     ],
   } as ApplicationCommandData,
   async run(i: CommandInteraction) {
-    let targetId = i.user.id
+    let target = i.user
 
     if (i.options.data[0]?.user) {
-      targetId = i.options.data[0].user.id
+      target = i.options.data[0].user
     }
 
-    const user = await findUser(i.guildId!, targetId)
+    const user = await findUser(i.guildId!, target.id)
     if (!user) {
       await i.reply(errorEmbed)
       return
     }
 
     let targetText = 'Tev'
-    if (targetId === process.env.BOT_ID) targetText = 'Valsts bankai'
-    else if (targetId !== i.user.id) targetText = `**${i.user.username}#${i.user.discriminator}**`
+    if (target.id === process.env.BOT_ID) targetText = 'Valsts bankai'
+    else if (target.id !== i.user.id) targetText = `${userString(target, true)}`
 
     await i.reply(embedTemplate({
       i,

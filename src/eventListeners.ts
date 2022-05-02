@@ -8,7 +8,6 @@ export default function(client: Client): void {
     await mongo().then(() => {
       console.log('connected to mongo')
     })
-    //await registerGuildCommands(client)
   })
 
   // bots gaida komandas
