@@ -5,15 +5,13 @@ const reqString = {
   required: true,
 }
 
-const reqNum = {
-  type: Number,
-  required: true,
-}
-
 const userSchema = new mongoose.Schema({
   guildId: reqString,
   userId: reqString,
-  lati: reqNum,
+  lati: {
+    type: Number,
+    default: 0,
+  },
 })
 
 export default mongoose.model('User', userSchema)

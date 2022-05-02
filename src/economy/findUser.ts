@@ -8,14 +8,8 @@ export default async function(guildId: string, userId: string) {
     if (result) {
       return result as UserProfile
     }
-
-    const newSchema: UserProfile = {
-      guildId,
-      userId,
-      lati: 0,
-    }
-
-    const newUser = await new User(newSchema)
+    
+    const newUser = await new User({ guildId, userId })
     newUser.save()
 
     return newUser as UserProfile
