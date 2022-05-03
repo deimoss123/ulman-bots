@@ -12,6 +12,15 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  items: {
+    type: [
+      {
+        name: String,
+        amount: Number,
+      },
+    ],
+    default: [],
+  },
 })
 
 export default mongoose.model('User', userSchema)

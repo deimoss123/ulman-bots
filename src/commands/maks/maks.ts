@@ -4,8 +4,8 @@ import findUser from '../../economy/findUser'
 import embedTemplate from '../../embeds/embedTemplate'
 import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums'
 import errorEmbed from '../../embeds/errorEmbed'
-import latiString from '../../embeds/latiString'
-import userString from '../../embeds/userString'
+import latiString from '../../embeds/stringFunctions/latiString'
+import userString from '../../embeds/stringFunctions/userString'
 
 export const maks: Command = {
   title: 'Maks',
