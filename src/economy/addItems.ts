@@ -14,6 +14,7 @@ export default async function(
 
     console.log('items to add:')
     console.log(itemsToAdd)
+
     for (const [itemToAdd, amountToAdd] of Object.entries(itemsToAdd)) {
       if (amountToAdd === 0) continue
 

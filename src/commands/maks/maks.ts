@@ -16,17 +16,13 @@ export const maks: Command = {
     options: [
       {
         name: 'lietotājs',
-        description: 'Lietotājs kam vēlies apskatīt maku',
+        description: 'Lietotājs kam apskatīt maku',
         type: ApplicationCommandOptionTypes.USER,
       },
     ],
   } as ApplicationCommandData,
   async run(i: CommandInteraction) {
-    let target = i.user
-
-    if (i.options.data[0]?.user) {
-      target = i.options.data[0].user
-    }
+    const target = i.options.data[0]?.user || i.user
 
     const user = await findUser(i.guildId!, target.id)
     if (!user) {
