@@ -31,8 +31,8 @@ export const maksat: Command = {
     ],
   } as ApplicationCommandData,
   async run(i: CommandInteraction) {
-    const latiToAdd = i.options.data[1].value as number
     const target = i.options.data[0].user!
+    const latiToAdd = i.options.data[1].value as number
 
     if (target.id === i.user.id) {
       await i.reply(ephemeralReply('Tu nevari maksāt sev'))
@@ -60,8 +60,10 @@ export const maksat: Command = {
       return
     }
 
-    const targetUser = await findUser(i.guildId!, target.id)
-    if (!targetUser) {
+    const targetUser = await addLati(i.guildId!, target.id, latiToAdd)
+    const resUser = await addLati(i.guildId!, i.user.id, -latiToAdd)
+
+    if (!targetUser || !resUser) {
       await i.reply(errorEmbed)
       return
     }
@@ -69,21 +71,18 @@ export const maksat: Command = {
     await i.reply(embedTemplate({
       i,
       content: `<@${target.id}>`,
-      description: `Tu samaksāji ${userString(target, true)} ${latiString(latiToAdd, true)}`,
+      description: `Tu samaksāji <@${target.id}> ${latiString(latiToAdd, true)}`,
       fields: [
         {
           name: 'Tev palika',
-          value: latiString(user.lati - latiToAdd),
+          value: latiString(resUser.lati),
           inline: true,
         }, {
           name: 'Tagad viņam ir',
-          value: latiString(targetUser.lati + latiToAdd),
+          value: latiString(targetUser.lati),
           inline: true,
         },
       ],
     }))
-
-    await addLati(i.guildId!, i.user.id, -latiToAdd)
-    await addLati(i.guildId!, target.id, latiToAdd)
   },
 }

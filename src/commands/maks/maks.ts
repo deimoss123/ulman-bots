@@ -32,10 +32,11 @@ export const maks: Command = {
 
     let targetText = 'Tev'
     if (target.id === process.env.BOT_ID) targetText = 'Valsts bankai'
-    else if (target.id !== i.user.id) targetText = `${userString(target, true)}`
+    else if (target.id !== i.user.id) targetText = `${userString(target)}`
 
     await i.reply(embedTemplate({
       i,
+      title: 'Maks',
       description: `${targetText} ir ${latiString(user.lati)}`,
     }))
   },
