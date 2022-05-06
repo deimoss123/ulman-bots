@@ -6,10 +6,12 @@ import _addItem from './_addItem/_addItem';
 import inventars from './inventars/inventars';
 import iedot from './iedot/iedot';
 import veikals from './veikals/veikals';
+import pirkt from './pirkt/pirkt';
+import pardot from './pardot/pardot';
 
 // komandu objektu saraksts
 export const commandList: Command[] = [
-  maks, maksat, inventars, iedot, veikals,
+  maks, maksat, inventars, iedot, veikals, pirkt, pardot,
 ];
 
 export const devCommandList: Command[] = [

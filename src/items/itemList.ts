@@ -48,6 +48,15 @@ const itemList: Record<string, Item> = {
     categories: [ItemCategory.ATKRITUMI],
     value: 10,
   },
+  virve: {
+    ids: ['virve', 'virvi'],
+    nameNomVsk: 'virve',
+    nameNomDsk: 'virves',
+    nameAkuVsk: 'virvi',
+    nameAkuDsk: 'virves',
+    categories: [ItemCategory.VEIKALS, ItemCategory.ATKRITUMI],
+    value: 10,
+  },
   zemenu_rasens: {
     ids: ['rasens', 'zemenurasens', 'rasenu', 'zemenurasenu'],
     nameNomVsk: 'zemeņu Rasēns',

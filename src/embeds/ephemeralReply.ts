@@ -1,6 +1,13 @@
-export default function(content: string) {
+import { InteractionReplyOptions } from 'discord.js';
+
+export default function(description: string) {
   return {
-    content,
+    embeds: [
+      {
+        description,
+        color: '#9d2235',
+      },
+    ],
     ephemeral: true,
-  };
+  } as InteractionReplyOptions;
 }

@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  itemCap: {
+    type: Number,
+    default: 50,
+  },
   items: {
     type: [
       {

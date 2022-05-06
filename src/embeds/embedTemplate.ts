@@ -16,7 +16,7 @@ export default function(options: EmbedTemplateOptions): MessageOptions {
       {
         title: options.title ?? '',
         description: options.description ?? '',
-        color: options.color ?? 0x000,
+        color: options.color ?? '#000000',
         fields: options.fields ?? [],
         author: {
           name: options.i.user.username,

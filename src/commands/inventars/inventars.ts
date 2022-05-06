@@ -7,6 +7,7 @@ import errorEmbed from '../../embeds/errorEmbed';
 import itemList from '../../items/itemList';
 import latiString from '../../embeds/stringFunctions/latiString';
 import userString from '../../embeds/stringFunctions/userString';
+import countItems from '../../items/countItems';
 
 const inventars: Command = {
   title: 'Inventārs',
@@ -22,7 +23,7 @@ const inventars: Command = {
       },
     ],
   },
-  async run(i: CommandInteraction) {
+  run: async function(i: CommandInteraction) {
     const target = i.options.data[0]?.user || i.user;
 
     const targetUser = await findUser(i.guildId!, target.id);
@@ -31,11 +32,11 @@ const inventars: Command = {
       return;
     }
 
-    const { items } = targetUser;
+    const { items, itemCap } = targetUser;
 
-    const totalValue = items.reduce((previous, { name, amount }) => {
-      return previous + (itemList[name].value * amount);
-    }, 0);
+    const totalValue = items.reduce(
+      (previous, { name, amount }) => previous + (itemList[name].value * amount), 0,
+    );
 
     await i.reply(embedTemplate({
       i,
@@ -43,15 +44,16 @@ const inventars: Command = {
         ? 'Tavs inventārs'
         : `${userString(target)} inventārs`,
       description: items.length
-        ? `Inventāra vērtība: ${latiString(totalValue)}`
+        ? `Inventāra vērtība: **${latiString(totalValue)}**\n` +
+        `Inventārā ir **${countItems(items)}** mantas no **${itemCap}**`
         : 'Tukšs inventārs :(',
-      fields: items.map(({ name, amount }) => {
-        return {
+      fields: items.map(({ name, amount }) => (
+        {
           name: `${itemList[name].nameNomVsk} x${amount}`,
           value: `Vērtība: ${latiString(itemList[name].value)}`,
           inline: true,
-        };
-      }),
+        }
+      )),
     }));
   },
 };

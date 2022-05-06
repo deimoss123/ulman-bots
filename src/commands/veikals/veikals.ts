@@ -17,7 +17,7 @@ export const veikals: Command = {
     console.log(Object.keys(itemList).sort());
 
     const shopItems = Object.entries(itemList).filter(
-      ([key, value]) => value.categories.includes(ItemCategory.VEIKALS),
+      ([_, value]) => value.categories.includes(ItemCategory.VEIKALS),
     ).sort( // sakārto preces no dārgākajām uz lētākajām
       (a, b) => b[1].value - a[1].value,
     );
@@ -27,12 +27,11 @@ export const veikals: Command = {
       content: '\u200b',
       title: 'Veikals',
       description: 'Izmanto /pirkt <preces_id>',
-      fields: shopItems.map(([key, item]) => ({
+      fields: shopItems.map(([_, item]) => ({
         name: capitalizeFirst(item.nameNomVsk),
-        value: `
-          Cena: ${latiString(item.value * 2)}
-          id: \`${item.ids[0]}\`
-        `,
+        value:
+          `Cena: ${latiString(item.value * 2)}\n` +
+          `id: \`${item.ids[0]}\``,
         inline: false,
       })),
     }));
