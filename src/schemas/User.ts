@@ -1,9 +1,9 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 const reqString = {
   type: String,
   required: true,
-}
+};
 
 const userSchema = new mongoose.Schema({
   guildId: reqString,
@@ -21,6 +21,6 @@ const userSchema = new mongoose.Schema({
     ],
     default: [],
   },
-})
+});
 
-export default mongoose.model('User', userSchema)
+export default mongoose.model('User', userSchema);

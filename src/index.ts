@@ -1,28 +1,28 @@
-import { Client, Intents } from 'discord.js'
-import dotenv from 'dotenv'
-import validateEnv from './utils/validateEnv'
-import mongo from './economy/mongo'
-import commandHandler from './commands/commandHandler'
+import { Client, Intents } from 'discord.js';
+import dotenv from 'dotenv';
+import validateEnv from './utils/validateEnv';
+import mongo from './economy/mongo';
+import commandHandler from './commands/commandHandler';
 
-dotenv.config()
+dotenv.config();
 
 // pārbauda vai .env failā ir ievadīti mainīgie
-if (!validateEnv()) process.exit()
+if (!validateEnv()) process.exit();
 
 // izveidota bota instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
-client.login(process.env.BOT_TOKEN).then(() => console.log('logged in'))
+const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+client.login(process.env.BOT_TOKEN).then(() => console.log('logged in'));
 
 client.on('ready', async () => {
-  console.log('bot ready')
+  console.log('bot ready');
   await mongo().then(() => {
-    console.log('connected to mongo')
-  })
-})
+    console.log('connected to mongo');
+  });
+});
 
 // bots gaida komandas
 client.on('interactionCreate', async i => {
   if (i.isCommand()) {
-    await commandHandler(i)
+    await commandHandler(i);
   }
-})
+});

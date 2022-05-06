@@ -1,5 +1,5 @@
-import User from '../schemas/User'
-import UserProfile from '../interfaces/UserProfile'
+import User from '../schemas/User';
+import UserProfile from '../interfaces/UserProfile';
 
 export default async function(
   guildId: string,
@@ -7,10 +7,10 @@ export default async function(
   lati: number,
 ): Promise<UserProfile | undefined> {
   try {
-    const res = await User.findOneAndUpdate({ guildId, userId }, { $inc: { lati } }, { new: true })
-    return res!
+    const res = await User.findOneAndUpdate({ guildId, userId }, { $inc: { lati } }, { new: true });
+    return res!;
   } catch (e) {
     // @ts-ignore
-    console.log(e.message, new Date().toString())
+    console.log(e.message, new Date().toString());
   }
 }

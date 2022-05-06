@@ -1,20 +1,21 @@
-import Item from '../interfaces/Item'
+import Item from '../interfaces/Item';
 
-enum ShopCategory {
+export enum ItemCategory {
   ATKRITUMI,
   VEIKALS,
   ZIVIS
 }
 
-export const itemList: Record<string, Item> = {
-  pudele: {
-    ids: ['pudele', 'stiklapudele', 'pudeli', 'stiklapudeli'],
-    nameNomVsk: 'stikla pudele',
-    nameNomDsk: 'stikla pudeles',
-    nameAkuVsk: 'stikla pudeli',
-    nameAkuDsk: 'stikla pudeles',
-    categories: [ShopCategory.ATKRITUMI],
-    value: 10,
+const itemList: Record<string, Item> = {
+  koka_makskere: {
+    ids: ['makskere', 'makskeri'],
+    nameNomVsk: 'koka makšķere',
+    nameNomDsk: 'koka makšķeres',
+    nameAkuVsk: 'koka makšķeri',
+    nameAkuDsk: 'koka makšķeres',
+    categories: [ItemCategory.VEIKALS],
+    value: 100,
+    use() {},
   },
   latloto: {
     ids: ['latloto'],
@@ -22,7 +23,7 @@ export const itemList: Record<string, Item> = {
     nameNomDsk: 'latloto biļetes',
     nameAkuVsk: 'latloto biļeti',
     nameAkuDsk: 'latloto biļetes',
-    categories: [ShopCategory.VEIKALS],
+    categories: [ItemCategory.VEIKALS],
     value: 50,
     removedOnUse: true,
     use() {},
@@ -33,9 +34,30 @@ export const itemList: Record<string, Item> = {
     nameNomDsk: 'naži',
     nameAkuVsk: 'nazi',
     nameAkuDsk: 'nažus',
-    categories: [ShopCategory.VEIKALS],
+    categories: [ItemCategory.VEIKALS],
     value: 125,
     removedOnUse: true,
     use() {},
   },
-}
+  pudele: {
+    ids: ['pudele', 'stiklapudele', 'pudeli', 'stiklapudeli'],
+    nameNomVsk: 'stikla pudele',
+    nameNomDsk: 'stikla pudeles',
+    nameAkuVsk: 'stikla pudeli',
+    nameAkuDsk: 'stikla pudeles',
+    categories: [ItemCategory.ATKRITUMI],
+    value: 10,
+  },
+  zemenu_rasens: {
+    ids: ['rasens', 'zemenurasens', 'rasenu', 'zemenurasenu'],
+    nameNomVsk: 'zemeņu Rasēns',
+    nameNomDsk: 'zemeņu Rasēni',
+    nameAkuVsk: 'zemeņu Rasēnu',
+    nameAkuDsk: 'zemeņu Rasēnus',
+    categories: [ItemCategory.VEIKALS],
+    value: 75,
+    use() {},
+  },
+};
+
+export default itemList;

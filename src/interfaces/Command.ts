@@ -1,21 +1,21 @@
 import {
   ApplicationCommandData,
   CommandInteraction,
-} from 'discord.js'
+} from 'discord.js';
 
 // interfeiss priekš bota komandu objektiem
 interface Command {
   // nosaukums priekš /palīdzība
-  title: string
+  title: string;
 
   // apraksts priekš /palīdzība
-  description: string
+  description: string;
 
   // konfigurācija / komandām priekš reģistrēšanas
-  config: ApplicationCommandData
+  config: ApplicationCommandData;
 
   // komandas galvenais kods
-  run: (i: CommandInteraction) => void
+  run: (i: CommandInteraction) => void;
 }
 
-export default Command
+export default Command;

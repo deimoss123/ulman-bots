@@ -1,13 +1,13 @@
-import Command from '../../interfaces/Command'
-import { ApplicationCommandData, CommandInteraction } from 'discord.js'
-import findUser from '../../economy/findUser'
-import embedTemplate from '../../embeds/embedTemplate'
-import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums'
-import errorEmbed from '../../embeds/errorEmbed'
-import latiString from '../../embeds/stringFunctions/latiString'
-import userString from '../../embeds/stringFunctions/userString'
+import Command from '../../interfaces/Command';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import findUser from '../../economy/findUser';
+import embedTemplate from '../../embeds/embedTemplate';
+import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums';
+import errorEmbed from '../../embeds/errorEmbed';
+import latiString from '../../embeds/stringFunctions/latiString';
+import userString from '../../embeds/stringFunctions/userString';
 
-export const maks: Command = {
+const maks: Command = {
   title: 'Maks',
   description: 'Apskatīties savu vai kāda lietotāja maku',
   config: {
@@ -22,22 +22,24 @@ export const maks: Command = {
     ],
   } as ApplicationCommandData,
   async run(i: CommandInteraction) {
-    const target = i.options.data[0]?.user || i.user
+    const target = i.options.data[0]?.user || i.user;
 
-    const user = await findUser(i.guildId!, target.id)
+    const user = await findUser(i.guildId!, target.id);
     if (!user) {
-      await i.reply(errorEmbed)
-      return
+      await i.reply(errorEmbed);
+      return;
     }
 
-    let targetText = 'Tev'
-    if (target.id === process.env.BOT_ID) targetText = 'Valsts bankai'
-    else if (target.id !== i.user.id) targetText = `${userString(target)}`
+    let targetText = 'Tev';
+    if (target.id === process.env.BOT_ID) targetText = 'Valsts bankai';
+    else if (target.id !== i.user.id) targetText = `${userString(target)}`;
 
     await i.reply(embedTemplate({
       i,
       title: 'Maks',
       description: `${targetText} ir ${latiString(user.lati)}`,
-    }))
+    }));
   },
-}
+};
+
+export default maks;

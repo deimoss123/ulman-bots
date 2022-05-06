@@ -1,13 +1,13 @@
 interface ItemInProfile {
-  name: string
-  amount: number
+  name: string;
+  amount: number;
 }
 
 interface UserProfile {
-  guildId: string
-  userId: string
-  lati: number
-  items: ItemInProfile[]
+  guildId: string;
+  userId: string;
+  lati: number;
+  items: ItemInProfile[];
 }
 
-export default UserProfile
+export default UserProfile;

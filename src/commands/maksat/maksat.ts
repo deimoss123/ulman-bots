@@ -1,15 +1,15 @@
-import Command from '../../interfaces/Command'
-import { ApplicationCommandData, CommandInteraction } from 'discord.js'
-import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums'
-import findUser from '../../economy/findUser'
-import embedTemplate from '../../embeds/embedTemplate'
-import latiString from '../../embeds/stringFunctions/latiString'
-import errorEmbed from '../../embeds/errorEmbed'
-import userString from '../../embeds/stringFunctions/userString'
-import addLati from '../../economy/addLati'
-import ephemeralReply from '../../embeds/ephemeralReply'
+import Command from '../../interfaces/Command';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums';
+import findUser from '../../economy/findUser';
+import embedTemplate from '../../embeds/embedTemplate';
+import latiString from '../../embeds/stringFunctions/latiString';
+import errorEmbed from '../../embeds/errorEmbed';
+import userString from '../../embeds/stringFunctions/userString';
+import addLati from '../../economy/addLati';
+import ephemeralReply from '../../embeds/ephemeralReply';
 
-export const maksat: Command = {
+const maksat: Command = {
   title: 'Maksāt',
   description: 'Pārskaitīt citam lietotājam naudu',
   config: {
@@ -31,23 +31,23 @@ export const maksat: Command = {
     ],
   } as ApplicationCommandData,
   async run(i: CommandInteraction) {
-    const target = i.options.data[0].user!
-    const latiToAdd = i.options.data[1].value as number
+    const target = i.options.data[0].user!;
+    const latiToAdd = i.options.data[1].value as number;
 
     if (target.id === i.user.id) {
-      await i.reply(ephemeralReply('Tu nevari maksāt sev'))
-      return
+      await i.reply(ephemeralReply('Tu nevari maksāt sev'));
+      return;
     }
 
     if (target.id === process.env.BOT_ID) {
-      await i.reply(ephemeralReply('Tu nevari maksāt Valsts bankai'))
-      return
+      await i.reply(ephemeralReply('Tu nevari maksāt Valsts bankai'));
+      return;
     }
 
-    const user = await findUser(i.guildId!, i.user.id)
+    const user = await findUser(i.guildId!, i.user.id);
     if (!user) {
-      await i.reply(errorEmbed)
-      return
+      await i.reply(errorEmbed);
+      return;
     }
 
     // nepietiek lati
@@ -56,16 +56,16 @@ export const maksat: Command = {
         i,
         description: `Tu nevari maksāt ${latiString(latiToAdd, true)}\n` +
           `Tev ir ${latiString(user.lati)}`,
-      }))
-      return
+      }));
+      return;
     }
 
-    const targetUser = await addLati(i.guildId!, target.id, latiToAdd)
-    const resUser = await addLati(i.guildId!, i.user.id, -latiToAdd)
+    const targetUser = await addLati(i.guildId!, target.id, latiToAdd);
+    const resUser = await addLati(i.guildId!, i.user.id, -latiToAdd);
 
     if (!targetUser || !resUser) {
-      await i.reply(errorEmbed)
-      return
+      await i.reply(errorEmbed);
+      return;
     }
 
     await i.reply(embedTemplate({
@@ -83,6 +83,8 @@ export const maksat: Command = {
           inline: true,
         },
       ],
-    }))
+    }));
   },
-}
+};
+
+export default maksat;
