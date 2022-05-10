@@ -13,6 +13,7 @@ import countFreeInvSlots from '../../items/countFreeInvSlots';
 import embedTemplate from '../../embeds/embedTemplate';
 import addLati from '../../economy/addLati';
 import addItems from '../../economy/addItems';
+import wrongIdEmbed from '../../embeds/wrongIdEmbed';
 
 const pirkt: Command = {
   title: 'Pirkt',
@@ -35,12 +36,12 @@ const pirkt: Command = {
     ],
   },
   async run(i: CommandInteraction) {
-    const itemToGiveId = i.options.data[0].value as string;
+    const itemToBuyId = i.options.data[0].value as string;
     const amount = i.options.data[1]?.value as number ?? 1;
 
-    const itemToBuy = findItemById(itemToGiveId);
+    const itemToBuy = findItemById(itemToBuyId);
     if (!itemToBuy) {
-      await i.reply(ephemeralReply('Šāda lieta neeksistē (nepareizi ievadīts id)'));
+      await i.reply(wrongIdEmbed(itemToBuyId));
       return;
     }
 
