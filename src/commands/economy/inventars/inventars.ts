@@ -1,28 +1,18 @@
-import Command from '../../interfaces/Command';
-import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums';
+import Command from '../../../interfaces/Command';
 import { CommandInteraction } from 'discord.js';
-import embedTemplate from '../../embeds/embedTemplate';
-import findUser from '../../economy/findUser';
-import errorEmbed from '../../embeds/errorEmbed';
-import itemList from '../../items/itemList';
-import latiString from '../../embeds/helpers/latiString';
-import userString from '../../embeds/helpers/userString';
-import countItems from '../../items/countItems';
+import embedTemplate from '../../../embeds/embedTemplate';
+import findUser from '../../../economy/findUser';
+import errorEmbed from '../../../embeds/errorEmbed';
+import itemList from '../../../items/itemList';
+import latiString from '../../../embeds/helpers/latiString';
+import userString from '../../../embeds/helpers/userString';
+import countItems from '../../../items/countItems';
+import inventarsConfig from './inventarsConfig';
 
 const inventars: Command = {
   title: 'Inventārs',
   description: 'Apskatīt savu vai kāda lietotāja inventāru',
-  config: {
-    name: 'inv',
-    description: 'Apskatīt inventāru',
-    options: [
-      {
-        name: 'lietotājs',
-        description: 'Lietotājs kam apskatīt inventāru',
-        type: ApplicationCommandOptionTypes.USER,
-      },
-    ],
-  },
+  config: inventarsConfig,
   run: async function(i: CommandInteraction) {
     const target = i.options.data[0]?.user || i.user;
 

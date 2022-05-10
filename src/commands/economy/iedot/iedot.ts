@@ -1,42 +1,21 @@
-import Command from '../../interfaces/Command';
-import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums';
+import Command from '../../../interfaces/Command';
 import { CommandInteraction } from 'discord.js';
-import findItemById from '../../items/findItemById';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import findUser from '../../economy/findUser';
-import errorEmbed from '../../embeds/errorEmbed';
-import itemString from '../../embeds/helpers/itemString';
-import embedTemplate from '../../embeds/embedTemplate';
-import addItems from '../../economy/addItems';
-import countItems from '../../items/countItems';
-import userString from '../../embeds/helpers/userString';
-import countFreeInvSlots from '../../items/countFreeInvSlots';
+import findItemById from '../../../items/findItemById';
+import ephemeralReply from '../../../embeds/ephemeralReply';
+import findUser from '../../../economy/findUser';
+import errorEmbed from '../../../embeds/errorEmbed';
+import itemString from '../../../embeds/helpers/itemString';
+import embedTemplate from '../../../embeds/embedTemplate';
+import addItems from '../../../economy/addItems';
+import countItems from '../../../items/countItems';
+import countFreeInvSlots from '../../../items/countFreeInvSlots';
+import wrongIdEmbed from '../../../embeds/wrongIdEmbed';
+import iedotConfig from './iedotConfig';
 
 const iedot: Command = {
   title: 'Iedot',
   description: 'Iedot citam lietotājam kādu lietu',
-  config: {
-    name: 'iedot',
-    description: 'Iedot citam lietotājam kādu lietu',
-    options: [
-      {
-        name: 'lietotājs',
-        description: 'Lietotājs kam iedot',
-        type: ApplicationCommandOptionTypes.USER,
-        required: true,
-      }, {
-        name: 'lietas_id',
-        description: 'Lietas id',
-        type: ApplicationCommandOptionTypes.STRING,
-        required: true,
-      }, {
-        name: 'daudzums',
-        description: 'Cik daudz dot',
-        type: ApplicationCommandOptionTypes.INTEGER,
-        min_value: 1,
-      },
-    ],
-  },
+  config: iedotConfig,
   async run(i: CommandInteraction) {
     const target = i.options.data[0].user!;
     const itemToGiveId = i.options.data[1].value as string;
@@ -54,7 +33,7 @@ const iedot: Command = {
 
     const itemToGive = findItemById(itemToGiveId);
     if (!itemToGive) {
-      await i.reply(ephemeralReply('Šāda lieta neeksistē (nepareizi ievadīts id)'));
+      await i.reply(wrongIdEmbed(itemToGiveId));
       return;
     }
 

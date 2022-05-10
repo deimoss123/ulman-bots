@@ -1,35 +1,17 @@
-import Command from '../../interfaces/Command';
-import { ApplicationCommandData, CommandInteraction } from 'discord.js';
-import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums';
-import findUser from '../../economy/findUser';
-import embedTemplate from '../../embeds/embedTemplate';
-import latiString from '../../embeds/helpers/latiString';
-import errorEmbed from '../../embeds/errorEmbed';
-import userString from '../../embeds/helpers/userString';
-import addLati from '../../economy/addLati';
-import ephemeralReply from '../../embeds/ephemeralReply';
+import Command from '../../../interfaces/Command';
+import { CommandInteraction } from 'discord.js';
+import findUser from '../../../economy/findUser';
+import embedTemplate from '../../../embeds/embedTemplate';
+import latiString from '../../../embeds/helpers/latiString';
+import errorEmbed from '../../../embeds/errorEmbed';
+import addLati from '../../../economy/addLati';
+import ephemeralReply from '../../../embeds/ephemeralReply';
+import maksatConfig from './maksatConfig';
 
 const maksat: Command = {
   title: 'Maksāt',
   description: 'Pārskaitīt citam lietotājam naudu',
-  config: {
-    name: 'maksāt',
-    description: 'Pārskaitīt citam lietotājam naudu',
-    options: [
-      {
-        name: 'lietotājs',
-        description: 'Lietotājs kam maksāt',
-        type: ApplicationCommandOptionTypes.USER,
-        required: true,
-      }, {
-        name: 'latu_daudzums',
-        description: 'Cik latus vēlies samaksāt',
-        type: ApplicationCommandOptionTypes.INTEGER,
-        min_value: 1,
-        required: true,
-      },
-    ],
-  } as ApplicationCommandData,
+  config: maksatConfig,
   async run(i: CommandInteraction) {
     const target = i.options.data[0].user!;
     const latiToAdd = i.options.data[1].value as number;

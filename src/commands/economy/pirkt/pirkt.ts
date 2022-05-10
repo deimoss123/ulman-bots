@@ -1,40 +1,24 @@
-import Command from '../../interfaces/Command';
-import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums';
+import Command from '../../../interfaces/Command';
 import { CommandInteraction } from 'discord.js';
-import findItemById from '../../items/findItemById';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import itemList, { ItemCategory } from '../../items/itemList';
-import capitalizeFirst from '../../embeds/helpers/capitalizeFirst';
-import findUser from '../../economy/findUser';
-import errorEmbed from '../../embeds/errorEmbed';
-import itemString from '../../embeds/helpers/itemString';
-import latiString from '../../embeds/helpers/latiString';
-import countFreeInvSlots from '../../items/countFreeInvSlots';
-import embedTemplate from '../../embeds/embedTemplate';
-import addLati from '../../economy/addLati';
-import addItems from '../../economy/addItems';
-import wrongIdEmbed from '../../embeds/wrongIdEmbed';
+import findItemById from '../../../items/findItemById';
+import ephemeralReply from '../../../embeds/ephemeralReply';
+import itemList, { ItemCategory } from '../../../items/itemList';
+import capitalizeFirst from '../../../embeds/helpers/capitalizeFirst';
+import findUser from '../../../economy/findUser';
+import errorEmbed from '../../../embeds/errorEmbed';
+import itemString from '../../../embeds/helpers/itemString';
+import latiString from '../../../embeds/helpers/latiString';
+import countFreeInvSlots from '../../../items/countFreeInvSlots';
+import embedTemplate from '../../../embeds/embedTemplate';
+import addLati from '../../../economy/addLati';
+import addItems from '../../../economy/addItems';
+import wrongIdEmbed from '../../../embeds/wrongIdEmbed';
+import pirktConfig from './pirktConfig';
 
 const pirkt: Command = {
   title: 'Pirkt',
   description: 'Pirkt preci no veikala',
-  config: {
-    name: 'pirkt',
-    description: 'Nopirkt preci no veikala',
-    options: [
-      {
-        name: 'preces_id',
-        description: 'Preces id',
-        type: ApplicationCommandOptionTypes.STRING,
-        required: true,
-      }, {
-        name: 'daudzums',
-        description: 'Cik preces pirkt (ja neievadi tad būs 1)',
-        type: ApplicationCommandOptionTypes.INTEGER,
-        min_value: 1,
-      },
-    ],
-  },
+  config: pirktConfig,
   async run(i: CommandInteraction) {
     const itemToBuyId = i.options.data[0].value as string;
     const amount = i.options.data[1]?.value as number ?? 1;

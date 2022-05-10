@@ -8,7 +8,6 @@ export default function wrongIdEmbed(id: string): InteractionReplyOptions {
 
   if (id.length >= 3) {
     similarId = findSimilarIds(id);
-    console.log(similarId);
     if (similarId.rating > 0.5) giveSuggestion = true;
   }
 
@@ -17,7 +16,7 @@ export default function wrongIdEmbed(id: string): InteractionReplyOptions {
       {
         description:
           'Nepareizi ievadīts id (šāda lieta neeksistē)' +
-          (giveSuggestion ? `\nVai tu domāji: "**${similarId!.target}**?"` : '')
+          (giveSuggestion ? `\nVai tu domāji "**${similarId!.target}**?"` : '')
         ,
       },
     ],

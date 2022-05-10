@@ -1,12 +1,12 @@
-import Command from '../../interfaces/Command';
+import Command from '../../../interfaces/Command';
 import { ApplicationCommandData, CommandInteraction } from 'discord.js';
 import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums';
-import embedTemplate from '../../embeds/embedTemplate';
-import userString from '../../embeds/helpers/userString';
-import latiString from '../../embeds/helpers/latiString';
-import findUser from '../../economy/findUser';
-import errorEmbed from '../../embeds/errorEmbed';
-import addLati from '../../economy/addLati';
+import embedTemplate from '../../../embeds/embedTemplate';
+import userString from '../../../embeds/helpers/userString';
+import latiString from '../../../embeds/helpers/latiString';
+import findUser from '../../../economy/findUser';
+import errorEmbed from '../../../embeds/errorEmbed';
+import addLati from '../../../economy/addLati';
 
 const _addLati: Command = {
   title: 'AddLati',

@@ -1,17 +1,15 @@
-import Command from '../../interfaces/Command';
+import Command from '../../../interfaces/Command';
 import { CommandInteraction } from 'discord.js';
-import itemList, { ItemCategory } from '../../items/itemList';
-import embedTemplate from '../../embeds/embedTemplate';
-import capitalizeFirst from '../../embeds/helpers/capitalizeFirst';
-import latiString from '../../embeds/helpers/latiString';
+import itemList, { ItemCategory } from '../../../items/itemList';
+import embedTemplate from '../../../embeds/embedTemplate';
+import capitalizeFirst from '../../../embeds/helpers/capitalizeFirst';
+import latiString from '../../../embeds/helpers/latiString';
+import veikalsConfig from './veikalsConfig';
 
 export const veikals: Command = {
   title: 'Veikals',
   description: 'Atvērt veikalu',
-  config: {
-    name: 'veikals',
-    description: 'Atvērt veikalu',
-  },
+  config: veikalsConfig,
   async run(i: CommandInteraction) {
 
     console.log(Object.keys(itemList).sort());

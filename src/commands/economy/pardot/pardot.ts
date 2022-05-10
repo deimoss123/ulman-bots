@@ -1,14 +1,13 @@
-import Command from '../../interfaces/Command';
+import Command from '../../../interfaces/Command';
 import { CommandInteraction } from 'discord.js';
 import pardotConfig from './pardotConfig';
-import findUser from '../../economy/findUser';
-import errorEmbed from '../../embeds/errorEmbed';
-import embedTemplate from '../../embeds/embedTemplate';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import Item from '../../interfaces/Item';
-import itemList, { ItemCategory } from '../../items/itemList';
-import itemString from '../../embeds/helpers/itemString';
-import latiString from '../../embeds/helpers/latiString';
+import findUser from '../../../economy/findUser';
+import errorEmbed from '../../../embeds/errorEmbed';
+import embedTemplate from '../../../embeds/embedTemplate';
+import ephemeralReply from '../../../embeds/ephemeralReply';
+import itemList, { ItemCategory } from '../../../items/itemList';
+import itemString from '../../../embeds/helpers/itemString';
+import latiString from '../../../embeds/helpers/latiString';
 
 const pardot: Command = {
   title: 'Pārdot',
