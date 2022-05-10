@@ -5,8 +5,8 @@ import embedTemplate from '../../embeds/embedTemplate';
 import findUser from '../../economy/findUser';
 import errorEmbed from '../../embeds/errorEmbed';
 import itemList from '../../items/itemList';
-import latiString from '../../embeds/stringFunctions/latiString';
-import userString from '../../embeds/stringFunctions/userString';
+import latiString from '../../embeds/helpers/latiString';
+import userString from '../../embeds/helpers/userString';
 import countItems from '../../items/countItems';
 
 const inventars: Command = {

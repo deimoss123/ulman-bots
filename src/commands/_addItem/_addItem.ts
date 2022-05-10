@@ -4,7 +4,7 @@ import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums';
 import findItemById from '../../items/findItemById';
 import ephemeralReply from '../../embeds/ephemeralReply';
 import embedTemplate from '../../embeds/embedTemplate';
-import itemString from '../../embeds/stringFunctions/itemString';
+import itemString from '../../embeds/helpers/itemString';
 import addItem from '../../economy/addItems';
 
 const _addItem: Command = {

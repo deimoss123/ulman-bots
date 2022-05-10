@@ -5,11 +5,11 @@ import findItemById from '../../items/findItemById';
 import ephemeralReply from '../../embeds/ephemeralReply';
 import findUser from '../../economy/findUser';
 import errorEmbed from '../../embeds/errorEmbed';
-import itemString from '../../embeds/stringFunctions/itemString';
+import itemString from '../../embeds/helpers/itemString';
 import embedTemplate from '../../embeds/embedTemplate';
 import addItems from '../../economy/addItems';
 import countItems from '../../items/countItems';
-import userString from '../../embeds/stringFunctions/userString';
+import userString from '../../embeds/helpers/userString';
 import countFreeInvSlots from '../../items/countFreeInvSlots';
 
 const iedot: Command = {

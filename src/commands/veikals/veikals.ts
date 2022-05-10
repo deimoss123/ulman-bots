@@ -2,8 +2,8 @@ import Command from '../../interfaces/Command';
 import { CommandInteraction } from 'discord.js';
 import itemList, { ItemCategory } from '../../items/itemList';
 import embedTemplate from '../../embeds/embedTemplate';
-import capitalizeFirst from '../../embeds/stringFunctions/capitalizeFirst';
-import latiString from '../../embeds/stringFunctions/latiString';
+import capitalizeFirst from '../../embeds/helpers/capitalizeFirst';
+import latiString from '../../embeds/helpers/latiString';
 
 export const veikals: Command = {
   title: 'Veikals',

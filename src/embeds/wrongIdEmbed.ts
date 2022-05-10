@@ -1,5 +1,5 @@
 import { InteractionReplyOptions } from 'discord.js';
-import findSimilarIds from './stringFunctions/findSimilarIds';
+import findSimilarIds from './helpers/findSimilarIds';
 import { Rating } from 'string-similarity';
 
 export default function wrongIdEmbed(id: string): InteractionReplyOptions {
