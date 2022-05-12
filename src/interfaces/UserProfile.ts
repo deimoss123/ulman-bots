@@ -4,7 +4,6 @@ export interface ItemInProfile {
 }
 
 interface UserProfile {
-  guildId: string;
   userId: string;
   lati: number;
   itemCap: number;

@@ -28,7 +28,7 @@ const maksat: Command = {
       return;
     }
 
-    const user = await findUser(i.guildId!, i.user.id);
+    const user = await findUser(i.user.id);
     if (!user) {
       await i.reply(errorEmbed);
       return;
@@ -44,8 +44,8 @@ const maksat: Command = {
       return;
     }
 
-    const targetUser = await addLati(i.guildId!, target.id, latiToAdd);
-    const resUser = await addLati(i.guildId!, i.user.id, -latiToAdd);
+    const targetUser = await addLati(target.id, latiToAdd);
+    const resUser = await addLati(i.user.id, -latiToAdd);
 
     if (!targetUser || !resUser) {
       await i.reply(errorEmbed);

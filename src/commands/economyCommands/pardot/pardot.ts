@@ -20,7 +20,7 @@ const pardot: Command = {
   color: commandColors.pardot,
   config: pardotConfig,
   async run(i: CommandInteraction) {
-    const user = await findUser(i.guildId!, i.user.id);
+    const user = await findUser(i.user.id);
     if (!user) {
       await i.reply(errorEmbed);
       return;
@@ -103,8 +103,8 @@ const pardot: Command = {
     });
 
     if (
-      !await addItems(i.guildId!, i.user.id, sellObj) ||
-      !await addLati(i.guildId!, i.user.id, soldItemsValue)
+      !await addItems(i.user.id, sellObj) ||
+      !await addLati(i.user.id, soldItemsValue)
     ) {
       await i.reply(errorEmbed);
       return;

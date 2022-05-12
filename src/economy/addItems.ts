@@ -2,13 +2,12 @@ import findUser from './findUser';
 import User from '../schemas/User';
 import UserProfile from '../interfaces/UserProfile';
 
-export default async function(
-  guildId: string,
+export default async function addItems(
   userId: string,
   itemsToAdd: Record<string, number>,
 ): Promise<UserProfile | undefined> {
   try {
-    const user = await findUser(guildId, userId);
+    const user = await findUser(userId);
     if (!user) return;
 
     let { items } = user;
@@ -36,12 +35,10 @@ export default async function(
       items[itemIndex].amount += amountToAdd;
     }
 
-    const res = await User.findOneAndUpdate(
-      { guildId, userId }, { $set: { items } }, { new: true });
+    const res = await User.findOneAndUpdate({ userId }, { $set: { items } }, { new: true });
 
-    return res!;
-  } catch (e) {
-    // @ts-ignore
+    return res as UserProfile;
+  } catch (e: any) {
     console.log(e.message, new Date().toString());
   }
 }

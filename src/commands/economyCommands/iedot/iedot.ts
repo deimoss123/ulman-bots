@@ -39,7 +39,7 @@ const iedot: Command = {
       return;
     }
 
-    const user = await findUser(i.guildId!, i.user.id);
+    const user = await findUser(i.user.id);
 
     if (!user) {
       await i.reply(errorEmbed);
@@ -62,7 +62,7 @@ const iedot: Command = {
       return;
     }
 
-    const targetUser = await findUser(i.guildId!, target.id);
+    const targetUser = await findUser(target.id);
     if (!targetUser) {
       await i.reply(errorEmbed);
       return;
@@ -76,8 +76,8 @@ const iedot: Command = {
       return;
     }
 
-    const targetUserAfter = await addItems(i.guildId!, target.id, { [itemToGive.key]: amountToGive });
-    const res = await addItems(i.guildId!, i.user.id, { [itemToGive.key]: -amountToGive });
+    const targetUserAfter = await addItems(target.id, { [itemToGive.key]: amountToGive });
+    const res = await addItems(i.user.id, { [itemToGive.key]: -amountToGive });
 
     if (!res || !targetUserAfter) {
       await i.reply(errorEmbed);

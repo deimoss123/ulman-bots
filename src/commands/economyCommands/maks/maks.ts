@@ -16,7 +16,7 @@ const maks: Command = {
   async run(i: CommandInteraction) {
     const target = i.options.data[0]?.user || i.user;
 
-    const user = await findUser(i.guildId!, target.id);
+    const user = await findUser(target.id);
     if (!user) {
       await i.reply(errorEmbed);
       return;

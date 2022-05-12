@@ -18,7 +18,7 @@ const inventars: Command = {
   run: async function(i: CommandInteraction) {
     const target = i.options.data[0]?.user || i.user;
 
-    const targetUser = await findUser(i.guildId!, target.id);
+    const targetUser = await findUser(target.id);
     if (!targetUser) {
       await i.reply(errorEmbed);
       return;

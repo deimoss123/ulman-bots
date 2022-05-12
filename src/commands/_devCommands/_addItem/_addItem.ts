@@ -49,7 +49,7 @@ const _addItem: Command = {
       description: `Tu pievienoji <@${target.id}> ${itemString(itemToAdd.item, amountToAdd, true)}`,
     }));
 
-    await addItem(i.guildId!, target.id, { [itemToAdd.key]: amountToAdd });
+    await addItem(target.id, { [itemToAdd.key]: amountToAdd });
   },
 };
 

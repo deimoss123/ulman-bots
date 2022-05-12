@@ -38,7 +38,7 @@ const pirkt: Command = {
       return;
     }
 
-    const user = await findUser(i.guildId!, i.user.id);
+    const user = await findUser(i.user.id);
     if (!user) {
       await i.reply(errorEmbed);
       return;
@@ -68,8 +68,8 @@ const pirkt: Command = {
       return;
     }
 
-    let userAfter = await addLati(i.guildId!, i.user.id, -totalCost);
-    userAfter = await addItems(i.guildId!, i.user.id, { [itemToBuy.key]: amount });
+    let userAfter = await addLati(i.user.id, -totalCost);
+    userAfter = await addItems(i.user.id, { [itemToBuy.key]: amount });
     if (!userAfter) {
       await i.reply(errorEmbed);
       return;

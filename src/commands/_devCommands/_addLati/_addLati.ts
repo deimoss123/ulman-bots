@@ -33,7 +33,7 @@ const _addLati: Command = {
     const target = i.options.data[0].user!;
     const latiToAdd = i.options.data[1].value as number;
 
-    const targetUser = await findUser(i.guildId!, target.id);
+    const targetUser = await findUser(target.id);
     if (!targetUser) {
       await i.reply(errorEmbed);
       return;
@@ -45,7 +45,7 @@ const _addLati: Command = {
         `Tagad viņam ir ${latiString(targetUser.lati + latiToAdd)}`,
     }));
 
-    await addLati(i.guildId!, target.id, latiToAdd);
+    await addLati(target.id, latiToAdd);
   },
 };
 

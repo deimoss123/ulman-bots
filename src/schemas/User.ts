@@ -1,13 +1,10 @@
 import mongoose from 'mongoose';
 
-const reqString = {
-  type: String,
-  required: true,
-};
-
 const userSchema = new mongoose.Schema({
-  guildId: reqString,
-  userId: reqString,
+  userId: {
+    type: String,
+    required: true,
+  },
   lati: {
     type: Number,
     default: 0,
