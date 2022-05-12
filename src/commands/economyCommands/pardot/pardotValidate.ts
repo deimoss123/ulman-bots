@@ -25,8 +25,8 @@ export const validateOne = async (
   }
 
   const itemInInv = items.find(({ name }) => name === itemToSell.key);
-  if (!itemInInv) { // TODO: izmantot itemString funkciju
-    await i.reply(ephemeralReply(`Tavā inventārā nav ${itemToSell.item.nameNomDsk}`));
+  if (!itemInInv) {
+    await i.reply(ephemeralReply(`Tavā inventārā nav **${itemString(itemToSell.item)}**`));
     return;
   }
 

@@ -33,7 +33,8 @@ const pirkt: Command = {
 
     if (!itemToBuy.item.categories.includes(ItemCategory.VEIKALS)) {
       await i.reply(ephemeralReply(
-        `**${capitalizeFirst(itemList[itemToBuy.key].nameNomVsk)}** nav nopērkams veikalā`,
+        `**${itemString(itemToBuy.item)}** nav ` +
+        (itemToBuy.item.isVirsiesuDzimte ? 'nopērkams' : 'nopērkama') + ' veikalā',
       ));
       return;
     }

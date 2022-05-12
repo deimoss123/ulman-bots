@@ -25,7 +25,8 @@ interface Item {
   // akuzatīvs daudzskaitlis
   nameAkuDsk: string;
 
-  // TODO: pievienot isViriesuDzimte priekš mantas dzimtes
+  // vai ir vīriešu dzimtes lietvārds
+  isVirsiesuDzimte: boolean;
 
   // kategorijas - veikals, zivis utt
   categories: categories;

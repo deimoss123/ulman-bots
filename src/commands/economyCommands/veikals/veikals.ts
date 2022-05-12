@@ -6,6 +6,7 @@ import capitalizeFirst from '../../../embeds/helpers/capitalizeFirst';
 import latiString from '../../../embeds/helpers/latiString';
 import veikalsConfig from './veikalsConfig';
 import commandColors from '../../../embeds/commandColors';
+import itemString from '../../../embeds/helpers/itemString';
 
 export const veikals: Command = {
   title: 'Veikals',
@@ -29,7 +30,7 @@ export const veikals: Command = {
       description: 'Izmanto /pirkt <preces_id>',
       color: this.color,
       fields: shopItems.map(([_, item]) => ({
-        name: capitalizeFirst(item.nameNomVsk),
+        name: itemString(item),
         value:
           `Cena: ${latiString(item.value * 2)}\n` +
           `id: \`${item.ids[0]}\``,

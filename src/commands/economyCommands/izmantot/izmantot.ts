@@ -25,7 +25,8 @@ const izmantot: Command = {
 
     if (!itemToUse.item.use) {
      await i.reply(ephemeralReply(
-       `${itemString(itemToUse.item)} nav izmantojams`
+       `**${itemString(itemToUse.item)}** nav ` +
+       (itemToUse.item.isVirsiesuDzimte ? 'izmantojams' : 'izmantojama')
      ))
      return
     }
@@ -41,7 +42,7 @@ const izmantot: Command = {
     const itemInInv = items.find(({ name }) => name === itemToUse.key)
     if (!itemInInv) {
       await i.reply(ephemeralReply(
-        `Tev inventārā nav ${itemString(itemToUse.item)}`
+        `Tavā inventārā nav **${itemString(itemToUse.item)}**`
       ))
       return
     }

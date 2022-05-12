@@ -49,8 +49,8 @@ const iedot: Command = {
     const { items } = user;
 
     const itemInInv = items.find(({ name }) => name === itemToGive.key);
-    if (!itemInInv) { // TODO: izmantot itemString funkciju
-      await i.reply(ephemeralReply(`Tavā inventārā nav ${itemToGive.item.nameNomDsk}`));
+    if (!itemInInv) {
+      await i.reply(ephemeralReply(`Tavā inventārā nav ${itemString(itemToGive.item)}`));
       return;
     }
 
