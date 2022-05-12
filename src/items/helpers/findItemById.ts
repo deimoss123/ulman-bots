@@ -1,6 +1,6 @@
-import Item from '../interfaces/Item';
-import itemList from './itemList';
-import normalizeLatText from '../embeds/helpers/normalizeLatText';
+import Item from '../../interfaces/Item';
+import itemList from '../itemList';
+import normalizeLatText from '../../embeds/helpers/normalizeLatText';
 
 // atrod mantu itemList sarakstā pēc id
 export default function(idToFind: string): { key: string, item: Item } | undefined {

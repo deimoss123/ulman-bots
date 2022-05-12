@@ -6,10 +6,12 @@ import errorEmbed from '../../../embeds/errorEmbed';
 import latiString from '../../../embeds/helpers/latiString';
 import userString from '../../../embeds/helpers/userString';
 import maksConfig from './maksConfig';
+import commandColors from '../../../embeds/commandColors';
 
 const maks: Command = {
   title: 'Maks',
   description: 'Apskatīties savu vai kāda lietotāja maku',
+  color: commandColors.maks,
   config: maksConfig,
   async run(i: CommandInteraction) {
     const target = i.options.data[0]?.user || i.user;
@@ -28,6 +30,7 @@ const maks: Command = {
       i,
       title: 'Maks',
       description: `${targetText} ir ${latiString(user.lati)}`,
+      color: this.color,
     }));
   },
 };

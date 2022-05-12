@@ -8,10 +8,16 @@ import ephemeralReply from '../../../embeds/ephemeralReply';
 import itemList, { ItemCategory } from '../../../items/itemList';
 import itemString from '../../../embeds/helpers/itemString';
 import latiString from '../../../embeds/helpers/latiString';
+import Item from '../../../interfaces/Item';
+import { validateOne } from './pardotValidate';
+import addItems from '../../../economy/addItems';
+import addLati from '../../../economy/addLati';
+import commandColors from '../../../embeds/commandColors';
 
 const pardot: Command = {
   title: 'Pārdot',
   description: 'Pārdot mantu no sava inventāra',
+  color: commandColors.pardot,
   config: pardotConfig,
   async run(i: CommandInteraction) {
     const user = await findUser(i.guildId!, i.user.id);
@@ -19,6 +25,12 @@ const pardot: Command = {
       await i.reply(errorEmbed);
       return;
     }
+
+    let itemsToSell: {
+      name: string
+      amount: number
+      item: Item
+    }[] = [];
 
     const { items } = user;
 
@@ -31,7 +43,7 @@ const pardot: Command = {
     if (i.options.data[0].name === 'pēc_tipa') {
       const typeToSell = i.options.data[0].options?.[0].value;
 
-      let itemsToSell = items.map(({ name, amount }) => (
+      itemsToSell = items.map(({ name, amount }) => (
         {
           name,
           amount,
@@ -62,41 +74,61 @@ const pardot: Command = {
         await i.reply(ephemeralReply(`Tev nav ko pārdot tipā: \`${typeToSell}\``));
         return;
       }
-
-      const soldItemsValue = itemsToSell.reduce(
-        (previous, { item, amount }) => previous + item.value * amount, 0,
-      );
-
-      console.log(itemsToSell);
-
-      await i.reply(embedTemplate({
-        i,
-        fields: [
-          {
-            name: 'Tu pārdevi',
-            value: itemsToSell.map(item => `> ${itemString(item.item, item.amount, true)}`).join('\n'),
-            inline: false,
-          }, {
-            name: 'Tu ieguvi',
-            value: latiString(soldItemsValue, true),
-            inline: true,
-          }, {
-            name: 'Tev tagad ir',
-            value: latiString(soldItemsValue + user.lati),
-            inline: true,
-          },
-        ],
-      }));
-
-      // TODO pievienot datubazes funkcijas
     }
 
-    // TODO pārdot vienu
+    // pārdot vienu
     if (i.options.data[0].name === 'vienu') {
-      await i.reply('vienu');
+      const itemToSellId = i.options.data[0].options![0].value as string;
+      const amountToSell = i.options.data[0].options![1]?.value as number ?? 1;
+
+      const itemToSell = await validateOne(i, items, itemToSellId, amountToSell);
+      if (!itemToSell) return;
+
+      itemsToSell = [
+        {
+          name: itemToSell.key,
+          amount: amountToSell,
+          item: itemToSell.item,
+        },
+      ];
+    }
+
+    const soldItemsValue = itemsToSell.reduce(
+      (previous, { item, amount }) => previous + item.value * amount, 0,
+    );
+
+    let sellObj: Record<string, number> = {};
+    itemsToSell.forEach(({ name, amount }) => {
+      sellObj[name] = -amount;
+    });
+
+    if (
+      !await addItems(i.guildId!, i.user.id, sellObj) ||
+      !await addLati(i.guildId!, i.user.id, soldItemsValue)
+    ) {
+      await i.reply(errorEmbed);
       return;
     }
 
+    await i.reply(embedTemplate({
+      i,
+      color: this.color,
+      fields: [
+        {
+          name: 'Tu pārdevi',
+          value: itemsToSell.map(item => `> ${itemString(item.item, item.amount, true)}`).join('\n'),
+          inline: false,
+        }, {
+          name: 'Tu ieguvi',
+          value: latiString(soldItemsValue, true),
+          inline: true,
+        }, {
+          name: 'Tev tagad ir',
+          value: latiString(soldItemsValue + user.lati),
+          inline: true,
+        },
+      ],
+    }));
   },
 };
 

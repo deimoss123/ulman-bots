@@ -1,6 +1,6 @@
 import {
   ApplicationCommandData,
-  CommandInteraction,
+  CommandInteraction, HexColorString,
 } from 'discord.js';
 
 // interfeiss priekš bota komandu objektiem
@@ -10,6 +10,9 @@ interface Command {
 
   // apraksts priekš /palīdzība
   description: string;
+
+  // krāsa embediem
+  color: string;
 
   // konfigurācija / komandām priekš reģistrēšanas
   config: ApplicationCommandData;

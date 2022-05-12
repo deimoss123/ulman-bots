@@ -11,6 +11,7 @@ import addLati from '../../../economy/addLati';
 const _addLati: Command = {
   title: 'AddLati',
   description: 'Pievienot latus',
+  color: '',
   config: {
     name: 'addlati',
     description: 'Pievienot latus',

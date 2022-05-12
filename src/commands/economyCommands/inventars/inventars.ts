@@ -6,12 +6,14 @@ import errorEmbed from '../../../embeds/errorEmbed';
 import itemList from '../../../items/itemList';
 import latiString from '../../../embeds/helpers/latiString';
 import userString from '../../../embeds/helpers/userString';
-import countItems from '../../../items/countItems';
+import countItems from '../../../items/helpers/countItems';
 import inventarsConfig from './inventarsConfig';
+import commandColors from '../../../embeds/commandColors';
 
 const inventars: Command = {
   title: 'Inventārs',
   description: 'Apskatīt savu vai kāda lietotāja inventāru',
+  color: commandColors.inventars,
   config: inventarsConfig,
   run: async function(i: CommandInteraction) {
     const target = i.options.data[0]?.user || i.user;
@@ -37,6 +39,7 @@ const inventars: Command = {
         ? `Inventāra vērtība: **${latiString(totalValue)}**\n` +
         `Inventārā ir **${countItems(items)}** mantas no **${itemCap}**`
         : 'Tukšs inventārs :(',
+      color: this.color,
       fields: items.map(({ name, amount }) => (
         {
           name: `${itemList[name].nameNomVsk} x${amount}`,

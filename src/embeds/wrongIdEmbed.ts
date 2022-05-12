@@ -18,6 +18,7 @@ export default function wrongIdEmbed(id: string): InteractionReplyOptions {
           'Nepareizi ievadīts id (šāda lieta neeksistē)' +
           (giveSuggestion ? `\nVai tu domāji "**${similarId!.target}**?"` : '')
         ,
+        color: '#9d2235',
       },
     ],
     ephemeral: true,

@@ -6,7 +6,7 @@ interface EmbedTemplateOptions {
   title?: string;
   description?: string;
   fields?: EmbedField[];
-  color?: number;
+  color?: any;
 }
 
 export default function(options: EmbedTemplateOptions): MessageOptions {

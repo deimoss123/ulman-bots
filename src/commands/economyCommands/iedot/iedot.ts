@@ -1,25 +1,27 @@
 import Command from '../../../interfaces/Command';
 import { CommandInteraction } from 'discord.js';
-import findItemById from '../../../items/findItemById';
+import findItemById from '../../../items/helpers/findItemById';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
 import itemString from '../../../embeds/helpers/itemString';
 import embedTemplate from '../../../embeds/embedTemplate';
 import addItems from '../../../economy/addItems';
-import countItems from '../../../items/countItems';
-import countFreeInvSlots from '../../../items/countFreeInvSlots';
+import countItems from '../../../items/helpers/countItems';
+import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import wrongIdEmbed from '../../../embeds/wrongIdEmbed';
 import iedotConfig from './iedotConfig';
+import commandColors from '../../../embeds/commandColors';
 
 const iedot: Command = {
   title: 'Iedot',
   description: 'Iedot citam lietotājam kādu lietu',
+  color: commandColors.iedot,
   config: iedotConfig,
   async run(i: CommandInteraction) {
     const target = i.options.data[0].user!;
     const itemToGiveId = i.options.data[1].value as string;
-    const amount = i.options.data[2]?.value as number ?? 1;
+    const amountToGive = i.options.data[2]?.value as number ?? 1;
 
     if (target.id === i.user.id) {
       await i.reply(ephemeralReply('Tu nevari iedot sev'));
@@ -47,14 +49,14 @@ const iedot: Command = {
     const { items } = user;
 
     const itemInInv = items.find(({ name }) => name === itemToGive.key);
-    if (!itemInInv) {
+    if (!itemInInv) { // TODO: izmantot itemString funkciju
       await i.reply(ephemeralReply(`Tavā inventārā nav ${itemToGive.item.nameNomDsk}`));
       return;
     }
 
-    if (itemInInv.amount < amount) {
+    if (itemInInv.amount < amountToGive) {
       await i.reply(ephemeralReply(
-        `Tu nevari iedot ${itemString(itemToGive.item, amount, true)}\n` +
+        `Tu nevari iedot ${itemString(itemToGive.item, amountToGive, true)}\n` +
         `Tev inventārā ir tikai ${itemString(itemToGive.item, itemInInv.amount)}`,
       ));
       return;
@@ -66,16 +68,16 @@ const iedot: Command = {
       return;
     }
 
-    if (amount > targetUser.itemCap - countItems(targetUser.items)) {
+    if (amountToGive > targetUser.itemCap - countItems(targetUser.items)) {
       await i.reply(ephemeralReply(
-        `Tu nevari iedot ${itemString(itemToGive.item, amount, true)}\n` +
+        `Tu nevari iedot ${itemString(itemToGive.item, amountToGive, true)}\n` +
         `<@${target.id}> inventārā ir **${countFreeInvSlots(targetUser)}** brīvas vietas`,
       ));
       return;
     }
 
-    const targetUserAfter = await addItems(i.guildId!, target.id, { [itemToGive.key]: amount });
-    const res = await addItems(i.guildId!, i.user.id, { [itemToGive.key]: -amount });
+    const targetUserAfter = await addItems(i.guildId!, target.id, { [itemToGive.key]: amountToGive });
+    const res = await addItems(i.guildId!, i.user.id, { [itemToGive.key]: -amountToGive });
 
     if (!res || !targetUserAfter) {
       await i.reply(errorEmbed);
@@ -87,11 +89,12 @@ const iedot: Command = {
     await i.reply(embedTemplate({
       i,
       content: `<@${target.id}>`,
-      description: `Tu iedevi <@${target.id}> ${itemString(itemToGive.item, amount, true)}`,
+      description: `Tu iedevi <@${target.id}> ${itemString(itemToGive.item, amountToGive, true)}`,
+      color: this.color,
       fields: [
         {
           name: 'Tev palika',
-          value: itemString(itemToGive.item, itemInInv.amount - amount),
+          value: itemString(itemToGive.item, itemInInv.amount - amountToGive),
           inline: true,
         }, {
           name: 'Tagad viņam ir',
@@ -100,7 +103,6 @@ const iedot: Command = {
         },
       ],
     }));
-
   },
 };
 

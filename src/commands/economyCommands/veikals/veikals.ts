@@ -5,10 +5,12 @@ import embedTemplate from '../../../embeds/embedTemplate';
 import capitalizeFirst from '../../../embeds/helpers/capitalizeFirst';
 import latiString from '../../../embeds/helpers/latiString';
 import veikalsConfig from './veikalsConfig';
+import commandColors from '../../../embeds/commandColors';
 
 export const veikals: Command = {
   title: 'Veikals',
   description: 'Atvērt veikalu',
+  color: commandColors.veikals,
   config: veikalsConfig,
   async run(i: CommandInteraction) {
 
@@ -25,6 +27,7 @@ export const veikals: Command = {
       content: '\u200b',
       title: 'Veikals',
       description: 'Izmanto /pirkt <preces_id>',
+      color: this.color,
       fields: shopItems.map(([_, item]) => ({
         name: capitalizeFirst(item.nameNomVsk),
         value:

@@ -10,15 +10,32 @@ interface categories extends Array<number> {
 }
 
 interface Item {
-  ids: ids;                 // mantu id ko izmanto komandās, piemēram /pirkt <id>
-  nameNomVsk: string;       // nominatīvs vienskaitlis
-  nameNomDsk: string;       // nominatīvs daudzskaitlis
-  nameAkuVsk: string;       // akuzatīvs vienskaitlis
-  nameAkuDsk: string;       // akuzatīvs daudzskaitlis
-  categories: categories;   // kategorijas - veikals, zivis utt
-  value: number;            // mantas vērtība
-  removedOnUse?: boolean;   // vai lietojot mantu tā tiks noņemta no inventāra
-  use?: () => void;         // ko manta darīs lietojot /izmantot komandu
+  // mantu id ko izmanto komandās, piemēram /pirkt <id>
+  ids: ids;
+
+  // nominatīvs vienskaitlis
+  nameNomVsk: string;
+
+  // nominatīvs daudzskaitlis
+  nameNomDsk: string;
+
+  // akuzatīvs vienskaitlis
+  nameAkuVsk: string;
+
+  // akuzatīvs daudzskaitlis
+  nameAkuDsk: string;
+
+  // kategorijas - veikals, zivis utt
+  categories: categories;
+
+  // mantas vērtība
+  value: number;
+
+  // vai lietojot mantu tā tiks noņemta no inventāra
+  removedOnUse?: boolean;
+
+  // ko manta darīs lietojot /izmantot komandu
+  use?: () => void;
 }
 
 export default Item;

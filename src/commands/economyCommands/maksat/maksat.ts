@@ -7,10 +7,12 @@ import errorEmbed from '../../../embeds/errorEmbed';
 import addLati from '../../../economy/addLati';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import maksatConfig from './maksatConfig';
+import commandColors from '../../../embeds/commandColors';
 
 const maksat: Command = {
   title: 'Maksāt',
   description: 'Pārskaitīt citam lietotājam naudu',
+  color: commandColors.maksat,
   config: maksatConfig,
   async run(i: CommandInteraction) {
     const target = i.options.data[0].user!;
@@ -54,6 +56,7 @@ const maksat: Command = {
       i,
       content: `<@${target.id}>`,
       description: `Tu samaksāji <@${target.id}> ${latiString(latiToAdd, true)}`,
+      color: this.color,
       fields: [
         {
           name: 'Tev palika',

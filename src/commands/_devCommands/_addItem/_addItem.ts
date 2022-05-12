@@ -1,7 +1,7 @@
 import Command from '../../../interfaces/Command';
 import { ApplicationCommandData, CommandInteraction } from 'discord.js';
 import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums';
-import findItemById from '../../../items/findItemById';
+import findItemById from '../../../items/helpers/findItemById';
 import embedTemplate from '../../../embeds/embedTemplate';
 import itemString from '../../../embeds/helpers/itemString';
 import addItem from '../../../economy/addItems';
@@ -10,6 +10,7 @@ import wrongIdEmbed from '../../../embeds/wrongIdEmbed';
 const _addItem: Command = {
   title: 'AddItem',
   description: 'Pievienot mantu inventārā',
+  color: '',
   config: {
     name: 'additem',
     description: 'Pievienot mantu inventārā',
