@@ -8,10 +8,11 @@ import iedot from './economyCommands/iedot/iedot';
 import veikals from './economyCommands/veikals/veikals';
 import pirkt from './economyCommands/pirkt/pirkt';
 import pardot from './economyCommands/pardot/pardot';
+import izmantot from './economyCommands/izmantot/izmantot';
 
 // komandu objektu saraksts
 export const commandList: Command[] = [
-  maks, maksat, inventars, iedot, veikals, pirkt, pardot,
+  maks, maksat, inventars, iedot, veikals, pirkt, pardot, izmantot
 ];
 
 export const devCommandList: Command[] = [

@@ -6,6 +6,8 @@ export default function wrongIdEmbed(id: string): InteractionReplyOptions {
   let giveSuggestion = false;
   let similarId: Rating;
 
+  // TODO: normalizēt lat string un tolowercase
+
   if (id.length >= 3) {
     similarId = findSimilarIds(id);
     if (similarId.rating > 0.5) giveSuggestion = true;
