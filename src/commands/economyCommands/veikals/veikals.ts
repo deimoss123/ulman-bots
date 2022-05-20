@@ -41,7 +41,7 @@ export const veikals: Command = {
       fields: shopItems.map(([_, item]) => ({
         name: itemString(item),
         value:
-          `Cena: ${latiString(item.value * 2)}\n` + // TODO: pievienot nocenojumu ja ir atlaide
+          `Cena: ${latiString(item.value * 2)} | ` + // TODO: pievienot nocenojumu ja ir atlaide
           `id: \`${item.ids[0]}\``,
         inline: false,
       })),
