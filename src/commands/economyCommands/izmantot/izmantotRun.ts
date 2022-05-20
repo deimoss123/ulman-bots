@@ -59,7 +59,7 @@ export default async function izmantotRun(
 
   const replyMessage = embedTemplate({
     i,
-    color: embedColor,
+    color: res.color || embedColor,
     fields: [
       {
         name: `Izmantot: ${ItemString(itemToUse, 0, true)}`,

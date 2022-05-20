@@ -2,6 +2,8 @@ import Item from '../interfaces/Item';
 import virve from './usableItems/virve';
 import divainais_burkans from './usableItems/divainais_burkans';
 import mugursoma from './usableItems/mugursoma';
+import latloto from './usableItems/latloto';
+import dizloto from './usableItems/dizloto';
 
 export enum ItemCategory {
   ATKRITUMI,
@@ -32,7 +34,7 @@ const itemList: Record<string, Item> = {
     categories: [ItemCategory.VEIKALS],
     value: 50,
     removedOnUse: true,
-    // use() {},
+    use: latloto,
   },
   nazis: {
     ids: ['nazis', 'nazi'],
@@ -112,7 +114,7 @@ const itemList: Record<string, Item> = {
     categories: [ItemCategory.VEIKALS],
     value: 250,
     removedOnUse: true,
-    // use:
+    use: dizloto,
   },
   divaina_makskere: {
     ids: ['divainamakskere', 'divainomakskeri'],
