@@ -1,6 +1,6 @@
 import {
   ApplicationCommandData,
-  CommandInteraction, HexColorString,
+  CommandInteraction,
 } from 'discord.js';
 
 // interfeiss priekš bota komandu objektiem

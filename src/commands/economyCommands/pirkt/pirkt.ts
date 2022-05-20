@@ -15,6 +15,7 @@ import addItems from '../../../economy/addItems';
 import wrongIdEmbed from '../../../embeds/wrongIdEmbed';
 import pirktConfig from './pirktConfig';
 import commandColors from '../../../embeds/commandColors';
+import pirktRun from './pirktRun';
 
 const pirkt: Command = {
   title: 'Pirkt',
@@ -39,63 +40,7 @@ const pirkt: Command = {
       return;
     }
 
-    const user = await findUser(i.user.id);
-    if (!user) {
-      await i.reply(errorEmbed);
-      return;
-    }
-
-    // mantu cena ir tā vērtība reiz 2
-    const totalCost = amount * itemToBuy.item.value * 2;
-
-    if (totalCost > user.lati) {
-      await i.reply(ephemeralReply(
-        `Tev nepietiek naudas lai nopirktu ${itemString(itemToBuy.item, amount, true)}\n` +
-        `Cena: ${latiString(totalCost)}\n` +
-        `Tev ir ${latiString(user.lati)}`,
-      ));
-      return;
-    }
-
-    const freeSlots = countFreeInvSlots(user);
-
-    console.log(freeSlots);
-
-    if (freeSlots < amount) {
-      await i.reply(ephemeralReply(
-        `Tev nepietiek vietas inventārā lai nopirktu ${itemString(itemToBuy.item, amount, true)}\n` +
-        `Tev ir **${freeSlots}** brīvas vietas`,
-      ));
-      return;
-    }
-
-    let userAfter = await addLati(i.user.id, -totalCost);
-    userAfter = await addItems(i.user.id, { [itemToBuy.key]: amount });
-    if (!userAfter) {
-      await i.reply(errorEmbed);
-      return;
-    }
-
-    const resItems = userAfter.items.find(item => item.name === itemToBuy.key)!;
-
-    await i.reply(embedTemplate({
-      i,
-      description:
-        `Tu nopirki **${itemString(itemToBuy.item, amount, true)}** ` +
-        `un iztērēji ${latiString(totalCost, true)}`,
-      color: this.color,
-      fields: [
-        {
-          name: 'Tev palika',
-          value: latiString(userAfter.lati),
-          inline: true,
-        }, {
-          name: 'Tev tagad ir',
-          value: itemString(itemList[resItems.name], resItems.amount),
-          inline: true,
-        },
-      ],
-    }));
+    await pirktRun(i, itemToBuy.key, amount, this.color)
   },
 };
 

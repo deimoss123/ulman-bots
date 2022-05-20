@@ -1,4 +1,6 @@
 import Item from '../interfaces/Item';
+import virve from './usableItems/virve';
+import divainais_burkans from './usableItems/divainais_burkans';
 
 export enum ItemCategory {
   ATKRITUMI,
@@ -16,7 +18,7 @@ const itemList: Record<string, Item> = {
     isVirsiesuDzimte: false,
     categories: [ItemCategory.VEIKALS],
     value: 100,
-    use() {},
+    // use() {},
   },
   latloto: {
     ids: ['latloto'],
@@ -28,7 +30,7 @@ const itemList: Record<string, Item> = {
     categories: [ItemCategory.VEIKALS],
     value: 50,
     removedOnUse: true,
-    use() {},
+    // use() {},
   },
   nazis: {
     ids: ['nazis', 'nazi'],
@@ -40,7 +42,7 @@ const itemList: Record<string, Item> = {
     categories: [ItemCategory.VEIKALS],
     value: 125,
     removedOnUse: true,
-    use() {},
+    // use() {},
   },
   pudele: {
     ids: ['pudele', 'stiklapudele', 'pudeli', 'stiklapudeli'],
@@ -61,6 +63,8 @@ const itemList: Record<string, Item> = {
     isVirsiesuDzimte: false,
     categories: [ItemCategory.VEIKALS, ItemCategory.ATKRITUMI],
     value: 10,
+    removedOnUse: true,
+    use: virve,
   },
   zemenu_rasens: {
     ids: ['rasens', 'zemenurasens', 'rasenu', 'zemenurasenu'],
@@ -71,7 +75,7 @@ const itemList: Record<string, Item> = {
     isVirsiesuDzimte: true,
     categories: [ItemCategory.VEIKALS],
     value: 75,
-    use() {},
+    // use() {},
   },
   metalluznis: {
     ids: ['metalluznis', 'metalluzni', 'metalluznus'],
@@ -82,7 +86,19 @@ const itemList: Record<string, Item> = {
     isVirsiesuDzimte: true,
     categories: [ItemCategory.ATKRITUMI],
     value: 5,
-  }
+  },
+  divainais_burkans: {
+    ids: ['divainaisburkans', 'divainoburkanu'],
+    nameNomVsk: 'dīvainais burkāns',
+    nameNomDsk: 'dīvainie burkāni',
+    nameAkuVsk: 'dīvaino burkānu',
+    nameAkuDsk: 'dīvainos burkānus',
+    isVirsiesuDzimte: true,
+    categories: [ItemCategory.VEIKALS],
+    value: 5000,
+    removedOnUse: false,
+    use: divainais_burkans,
+  },
 };
 
 export default itemList;

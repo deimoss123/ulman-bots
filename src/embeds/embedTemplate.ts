@@ -1,15 +1,22 @@
-import { CommandInteraction, EmbedField, MessageOptions } from 'discord.js';
+import {
+  ButtonInteraction,
+  CommandInteraction,
+  EmbedField,
+  InteractionReplyOptions,
+  MessageActionRow,
+} from 'discord.js';
 
-interface EmbedTemplateOptions {
-  i: CommandInteraction;
+export interface EmbedTemplateOptions {
+  i: CommandInteraction | ButtonInteraction;
   content?: string;
   title?: string;
   description?: string;
   fields?: EmbedField[];
   color?: any;
+  components?: MessageActionRow[];
 }
 
-export default function(options: EmbedTemplateOptions): MessageOptions {
+export default function(options: EmbedTemplateOptions): InteractionReplyOptions {
   return {
     content: options.content,
     embeds: [
@@ -24,5 +31,7 @@ export default function(options: EmbedTemplateOptions): MessageOptions {
         },
       },
     ],
+    components: options.components ?? [],
+    fetchReply: true,
   };
 }

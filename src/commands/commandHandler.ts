@@ -3,7 +3,14 @@ import { CommandInteraction } from 'discord.js';
 import errorEmbed from '../embeds/errorEmbed';
 
 export default async function(interaction: CommandInteraction) {
+
+  if (!interaction.guild) {
+    await interaction.reply('UlmaņBota komandas var izmantot tikai serveros');
+    return;
+  }
+
   let command = commandList.find(cmd => cmd.config.name === interaction.commandName);
+
   if (command) {
     await command.run(interaction);
     return;

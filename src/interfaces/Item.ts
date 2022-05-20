@@ -1,4 +1,6 @@
 // masīvs ar vismaz vienu vērtību
+import UsableItemReturn from './UsableItemReturn';
+
 interface ids extends Array<string> {
   0: string;
   [key: number]: string;
@@ -38,7 +40,7 @@ interface Item {
   removedOnUse?: boolean;
 
   // ko manta darīs lietojot /izmantot komandu
-  use?: () => void;
+  use?: (userId: string) => Promise<UsableItemReturn>;
 }
 
 export default Item;
