@@ -1,6 +1,7 @@
 import Item from '../interfaces/Item';
 import virve from './usableItems/virve';
 import divainais_burkans from './usableItems/divainais_burkans';
+import mugursoma from './usableItems/mugursoma';
 
 export enum ItemCategory {
   ATKRITUMI,
@@ -18,6 +19,7 @@ const itemList: Record<string, Item> = {
     isVirsiesuDzimte: false,
     categories: [ItemCategory.VEIKALS],
     value: 100,
+    removedOnUse: false,
     // use() {},
   },
   latloto: {
@@ -75,6 +77,7 @@ const itemList: Record<string, Item> = {
     isVirsiesuDzimte: true,
     categories: [ItemCategory.VEIKALS],
     value: 75,
+    removedOnUse: true,
     // use() {},
   },
   metalluznis: {
@@ -98,6 +101,42 @@ const itemList: Record<string, Item> = {
     value: 5000,
     removedOnUse: false,
     use: divainais_burkans,
+  },
+  dizloto: {
+    ids: ['dizloto'],
+    nameNomVsk: 'dižloto biļete',
+    nameNomDsk: 'dižloto biļetes',
+    nameAkuVsk: 'dižloto biļeti',
+    nameAkuDsk: 'dižloto biļetes',
+    isVirsiesuDzimte: false,
+    categories: [ItemCategory.VEIKALS],
+    value: 250,
+    removedOnUse: true,
+    // use:
+  },
+  divaina_makskere: {
+    ids: ['divainamakskere', 'divainomakskeri'],
+    nameNomVsk: 'dīvainā makšķere',
+    nameNomDsk: 'dīvainās makšķeres',
+    nameAkuVsk: 'dīvaino makšķeri',
+    nameAkuDsk: 'dīvainās makšķeres',
+    isVirsiesuDzimte: false,
+    categories: [ItemCategory.VEIKALS],
+    value: 500,
+    removedOnUse: false,
+    // use:
+  },
+  mugursoma: {
+    ids: ['mugursoma', 'mugursomu'],
+    nameNomVsk: 'mugursoma',
+    nameNomDsk: 'mugursomas',
+    nameAkuVsk: 'mugursomu',
+    nameAkuDsk: 'mugursomas',
+    isVirsiesuDzimte: false,
+    categories: [ItemCategory.VEIKALS],
+    value: 1500,
+    removedOnUse: true,
+    use: mugursoma,
   },
 };
 
