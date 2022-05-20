@@ -31,16 +31,24 @@ export default async function buttonHandler(
 
     const res = await callback(componentInteraction as ButtonInteraction | SelectMenuInteraction);
     if (!res) {
-      await componentInteraction.deferUpdate();
+      try {
+        await componentInteraction.deferUpdate();
+      } catch (e) {}
       return;
     }
 
     if (res?.edit) {
       if (res?.after) {
-        currentMessage = await cmdInteraction.editReply(res.edit as MessagePayload) as Message;
-      } else currentMessage = await componentInteraction.update(
-        { ...res.edit as InteractionUpdateOptions, fetchReply: true },
-      ) as Message;
+        try {
+          currentMessage = await cmdInteraction.editReply(res.edit as MessagePayload) as Message;
+        } catch (e) {}
+      } else {
+        try {
+          currentMessage = await componentInteraction.update(
+            { ...res.edit as InteractionUpdateOptions, fetchReply: true },
+          ) as Message;
+        } catch (e) {}
+      }
     }
 
     if (res?.end) {
@@ -65,7 +73,9 @@ export default async function buttonHandler(
     });
 
     if (!areAllComponentsDisabled) {
-      await cmdInteraction.editReply({ components: currentMessage.components });
+      try {
+        await cmdInteraction.editReply({ components: currentMessage.components });
+      } catch (e) {}
     }
   });
 }
