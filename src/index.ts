@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import validateEnv from './utils/validateEnv';
 import mongo from './economy/mongo';
 import commandHandler from './commands/commandHandler';
+import setupCronJobs from './utils/setupCronJobs';
 
 dotenv.config();
 
@@ -15,6 +16,9 @@ client.login(process.env.BOT_TOKEN).then(() => console.log('logged in'));
 
 client.on('ready', async () => {
   console.log('bot ready');
+
+  setupCronJobs();
+
   await mongo().then(() => {
     console.log('connected to mongo');
   });
