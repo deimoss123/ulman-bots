@@ -74,16 +74,16 @@ export default async function izmantotRun(
 
   if (!itemsToUseLeft || !itemToUse.removedOnUse) return;
 
-  await buttonHandler(i, interactionReply!, async componentInteraction => {
+  await buttonHandler(i, 'izmantot', interactionReply!, async componentInteraction => {
     if (componentInteraction.customId === 'izmantot_velreiz') {
       if (componentInteraction.componentType !== 'BUTTON') return;
 
-      let buttonStyle = 'SUCCESS'
+      let buttonStyle = 'SUCCESS';
 
-      const userBeforeUse = await findUser(i.user.id)
+      const userBeforeUse = await findUser(i.user.id);
       if (userBeforeUse) {
         if (!userBeforeUse.items.find(item => item.name === itemToUseKey)) {
-          buttonStyle = 'DANGER'
+          buttonStyle = 'DANGER';
         }
       }
 

@@ -51,7 +51,7 @@ export const veikals: Command = {
     let chosenItem = '';
     let chosenAmount = 1;
 
-    await buttonHandler(i, interactionReply! as Message, async (componentInteraction) => {
+    await buttonHandler(i, 'veikals', interactionReply! as Message, async (componentInteraction) => {
 
       switch (componentInteraction.customId) {
         case 'veikals_prece':

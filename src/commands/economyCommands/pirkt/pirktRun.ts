@@ -97,16 +97,16 @@ export default async function pirktRun(
 
   if (!itemToBuy.use) return;
 
-  await buttonHandler(i, interactionReply!, async componentInteraction => {
+  await buttonHandler(i, 'pirkt', interactionReply!, async componentInteraction => {
     if (componentInteraction.customId === 'pirkt_izmantot') {
       if (componentInteraction.componentType !== 'BUTTON') return;
 
-      let buttonStyle = 'SUCCESS'
+      let buttonStyle = 'SUCCESS';
 
-      const userBeforeUse = await findUser(i.user.id)
+      const userBeforeUse = await findUser(i.user.id);
       if (userBeforeUse) {
         if (!userBeforeUse.items.find(item => item.name === itemToBuyKey)) {
-          buttonStyle = 'DANGER'
+          buttonStyle = 'DANGER';
         }
       }
 

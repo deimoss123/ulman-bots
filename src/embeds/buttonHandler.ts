@@ -4,24 +4,44 @@ import {
   InteractionUpdateOptions,
   Message, MessagePayload, SelectMenuInteraction,
 } from 'discord.js';
+import interactionCache from '../utils/interactionCache';
 
 interface CallbackReturn {
   edit?: InteractionUpdateOptions | MessagePayload,
   end?: boolean
   after?: () => Promise<void>
+  setInactive?: boolean
 }
 
 export default async function buttonHandler(
-  cmdInteraction: CommandInteraction | ButtonInteraction,
+  interaction: CommandInteraction | ButtonInteraction,
+  interactionName: string,
   interactionMsg: Message,
   callback: (buttonInteraction: ButtonInteraction | SelectMenuInteraction) => Promise<CallbackReturn | undefined>,
   time: number = 15000,
+  isActive: boolean = false,
 ): Promise<void> {
   const collector = interactionMsg.createMessageComponentCollector({ time });
   let currentMessage = interactionMsg;
 
+  // pārbauda vai lietotājs ir interactionCache objektā, ja nav tad tiek pievienots kā {}
+  if (!interactionCache?.[interaction.user.id]) {
+    interactionCache[interaction.user.id] = {};
+  }
+
+  // ja interaction ar eksistējošu nosaukumu eksistē tad tā tiek apstādināta
+  if (interactionCache?.[interaction.user.id]?.[interactionName]) {
+    interactionCache[interaction.user.id][interactionName].collector.stop();
+  }
+
+  // pievieno interactionCache objektam pašreizējo interaction
+  interactionCache[interaction.user.id][interactionName] = {
+    collector,
+    isInteractionActive: isActive,
+  };
+
   collector.on('collect', async componentInteraction => {
-    if (componentInteraction.user.id !== cmdInteraction.user.id) {
+    if (componentInteraction.user.id !== interaction.user.id) {
       await componentInteraction.reply({
         content: 'Šī poga nav domāta tev',
         ephemeral: true,
@@ -37,10 +57,14 @@ export default async function buttonHandler(
       return;
     }
 
+    if (res?.setInactive) {
+      interactionCache[interaction.user.id][interactionName].isInteractionActive = false;
+    }
+
     if (res?.edit) {
       if (res?.after) {
         try {
-          currentMessage = await cmdInteraction.editReply(res.edit as MessagePayload) as Message;
+          currentMessage = await interaction.editReply(res.edit as MessagePayload) as Message;
         } catch (e) {}
       } else {
         try {
@@ -59,10 +83,16 @@ export default async function buttonHandler(
   });
 
   collector.on('end', async () => {
+
+    // izdzēš izbeigto interaction no interactionCache
+    delete interactionCache[interaction.user.id][interactionName];
+
+    // pārbauda ziņai ir pogas
     if (!currentMessage?.components || !currentMessage.components.length) return;
 
     let areAllComponentsDisabled = true;
 
+    // iziet cauri visām pogām message objektā un atspējo tās
     currentMessage.components.forEach(row => {
       row.components.forEach(component => {
         if (!component.disabled) {
@@ -72,9 +102,10 @@ export default async function buttonHandler(
       });
     });
 
+    // rediģē ziņu ar atspējotajām pogām, ja tās jau nav atspējotas
     if (!areAllComponentsDisabled) {
       try {
-        await cmdInteraction.editReply({ components: currentMessage.components });
+        await interaction.editReply({ components: currentMessage.components });
       } catch (e) {}
     }
   });
