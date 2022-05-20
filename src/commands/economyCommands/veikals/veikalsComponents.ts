@@ -7,7 +7,6 @@ import {
 import Item from '../../../interfaces/Item';
 import capitalizeFirst from '../../../embeds/helpers/capitalizeFirst';
 import latiString from '../../../embeds/helpers/latiString';
-import itemList from '../../../items/itemList';
 import UserProfile from '../../../interfaces/UserProfile';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import getItemPrice from '../../../items/helpers/getItemPrice';
@@ -32,7 +31,7 @@ export default function veikalsComponents(
   let hasInvSlots = true;
 
   if (chosenItem && user) {
-    totalCost = getItemPrice(chosenItem) * chosenAmount;
+    totalCost = getItemPrice(chosenItem).price * chosenAmount;
 
     if (totalCost > user.lati) canAfford = false;
     if (countFreeInvSlots(user) < chosenAmount) hasInvSlots = false;
@@ -83,7 +82,7 @@ export default function veikalsComponents(
       .addOptions(shopItems.map(([key, item]) => (
           {
             label: capitalizeFirst(item.nameNomVsk),
-            description: latiString(getItemPrice(key)),
+            description: latiString(getItemPrice(key).price),
             value: key,
             emoji: '922501450544857098',
             default: key === chosenItem,

@@ -36,6 +36,9 @@ interface Item {
   // mantas vērtība
   value: number;
 
+  // vai ir atļautas atlaides
+  allowDiscount?: boolean
+
   // vai lietojot mantu tā tiks noņemta no inventāra
   removedOnUse?: boolean;
 

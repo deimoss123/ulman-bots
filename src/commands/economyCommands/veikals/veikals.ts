@@ -33,18 +33,35 @@ export const veikals: Command = {
       (a, b) => b[1].value - a[1].value,
     );
 
+    const fields = shopItems.map(([key, item]) => {
+      const itemPrice = getItemPrice(key);
+
+      let name = itemString(item);
+      if (itemPrice.discount) {
+        name += ` -${Math.floor(itemPrice.discount * 100)}%`;
+      }
+
+      const price = itemPrice.discount
+        ? `~~${item.value * 2}~~ **${itemPrice.price}** lati`
+        : latiString(item.value * 2);
+
+      return {
+        name,
+        value:
+          `Cena: ${price}\n` +
+          `id: \`${item.ids[0]}\``,
+        inline: false,
+      };
+    });
+
     const interactionReply = await i.reply(embedTemplate({
       i,
       title: 'Veikals',
-      description: 'Nopirkt preci: `/pirkt <preces_id> <daudzums>`',
+      description:
+        'Nopirkt preci: `/pirkt <preces_id> <daudzums>\n`' +
+        'Atlaides mainās katru dienu plkst. `00:00`',
       color: this.color,
-      fields: shopItems.map(([_, item]) => ({
-        name: itemString(item),
-        value:
-          `Cena: ${latiString(item.value * 2)} | ` + // TODO: pievienot nocenojumu ja ir atlaide
-          `id: \`${item.ids[0]}\``,
-        inline: false,
-      })),
+      fields,
       components: veikalsComponents(shopItems, user),
     }));
 
@@ -81,7 +98,7 @@ export const veikals: Command = {
 
           const userBeforeBuy = await findUser(i.user.id);
           if (userBeforeBuy) {
-            const totalCost = getItemPrice(chosenItem) * chosenAmount;
+            const totalCost = getItemPrice(chosenItem).price * chosenAmount;
             if (userBeforeBuy.lati < totalCost || countFreeInvSlots(userBeforeBuy) < chosenAmount) {
               buttonStyle = 'DANGER';
             }

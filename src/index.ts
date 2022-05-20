@@ -4,6 +4,7 @@ import validateEnv from './utils/validateEnv';
 import mongo from './economy/mongo';
 import commandHandler from './commands/commandHandler';
 import setupCronJobs from './utils/setupCronJobs';
+import createDiscounts from './items/discounts/createDiscounts';
 
 dotenv.config();
 
@@ -15,8 +16,7 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 client.login(process.env.BOT_TOKEN).then(() => console.log('logged in'));
 
 client.on('ready', async () => {
-  console.log('bot ready');
-
+  createDiscounts();
   setupCronJobs();
 
   await mongo().then(() => {

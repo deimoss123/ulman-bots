@@ -21,7 +21,7 @@ const itemList: Record<string, Item> = {
     isVirsiesuDzimte: false,
     categories: [ItemCategory.VEIKALS],
     value: 100,
-    removedOnUse: false,
+    allowDiscount: true,
     // use() {},
   },
   latloto: {
@@ -46,6 +46,7 @@ const itemList: Record<string, Item> = {
     categories: [ItemCategory.VEIKALS],
     value: 125,
     removedOnUse: true,
+    allowDiscount: true,
     // use() {},
   },
   pudele: {
@@ -67,6 +68,7 @@ const itemList: Record<string, Item> = {
     isVirsiesuDzimte: false,
     categories: [ItemCategory.VEIKALS, ItemCategory.ATKRITUMI],
     value: 10,
+    allowDiscount: true,
     removedOnUse: true,
     use: virve,
   },
@@ -79,6 +81,7 @@ const itemList: Record<string, Item> = {
     isVirsiesuDzimte: true,
     categories: [ItemCategory.VEIKALS],
     value: 75,
+    allowDiscount: true,
     removedOnUse: true,
     // use() {},
   },
@@ -101,7 +104,7 @@ const itemList: Record<string, Item> = {
     isVirsiesuDzimte: true,
     categories: [ItemCategory.VEIKALS],
     value: 5000,
-    removedOnUse: false,
+    allowDiscount: true,
     use: divainais_burkans,
   },
   dizloto: {
@@ -125,7 +128,7 @@ const itemList: Record<string, Item> = {
     isVirsiesuDzimte: false,
     categories: [ItemCategory.VEIKALS],
     value: 500,
-    removedOnUse: false,
+    allowDiscount: true,
     // use:
   },
   mugursoma: {
@@ -137,6 +140,7 @@ const itemList: Record<string, Item> = {
     isVirsiesuDzimte: false,
     categories: [ItemCategory.VEIKALS],
     value: 1500,
+    allowDiscount: true,
     removedOnUse: true,
     use: mugursoma,
   },

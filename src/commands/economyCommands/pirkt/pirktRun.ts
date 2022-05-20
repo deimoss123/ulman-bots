@@ -35,7 +35,7 @@ export default async function pirktRun(
   const itemToBuy = itemList[itemToBuyKey];
 
   // mantu cena ir tā vērtība reiz 2
-  const totalCost = getItemPrice(itemToBuyKey) * amountToBuy;
+  const totalCost = getItemPrice(itemToBuyKey).price * amountToBuy;
 
   if (totalCost > user.lati) {
     await i.reply(ephemeralReply(

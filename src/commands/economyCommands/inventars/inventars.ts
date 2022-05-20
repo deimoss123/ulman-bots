@@ -9,6 +9,7 @@ import userString from '../../../embeds/helpers/userString';
 import countItems from '../../../items/helpers/countItems';
 import inventarsConfig from './inventarsConfig';
 import commandColors from '../../../embeds/commandColors';
+import itemString from '../../../embeds/helpers/itemString';
 
 const inventars: Command = {
   title: 'Inventārs',
@@ -42,7 +43,7 @@ const inventars: Command = {
       color: this.color,
       fields: items.map(({ name, amount }) => (
         {
-          name: `${itemList[name].nameNomVsk} x${amount}`,
+          name: `${itemString(itemList[name])} x${amount}`,
           value: `Vērtība: ${latiString(itemList[name].value)}`,
           inline: true,
         }
