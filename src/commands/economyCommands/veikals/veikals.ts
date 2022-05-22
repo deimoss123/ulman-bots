@@ -27,11 +27,10 @@ export const veikals: Command = {
       return;
     }
 
-    const shopItems = Object.entries(itemList).filter(
-      ([_, item]) => item.categories.includes(ItemCategory.VEIKALS),
-    ).sort( // sakārto preces no dārgākajām uz lētākajām
-      (a, b) => b[1].value - a[1].value,
-    );
+    const shopItems =
+      Object.entries(itemList)
+      .filter(([_, item]) => item.categories.includes(ItemCategory.VEIKALS))
+      .sort((a, b) => b[1].value - a[1].value);
 
     const fields = shopItems.map(([key, item]) => {
       const itemPrice = getItemPrice(key);
@@ -58,7 +57,7 @@ export const veikals: Command = {
       i,
       title: 'Veikals',
       description:
-        'Nopirkt preci: `/pirkt <preces_id> <daudzums>\n`' +
+        'Nopirkt preci: `/pirkt <preces_nosaukums> <daudzums>\n`' +
         'Atlaides mainās katru dienu plkst. `00:00`',
       color: this.color,
       fields,
@@ -113,9 +112,6 @@ export const veikals: Command = {
             },
             after: async () => pirktRun(componentInteraction, chosenItem, chosenAmount, commandColors.pirkt),
           };
-
-        default:
-          return;
       }
     }, 60000);
   },

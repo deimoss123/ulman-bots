@@ -1,7 +1,6 @@
 import {
   ButtonInteraction,
   CommandInteraction,
-  Message,
   MessageActionRow,
   MessageButton,
   MessageButtonStyle,

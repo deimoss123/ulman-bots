@@ -1,5 +1,5 @@
 import {
-  ApplicationCommandData,
+  ApplicationCommandData, AutocompleteInteraction,
   CommandInteraction,
 } from 'discord.js';
 
@@ -16,6 +16,9 @@ interface Command {
 
   // konfigurācija / komandām priekš reģistrēšanas
   config: ApplicationCommandData;
+
+  // funkcija priekš / komandu autocomplete apstrādāšanas
+  autocomplete?: (i: AutocompleteInteraction) => void;
 
   // komandas galvenais kods
   run: (i: CommandInteraction) => void;

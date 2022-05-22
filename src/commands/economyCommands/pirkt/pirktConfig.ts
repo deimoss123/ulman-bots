@@ -6,13 +6,14 @@ const pirktConfig: ApplicationCommandData = {
   description: 'Nopirkt preci no veikala',
   options: [
     {
-      name: 'preces_id',
+      name: 'preces_nosaukums',
       description: 'Preces id',
       type: ApplicationCommandOptionTypes.STRING,
+      autocomplete: true,
       required: true,
     }, {
       name: 'daudzums',
-      description: 'Cik preces pirkt (ja neievadi tad būs 1)',
+      description: 'Cik preces pirkt',
       type: ApplicationCommandOptionTypes.INTEGER,
       min_value: 1,
     },
