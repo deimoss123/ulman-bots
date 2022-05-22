@@ -1,28 +1,28 @@
-import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums';
 import { ApplicationCommandData } from 'discord.js';
+import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums';
 
-const iedotConfig: ApplicationCommandData = {
-  name: 'iedot',
-  description: 'Iedot citam lietotājam kādu lietu',
+const _addItemConfig: ApplicationCommandData = {
+  name: 'additem',
+  description: 'Pievienot mantu inventārā',
   options: [
     {
       name: 'lietotājs',
-      description: 'Lietotājs kam iedot',
+      description: 'Lietotājs kam pievienot lietu',
       type: ApplicationCommandOptionTypes.USER,
       required: true,
     }, {
       name: 'nosaukums',
-      description: 'Lieta ko vēlies iedot',
+      description: 'Kādu lietu pievienot',
       type: ApplicationCommandOptionTypes.STRING,
       autocomplete: true,
       required: true,
     }, {
       name: 'daudzums',
-      description: 'Cik lietas daudz iedot',
+      description: 'Cik lietas pievienot',
       type: ApplicationCommandOptionTypes.INTEGER,
-      min_value: 1,
+      required: true,
     },
   ],
 };
 
-export default iedotConfig;
+export default _addItemConfig;

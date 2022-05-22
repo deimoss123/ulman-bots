@@ -1,14 +1,13 @@
 import Command from '../../../interfaces/Command';
 import { CommandInteraction } from 'discord.js';
-import findItemById from '../../../items/helpers/findItemById';
 import ephemeralReply from '../../../embeds/ephemeralReply';
-import { ItemCategory } from '../../../items/itemList';
+import itemList, { ItemCategory } from '../../../items/itemList';
 import itemString from '../../../embeds/helpers/itemString';
-import wrongIdEmbed from '../../../embeds/wrongIdEmbed';
 import pirktConfig from './pirktConfig';
 import commandColors from '../../../embeds/commandColors';
 import pirktRun from './pirktRun';
 import pirktAutocomplete from './pirktAutocomplete';
+import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
 
 const pirkt: Command = {
   title: 'Pirkt',
@@ -18,24 +17,24 @@ const pirkt: Command = {
   autocomplete: pirktAutocomplete,
   async run(i: CommandInteraction) {
 
-    const itemToBuyId = i.options.data[0].value as string;
+    const itemToBuyKey = i.options.data[0].value as string;
     const amount = i.options.data[1]?.value as number ?? 1;
 
-    const itemToBuy = findItemById(itemToBuyId);
+    const itemToBuy = itemList[itemToBuyKey];
     if (!itemToBuy) {
-      await i.reply(wrongIdEmbed(itemToBuyId));
+      await i.reply(wrongKeyEmbed);
       return;
     }
 
-    if (!itemToBuy.item.categories.includes(ItemCategory.VEIKALS)) {
+    if (!itemToBuy.categories.includes(ItemCategory.VEIKALS)) {
       await i.reply(ephemeralReply(
-        `**${itemString(itemToBuy.item)}** nav ` +
-        (itemToBuy.item.isVirsiesuDzimte ? 'nopērkams' : 'nopērkama') + ' veikalā',
+        `**${itemString(itemToBuy)}** nav ` +
+        (itemToBuy.isVirsiesuDzimte ? 'nopērkams' : 'nopērkama') + ' veikalā',
       ));
       return;
     }
 
-    await pirktRun(i, itemToBuy.key, amount, this.color);
+    await pirktRun(i, itemToBuyKey, amount, this.color);
   },
 };
 

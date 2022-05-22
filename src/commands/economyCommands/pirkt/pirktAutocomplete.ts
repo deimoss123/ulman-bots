@@ -5,6 +5,18 @@ import capitalizeFirst from '../../../embeds/helpers/capitalizeFirst';
 import latiString from '../../../embeds/helpers/latiString';
 import findItemsByQuery from '../../../items/helpers/findItemsByQuery';
 import normalizeLatText from '../../../embeds/helpers/normalizeLatText';
+import Item from '../../../interfaces/Item';
+
+function mapItemsToChoices(itemInList: [string, Item]) {
+  const [key, item] = itemInList;
+
+  return {
+    name:
+      `💰 [${latiString(getItemPrice(key).price)}] ` +
+      `${capitalizeFirst(item.nameNomVsk)}`,
+    value: key,
+  };
+}
 
 export default async function pirktAutocomplete(interaction: AutocompleteInteraction): Promise<void> {
 
@@ -17,13 +29,5 @@ export default async function pirktAutocomplete(interaction: AutocompleteInterac
     .sort((a, b) => b[1].value - a[1].value); // sakārtotas pēc vērtības
 
   const queriedChoices = findItemsByQuery(focusedValue, allChoices);
-
-  await interaction.respond(
-    queriedChoices.map(([key, item]) => ({
-      name:
-        `💰 [${latiString(getItemPrice(key).price)}] ` +
-        `${capitalizeFirst(item.nameNomVsk)}`,
-      value: key,
-    })),
-  );
+  await interaction.respond(queriedChoices.map(mapItemsToChoices));
 }

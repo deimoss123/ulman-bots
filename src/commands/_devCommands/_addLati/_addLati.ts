@@ -2,7 +2,6 @@ import Command from '../../../interfaces/Command';
 import { ApplicationCommandData, CommandInteraction } from 'discord.js';
 import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums';
 import embedTemplate from '../../../embeds/embedTemplate';
-import userString from '../../../embeds/helpers/userString';
 import latiString from '../../../embeds/helpers/latiString';
 import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
@@ -11,7 +10,7 @@ import addLati from '../../../economy/addLati';
 const _addLati: Command = {
   title: 'AddLati',
   description: 'Pievienot latus',
-  color: '',
+  color: '#ffffff',
   config: {
     name: 'addlati',
     description: 'Pievienot latus',
@@ -41,8 +40,9 @@ const _addLati: Command = {
 
     await i.reply(embedTemplate({
       i,
-      description: `**${userString(target)}** tika pievienots ${latiString(latiToAdd)}\n` +
+      description: `<@${target.id}> tika pievienoti ${latiString(latiToAdd)}\n` +
         `Tagad viņam ir ${latiString(targetUser.lati + latiToAdd)}`,
+      color: this.color,
     }));
 
     await addLati(target.id, latiToAdd);

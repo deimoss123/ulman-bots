@@ -5,13 +5,13 @@ import userCache from '../utils/userCache';
 export default async function setLati(userId: string, lati: number): Promise<UserProfile | undefined> {
   try {
     const res = await User.findOneAndUpdate(
-      { userId }, { $set: { lati } }, { new: true }
+      { userId }, { $set: { lati } }, { new: true },
     ) as UserProfile;
 
-    userCache[userId] = res
+    userCache[userId] = res;
 
-    return res;
+    return JSON.parse(JSON.stringify(res)) as UserProfile;
   } catch (e: any) {
-    console.log(e.message, new Date().toString());
+    console.log(new Date().toLocaleString(), e.message);
   }
 }

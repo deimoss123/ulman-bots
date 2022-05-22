@@ -8,12 +8,13 @@ export default async function increaseInvCap(
 ): Promise<UserProfile | undefined> {
   try {
     const res = await User.findOneAndUpdate(
-      { userId }, { $inc: { itemCap: increaseAmount } }, { new: true }
+      { userId }, { $inc: { itemCap: increaseAmount } }, { new: true },
     ) as UserProfile;
 
-    userCache[userId] = res
-    return res;
+    userCache[userId] = res;
+
+    return JSON.parse(JSON.stringify(res));
   } catch (e: any) {
-    console.log(e.message, new Date().toString());
+    console.log(new Date().toLocaleString(), e.message);
   }
 }

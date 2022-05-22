@@ -6,21 +6,21 @@ export default async function findUser(
   userId: string,
 ): Promise<UserProfile | undefined> {
   try {
-    if (userCache?.[userId]) return userCache[userId];
+    if (userCache?.[userId]) return JSON.parse(JSON.stringify(userCache[userId]));
 
     let result = await User.findOne({ userId }) as UserProfile;
 
     if (result) {
       userCache[userId] = result;
-      return result;
+      return JSON.parse(JSON.stringify(result));
     }
 
     const newUser = await new User({ userId });
     newUser.save();
 
     userCache[userId] = newUser as UserProfile;
-    return newUser as UserProfile;
+    return JSON.parse(JSON.stringify(newUser)) as UserProfile;
   } catch (e: any) {
-    console.log(e.message, new Date().toString());
+    console.log(new Date().toLocaleString(), e.message);
   }
 }

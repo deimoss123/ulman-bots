@@ -6,12 +6,13 @@ const izmantotConfig: ApplicationCommandData = {
   description: 'Izmantot kādu lietu no inventāra',
   options: [
     {
-      name: 'lietas_id',
-      description: 'lietas id',
+      name: 'nosaukums',
+      description: 'Lieta ko izmantot',
       type: ApplicationCommandOptionTypes.STRING,
-      required: true
-    }
-  ]
-}
+      autocomplete: true,
+      required: true,
+    },
+  ],
+};
 
-export default izmantotConfig
+export default izmantotConfig;

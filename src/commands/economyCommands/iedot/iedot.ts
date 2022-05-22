@@ -1,6 +1,5 @@
 import Command from '../../../interfaces/Command';
 import { CommandInteraction } from 'discord.js';
-import findItemById from '../../../items/helpers/findItemById';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
@@ -9,18 +8,21 @@ import embedTemplate from '../../../embeds/embedTemplate';
 import addItems from '../../../economy/addItems';
 import countItems from '../../../items/helpers/countItems';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
-import wrongIdEmbed from '../../../embeds/wrongIdEmbed';
 import iedotConfig from './iedotConfig';
 import commandColors from '../../../embeds/commandColors';
+import iedotAutocomplete from './iedotAutocomplete';
+import itemList from '../../../items/itemList';
+import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
 
 const iedot: Command = {
   title: 'Iedot',
   description: 'Iedot citam lietotājam kādu lietu',
   color: commandColors.iedot,
   config: iedotConfig,
+  autocomplete: iedotAutocomplete,
   async run(i: CommandInteraction) {
     const target = i.options.data[0].user!;
-    const itemToGiveId = i.options.data[1].value as string;
+    const itemToGiveKey = i.options.data[1].value as string;
     const amountToGive = i.options.data[2]?.value as number ?? 1;
 
     if (target.id === i.user.id) {
@@ -33,9 +35,9 @@ const iedot: Command = {
       return;
     }
 
-    const itemToGive = findItemById(itemToGiveId);
+    const itemToGive = itemList[itemToGiveKey];
     if (!itemToGive) {
-      await i.reply(wrongIdEmbed(itemToGiveId));
+      await i.reply(wrongKeyEmbed);
       return;
     }
 
@@ -48,16 +50,16 @@ const iedot: Command = {
 
     const { items } = user;
 
-    const itemInInv = items.find(({ name }) => name === itemToGive.key);
+    const itemInInv = items.find(({ name }) => name === itemToGiveKey);
     if (!itemInInv) {
-      await i.reply(ephemeralReply(`Tavā inventārā nav ${itemString(itemToGive.item)}`));
+      await i.reply(ephemeralReply(`Tavā inventārā nav ${itemString(itemToGive)}`));
       return;
     }
 
     if (itemInInv.amount < amountToGive) {
       await i.reply(ephemeralReply(
-        `Tu nevari iedot ${itemString(itemToGive.item, amountToGive, true)}\n` +
-        `Tev inventārā ir tikai ${itemString(itemToGive.item, itemInInv.amount)}`,
+        `Tu nevari iedot ${itemString(itemToGive, amountToGive, true)}\n` +
+        `Tev inventārā ir tikai ${itemString(itemToGive, itemInInv.amount)}`,
       ));
       return;
     }
@@ -70,35 +72,35 @@ const iedot: Command = {
 
     if (amountToGive > targetUser.itemCap - countItems(targetUser.items)) {
       await i.reply(ephemeralReply(
-        `Tu nevari iedot ${itemString(itemToGive.item, amountToGive, true)}\n` +
+        `Tu nevari iedot ${itemString(itemToGive, amountToGive, true)}\n` +
         `<@${target.id}> inventārā ir **${countFreeInvSlots(targetUser)}** brīvas vietas`,
       ));
       return;
     }
 
-    const targetUserAfter = await addItems(target.id, { [itemToGive.key]: amountToGive });
-    const res = await addItems(i.user.id, { [itemToGive.key]: -amountToGive });
+    const targetUserAfter = await addItems(target.id, { [itemToGiveKey]: amountToGive });
+    const res = await addItems(i.user.id, { [itemToGiveKey]: -amountToGive });
 
     if (!res || !targetUserAfter) {
       await i.reply(errorEmbed);
       return;
     }
 
-    const targetUserItem = targetUserAfter.items.find(({ name }) => name === itemToGive.key)!;
+    const targetUserItem = targetUserAfter.items.find(({ name }) => name === itemToGiveKey)!;
 
     await i.reply(embedTemplate({
       i,
       content: `<@${target.id}>`,
-      description: `Tu iedevi <@${target.id}> ${itemString(itemToGive.item, amountToGive, true)}`,
+      description: `Tu iedevi <@${target.id}> ${itemString(itemToGive, amountToGive, true)}`,
       color: this.color,
       fields: [
         {
           name: 'Tev palika',
-          value: itemString(itemToGive.item, itemInInv.amount - amountToGive),
+          value: itemString(itemToGive, itemInInv.amount - amountToGive),
           inline: true,
         }, {
           name: 'Tagad viņam ir',
-          value: itemString(itemToGive.item, targetUserItem.amount),
+          value: itemString(itemToGive, targetUserItem.amount),
           inline: true,
         },
       ],

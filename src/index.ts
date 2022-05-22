@@ -1,7 +1,7 @@
 import { Client, Intents } from 'discord.js';
 import dotenv from 'dotenv';
 import validateEnv from './utils/validateEnv';
-import mongo from './economy/mongo';
+import mongo from './utils/mongo';
 import commandHandler from './commands/commandHandler';
 import setupCronJobs from './utils/setupCronJobs';
 import createDiscounts from './items/discounts/createDiscounts';

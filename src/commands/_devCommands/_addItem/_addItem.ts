@@ -1,55 +1,38 @@
 import Command from '../../../interfaces/Command';
 import { ApplicationCommandData, CommandInteraction } from 'discord.js';
 import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums';
-import findItemById from '../../../items/helpers/findItemById';
 import embedTemplate from '../../../embeds/embedTemplate';
 import itemString from '../../../embeds/helpers/itemString';
 import addItem from '../../../economy/addItems';
-import wrongIdEmbed from '../../../embeds/wrongIdEmbed';
+import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
+import itemList from '../../../items/itemList';
+import _addItemAutocomplete from './_addItemAutocomplete';
+import _addItemConfig from './_addItemConfig';
 
 const _addItem: Command = {
   title: 'AddItem',
   description: 'Pievienot mantu inventārā',
-  color: '',
-  config: {
-    name: 'additem',
-    description: 'Pievienot mantu inventārā',
-    options: [
-      {
-        name: 'lietotājs',
-        description: 'Lietotājs kam pievienot mantu',
-        type: ApplicationCommandOptionTypes.USER,
-        required: true,
-      }, {
-        name: 'mantas_id',
-        description: 'Kādu mantu pievienot',
-        type: ApplicationCommandOptionTypes.STRING,
-        required: true,
-      }, {
-        name: 'daudzums',
-        description: 'Cik mantas pievienot',
-        type: ApplicationCommandOptionTypes.INTEGER,
-        required: true,
-      },
-    ],
-  } as ApplicationCommandData,
+  color: '#ffffff',
+  autocomplete: _addItemAutocomplete,
+  config: _addItemConfig,
   async run(i: CommandInteraction) {
     const target = i.options.data[0].user!;
-    const itemToAddId = i.options.data[1].value as string;
+    const itemToAddKey = i.options.data[1].value as string;
     const amountToAdd = i.options.data[2].value as number;
 
-    const itemToAdd = findItemById(itemToAddId);
+    const itemToAdd = itemList[itemToAddKey];
     if (!itemToAdd) {
-      await i.reply(wrongIdEmbed(itemToAddId));
+      await i.reply(wrongKeyEmbed);
       return;
     }
 
     await i.reply(embedTemplate({
       i,
-      description: `Tu pievienoji <@${target.id}> ${itemString(itemToAdd.item, amountToAdd, true)}`,
+      description: `Tu pievienoji <@${target.id}> ${itemString(itemToAdd, amountToAdd, true)}`,
+      color: this.color,
     }));
 
-    await addItem(target.id, { [itemToAdd.key]: amountToAdd });
+    await addItem(target.id, { [itemToAddKey]: amountToAdd });
   },
 };
 

@@ -37,13 +37,13 @@ export default async function addItems(
     }
 
     const res = await User.findOneAndUpdate(
-      { userId }, { $set: { items } }, { new: true }
+      { userId }, { $set: { items } }, { new: true },
     ) as UserProfile;
 
-    userCache[userId] = res
+    userCache[userId] = res;
 
-    return res;
+    return JSON.parse(JSON.stringify(res));
   } catch (e: any) {
-    console.log(e.message, new Date().toString());
+    console.log(new Date().toLocaleString(), e.message);
   }
 }

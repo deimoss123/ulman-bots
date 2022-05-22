@@ -13,12 +13,14 @@ import { validateOne } from './pardotValidate';
 import addItems from '../../../economy/addItems';
 import addLati from '../../../economy/addLati';
 import commandColors from '../../../embeds/commandColors';
+import pardotAutocomplete from './pardotAutocomplete';
 
 const pardot: Command = {
   title: 'Pārdot',
   description: 'Pārdot mantu no sava inventāra',
   color: commandColors.pardot,
   config: pardotConfig,
+  autocomplete: pardotAutocomplete,
   async run(i: CommandInteraction) {
     const user = await findUser(i.user.id);
     if (!user) {
