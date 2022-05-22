@@ -1,6 +1,7 @@
 import findUser from './findUser';
 import User from '../schemas/User';
 import UserProfile from '../interfaces/UserProfile';
+import userCache from '../utils/userCache';
 
 export default async function addItems(
   userId: string,
@@ -35,9 +36,13 @@ export default async function addItems(
       items[itemIndex].amount += amountToAdd;
     }
 
-    const res = await User.findOneAndUpdate({ userId }, { $set: { items } }, { new: true });
+    const res = await User.findOneAndUpdate(
+      { userId }, { $set: { items } }, { new: true }
+    ) as UserProfile;
 
-    return res as UserProfile;
+    userCache[userId] = res
+
+    return res;
   } catch (e: any) {
     console.log(e.message, new Date().toString());
   }
