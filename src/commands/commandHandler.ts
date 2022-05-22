@@ -3,6 +3,7 @@ import { CommandInteraction } from 'discord.js';
 import errorEmbed from '../embeds/errorEmbed';
 import interactionCache from '../utils/interactionCache';
 import ephemeralReply from '../embeds/ephemeralReply';
+import logCommand from '../utils/logCommand';
 
 export default async function(interaction: CommandInteraction) {
 
@@ -21,6 +22,7 @@ export default async function(interaction: CommandInteraction) {
     }
 
     await command.run(interaction);
+    logCommand(interaction)
     return;
   }
 
