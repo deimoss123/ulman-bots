@@ -1,5 +1,6 @@
 import UserProfile from '../interfaces/UserProfile';
 import { Snowflake } from 'discord.js';
+
 /*
 User cache glabā lietotāju ekonomijas informāciju
 {
@@ -7,7 +8,6 @@ User cache glabā lietotāju ekonomijas informāciju
   <user_id>: <UserProfile>
 }
 */
-
 const userCache: Record<Snowflake, UserProfile> = {};
 
 export default userCache;

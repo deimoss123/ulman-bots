@@ -1,6 +1,8 @@
 import { commandList, devCommandList } from './commandList';
 import { CommandInteraction } from 'discord.js';
 import errorEmbed from '../embeds/errorEmbed';
+import interactionCache from '../utils/interactionCache';
+import ephemeralReply from '../embeds/ephemeralReply';
 
 export default async function(interaction: CommandInteraction) {
 
@@ -12,6 +14,12 @@ export default async function(interaction: CommandInteraction) {
   let command = commandList.find(cmd => cmd.config.name === interaction.commandName);
 
   if (command) {
+    // pārbauda iekš interaction cache vai komanda nav aktīva
+    if (interactionCache?.[interaction.user.id]?.[command.config.name]?.isInteractionActive) {
+      await interaction.reply(ephemeralReply('Šī komanda jau ir aktīva'));
+      return;
+    }
+
     await command.run(interaction);
     return;
   }
@@ -24,7 +32,5 @@ export default async function(interaction: CommandInteraction) {
 
   // komandas testēšanai, priekš privāta servera
   command = devCommandList.find(cmd => cmd.config.name === interaction.commandName);
-  if (command) {
-    await command.run(interaction);
-  }
+  if (command) await command.run(interaction);
 }

@@ -20,5 +20,4 @@ export default function createDiscounts() {
     if (err) throw err;
     console.log('discounts.json created');
   });
-
 }

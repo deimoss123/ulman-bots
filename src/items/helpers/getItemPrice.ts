@@ -3,11 +3,11 @@ import * as fs from 'fs';
 import { DISCOUNTS_FILE_PATH } from '../discounts/createDiscounts';
 import { DiscountedItems } from '../discounts/generateDiscounts';
 
+// atgriež lietas cenu un atlaidi ja tāda ir
 export default function getItemPrice(itemKey: string) {
   const discountData = fs.readFileSync(DISCOUNTS_FILE_PATH);
 
-  // @ts-ignore
-  const discounts = JSON.parse(discountData) as DiscountedItems;
+  const discounts = JSON.parse(discountData as any) as DiscountedItems;
 
   let itemPrice = itemList[itemKey].value * 2;
 

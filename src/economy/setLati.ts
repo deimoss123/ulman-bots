@@ -2,7 +2,10 @@ import UserProfile from '../interfaces/UserProfile';
 import User from '../schemas/User';
 import userCache from '../utils/userCache';
 
-export default async function setLati(userId: string, lati: number): Promise<UserProfile | undefined> {
+export default async function setLati(
+  userId: string,
+  lati: number
+): Promise<UserProfile | undefined> {
   try {
     const res = await User.findOneAndUpdate(
       { userId }, { $set: { lati } }, { new: true },

@@ -7,6 +7,7 @@ import setupCronJobs from './utils/setupCronJobs';
 import createDiscounts from './items/discounts/createDiscounts';
 import autocompleteHandler from './commands/autocompleteHandler';
 
+process.env.TZ = 'Europe/Riga';
 dotenv.config();
 
 // pārbauda vai .env failā ir ievadīti mainīgie

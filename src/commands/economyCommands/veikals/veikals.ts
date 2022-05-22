@@ -74,6 +74,7 @@ export const veikals: Command = {
           chosenItem = componentInteraction.values[0];
 
           return {
+            setInactive: true,
             edit: {
               components: veikalsComponents(shopItems, user, chosenItem, chosenAmount),
             },
@@ -112,7 +113,7 @@ export const veikals: Command = {
             after: async () => pirktRun(componentInteraction, chosenItem, chosenAmount, commandColors.pirkt),
           };
       }
-    }, 60000);
+    }, 60000, true);
   },
 };
 

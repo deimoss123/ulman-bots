@@ -5,7 +5,6 @@ export default function setupCronJobs() {
 
   // katru dienu plkst 00:00
   cron.schedule('0 0 * * *', () => {
-    // iestata jaunas atlaides
-    setDiscounts();
+    setDiscounts(); // iestata jaunas atlaides
   });
 }

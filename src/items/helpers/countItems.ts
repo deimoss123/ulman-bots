@@ -4,7 +4,7 @@ import { ItemInProfile } from '../../interfaces/UserProfile';
 export default function(items: ItemInProfile[]): number {
   if (!items.length) return 0;
 
-  return items.reduce((previous, { amount }) => {
-    return previous + amount;
-  }, 0);
+  return items.reduce((previous, { amount }) => (
+    previous + amount
+  ), 0);
 }

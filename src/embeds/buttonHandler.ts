@@ -14,12 +14,12 @@ interface CallbackReturn {
 }
 
 export default async function buttonHandler(
-  interaction: CommandInteraction | ButtonInteraction,
+  interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction,
   interactionName: string,
   interactionMsg: Message,
   callback: (buttonInteraction: ButtonInteraction | SelectMenuInteraction) => Promise<CallbackReturn | undefined>,
-  time: number = 15000,
-  isActive: boolean = false,
+  time = 15000,
+  isActive = false,
 ): Promise<void> {
   const collector = interactionMsg.createMessageComponentCollector({ time });
   let currentMessage = interactionMsg;
@@ -51,9 +51,7 @@ export default async function buttonHandler(
 
     const res = await callback(componentInteraction as ButtonInteraction | SelectMenuInteraction);
     if (!res) {
-      try {
-        await componentInteraction.deferUpdate();
-      } catch (e) {}
+      await componentInteraction.deferUpdate();
       return;
     }
 
@@ -61,17 +59,14 @@ export default async function buttonHandler(
       interactionCache[interaction.user.id][interactionName].isInteractionActive = false;
     }
 
+    // neliela šizofrēnija
     if (res?.edit) {
       if (res?.after) {
-        try {
-          currentMessage = await interaction.editReply(res.edit as MessagePayload) as Message;
-        } catch (e) {}
+        currentMessage = await interaction.editReply(res.edit as MessagePayload) as Message;
       } else {
-        try {
-          currentMessage = await componentInteraction.update(
-            { ...res.edit as InteractionUpdateOptions, fetchReply: true },
-          ) as Message;
-        } catch (e) {}
+        currentMessage = await componentInteraction.update(
+          { ...res.edit as InteractionUpdateOptions, fetchReply: true },
+        ) as Message;
       }
     }
 

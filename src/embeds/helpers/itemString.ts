@@ -1,20 +1,27 @@
 import Item from '../../interfaces/Item';
 import capitalizeFirst from './capitalizeFirst';
 
-export default function(item: Item, amount: number = 0, akuzativs: boolean = false): string {
-  const amountString = amount >= 1 ? `${amount.toString()} `: ''
-  let result = ''
-
-  // vienskaitlis
-  if (amount % 10 === 1 && amount % 100 !== 11 || amount === 0) {
-    result = akuzativs
-      ? `${amountString}${item.nameAkuVsk}`
-      : `${amountString}${item.nameNomVsk}`;
-  } else { // daudzskaitlis
-    result = akuzativs
-      ? `${amountString}${item.nameAkuDsk}`
-      : `${amountString}${item.nameNomDsk}`;
+export default function itemString(
+  item: Item,
+  amount: number | null = null,
+  akuzativs: boolean = false,
+): string {
+  if (amount === null) {
+    return capitalizeFirst(item.nameNomVsk);
   }
 
-  return capitalizeFirst(result)
+  let result: string;
+
+  // vienskaitlis
+  if (amount % 10 === 1 && amount % 100 !== 11 && amount !== 0) {
+    result = akuzativs
+      ? item.nameAkuVsk
+      : item.nameNomVsk;
+  } else { // daudzskaitlis
+    result = akuzativs
+      ? item.nameAkuDsk
+      : item.nameNomDsk;
+  }
+
+  return `${amount} ${capitalizeFirst(result)}`;
 }

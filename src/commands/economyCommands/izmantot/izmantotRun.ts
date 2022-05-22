@@ -62,7 +62,7 @@ export default async function izmantotRun(
     color: res.color || embedColor,
     fields: [
       {
-        name: `Izmantot: ${ItemString(itemToUse, 0, true)}`,
+        name: `Izmantot: ${ItemString(itemToUse, null, true)}`,
         value: res.text,
         inline: false,
       }, ...resFields as any,
