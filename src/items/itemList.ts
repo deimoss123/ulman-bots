@@ -13,7 +13,6 @@ export enum ItemCategory {
 
 const itemList: Record<string, Item> = {
   koka_makskere: {
-    ids: ['makskere', 'makskeri'],
     nameNomVsk: 'koka makšķere',
     nameNomDsk: 'koka makšķeres',
     nameAkuVsk: 'koka makšķeri',
@@ -25,7 +24,6 @@ const itemList: Record<string, Item> = {
     // use() {},
   },
   latloto: {
-    ids: ['latloto'],
     nameNomVsk: 'latloto biļete',
     nameNomDsk: 'latloto biļetes',
     nameAkuVsk: 'latloto biļeti',
@@ -37,7 +35,6 @@ const itemList: Record<string, Item> = {
     use: latloto,
   },
   nazis: {
-    ids: ['nazis', 'nazi'],
     nameNomVsk: 'nazis',
     nameNomDsk: 'naži',
     nameAkuVsk: 'nazi',
@@ -50,7 +47,6 @@ const itemList: Record<string, Item> = {
     // use() {},
   },
   pudele: {
-    ids: ['pudele', 'stiklapudele', 'pudeli', 'stiklapudeli'],
     nameNomVsk: 'stikla pudele',
     nameNomDsk: 'stikla pudeles',
     nameAkuVsk: 'stikla pudeli',
@@ -60,7 +56,6 @@ const itemList: Record<string, Item> = {
     value: 10,
   },
   virve: {
-    ids: ['virve', 'virvi'],
     nameNomVsk: 'virve',
     nameNomDsk: 'virves',
     nameAkuVsk: 'virvi',
@@ -73,7 +68,6 @@ const itemList: Record<string, Item> = {
     use: virve,
   },
   zemenu_rasens: {
-    ids: ['rasens', 'zemenurasens', 'rasenu', 'zemenurasenu'],
     nameNomVsk: 'zemeņu Rasēns',
     nameNomDsk: 'zemeņu Rasēni',
     nameAkuVsk: 'zemeņu Rasēnu',
@@ -86,7 +80,6 @@ const itemList: Record<string, Item> = {
     // use() {},
   },
   metalluznis: {
-    ids: ['metalluznis', 'metalluzni', 'metalluznus'],
     nameNomVsk: 'metāllūznis',
     nameNomDsk: 'metāllūžņi',
     nameAkuVsk: 'metāllūzni',
@@ -96,7 +89,6 @@ const itemList: Record<string, Item> = {
     value: 5,
   },
   divainais_burkans: {
-    ids: ['divainaisburkans', 'divainoburkanu'],
     nameNomVsk: 'dīvainais burkāns',
     nameNomDsk: 'dīvainie burkāni',
     nameAkuVsk: 'dīvaino burkānu',
@@ -108,7 +100,6 @@ const itemList: Record<string, Item> = {
     use: divainais_burkans,
   },
   dizloto: {
-    ids: ['dizloto'],
     nameNomVsk: 'dižloto biļete',
     nameNomDsk: 'dižloto biļetes',
     nameAkuVsk: 'dižloto biļeti',
@@ -120,7 +111,6 @@ const itemList: Record<string, Item> = {
     use: dizloto,
   },
   divaina_makskere: {
-    ids: ['divainamakskere', 'divainomakskeri'],
     nameNomVsk: 'dīvainā makšķere',
     nameNomDsk: 'dīvainās makšķeres',
     nameAkuVsk: 'dīvaino makšķeri',
@@ -132,7 +122,6 @@ const itemList: Record<string, Item> = {
     // use:
   },
   mugursoma: {
-    ids: ['mugursoma', 'mugursomu'],
     nameNomVsk: 'mugursoma',
     nameNomDsk: 'mugursomas',
     nameAkuVsk: 'mugursomu',

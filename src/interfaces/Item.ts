@@ -12,9 +12,6 @@ interface categories extends Array<number> {
 }
 
 interface Item {
-  // mantu id ko izmanto komandās, piemēram /pirkt <id>
-  ids: ids;
-
   // nominatīvs vienskaitlis
   nameNomVsk: string;
 
@@ -37,7 +34,7 @@ interface Item {
   value: number;
 
   // vai ir atļautas atlaides
-  allowDiscount?: boolean
+  allowDiscount?: boolean;
 
   // vai lietojot mantu tā tiks noņemta no inventāra
   removedOnUse?: boolean;

@@ -47,8 +47,7 @@ export const veikals: Command = {
       return {
         name,
         value:
-          `Cena: ${price}\n` +
-          `id: \`${item.ids[0]}\``,
+          `Cena: ${price}`,
         inline: false,
       };
     });
@@ -57,7 +56,7 @@ export const veikals: Command = {
       i,
       title: 'Veikals',
       description:
-        'Nopirkt preci: `/pirkt <preces_nosaukums> <daudzums>\n`' +
+        'Nopirkt preci: `/pirkt <nosaukums> <daudzums>\n`' +
         'Atlaides mainās katru dienu plkst. `00:00`',
       color: this.color,
       fields,
