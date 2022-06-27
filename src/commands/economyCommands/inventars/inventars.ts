@@ -16,7 +16,7 @@ const inventars: Command = {
   description: 'Apskatīt savu vai kāda lietotāja inventāru',
   color: commandColors.inventars,
   config: inventarsConfig,
-  run: async function(i: CommandInteraction) {
+  async run(i: CommandInteraction) {
     const target = i.options.data[0]?.user || i.user;
 
     const targetUser = await findUser(target.id);
@@ -27,28 +27,26 @@ const inventars: Command = {
 
     const { items, itemCap } = targetUser;
 
-    const totalValue = items.reduce(
-      (previous, { name, amount }) => previous + (itemList[name].value * amount), 0,
-    );
+    const totalValue = items.reduce((previous, { name, amount }) => {
+      return previous + itemList[name].value * amount;
+    }, 0);
 
-    await i.reply(embedTemplate({
-      i,
-      title: target.id === i.user.id
-        ? 'Tavs inventārs'
-        : `${userString(target)} inventārs`,
-      description: items.length
-        ? `Inventāra vērtība: **${latiString(totalValue)}**\n` +
-        `Inventārā ir **${countItems(items)}** mantas no **${itemCap}**`
-        : 'Tukšs inventārs :(',
-      color: this.color,
-      fields: items.map(({ name, amount }) => (
-        {
+    await i.reply(
+      embedTemplate({
+        i,
+        title: target.id === i.user.id ? 'Tavs inventārs' : `${userString(target)} inventārs`,
+        description: items.length
+          ? `Inventāra vērtība: **${latiString(totalValue)}**\n` +
+            `Inventārā ir **${countItems(items)}** mantas no **${itemCap}**`
+          : 'Tukšs inventārs :(',
+        color: this.color,
+        fields: items.map(({ name, amount }) => ({
           name: `${itemString(itemList[name])} x${amount}`,
           value: `Vērtība: ${latiString(itemList[name].value)}`,
           inline: true,
-        }
-      )),
-    }));
+        })),
+      })
+    );
   },
 };
 

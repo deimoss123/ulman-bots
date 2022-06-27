@@ -99,7 +99,7 @@ const pardot: Command = {
       (previous, { item, amount }) => previous + item.value * amount, 0,
     );
 
-    let sellObj: Record<string, number> = {};
+    const sellObj: Record<string, number> = {};
     itemsToSell.forEach(({ name, amount }) => {
       sellObj[name] = -amount;
     });

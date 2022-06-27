@@ -1,6 +1,6 @@
 import { InteractionReplyOptions } from 'discord.js';
 
-export default function(description: string) {
+export default function ephemeralReply(description: string) {
   return {
     embeds: [
       {

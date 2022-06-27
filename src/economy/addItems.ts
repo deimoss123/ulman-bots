@@ -11,7 +11,7 @@ export default async function addItems(
     const user = await findUser(userId);
     if (!user) return;
 
-    let { items } = user;
+    const { items } = user;
 
     for (const [itemToAdd, amountToAdd] of Object.entries(itemsToAdd)) {
       if (amountToAdd === 0) continue;

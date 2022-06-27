@@ -13,7 +13,7 @@ export interface DiscountedItems {
 
 export default function generateDiscounts() {
   // saraksts ar mantām kurām var būt atlaides
-  let discountableItems = Object.entries(itemList).filter(
+  const discountableItems = Object.entries(itemList).filter(
     ([_, item]) => item.categories.includes(ItemCategory.VEIKALS) && item.allowDiscount,
   ).map(([key, _]) => key);
 
@@ -21,7 +21,7 @@ export default function generateDiscounts() {
   let discountCount = Math.floor(Math.random() * MAX_ITEMS) + MIN_ITEMS;
 
   // objekts ar mantām kam būs atlaides
-  let discountedItems: Record<string, number> = {};
+  const discountedItems: Record<string, number> = {};
 
   while (discountCount-- > 0) {
     // nejauši izvēlās indeksu

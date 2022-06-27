@@ -8,7 +8,7 @@ export default async function findUser(
   try {
     if (userCache?.[userId]) return JSON.parse(JSON.stringify(userCache[userId]));
 
-    let result = await User.findOne({ userId }) as UserProfile;
+    const result = await User.findOne({ userId }) as UserProfile;
 
     if (result) {
       userCache[userId] = result;

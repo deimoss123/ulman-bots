@@ -33,7 +33,7 @@ interface InteractionInCache {
   isInteractionActive: boolean;
 }
 
-let interactionCache: Record<string, // lietotāja id
+const interactionCache: Record<string, // lietotāja id
   Record<string, // interaction nosaukums (veikals, izmantot_velreiz, fenikss, ...)
     InteractionInCache>> = {};
 

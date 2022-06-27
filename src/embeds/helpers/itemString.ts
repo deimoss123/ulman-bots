@@ -4,7 +4,7 @@ import capitalizeFirst from './capitalizeFirst';
 export default function itemString(
   item: Item,
   amount: number | null = null,
-  akuzativs: boolean = false,
+  akuzativs = false,
 ): string {
   if (amount === null) {
     return capitalizeFirst(item.nameNomVsk);

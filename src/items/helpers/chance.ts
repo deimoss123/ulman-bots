@@ -22,7 +22,7 @@ interface ChanceReturn {
 }
 
 // objekts ar chance objektiem
-export type ChanceRecord = Record<string, ChanceObj>
+export type ChanceRecord = Record<string, ChanceObj>;
 
 // nejauši izvēlās kādu vērtību no chance objekta
 // ! CHANCE SUMMA OBJEKTĀ NEDRĪKST PĀRSNIEGT 1 !
@@ -35,11 +35,10 @@ export default function chance(obj: ChanceRecord): ChanceReturn {
   let sumChance = 0;
 
   // masīvs kas satur objektus ar '*' svaru
-  let starredArr = [];
+  const starredArr = [];
 
   // iziet cauri visiem svariem
   for (const key in obj) {
-
     // ja svars ir '*' tas tiek pievienots starredArr
     if (obj[key].chance === '*') {
       starredArr.push(key);

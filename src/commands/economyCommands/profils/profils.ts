@@ -6,7 +6,6 @@ import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
 import userString from '../../../embeds/helpers/userString';
 import embedTemplate from '../../../embeds/embedTemplate';
-import latiString from '../../../embeds/helpers/latiString';
 import getLevel from '../../../levelingSystem/getLevel';
 import levelsList from '../../../levelingSystem/levelsList';
 import ephemeralReply from '../../../embeds/ephemeralReply';

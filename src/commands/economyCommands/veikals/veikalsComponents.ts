@@ -14,11 +14,11 @@ import getItemPrice from '../../../items/helpers/getItemPrice';
 export default function veikalsComponents(
   shopItems: ([string, Item][]),
   user: UserProfile,
-  chosenItem: string = '',
-  chosenAmount: number = 1,
+  chosenItem = '',
+  chosenAmount = 1,
   buttonStyle: MessageButtonStyle | null = null,
 ) {
-  let amountMenuOptions: MessageSelectOptionData[] = [];
+  const amountMenuOptions: MessageSelectOptionData[] = [];
   for (let i = 1; i <= 25; i++) {
     amountMenuOptions.push({
       label: i.toString(),
@@ -39,7 +39,7 @@ export default function veikalsComponents(
 
   const disableBuy = chosenItem === '' || !canAfford || !hasInvSlots;
 
-  let buttonRow = new MessageActionRow()
+  const buttonRow = new MessageActionRow()
     .addComponents(
       new MessageButton()
         .setCustomId('veikals_pirkt')

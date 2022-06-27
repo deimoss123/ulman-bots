@@ -5,14 +5,13 @@ import interactionCache from '../utils/interactionCache';
 import ephemeralReply from '../embeds/ephemeralReply';
 import logCommand from '../utils/logCommand';
 
-export default async function(interaction: CommandInteraction) {
-
+export default async function commandHandler(interaction: CommandInteraction) {
   if (!interaction.guild) {
     await interaction.reply('UlmaņBota komandas var izmantot tikai serveros');
     return;
   }
 
-  let command = commandList.find(cmd => cmd.config.name === interaction.commandName);
+  let command = commandList.find((cmd) => cmd.config.name === interaction.commandName);
 
   if (command) {
     // pārbauda iekš interaction cache vai komanda nav aktīva
@@ -22,7 +21,7 @@ export default async function(interaction: CommandInteraction) {
     }
 
     await command.run(interaction);
-    logCommand(interaction)
+    logCommand(interaction);
     return;
   }
 
@@ -33,6 +32,6 @@ export default async function(interaction: CommandInteraction) {
   }
 
   // komandas testēšanai, priekš privāta servera
-  command = devCommandList.find(cmd => cmd.config.name === interaction.commandName);
+  command = devCommandList.find((cmd) => cmd.config.name === interaction.commandName);
   if (command) await command.run(interaction);
 }

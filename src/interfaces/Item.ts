@@ -1,11 +1,6 @@
 // masīvs ar vismaz vienu vērtību
 import UsableItemReturn from './UsableItemReturn';
 
-interface ids extends Array<string> {
-  0: string;
-  [key: number]: string;
-}
-
 interface categories extends Array<number> {
   0: number;
   [key: number]: number;
