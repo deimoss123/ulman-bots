@@ -37,5 +37,13 @@
     "mongoose": "^6.3.1",
     "node-cron": "^3.0.0",
     "string-similarity": "^4.0.4"
+  },
+  "eslintIgnore": [
+    "node_modules",
+    "dist"
+  ],
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 100
   }
 }
