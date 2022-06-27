@@ -51,11 +51,11 @@ export default async function izmantotRun(
   const resFields = res.fields || [];
 
   const componentRow = new MessageActionRow()
-  .addComponents(
-    new MessageButton()
-    .setCustomId('izmantot_velreiz')
-    .setLabel(`Izmantot vēlreiz (${itemsToUseLeft})`)
-    .setStyle('PRIMARY'));
+    .addComponents(
+      new MessageButton()
+        .setCustomId('izmantot_velreiz')
+        .setLabel(`Izmantot vēlreiz (${itemsToUseLeft})`)
+        .setStyle('PRIMARY'));
 
   const replyMessage = embedTemplate({
     i,
@@ -89,10 +89,10 @@ export default async function izmantotRun(
 
       componentRow.setComponents(
         new MessageButton()
-        .setCustomId('izmantot_velreiz')
-        .setLabel(`Izmantot vēlreiz (${itemsToUseLeft})`)
-        .setStyle(buttonStyle as MessageButtonStyle)
-        .setDisabled(true),
+          .setCustomId('izmantot_velreiz')
+          .setLabel(`Izmantot vēlreiz (${itemsToUseLeft})`)
+          .setStyle(buttonStyle as MessageButtonStyle)
+          .setDisabled(true),
       );
 
       return {

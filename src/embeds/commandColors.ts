@@ -7,6 +7,7 @@ const commandColors = {
   pardot: '#09792d',
   pirkt: '#2aecce',
   veikals: '#ef6363',
+  profils: '#82e576',
 };
 
 export default commandColors;

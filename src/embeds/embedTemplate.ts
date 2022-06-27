@@ -6,7 +6,7 @@ import {
   MessageActionRow,
 } from 'discord.js';
 
-export interface EmbedTemplateOptions {
+interface EmbedTemplateOptions {
   i: CommandInteraction | ButtonInteraction;
   content?: string;
   title?: string;
@@ -16,7 +16,7 @@ export interface EmbedTemplateOptions {
   components?: MessageActionRow[];
 }
 
-export default function(options: EmbedTemplateOptions): InteractionReplyOptions {
+export default function embedTemplate(options: EmbedTemplateOptions): InteractionReplyOptions {
   return {
     content: options.content,
     embeds: [

@@ -5,13 +5,15 @@ import mugursoma from './usableItems/mugursoma';
 import latloto from './usableItems/latloto';
 import dizloto from './usableItems/dizloto';
 
+export type ItemKey = string
+
 export enum ItemCategory {
   ATKRITUMI,
   VEIKALS,
   ZIVIS
 }
 
-const itemList: Record<string, Item> = {
+const itemList: Record<ItemKey, Item> = {
   koka_makskere: {
     nameNomVsk: 'koka makšķere',
     nameNomDsk: 'koka makšķeres',

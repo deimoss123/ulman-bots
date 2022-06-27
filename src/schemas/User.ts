@@ -1,14 +1,18 @@
 import mongoose from 'mongoose';
 
+const numberDefaulZero = {
+  type: Number,
+  default: 0
+}
+
 const userSchema = new mongoose.Schema({
   userId: {
     type: String,
     required: true,
   },
-  lati: {
-    type: Number,
-    default: 0,
-  },
+  lati: numberDefaulZero,
+  xp: numberDefaulZero,
+  level: numberDefaulZero,
   itemCap: {
     type: Number,
     default: 50,

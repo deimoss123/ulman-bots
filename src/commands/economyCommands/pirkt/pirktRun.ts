@@ -66,11 +66,11 @@ export default async function pirktRun(
   const resItems = userAfter.items.find(item => item.name === itemToBuyKey)!;
 
   const componentRow = new MessageActionRow()
-  .addComponents(
-    new MessageButton()
-    .setCustomId('pirkt_izmantot')
-    .setLabel(`Izmantot (${resItems.amount})`)
-    .setStyle('PRIMARY'));
+    .addComponents(
+      new MessageButton()
+        .setCustomId('pirkt_izmantot')
+        .setLabel(`Izmantot (${resItems.amount})`)
+        .setStyle('PRIMARY'));
 
   const replyMessage = embedTemplate({
     i,
@@ -111,10 +111,10 @@ export default async function pirktRun(
 
       componentRow.setComponents(
         new MessageButton()
-        .setCustomId('pirkt_izmantot')
-        .setLabel(`Izmantot (${resItems.amount})`)
-        .setStyle(buttonStyle as MessageButtonStyle)
-        .setDisabled(true),
+          .setCustomId('pirkt_izmantot')
+          .setLabel(`Izmantot (${resItems.amount})`)
+          .setStyle(buttonStyle as MessageButtonStyle)
+          .setDisabled(true),
       );
 
       return {
