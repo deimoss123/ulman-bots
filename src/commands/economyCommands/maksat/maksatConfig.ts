@@ -2,7 +2,7 @@ import { ApplicationCommandData } from 'discord.js';
 import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums';
 
 const maksatConfig: ApplicationCommandData = {
-  name: 'maksāt',
+  name: 'maksat',
   description: 'Pārskaitīt citam lietotājam naudu',
   options: [
     {
@@ -10,7 +10,8 @@ const maksatConfig: ApplicationCommandData = {
       description: 'Lietotājs kam maksāt',
       type: ApplicationCommandOptionTypes.USER,
       required: true,
-    }, {
+    },
+    {
       name: 'latu_daudzums',
       description: 'Cik latus vēlies samaksāt',
       type: ApplicationCommandOptionTypes.INTEGER,
