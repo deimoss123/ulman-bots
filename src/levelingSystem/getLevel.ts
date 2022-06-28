@@ -1,8 +1,8 @@
 import levelsList from './levelsList';
 
 interface GetLevelReturn {
-  excessXp: number
-  level: number,
+  excessXp: number;
+  level: number;
 }
 
 export default function getLevel(currentXp: number) {
@@ -20,6 +20,6 @@ export default function getLevel(currentXp: number) {
 
   return {
     excessXp: totalXp,
-    level: currentLevel,
+    level: currentLevel < 10 ? currentLevel : 9,
   };
 }

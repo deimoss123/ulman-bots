@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 
 const numberDefaulZero = {
   type: Number,
-  default: 0
-}
+  default: 0,
+};
 
 const userSchema = new mongoose.Schema({
   userId: {
@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema({
   lati: numberDefaulZero,
   xp: numberDefaulZero,
   level: numberDefaulZero,
+  jobPosition: {
+    type: String,
+    default: null,
+  },
   itemCap: {
     type: Number,
     default: 50,

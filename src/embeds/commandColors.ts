@@ -8,6 +8,7 @@ const commandColors = {
   pirkt: '#2aecce',
   veikals: '#ef6363',
   profils: '#82e576',
+  vakances: '#6b8d7a',
 };
 
 export default commandColors;

@@ -8,8 +8,9 @@ export interface ItemInProfile {
 interface UserProfile {
   userId: string;
   lati: number;
-  xp: number,
-  level: number,
+  xp: number;
+  level: number;
+  jobPosition: string;
   itemCap: number;
   items: ItemInProfile[];
 }

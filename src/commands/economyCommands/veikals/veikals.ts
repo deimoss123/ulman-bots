@@ -76,7 +76,6 @@ export const veikals: Command = {
             chosenItem = componentInteraction.values[0];
 
             return {
-              setInactive: true,
               edit: {
                 components: veikalsComponents(shopItems, user, chosenItem, chosenAmount),
               },
@@ -125,8 +124,7 @@ export const veikals: Command = {
           }
         }
       },
-      60000,
-      true
+      60000
     );
   },
 };

@@ -53,6 +53,8 @@ export default async function buttonHandler(
       return;
     }
 
+    collector.resetTimer();
+
     const res = await callback(componentInteraction as ButtonInteraction | SelectMenuInteraction);
     if (!res) {
       await componentInteraction.deferUpdate();
