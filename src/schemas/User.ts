@@ -1,17 +1,17 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const numberDefaulZero = {
   type: Number,
   default: 0,
 };
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   userId: {
     type: String,
     required: true,
   },
   lati: numberDefaulZero,
-  xp: numberDefaulZero,
+  xp: numberDefaulZero, // pāri palikušais xp
   level: numberDefaulZero,
   jobPosition: {
     type: String,
@@ -32,4 +32,4 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model('User', userSchema);
+export default model('User', userSchema);

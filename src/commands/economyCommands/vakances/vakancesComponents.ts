@@ -1,10 +1,9 @@
 import { MessageActionRow, MessageButton, MessageSelectMenu } from 'discord.js';
 import { JobPositions } from './vakances';
-import getLevel from '../../../levelingSystem/getLevel';
 
-export default function vakancesComponents(chosen: string, xp: number, currentJob: string) {
+export default function vakancesComponents(chosen: string, level: number, currentJob: string) {
   const options = Object.entries(JobPositions)
-    .filter(([key, value]) => key !== currentJob && getLevel(xp).level >= value.minLevel)
+    .filter(([key, value]) => key !== currentJob && level >= value.minLevel)
     .map(([key, value]) => ({
       label: value.name,
       value: key,

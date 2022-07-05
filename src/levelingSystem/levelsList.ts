@@ -1,11 +1,13 @@
 import { ItemKey } from '../items/itemList';
 
+export interface LevelReward {
+  lati?: number;
+  item?: Record<ItemKey, number>;
+}
+
 export interface LevelMilestone {
   xp: number;
-  reward: {
-    lati?: number
-    item?: Record<ItemKey, number>
-  };
+  reward: LevelReward;
 }
 
 /*
@@ -13,7 +15,8 @@ ubagošana - 1-2
 stradašana - 4-6
  */
 
-export const MAX_LEVEL = 10;
+// lati ko saņem par katru lieko xp ja ir sasniegts max līmenis
+export const MAX_LEVEL_REWARD_PER_XP = 3;
 
 const levelsList: Record<number, LevelMilestone> = {
   1: {
@@ -50,12 +53,14 @@ const levelsList: Record<number, LevelMilestone> = {
   },
   9: {
     xp: 50,
-    reward: { lati: 125},
+    reward: { lati: 125 },
   },
   10: {
     xp: 50,
-    reward: { item: { dizloto: 1 }},
+    reward: { item: { dizloto: 1 } },
   },
 };
+
+export const MAX_LEVEL = Object.keys(levelsList).length;
 
 export default levelsList;

@@ -50,7 +50,7 @@ const vakances: Command = {
     const user = await findUser(i.user.id);
     if (!user) return i.reply(errorEmbed);
 
-    const { jobPosition, xp } = user;
+    const { jobPosition, level } = user;
 
     let chosenJob = '';
 
@@ -67,7 +67,7 @@ const vakances: Command = {
           value: vakance.description,
           inline: false,
         })),
-        components: vakancesComponents(chosenJob, xp, jobPosition),
+        components: vakancesComponents(chosenJob, level, jobPosition),
       })
     );
 
@@ -83,7 +83,7 @@ const vakances: Command = {
 
             return {
               edit: {
-                components: vakancesComponents(chosenJob, xp, jobPosition),
+                components: vakancesComponents(chosenJob, level, jobPosition),
               },
             };
           case 'vakances_button':
@@ -92,7 +92,7 @@ const vakances: Command = {
             return {
               end: true,
               edit: {
-                components: vakancesComponents(chosenJob, xp, jobPosition),
+                components: vakancesComponents(chosenJob, level, jobPosition),
               },
               after: async () => {
                 await Promise.all([

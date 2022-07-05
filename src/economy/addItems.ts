@@ -2,10 +2,11 @@ import findUser from './findUser';
 import User from '../schemas/User';
 import UserProfile from '../interfaces/UserProfile';
 import userCache from '../utils/userCache';
+import { ItemKey } from '../items/itemList';
 
 export default async function addItems(
   userId: string,
-  itemsToAdd: Record<string, number>,
+  itemsToAdd: Record<ItemKey, number>
 ): Promise<UserProfile | undefined> {
   try {
     const user = await findUser(userId);
@@ -17,7 +18,7 @@ export default async function addItems(
       if (amountToAdd === 0) continue;
 
       // meklē lietotāja inventārā itemToAdd
-      const itemIndex = items.findIndex(item => item.name === itemToAdd);
+      const itemIndex = items.findIndex((item) => item.name === itemToAdd);
 
       // ja nav lietotājam datubāzē, tad ievieto jaunu item objektu
       if (itemIndex === -1) {
@@ -36,9 +37,11 @@ export default async function addItems(
       items[itemIndex].amount += amountToAdd;
     }
 
-    const res = await User.findOneAndUpdate(
-      { userId }, { $set: { items } }, { new: true },
-    ) as UserProfile;
+    const res = (await User.findOneAndUpdate(
+      { userId },
+      { $set: { items } },
+      { new: true }
+    )) as UserProfile;
 
     userCache[userId] = res;
 
