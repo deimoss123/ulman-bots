@@ -4,7 +4,6 @@ import UserProfile from '../interfaces/UserProfile';
 import userCache from '../utils/userCache';
 import findUser from './findUser';
 import levelsList, {
-  LevelMilestone,
   LevelReward,
   MAX_LEVEL,
   MAX_LEVEL_REWARD_PER_XP,
@@ -51,7 +50,7 @@ function calcLevel(
     };
   }
 
-  const nextLevelInList = levelsList[nextLevel + 1] as LevelMilestone;
+  const nextLevelInList = levelsList[nextLevel + 1];
   if (excessXp >= nextLevelInList.xp) {
     return calcLevel(currentLevel, excessXp - nextLevelInList.xp, nextLevel + 1, [
       ...rewards,
