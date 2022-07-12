@@ -9,6 +9,7 @@ const commandColors = {
   veikals: '#ef6363',
   profils: '#82e576',
   vakances: '#6b8d7a',
+  stradat: '#5b1919',
 };
 
 export default commandColors;

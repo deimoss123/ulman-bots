@@ -12,6 +12,7 @@ import izmantot from './economyCommands/izmantot/izmantot';
 import profils from './economyCommands/profils/profils';
 import _addXP from './_devCommands/_addXP/_addXP';
 import vakances from './economyCommands/vakances/vakances';
+import stradat from './economyCommands/stradat/stradat';
 
 // komandu objektu saraksts
 export const commandList: Command[] = [
@@ -25,6 +26,7 @@ export const commandList: Command[] = [
   izmantot,
   profils,
   vakances,
+  stradat,
 ];
 
 export const devCommandList: Command[] = [_addLati, _addItem, _addXP];
