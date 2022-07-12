@@ -17,15 +17,16 @@ function mapItemsToChoices(itemInList: [string, Item]) {
 }
 
 function mapProfileItemsToItemsList(item: ItemInProfile): [string, Item] {
-  return [item.name, itemList[item.name]];
+  return [item.name, itemList[item.name] as Item];
 }
 
 function filterByUsable(item: [string, Item]) {
   return !!item[1].use;
 }
 
-export default async function izmantotAutocomplete(interaction: AutocompleteInteraction): Promise<void> {
-  
+export default async function izmantotAutocomplete(
+  interaction: AutocompleteInteraction
+): Promise<void> {
   // lietotāja ievadītais teksts
   const focusedValue = normalizeLatText(interaction.options.getFocused() as string);
 
