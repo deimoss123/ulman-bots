@@ -29,12 +29,12 @@ export default async function addItems(
       }
 
       // ir datubāzē bet tiek atņemts visas (vai vairāk) mantas
-      if (items[itemIndex].amount + amountToAdd <= 0) {
+      if (items[itemIndex]!.amount + amountToAdd <= 0) {
         items.splice(itemIndex, 1);
         continue;
       }
 
-      items[itemIndex].amount += amountToAdd;
+      items[itemIndex]!.amount += amountToAdd;
     }
 
     const res = (await User.findOneAndUpdate(

@@ -13,8 +13,8 @@ const _addLati: Command = {
   color: '#ffffff',
   config: _addLatiConfig,
   async run(i: CommandInteraction) {
-    const target = i.options.data[0].user!;
-    const latiToAdd = i.options.data[1].value as number;
+    const target = i.options.getUser('lietotājs')!;
+    const latiToAdd = i.options.getInteger('latu_daudzums')!;
 
     const targetUser = await findUser(target.id);
     if (!targetUser) {
@@ -22,12 +22,15 @@ const _addLati: Command = {
       return;
     }
 
-    await i.reply(embedTemplate({
-      i,
-      description: `<@${target.id}> tika pievienoti ${latiString(latiToAdd)}\n` +
-        `Tagad viņam ir ${latiString(targetUser.lati + latiToAdd)}`,
-      color: this.color,
-    }));
+    await i.reply(
+      embedTemplate({
+        i,
+        description:
+          `<@${target.id}> tika pievienoti ${latiString(latiToAdd)}\n` +
+          `Tagad viņam ir ${latiString(targetUser.lati + latiToAdd)}`,
+        color: this.color,
+      })
+    );
 
     await addLati(target.id, latiToAdd);
   },

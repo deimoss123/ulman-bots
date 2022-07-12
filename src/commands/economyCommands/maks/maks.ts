@@ -14,7 +14,7 @@ const maks: Command = {
   color: commandColors.maks,
   config: maksConfig,
   async run(i: CommandInteraction) {
-    const target = i.options.data[0]?.user || i.user;
+    const target = i.options.getUser('lietotājs') ?? i.user;
 
     const user = await findUser(target.id);
     if (!user) {
@@ -26,12 +26,14 @@ const maks: Command = {
     if (target.id === process.env.BOT_ID) targetText = 'Valsts bankai';
     else if (target.id !== i.user.id) targetText = `${userString(target)}`;
 
-    await i.reply(embedTemplate({
-      i,
-      title: 'Maks',
-      description: `${targetText} ir ${latiString(user.lati)}`,
-      color: this.color,
-    }));
+    await i.reply(
+      embedTemplate({
+        i,
+        title: 'Maks',
+        description: `${targetText} ir ${latiString(user.lati)}`,
+        color: this.color,
+      })
+    );
   },
 };
 

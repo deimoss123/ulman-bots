@@ -10,8 +10,10 @@ piemērs 2:
 svari ir 0.4, '*', '*'
 svars katram '*' būs 0.3
 */
+export type ChanceValue = number | '*';
+
 export interface ChanceObj {
-  chance: number | '*';
+  chance: ChanceValue;
   [key: string]: any;
 }
 

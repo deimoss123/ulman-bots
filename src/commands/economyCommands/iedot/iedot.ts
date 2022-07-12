@@ -21,9 +21,9 @@ const iedot: Command = {
   config: iedotConfig,
   autocomplete: iedotAutocomplete,
   async run(i: CommandInteraction) {
-    const target = i.options.data[0].user!;
-    const itemToGiveKey = i.options.data[1].value as string;
-    const amountToGive = i.options.data[2]?.value as number ?? 1;
+    const target = i.options.getUser('lietotājs')!;
+    const itemToGiveKey = i.options.getString('nosaukums')!;
+    const amountToGive = i.options.getInteger('daudzums') ?? 1;
 
     if (target.id === i.user.id) {
       await i.reply(ephemeralReply('Tu nevari iedot sev'));
@@ -57,10 +57,12 @@ const iedot: Command = {
     }
 
     if (itemInInv.amount < amountToGive) {
-      await i.reply(ephemeralReply(
-        `Tu nevari iedot ${itemString(itemToGive, amountToGive, true)}\n` +
-        `Tev inventārā ir tikai ${itemString(itemToGive, itemInInv.amount)}`,
-      ));
+      await i.reply(
+        ephemeralReply(
+          `Tu nevari iedot ${itemString(itemToGive, amountToGive, true)}\n` +
+            `Tev inventārā ir tikai ${itemString(itemToGive, itemInInv.amount)}`
+        )
+      );
       return;
     }
 
@@ -71,10 +73,12 @@ const iedot: Command = {
     }
 
     if (amountToGive > targetUser.itemCap - countItems(targetUser.items)) {
-      await i.reply(ephemeralReply(
-        `Tu nevari iedot ${itemString(itemToGive, amountToGive, true)}\n` +
-        `<@${target.id}> inventārā ir **${countFreeInvSlots(targetUser)}** brīvas vietas`,
-      ));
+      await i.reply(
+        ephemeralReply(
+          `Tu nevari iedot ${itemString(itemToGive, amountToGive, true)}\n` +
+            `<@${target.id}> inventārā ir **${countFreeInvSlots(targetUser)}** brīvas vietas`
+        )
+      );
       return;
     }
 
@@ -88,23 +92,26 @@ const iedot: Command = {
 
     const targetUserItem = targetUserAfter.items.find(({ name }) => name === itemToGiveKey)!;
 
-    await i.reply(embedTemplate({
-      i,
-      content: `<@${target.id}>`,
-      description: `Tu iedevi <@${target.id}> ${itemString(itemToGive, amountToGive, true)}`,
-      color: this.color,
-      fields: [
-        {
-          name: 'Tev palika',
-          value: itemString(itemToGive, itemInInv.amount - amountToGive),
-          inline: true,
-        }, {
-          name: 'Tagad viņam ir',
-          value: itemString(itemToGive, targetUserItem.amount),
-          inline: true,
-        },
-      ],
-    }));
+    await i.reply(
+      embedTemplate({
+        i,
+        content: `<@${target.id}>`,
+        description: `Tu iedevi <@${target.id}> ${itemString(itemToGive, amountToGive, true)}`,
+        color: this.color,
+        fields: [
+          {
+            name: 'Tev palika',
+            value: itemString(itemToGive, itemInInv.amount - amountToGive),
+            inline: true,
+          },
+          {
+            name: 'Tagad viņam ir',
+            value: itemString(itemToGive, targetUserItem.amount),
+            inline: true,
+          },
+        ],
+      })
+    );
   },
 };
 

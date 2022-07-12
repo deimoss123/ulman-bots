@@ -73,7 +73,7 @@ export const veikals: Command = {
         switch (componentInteraction.customId) {
           case 'veikals_prece':
             if (componentInteraction.componentType !== 'SELECT_MENU') return;
-            chosenItem = componentInteraction.values[0];
+            chosenItem = componentInteraction.values[0]!;
 
             return {
               edit: {
@@ -83,7 +83,7 @@ export const veikals: Command = {
 
           case 'veikals_daudzums':
             if (componentInteraction.componentType !== 'SELECT_MENU') return;
-            chosenAmount = parseInt(componentInteraction.values[0]);
+            chosenAmount = parseInt(componentInteraction.values[0]!);
 
             return {
               edit: {

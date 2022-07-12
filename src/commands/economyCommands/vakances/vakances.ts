@@ -60,7 +60,7 @@ const vakances: Command = {
         title: 'Vakances',
         color: this.color,
         description: `Pašreizējā profesija: **${
-          jobPosition ? JobPositions[jobPosition].name : 'nav'
+          jobPosition ? JobPositions[jobPosition]!.name : 'nav'
         }**`,
         fields: Object.values(JobPositions).map((vakance) => ({
           name: `${vakance.name} | ${vakance.minLevel}. līmenis`,
@@ -79,7 +79,7 @@ const vakances: Command = {
         switch (componentInteraction.customId) {
           case 'vakances_select':
             if (componentInteraction.componentType !== 'SELECT_MENU') return;
-            chosenJob = componentInteraction.values[0];
+            chosenJob = componentInteraction.values[0]!;
 
             return {
               edit: {
@@ -99,7 +99,7 @@ const vakances: Command = {
                   setJobPosition(i.user.id, chosenJob),
                   componentInteraction.reply(
                     smallEmbed(
-                      `Tu nomainīji profesiju uz **${JobPositions[chosenJob].name}**`,
+                      `Tu nomainīji profesiju uz **${JobPositions[chosenJob]!.name}**`,
                       this.color
                     )
                   ),

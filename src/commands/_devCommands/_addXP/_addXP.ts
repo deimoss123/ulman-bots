@@ -12,8 +12,8 @@ const _addXP: Command = {
   color: '#fff',
   config: _addXPConfig,
   async run(i: CommandInteraction) {
-    const target = i.options.data[0].user!;
-    const xpToAdd = i.options.data[1].value as number;
+    const target = i.options.getUser('lietotājs')!;
+    const xpToAdd = i.options.getInteger('daudzums')!;
 
     const leveledUser = await addXp(target.id, xpToAdd);
     if (!leveledUser) return i.reply(errorEmbed);

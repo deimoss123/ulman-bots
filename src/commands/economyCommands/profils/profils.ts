@@ -15,7 +15,7 @@ const profils: Command = {
   color: commandColors.profils,
   config: profilsConfig,
   async run(i: CommandInteraction) {
-    const target = i.options.data[0]?.user || i.user;
+    const target = i.options.getUser('lietotājs') ?? i.user;
 
     const user = await findUser(target.id);
     if (!user) return i.reply(errorEmbed);
@@ -36,8 +36,8 @@ const profils: Command = {
         description:
           `Līmenis: **${level}** ${level === MAX_LEVEL ? 'MAX' : ''}\n` +
           (level === MAX_LEVEL
-            ? `${levelsList[level].xp}/${levelsList[level].xp}`
-            : `${xp}/${levelsList[level + 1].xp}`) +
+            ? `${levelsList[level]!.xp}/${levelsList[level]!.xp}`
+            : `${xp}/${levelsList[level + 1]!.xp}`) +
           ` UlmaņPunkti`,
         fields: [
           {

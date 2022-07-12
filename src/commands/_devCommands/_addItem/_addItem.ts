@@ -16,9 +16,9 @@ const _addItem: Command = {
   autocomplete: _addItemAutocomplete,
   config: _addItemConfig,
   async run(i: CommandInteraction) {
-    const target = i.options.data[0].user!;
-    const itemToAddKey = i.options.data[1].value as string;
-    const amountToAdd = i.options.data[2].value as number;
+    const target = i.options.getUser('lietotājs')!;
+    const itemToAddKey = i.options.getString('nosaukums')!;
+    const amountToAdd = i.options.getInteger('daudzums')!;
 
     const itemToAdd = itemList[itemToAddKey];
     if (!itemToAdd) {
@@ -26,11 +26,13 @@ const _addItem: Command = {
       return;
     }
 
-    await i.reply(embedTemplate({
-      i,
-      description: `Tu pievienoji <@${target.id}> ${itemString(itemToAdd, amountToAdd, true)}`,
-      color: this.color,
-    }));
+    await i.reply(
+      embedTemplate({
+        i,
+        description: `Tu pievienoji <@${target.id}> ${itemString(itemToAdd, amountToAdd, true)}`,
+        color: this.color,
+      })
+    );
 
     await addItem(target.id, { [itemToAddKey]: amountToAdd });
   },

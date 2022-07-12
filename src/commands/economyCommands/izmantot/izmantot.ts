@@ -16,7 +16,7 @@ const izmantot: Command = {
   autocomplete: izmantotAutocomplete,
   config: izmantotConfig,
   async run(i: CommandInteraction) {
-    const itemToUseKey = i.options.data[0].value as string;
+    const itemToUseKey = i.options.getString('nosaukums')!;
 
     const itemToUse = itemList[itemToUseKey];
     if (!itemToUse) {
@@ -25,10 +25,12 @@ const izmantot: Command = {
     }
 
     if (!itemToUse.use) {
-      await i.reply(ephemeralReply(
-        `**${itemString(itemToUse)}** nav ` +
-        (itemToUse.isVirsiesuDzimte ? 'izmantojams' : 'izmantojama'),
-      ));
+      await i.reply(
+        ephemeralReply(
+          `**${itemString(itemToUse)}** nav ` +
+            (itemToUse.isVirsiesuDzimte ? 'izmantojams' : 'izmantojama')
+        )
+      );
       return;
     }
 
