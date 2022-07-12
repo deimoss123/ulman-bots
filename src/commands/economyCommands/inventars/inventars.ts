@@ -17,7 +17,7 @@ const inventars: Command = {
   color: commandColors.inventars,
   config: inventarsConfig,
   async run(i: CommandInteraction) {
-    const target = i.options.data[0]?.user || i.user;
+    const target = i.options.getUser('lietotājs') || i.user;
 
     const targetUser = await findUser(target.id);
     if (!targetUser) {
@@ -28,7 +28,7 @@ const inventars: Command = {
     const { items, itemCap } = targetUser;
 
     const totalValue = items.reduce((previous, { name, amount }) => {
-      return previous + itemList[name].value * amount;
+      return previous + itemList[name]!.value * amount;
     }, 0);
 
     await i.reply(
@@ -41,8 +41,8 @@ const inventars: Command = {
           : 'Tukšs inventārs :(',
         color: this.color,
         fields: items.map(({ name, amount }) => ({
-          name: `${itemString(itemList[name])} x${amount}`,
-          value: `Vērtība: ${latiString(itemList[name].value)}`,
+          name: `${itemString(itemList[name]!)} x${amount}`,
+          value: `Vērtība: ${latiString(itemList[name]!.value)}`,
           inline: true,
         })),
       })

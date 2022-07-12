@@ -25,6 +25,9 @@ const pardot: Command = {
     const user = await findUser(i.user.id);
     if (!user) return i.reply(errorEmbed);
 
+    const subCommandName = i.options.getSubcommand();
+    console.log();
+
     let itemsToSell: {
       name: string;
       amount: number;
@@ -38,13 +41,13 @@ const pardot: Command = {
     }
 
     // pārdot pēc tipa
-    if (i.options.data[0].name === 'pēc_tipa') {
-      const typeToSell = i.options.data[0].options?.[0].value;
+    if (subCommandName === 'pēc_tipa') {
+      const typeToSell = i.options.getString('tips');
 
       itemsToSell = items.map(({ name, amount }) => ({
         name,
         amount,
-        item: itemList[name],
+        item: itemList[name]!,
       }));
 
       switch (typeToSell) {
@@ -72,9 +75,9 @@ const pardot: Command = {
     }
 
     // pārdot vienu
-    if (i.options.data[0].name === 'vienu') {
-      const itemToSellId = i.options.data[0].options![0].value as string;
-      const amountToSell = (i.options.data[0].options![1]?.value as number) ?? 1;
+    if (subCommandName === 'vienu') {
+      const itemToSellId = i.options.getString('nosaukums')!;
+      const amountToSell = i.options.getInteger('daudzums') ?? 1;
 
       const itemToSell = await validateOne(i, items, itemToSellId, amountToSell);
       if (!itemToSell) return;

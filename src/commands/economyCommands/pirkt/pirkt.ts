@@ -16,9 +16,8 @@ const pirkt: Command = {
   config: pirktConfig,
   autocomplete: pirktAutocomplete,
   async run(i: CommandInteraction) {
-
-    const itemToBuyKey = i.options.data[0].value as string;
-    const amount = i.options.data[1]?.value as number ?? 1;
+    const itemToBuyKey = i.options.getString('nosaukums')!;
+    const amount = i.options.getInteger('daudzums') ?? 1;
 
     const itemToBuy = itemList[itemToBuyKey];
     if (!itemToBuy) {
@@ -27,10 +26,13 @@ const pirkt: Command = {
     }
 
     if (!itemToBuy.categories.includes(ItemCategory.VEIKALS)) {
-      await i.reply(ephemeralReply(
-        `**${itemString(itemToBuy)}** nav ` +
-        (itemToBuy.isVirsiesuDzimte ? 'nopērkams' : 'nopērkama') + ' veikalā',
-      ));
+      await i.reply(
+        ephemeralReply(
+          `**${itemString(itemToBuy)}** nav ` +
+            (itemToBuy.isVirsiesuDzimte ? 'nopērkams' : 'nopērkama') +
+            ' veikalā'
+        )
+      );
       return;
     }
 

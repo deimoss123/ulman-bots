@@ -15,8 +15,8 @@ const maksat: Command = {
   color: commandColors.maksat,
   config: maksatConfig,
   async run(i: CommandInteraction) {
-    const target = i.options.data[0].user!;
-    const latiToAdd = i.options.data[1].value as number;
+    const target = i.options.getUser('lietotājs')!;
+    const latiToAdd = i.options.getInteger('latu_daudzums')!;
 
     if (target.id === i.user.id) {
       await i.reply(ephemeralReply('Tu nevari maksāt sev'));
@@ -36,11 +36,13 @@ const maksat: Command = {
 
     // nepietiek lati
     if (user.lati < latiToAdd) {
-      await i.reply(embedTemplate({
-        i,
-        description: `Tu nevari maksāt ${latiString(latiToAdd, true)}\n` +
-          `Tev ir ${latiString(user.lati)}`,
-      }));
+      await i.reply(
+        embedTemplate({
+          i,
+          description:
+            `Tu nevari maksāt ${latiString(latiToAdd, true)}\n` + `Tev ir ${latiString(user.lati)}`,
+        })
+      );
       return;
     }
 
@@ -52,23 +54,26 @@ const maksat: Command = {
       return;
     }
 
-    await i.reply(embedTemplate({
-      i,
-      content: `<@${target.id}>`,
-      description: `Tu samaksāji <@${target.id}> ${latiString(latiToAdd, true)}`,
-      color: this.color,
-      fields: [
-        {
-          name: 'Tev palika',
-          value: latiString(resUser.lati),
-          inline: true,
-        }, {
-          name: 'Tagad viņam ir',
-          value: latiString(targetUser.lati),
-          inline: true,
-        },
-      ],
-    }));
+    await i.reply(
+      embedTemplate({
+        i,
+        content: `<@${target.id}>`,
+        description: `Tu samaksāji <@${target.id}> ${latiString(latiToAdd, true)}`,
+        color: this.color,
+        fields: [
+          {
+            name: 'Tev palika',
+            value: latiString(resUser.lati),
+            inline: true,
+          },
+          {
+            name: 'Tagad viņam ir',
+            value: latiString(targetUser.lati),
+            inline: true,
+          },
+        ],
+      })
+    );
   },
 };
 
