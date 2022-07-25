@@ -21,14 +21,6 @@ const setnieks: StradatInteractions = {
           },
         },
       },
-      {
-        label: 'Pacel pudeli un ieliec miskastē',
-        customId: 'pietura_pacel_pudeli',
-      },
-      {
-        label: 'Piekauj viņu',
-        customId: 'pietura_piekauj',
-      },
     ],
   },
 };
