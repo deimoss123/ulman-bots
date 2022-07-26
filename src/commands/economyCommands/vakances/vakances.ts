@@ -1,5 +1,5 @@
 import Command from '../../../interfaces/Command';
-import { CommandInteraction, Message } from 'discord.js';
+import { ChatInputCommandInteraction, ComponentType, Message } from 'discord.js';
 import commandColors from '../../../embeds/commandColors';
 import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
@@ -42,11 +42,11 @@ const vakances: Command = {
   title: 'Vakances',
   description: 'Apskatīties pieejamās darba vakances',
   color: commandColors.vakances,
-  config: {
+  data: {
     name: 'vakances',
     description: 'Apskatīties pieejamās darba vakances',
   },
-  async run(i: CommandInteraction) {
+  async run(i: ChatInputCommandInteraction) {
     const user = await findUser(i.user.id);
     if (!user) return i.reply(errorEmbed);
 
@@ -78,7 +78,7 @@ const vakances: Command = {
       async (componentInteraction) => {
         switch (componentInteraction.customId) {
           case 'vakances_select':
-            if (componentInteraction.componentType !== 'SELECT_MENU') return;
+            if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
             chosenJob = componentInteraction.values[0]!;
 
             return {
@@ -87,7 +87,7 @@ const vakances: Command = {
               },
             };
           case 'vakances_button':
-            if (componentInteraction.componentType !== 'BUTTON') return;
+            if (componentInteraction.componentType !== ComponentType.Button) return;
 
             return {
               end: true,

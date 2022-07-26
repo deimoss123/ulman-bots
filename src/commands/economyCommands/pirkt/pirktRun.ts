@@ -1,9 +1,10 @@
 import {
+  ActionRowBuilder,
+  ButtonBuilder,
   ButtonInteraction,
+  ButtonStyle,
   CommandInteraction,
-  MessageActionRow,
-  MessageButton,
-  MessageButtonStyle,
+  ComponentType,
 } from 'discord.js';
 import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
@@ -23,7 +24,7 @@ export default async function pirktRun(
   i: CommandInteraction | ButtonInteraction,
   itemToBuyKey: string,
   amountToBuy: number,
-  embedColor: string,
+  embedColor: number
 ): Promise<void> {
   const user = await findUser(i.user.id);
   if (!user) {
@@ -37,21 +38,28 @@ export default async function pirktRun(
   const totalCost = getItemPrice(itemToBuyKey).price * amountToBuy;
 
   if (totalCost > user.lati) {
-    await i.reply(ephemeralReply(
-      `Tev nepietiek naudas lai nopirktu ${itemString(itemToBuy, amountToBuy, true)}\n` +
-      `Cena: ${latiString(totalCost)}\n` +
-      `Tev ir ${latiString(user.lati)}`,
-    ));
+    await i.reply(
+      ephemeralReply(
+        `Tev nepietiek naudas lai nopirktu ${itemString(itemToBuy, amountToBuy, true)}\n` +
+          `Cena: ${latiString(totalCost)}\n` +
+          `Tev ir ${latiString(user.lati)}`
+      )
+    );
     return;
   }
 
   const freeSlots = countFreeInvSlots(user);
 
   if (freeSlots < amountToBuy) {
-    await i.reply(ephemeralReply(
-      `Tev nepietiek vietas inventārā lai nopirktu ${itemString(itemToBuy, amountToBuy, true)}\n` +
-      `Tev ir **${freeSlots}** brīvas vietas`,
-    ));
+    await i.reply(
+      ephemeralReply(
+        `Tev nepietiek vietas inventārā lai nopirktu ${itemString(
+          itemToBuy,
+          amountToBuy,
+          true
+        )}\n` + `Tev ir **${freeSlots}** brīvas vietas`
+      )
+    );
     return;
   }
 
@@ -63,14 +71,14 @@ export default async function pirktRun(
     return;
   }
 
-  const resItems = userAfter.items.find(item => item.name === itemToBuyKey)!;
+  const resItems = userAfter.items.find((item) => item.name === itemToBuyKey)!;
 
-  const componentRow = new MessageActionRow()
-    .addComponents(
-      new MessageButton()
-        .setCustomId('pirkt_izmantot')
-        .setLabel(`Izmantot (${resItems.amount})`)
-        .setStyle('PRIMARY'));
+  const componentRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder()
+      .setCustomId('pirkt_izmantot')
+      .setLabel(`Izmantot (${resItems.amount})`)
+      .setStyle(ButtonStyle.Primary)
+  );
 
   const replyMessage = embedTemplate({
     i,
@@ -83,7 +91,8 @@ export default async function pirktRun(
         name: 'Tev palika',
         value: latiString(userAfter.lati),
         inline: true,
-      }, {
+      },
+      {
         name: 'Tev tagad ir',
         value: itemString(itemList[resItems.name], resItems.amount),
         inline: true,
@@ -96,35 +105,40 @@ export default async function pirktRun(
 
   if (!itemToBuy.use) return;
 
-  await buttonHandler(i, 'pirkt', interactionReply!, async componentInteraction => {
-    if (componentInteraction.customId === 'pirkt_izmantot') {
-      if (componentInteraction.componentType !== 'BUTTON') return;
+  await buttonHandler(
+    i,
+    'pirkt',
+    interactionReply!,
+    async (componentInteraction) => {
+      if (componentInteraction.customId === 'pirkt_izmantot') {
+        if (componentInteraction.componentType !== ComponentType.Button) return;
 
-      let buttonStyle = 'SUCCESS';
+        let buttonStyle = ButtonStyle.Success;
 
-      const userBeforeUse = await findUser(i.user.id);
-      if (userBeforeUse) {
-        if (!userBeforeUse.items.find(item => item.name === itemToBuyKey)) {
-          buttonStyle = 'DANGER';
+        const userBeforeUse = await findUser(i.user.id);
+        if (userBeforeUse) {
+          if (!userBeforeUse.items.find((item) => item.name === itemToBuyKey)) {
+            buttonStyle = ButtonStyle.Danger;
+          }
         }
+
+        componentRow.setComponents(
+          new ButtonBuilder()
+            .setCustomId('pirkt_izmantot')
+            .setLabel(`Izmantot (${resItems.amount})`)
+            .setStyle(buttonStyle)
+            .setDisabled(true)
+        );
+
+        return {
+          end: true,
+          edit: { components: [componentRow] },
+          after: async () => izmantotRun(componentInteraction, itemToBuyKey, embedColor),
+        };
       }
 
-      componentRow.setComponents(
-        new MessageButton()
-          .setCustomId('pirkt_izmantot')
-          .setLabel(`Izmantot (${resItems.amount})`)
-          .setStyle(buttonStyle as MessageButtonStyle)
-          .setDisabled(true),
-      );
-
-      return {
-        end: true,
-        edit: { components: [componentRow] },
-        after: async () => izmantotRun(componentInteraction, itemToBuyKey, embedColor),
-      };
-    }
-
-    return;
-  }, 10000);
-
+      return;
+    },
+    10000
+  );
 }

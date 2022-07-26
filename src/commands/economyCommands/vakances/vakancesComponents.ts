@@ -1,4 +1,4 @@
-import { MessageActionRow, MessageButton, MessageSelectMenu } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, SelectMenuBuilder } from 'discord.js';
 import { JobPositions } from './vakances';
 
 export default function vakancesComponents(chosen: string, level: number, currentJob: string) {
@@ -11,18 +11,18 @@ export default function vakancesComponents(chosen: string, level: number, curren
     }));
 
   return [
-    new MessageActionRow().addComponents(
-      new MessageSelectMenu()
+    new ActionRowBuilder<SelectMenuBuilder>().addComponents(
+      new SelectMenuBuilder()
         .setCustomId('vakances_select')
         .setPlaceholder('Izvēlies vakanci')
         .setDisabled(!options.length)
         .addOptions(options.length ? options : [{ label: '-', value: '-' }])
     ),
-    new MessageActionRow().addComponents(
-      new MessageButton()
+    new ActionRowBuilder<ButtonBuilder>().addComponents(
+      new ButtonBuilder()
         .setCustomId('vakances_button')
         .setLabel('Mainīt darbu')
-        .setStyle(chosen ? 'PRIMARY' : 'SECONDARY')
+        .setStyle(chosen ? ButtonStyle.Primary : ButtonStyle.Secondary)
         .setDisabled(!chosen)
     ),
   ];

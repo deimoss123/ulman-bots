@@ -1,4 +1,9 @@
-import { Client, Intents } from 'discord.js';
+import {
+  ChatInputCommandInteraction,
+  Client,
+  GatewayIntentBits,
+  InteractionType,
+} from 'discord.js';
 import dotenv from 'dotenv';
 import validateEnv from './utils/validateEnv';
 import mongo from './utils/mongo';
@@ -14,17 +19,20 @@ dotenv.config();
 // pārbauda vai .env failā ir ievadīti mainīgie
 if (!validateEnv()) process.exit(1);
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-client.once('ready', async () => {
+client.once('ready', () => {
   createDiscounts();
   setupCronJobs();
   mongo().then(() => console.log('Connected to MongoDB'));
 });
 
 client.on('interactionCreate', async (i) => {
-  if (i.isCommand()) await commandHandler(i);
-  if (i.isAutocomplete()) await autocompleteHandler(i);
+  if (i.type === InteractionType.ApplicationCommand) {
+    await commandHandler(i as ChatInputCommandInteraction);
+  } else if (i.type === InteractionType.ApplicationCommandAutocomplete) {
+    await autocompleteHandler(i);
+  }
 });
 
 client

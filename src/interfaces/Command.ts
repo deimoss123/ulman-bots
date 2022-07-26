@@ -1,6 +1,7 @@
 import {
-  ApplicationCommandData, AutocompleteInteraction,
-  CommandInteraction,
+  AutocompleteInteraction,
+  ChatInputApplicationCommandData,
+  ChatInputCommandInteraction,
 } from 'discord.js';
 
 // interfeiss priekš bota komandu objektiem
@@ -12,16 +13,16 @@ interface Command {
   description: string;
 
   // krāsa embediem
-  color: string;
+  color: number;
 
   // konfigurācija / komandām priekš reģistrēšanas
-  config: ApplicationCommandData;
+  data: ChatInputApplicationCommandData;
 
   // funkcija priekš / komandu autocomplete apstrādāšanas
   autocomplete?: (i: AutocompleteInteraction) => void;
 
   // komandas galvenais kods
-  run: (i: CommandInteraction) => void;
+  run: (i: ChatInputCommandInteraction) => void;
 }
 
 export default Command;

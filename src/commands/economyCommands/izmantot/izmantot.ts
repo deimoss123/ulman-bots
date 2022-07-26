@@ -1,7 +1,6 @@
 import Command from '../../../interfaces/Command';
 import commandColors from '../../../embeds/commandColors';
-import { CommandInteraction } from 'discord.js';
-import izmantotConfig from './izmantotConfig';
+import { ApplicationCommandOptionType, ChatInputCommandInteraction } from 'discord.js';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import itemString from '../../../embeds/helpers/itemString';
 import izmantotRun from './izmantotRun';
@@ -14,8 +13,20 @@ const izmantot: Command = {
   description: 'Izmantot kādu lietu no inventāra',
   color: commandColors.izmantot,
   autocomplete: izmantotAutocomplete,
-  config: izmantotConfig,
-  async run(i: CommandInteraction) {
+  data: {
+    name: 'izmantot',
+    description: 'Izmantot kādu lietu no inventāra',
+    options: [
+      {
+        name: 'nosaukums',
+        description: 'Lieta ko izmantot',
+        type: ApplicationCommandOptionType.String,
+        autocomplete: true,
+        required: true,
+      },
+    ],
+  },
+  async run(i: ChatInputCommandInteraction) {
     const itemToUseKey = i.options.getString('nosaukums')!;
 
     const itemToUse = itemList[itemToUseKey];

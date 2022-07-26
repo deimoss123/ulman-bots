@@ -1,13 +1,8 @@
-import { InteractionReplyOptions } from 'discord.js';
+import { EmbedBuilder, InteractionReplyOptions } from 'discord.js';
 
-export default function ephemeralReply(description: string) {
+export default function ephemeralReply(description: string): InteractionReplyOptions {
   return {
-    embeds: [
-      {
-        description,
-        color: '#9d2235',
-      },
-    ],
+    embeds: [new EmbedBuilder().setDescription(description).setColor(0x9d2235)],
     ephemeral: true,
-  } as InteractionReplyOptions;
+  };
 }

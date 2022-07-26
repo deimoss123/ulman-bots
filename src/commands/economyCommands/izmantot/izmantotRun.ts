@@ -1,10 +1,9 @@
 import {
+  ActionRowBuilder,
   ButtonInteraction,
+  ButtonStyle,
   CommandInteraction,
-  Message,
-  MessageActionRow,
-  MessageButton,
-  MessageButtonStyle,
+  ComponentType,
 } from 'discord.js';
 import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
@@ -15,13 +14,13 @@ import embedTemplate from '../../../embeds/embedTemplate';
 import ItemString from '../../../embeds/helpers/itemString';
 import itemList from '../../../items/itemList';
 import buttonHandler from '../../../embeds/buttonHandler';
+import { ButtonBuilder } from '@discordjs/builders';
 
 export default async function izmantotRun(
   i: CommandInteraction | ButtonInteraction,
   itemToUseKey: string,
-  embedColor: string,
+  embedColor: number
 ): Promise<void> {
-
   const user = await findUser(i.user.id);
   if (!user) {
     await i.reply(errorEmbed);
@@ -50,12 +49,12 @@ export default async function izmantotRun(
   const res = await itemToUse.use!(i.user.id);
   const resFields = res.fields || [];
 
-  const componentRow = new MessageActionRow()
-    .addComponents(
-      new MessageButton()
-        .setCustomId('izmantot_velreiz')
-        .setLabel(`Izmantot vēlreiz (${itemsToUseLeft})`)
-        .setStyle('PRIMARY'));
+  const componentRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder()
+      .setCustomId('izmantot_velreiz')
+      .setLabel(`Izmantot vēlreiz (${itemsToUseLeft})`)
+      .setStyle(ButtonStyle.Primary)
+  );
 
   const replyMessage = embedTemplate({
     i,
@@ -65,44 +64,50 @@ export default async function izmantotRun(
         name: `Izmantot: ${ItemString(itemToUse, null, true)}`,
         value: res.text,
         inline: false,
-      }, ...resFields as any,
+      },
+      ...(resFields as any),
     ],
-    components: (itemsToUseLeft && itemToUse.removedOnUse) ? [componentRow] : [],
+    components: itemsToUseLeft && itemToUse.removedOnUse ? [componentRow] : [],
   });
 
   const interactionReply = await i.reply(replyMessage);
 
   if (!itemsToUseLeft || !itemToUse.removedOnUse) return;
 
-  await buttonHandler(i, 'izmantot', interactionReply!, async componentInteraction => {
-    if (componentInteraction.customId === 'izmantot_velreiz') {
-      if (componentInteraction.componentType !== 'BUTTON') return;
+  await buttonHandler(
+    i,
+    'izmantot',
+    interactionReply!,
+    async (componentInteraction) => {
+      if (componentInteraction.customId === 'izmantot_velreiz') {
+        if (componentInteraction.componentType !== ComponentType.Button) return;
 
-      let buttonStyle = 'SUCCESS';
+        let buttonStyle = ButtonStyle.Success;
 
-      const userBeforeUse = await findUser(i.user.id);
-      if (userBeforeUse) {
-        if (!userBeforeUse.items.find(item => item.name === itemToUseKey)) {
-          buttonStyle = 'DANGER';
+        const userBeforeUse = await findUser(i.user.id);
+        if (userBeforeUse) {
+          if (!userBeforeUse.items.find((item) => item.name === itemToUseKey)) {
+            buttonStyle = ButtonStyle.Danger;
+          }
         }
+
+        componentRow.setComponents(
+          new ButtonBuilder()
+            .setCustomId('izmantot_velreiz')
+            .setLabel(`Izmantot vēlreiz (${itemsToUseLeft})`)
+            .setStyle(buttonStyle)
+            .setDisabled(true)
+        );
+
+        return {
+          end: true,
+          edit: { components: [componentRow] },
+          after: async () => izmantotRun(componentInteraction, itemToUseKey, embedColor),
+        };
       }
 
-      componentRow.setComponents(
-        new MessageButton()
-          .setCustomId('izmantot_velreiz')
-          .setLabel(`Izmantot vēlreiz (${itemsToUseLeft})`)
-          .setStyle(buttonStyle as MessageButtonStyle)
-          .setDisabled(true),
-      );
-
-      return {
-        end: true,
-        edit: { components: [componentRow] },
-        after: async () => izmantotRun(componentInteraction, itemToUseKey, embedColor),
-      };
-    }
-
-    return;
-  }, 10000);
-
+      return;
+    },
+    10000
+  );
 }

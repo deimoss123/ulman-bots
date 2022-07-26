@@ -1,17 +1,32 @@
-import Command from '../../../interfaces/Command';
-import _addXPConfig from './_addXPConfig';
-import { CommandInteraction } from 'discord.js';
-import errorEmbed from '../../../embeds/errorEmbed';
-import embedTemplate from '../../../embeds/embedTemplate';
-import addXp from '../../../economy/addXp';
-import latiString from '../../../embeds/helpers/latiString';
+import Command from '../../interfaces/Command';
+import { ApplicationCommandOptionType, ChatInputCommandInteraction } from 'discord.js';
+import errorEmbed from '../../embeds/errorEmbed';
+import embedTemplate from '../../embeds/embedTemplate';
+import addXp from '../../economy/addXp';
+import latiString from '../../embeds/helpers/latiString';
 
 const _addXP: Command = {
   title: 'AddXP',
   description: 'Pievienot UlmaņPunktus',
-  color: '#fff',
-  config: _addXPConfig,
-  async run(i: CommandInteraction) {
+  color: 0xffffff,
+  data: {
+    name: 'addxp',
+    description: 'Pievienot UlmaņPunktus',
+    options: [
+      {
+        name: 'lietotājs',
+        description: 'Lietotājs kam pievienot UlmaņPunktus',
+        type: ApplicationCommandOptionType.User,
+      },
+      {
+        name: 'daudzums',
+        description: 'Cik UlmaņPunktus pievienot',
+        type: ApplicationCommandOptionType.Integer,
+        required: true,
+      },
+    ],
+  },
+  async run(i: ChatInputCommandInteraction) {
     const target = i.options.getUser('lietotājs')!;
     const xpToAdd = i.options.getInteger('daudzums')!;
 

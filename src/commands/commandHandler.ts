@@ -1,21 +1,21 @@
 import { commandList, devCommandList } from './commandList';
-import { CommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction } from 'discord.js';
 import errorEmbed from '../embeds/errorEmbed';
 import interactionCache from '../utils/interactionCache';
 import ephemeralReply from '../embeds/ephemeralReply';
 import logCommand from '../utils/logCommand';
 
-export default async function commandHandler(interaction: CommandInteraction) {
+export default async function commandHandler(interaction: ChatInputCommandInteraction) {
   if (!interaction.guild) {
     await interaction.reply('UlmaņBota komandas var izmantot tikai serveros');
     return;
   }
 
-  let command = commandList.find((cmd) => cmd.config.name === interaction.commandName);
+  let command = commandList.find((cmd) => cmd.data.name === interaction.commandName);
 
   if (command) {
     // pārbauda iekš interaction cache vai komanda nav aktīva
-    if (interactionCache?.[interaction.user.id]?.[command.config.name]?.isInteractionActive) {
+    if (interactionCache?.[interaction.user.id]?.[command.data.name]?.isInteractionActive) {
       await interaction.reply(ephemeralReply('Šī komanda jau ir aktīva'));
       return;
     }
@@ -32,6 +32,6 @@ export default async function commandHandler(interaction: CommandInteraction) {
   }
 
   // komandas testēšanai, priekš privāta servera
-  command = devCommandList.find((cmd) => cmd.config.name === interaction.commandName);
+  command = devCommandList.find((cmd) => cmd.data.name === interaction.commandName);
   if (command) await command.run(interaction);
 }

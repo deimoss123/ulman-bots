@@ -1,8 +1,9 @@
 import {
-  MessageActionRow,
-  MessageButton, MessageButtonStyle,
-  MessageSelectMenu,
-  MessageSelectOptionData,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  SelectMenuBuilder,
+  SelectMenuComponentOptionData,
 } from 'discord.js';
 import Item from '../../../interfaces/Item';
 import capitalizeFirst from '../../../embeds/helpers/capitalizeFirst';
@@ -12,13 +13,13 @@ import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import getItemPrice from '../../../items/helpers/getItemPrice';
 
 export default function veikalsComponents(
-  shopItems: ([string, Item][]),
+  shopItems: [string, Item][],
   user: UserProfile,
   chosenItem = '',
   chosenAmount = 1,
-  buttonStyle: MessageButtonStyle | null = null,
+  buttonStyle: ButtonStyle | null = null
 ) {
-  const amountMenuOptions: MessageSelectOptionData[] = [];
+  const amountMenuOptions: SelectMenuComponentOptionData[] = [];
   for (let i = 1; i <= 25; i++) {
     amountMenuOptions.push({
       label: i.toString(),
@@ -39,64 +40,58 @@ export default function veikalsComponents(
 
   const disableBuy = chosenItem === '' || !canAfford || !hasInvSlots;
 
-  const buttonRow = new MessageActionRow()
-    .addComponents(
-      new MessageButton()
-        .setCustomId('veikals_pirkt')
-        .setLabel('Pirkt' + (totalCost ? ` (${latiString(totalCost)})` : ''))
-        .setStyle(
-          buttonStyle || (disableBuy ? 'SECONDARY' : 'PRIMARY'),
-        )
-        .setEmoji(disableBuy ? '' : '911400812754915388')
-        .setDisabled(disableBuy),
-    );
+  const buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder()
+      .setCustomId('veikals_pirkt')
+      .setLabel('Pirkt' + (totalCost ? ` (${latiString(totalCost)})` : ''))
+      .setStyle(buttonStyle || (disableBuy ? ButtonStyle.Secondary : ButtonStyle.Primary))
+      .setEmoji(disableBuy ? '911400812754915388' : '911400812754915388')
+      .setDisabled(disableBuy)
+  );
 
   if (!canAfford) {
     buttonRow.addComponents(
-      new MessageButton()
+      new ButtonBuilder()
         .setCustomId('veikals_warn_1')
         .setLabel('Tev nepietiek naudas')
-        .setStyle('DANGER')
+        .setStyle(ButtonStyle.Danger)
         .setEmoji('❕')
-        .setDisabled(true),
+        .setDisabled(true)
     );
   }
 
   if (!hasInvSlots) {
     buttonRow.addComponents(
-      new MessageButton()
+      new ButtonBuilder()
         .setCustomId('veikals_warn_2')
         .setLabel('Tev inventārā nav pietiekami vietas')
-        .setStyle('DANGER')
+        .setStyle(ButtonStyle.Danger)
         .setEmoji('❕')
-        .setDisabled(true),
+        .setDisabled(true)
     );
   }
 
   return [
-    new MessageActionRow()
-      .addComponents(
-        new MessageSelectMenu()
-          .setCustomId('veikals_prece')
-          .setPlaceholder(`Izvēlies preci, tev ir ${latiString(user.lati)}`)
-          .addOptions(shopItems.map(([key, item]) => (
-              {
-                label: capitalizeFirst(item.nameNomVsk),
-                description: latiString(getItemPrice(key).price),
-                value: key,
-                emoji: '922501450544857098',
-                default: key === chosenItem,
-              }
-            )),
-          ),
-      ),
-    new MessageActionRow()
-      .addComponents(
-        new MessageSelectMenu()
-          .setCustomId('veikals_daudzums')
-          .setPlaceholder(`Daudzums: ${chosenAmount}`)
-          .addOptions(amountMenuOptions),
-      ),
+    new ActionRowBuilder<SelectMenuBuilder>().addComponents(
+      new SelectMenuBuilder()
+        .setCustomId('veikals_prece')
+        .setPlaceholder(`Izvēlies preci, tev ir ${latiString(user.lati)}`)
+        .addOptions(
+          shopItems.map(([key, item]) => ({
+            label: capitalizeFirst(item.nameNomVsk),
+            description: latiString(getItemPrice(key).price),
+            value: key,
+            emoji: '922501450544857098',
+            default: key === chosenItem,
+          }))
+        )
+    ),
+    new ActionRowBuilder<SelectMenuBuilder>().addComponents(
+      new SelectMenuBuilder()
+        .setCustomId('veikals_daudzums')
+        .setPlaceholder(`Daudzums: ${chosenAmount}`)
+        .addOptions(amountMenuOptions)
+    ),
     buttonRow,
   ];
 }

@@ -1,4 +1,4 @@
-import { InteractionCollector, MessageComponentInteraction } from 'discord.js';
+import { ButtonInteraction, InteractionCollector, SelectMenuInteraction } from 'discord.js';
 
 /*
 Interaction Cache glabā visas ziņas kurās pogas nav izslēgtas un kurās strādā collectori
@@ -26,15 +26,19 @@ interactionsCache struktūra:
 */
 
 interface InteractionInCache {
-  collector: InteractionCollector<MessageComponentInteraction>;
+  collector: InteractionCollector<ButtonInteraction | SelectMenuInteraction>;
 
   // nosaka vai komanda ir aktīva, piemēram ja griežas fenikss, tad tā IR aktīva
   // kad fēnikss ir beidzis griezties tā vairs nav aktīva
   isInteractionActive: boolean;
 }
 
-const interactionCache: Record<string, // lietotāja id
-  Record<string, // interaction nosaukums (veikals, izmantot_velreiz, fenikss, ...)
-    InteractionInCache>> = {};
+const interactionCache: Record<
+  string, // lietotāja id
+  Record<
+    string, // interaction nosaukums (veikals, izmantot_velreiz, fenikss, ...)
+    InteractionInCache
+  >
+> = {};
 
 export default interactionCache;

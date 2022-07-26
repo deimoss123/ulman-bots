@@ -1,9 +1,8 @@
 import Command from '../../../interfaces/Command';
-import { CommandInteraction, Message, MessageButtonStyle } from 'discord.js';
+import { ButtonStyle, CommandInteraction, ComponentType, Message } from 'discord.js';
 import itemList, { ItemCategory } from '../../../items/itemList';
 import embedTemplate from '../../../embeds/embedTemplate';
 import latiString from '../../../embeds/helpers/latiString';
-import veikalsConfig from './veikalsConfig';
 import commandColors from '../../../embeds/commandColors';
 import itemString from '../../../embeds/helpers/itemString';
 import buttonHandler from '../../../embeds/buttonHandler';
@@ -18,7 +17,10 @@ export const veikals: Command = {
   title: 'Veikals',
   description: 'Atvērt veikalu',
   color: commandColors.veikals,
-  config: veikalsConfig,
+  data: {
+    name: 'veikals',
+    description: 'Atvērt veikalu',
+  },
   async run(i: CommandInteraction) {
     const user = await findUser(i.user.id);
     if (!user) {
@@ -72,7 +74,7 @@ export const veikals: Command = {
       async (componentInteraction) => {
         switch (componentInteraction.customId) {
           case 'veikals_prece':
-            if (componentInteraction.componentType !== 'SELECT_MENU') return;
+            if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
             chosenItem = componentInteraction.values[0]!;
 
             return {
@@ -82,7 +84,7 @@ export const veikals: Command = {
             };
 
           case 'veikals_daudzums':
-            if (componentInteraction.componentType !== 'SELECT_MENU') return;
+            if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
             chosenAmount = parseInt(componentInteraction.values[0]!);
 
             return {
@@ -92,9 +94,9 @@ export const veikals: Command = {
             };
 
           case 'veikals_pirkt': {
-            if (componentInteraction.componentType !== 'BUTTON') return;
+            if (componentInteraction.componentType !== ComponentType.Button) return;
 
-            let buttonStyle = 'SUCCESS';
+            let buttonStyle = ButtonStyle.Success;
 
             const userBeforeBuy = await findUser(i.user.id);
             if (userBeforeBuy) {
@@ -103,7 +105,7 @@ export const veikals: Command = {
                 userBeforeBuy.lati < totalCost ||
                 countFreeInvSlots(userBeforeBuy) < chosenAmount
               ) {
-                buttonStyle = 'DANGER';
+                buttonStyle = ButtonStyle.Danger;
               }
             }
 
@@ -115,7 +117,7 @@ export const veikals: Command = {
                   user,
                   chosenItem,
                   chosenAmount,
-                  buttonStyle as MessageButtonStyle
+                  buttonStyle
                 ),
               },
               after: async () =>

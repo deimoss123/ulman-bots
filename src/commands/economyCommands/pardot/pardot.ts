@@ -1,6 +1,5 @@
 import Command from '../../../interfaces/Command';
-import { CommandInteraction } from 'discord.js';
-import pardotConfig from './pardotConfig';
+import { ApplicationCommandOptionType, ChatInputCommandInteraction } from 'discord.js';
 import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
 import embedTemplate from '../../../embeds/embedTemplate';
@@ -19,14 +18,65 @@ const pardot: Command = {
   title: 'Pārdot',
   description: 'Pārdot mantu no sava inventāra',
   color: commandColors.pardot,
-  config: pardotConfig,
+  data: {
+    name: 'pardot',
+    description: 'Pārdot lietu no sava inventāra',
+    options: [
+      {
+        name: 'vienu',
+        description: 'Pārdot vienu lietu pēc id',
+        type: ApplicationCommandOptionType.Subcommand,
+        options: [
+          {
+            name: 'nosaukums',
+            description: 'Lieta ko vēlies pārdot',
+            type: ApplicationCommandOptionType.String,
+            autocomplete: true,
+            required: true,
+          },
+          {
+            name: 'daudzums',
+            description: 'Cik daudz lietas vēlies pārdot',
+            type: ApplicationCommandOptionType.Integer,
+            min_value: 1,
+          },
+        ],
+      },
+      {
+        name: 'pēc_tipa',
+        description: 'Pārdot visas lietas pēc tipa (zivis, atkritumi, utt.)',
+        type: ApplicationCommandOptionType.Subcommand,
+        options: [
+          {
+            name: 'tips',
+            description: 'Kāda tipa lietas pārdot',
+            type: ApplicationCommandOptionType.String,
+            required: true,
+            choices: [
+              {
+                name: 'Atkritumi',
+                value: 'atkritumi',
+              },
+              {
+                name: 'Zivis',
+                value: 'zivis',
+              },
+              {
+                name: 'Visu',
+                value: 'visu',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
   autocomplete: pardotAutocomplete,
-  async run(i: CommandInteraction) {
+  async run(i: ChatInputCommandInteraction) {
     const user = await findUser(i.user.id);
     if (!user) return i.reply(errorEmbed);
 
     const subCommandName = i.options.getSubcommand();
-    console.log();
 
     let itemsToSell: {
       name: string;

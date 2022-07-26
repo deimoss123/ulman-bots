@@ -1,7 +1,7 @@
-import { HexColorString, MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
-export default function smallEmbed(text: string, color: string) {
+export default function smallEmbed(text: string, color: number) {
   return {
-    embeds: [new MessageEmbed().setDescription(text).setColor(color as HexColorString)],
+    embeds: [new EmbedBuilder().setDescription(text).setColor(color)],
   };
 }

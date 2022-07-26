@@ -1,9 +1,14 @@
 import {
+  ActionRowData,
+  APIActionRowComponent,
+  APIMessageActionRowComponent,
   ButtonInteraction,
   CommandInteraction,
   EmbedField,
   InteractionReplyOptions,
-  MessageActionRow,
+  JSONEncodable,
+  MessageActionRowComponentBuilder,
+  MessageActionRowComponentData,
 } from 'discord.js';
 
 interface EmbedTemplateOptions {
@@ -13,10 +18,16 @@ interface EmbedTemplateOptions {
   description?: string;
   fields?: EmbedField[];
   color?: any;
-  components?: MessageActionRow[];
+  components?: (
+    | JSONEncodable<APIActionRowComponent<APIMessageActionRowComponent>>
+    | ActionRowData<MessageActionRowComponentData | MessageActionRowComponentBuilder>
+    | APIActionRowComponent<APIMessageActionRowComponent>
+  )[];
 }
 
-export default function embedTemplate(options: EmbedTemplateOptions): InteractionReplyOptions {
+export default function embedTemplate(
+  options: EmbedTemplateOptions
+): InteractionReplyOptions & { fetchReply: true } {
   return {
     content: options.content,
     embeds: [
@@ -27,7 +38,7 @@ export default function embedTemplate(options: EmbedTemplateOptions): Interactio
         fields: options.fields ?? [],
         author: {
           name: options.i.user.username,
-          icon_url: options.i.user.displayAvatarURL({ dynamic: true }),
+          icon_url: options.i.user.displayAvatarURL(),
         },
       },
     ],

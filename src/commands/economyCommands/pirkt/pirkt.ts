@@ -1,9 +1,8 @@
 import Command from '../../../interfaces/Command';
-import { CommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType, ChatInputCommandInteraction } from 'discord.js';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import itemList, { ItemCategory } from '../../../items/itemList';
 import itemString from '../../../embeds/helpers/itemString';
-import pirktConfig from './pirktConfig';
 import commandColors from '../../../embeds/commandColors';
 import pirktRun from './pirktRun';
 import pirktAutocomplete from './pirktAutocomplete';
@@ -13,9 +12,27 @@ const pirkt: Command = {
   title: 'Pirkt',
   description: 'Pirkt preci no veikala',
   color: commandColors.pirkt,
-  config: pirktConfig,
+  data: {
+    name: 'pirkt',
+    description: 'Nopirkt preci no veikala',
+    options: [
+      {
+        name: 'nosaukums',
+        description: 'Prece ko vēlies nopirkt',
+        type: ApplicationCommandOptionType.String,
+        autocomplete: true,
+        required: true,
+      },
+      {
+        name: 'daudzums',
+        description: 'Cik preces pirkt',
+        type: ApplicationCommandOptionType.Integer,
+        min_value: 1,
+      },
+    ],
+  },
   autocomplete: pirktAutocomplete,
-  async run(i: CommandInteraction) {
+  async run(i: ChatInputCommandInteraction) {
     const itemToBuyKey = i.options.getString('nosaukums')!;
     const amount = i.options.getInteger('daudzums') ?? 1;
 

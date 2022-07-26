@@ -1,5 +1,5 @@
 import Command from '../../../interfaces/Command';
-import { CommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType, ChatInputCommandInteraction } from 'discord.js';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
@@ -8,7 +8,6 @@ import embedTemplate from '../../../embeds/embedTemplate';
 import addItems from '../../../economy/addItems';
 import countItems from '../../../items/helpers/countItems';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
-import iedotConfig from './iedotConfig';
 import commandColors from '../../../embeds/commandColors';
 import iedotAutocomplete from './iedotAutocomplete';
 import itemList from '../../../items/itemList';
@@ -18,9 +17,33 @@ const iedot: Command = {
   title: 'Iedot',
   description: 'Iedot citam lietotājam kādu lietu',
   color: commandColors.iedot,
-  config: iedotConfig,
+  data: {
+    name: 'iedot',
+    description: 'Iedot citam lietotājam kādu lietu',
+    options: [
+      {
+        name: 'lietotājs',
+        description: 'Lietotājs kam iedot',
+        type: ApplicationCommandOptionType.User,
+        required: true,
+      },
+      {
+        name: 'nosaukums',
+        description: 'Lieta ko vēlies iedot',
+        type: ApplicationCommandOptionType.String,
+        autocomplete: true,
+        required: true,
+      },
+      {
+        name: 'daudzums',
+        description: 'Cik lietas daudz iedot',
+        type: ApplicationCommandOptionType.Integer,
+        min_value: 1,
+      },
+    ],
+  },
   autocomplete: iedotAutocomplete,
-  async run(i: CommandInteraction) {
+  async run(i: ChatInputCommandInteraction) {
     const target = i.options.getUser('lietotājs')!;
     const itemToGiveKey = i.options.getString('nosaukums')!;
     const amountToGive = i.options.getInteger('daudzums') ?? 1;
