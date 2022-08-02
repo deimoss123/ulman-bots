@@ -75,7 +75,7 @@ function calcLevel(
   };
 }
 
-interface AddXpReturn {
+export interface AddXpReturn {
   user: UserProfile;
   levelIncrease: null | {
     from: number;

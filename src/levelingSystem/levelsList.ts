@@ -16,7 +16,7 @@ stradašana - 4-6
  */
 
 // lati ko saņem par katru lieko xp ja ir sasniegts max līmenis
-export const MAX_LEVEL_REWARD_PER_XP = 3;
+export const MAX_LEVEL_REWARD_PER_XP = 10;
 
 const levelsList: Record<number, LevelMilestone> = {
   1: {

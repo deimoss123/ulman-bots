@@ -34,7 +34,7 @@ export default function embedTemplate(
       {
         title: options.title ?? '',
         description: options.description ?? '',
-        color: options.color ?? '#000000',
+        color: options.color ?? 0x000000,
         fields: options.fields ?? [],
         author: {
           name: options.i.user.username,

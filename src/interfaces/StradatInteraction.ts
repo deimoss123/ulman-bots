@@ -4,13 +4,13 @@ import { ItemKey } from '../items/itemList';
 type MinLati = number;
 type MaxLati = number;
 
-interface StradatResult {
+export interface StradatResult {
   chance: ChanceValue;
   text: string;
   reward: { lati?: [MinLati, MaxLati]; items?: Record<ItemKey, number> } | null;
 }
 
-interface StradatVeids {
+export interface StradatVeids {
   chance: ChanceValue;
   text: string;
   options: {
