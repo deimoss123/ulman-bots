@@ -37,17 +37,31 @@ const profils: Command = {
 
     const targetText = target.id === i.user.id ? 'Tavs' : userString(target);
 
+    const XP_BAR_LENGTH = 20;
+
+    let maxLevelText = '**Sasniegts maksimālais līmenis!**\n';
+    let maxLevelEmoji = '🔥';
+    let xpText = '';
+
+    let xpBar = '';
+    if (level !== MAX_LEVEL) {
+      maxLevelText = '';
+      maxLevelEmoji = '';
+      xpText = `| UlmaņPunkti: ${xp}/${levelsList[level + 1]!.xp}`;
+
+      const filledSlots = '#'.repeat(
+        Math.round((XP_BAR_LENGTH / levelsList[user.level + 1].xp) * xp)
+      );
+      xpBar += filledSlots + '-'.repeat(XP_BAR_LENGTH - filledSlots.length);
+      xpBar = `**${user.level}** \`[${xpBar}]\` **${user.level + 1}**`;
+    }
+
     await i.reply(
       embedTemplate({
         i,
         color: this.color,
         title: `${targetText} profils`,
-        description:
-          `Līmenis: **${level}** ${level === MAX_LEVEL ? 'MAX' : ''}\n` +
-          (level === MAX_LEVEL
-            ? `${levelsList[level]!.xp}/${levelsList[level]!.xp}`
-            : `${xp}/${levelsList[level + 1]!.xp}`) +
-          ` UlmaņPunkti`,
+        description: `${maxLevelText}Līmenis: **${level}** ${maxLevelEmoji} ${xpText}\n${xpBar}`,
         fields: [
           {
             name: 'Statusi',
