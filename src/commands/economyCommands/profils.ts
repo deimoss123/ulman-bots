@@ -7,6 +7,7 @@ import userString from '../../embeds/helpers/userString';
 import embedTemplate from '../../embeds/embedTemplate';
 import levelsList, { MAX_LEVEL } from '../../levelingSystem/levelsList';
 import ephemeralReply from '../../embeds/ephemeralReply';
+import { JobPositions } from './vakances/vakances';
 
 const profils: Command = {
   title: 'Profils',
@@ -29,7 +30,7 @@ const profils: Command = {
     const user = await findUser(target.id);
     if (!user) return i.reply(errorEmbed);
 
-    const { level, xp } = user;
+    const { level, xp, jobPosition } = user;
 
     if (target.id === process.env.BOT_ID) {
       return i.reply(ephemeralReply('Tu nevari apskatīt Valsts Bankas profilu'));
@@ -61,7 +62,9 @@ const profils: Command = {
         i,
         color: this.color,
         title: `${targetText} profils`,
-        description: `${maxLevelText}Līmenis: **${level}** ${maxLevelEmoji} ${xpText}\n${xpBar}`,
+        description:
+          `Profesija: \`${jobPosition ? JobPositions[jobPosition].name : 'Bezdarbnieks'}\`\n\n` +
+          `${maxLevelText}Līmenis: **${level}** ${maxLevelEmoji} ${xpText}\n${xpBar}`,
         fields: [
           {
             name: 'Statusi',
