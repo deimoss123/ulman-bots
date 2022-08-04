@@ -103,15 +103,13 @@ export default async function buttonHandler(
     currentMessage.components.forEach((row) => {
       const editedRow = new ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>();
       row.components.forEach((component) => {
-        if (!component.data.disabled) {
-          areAllComponentsAlreadyDisabled = false;
-          if (component.type === ComponentType.Button) {
-            editedRow.addComponents(ButtonBuilder.from(component).setDisabled(true));
-          } else if (component.type === ComponentType.SelectMenu) {
-            editedRow.addComponents(SelectMenuBuilder.from(component).setDisabled(true));
-          }
+        if (!component.data.disabled) areAllComponentsAlreadyDisabled = false;
+
+        if (component.type === ComponentType.Button) {
+          editedRow.addComponents(ButtonBuilder.from(component).setDisabled(true));
+        } else if (component.type === ComponentType.SelectMenu) {
+          editedRow.addComponents(SelectMenuBuilder.from(component).setDisabled(true));
         }
-        // console.log(component.data);
       });
       editedMessageComponents.push(editedRow);
     });
