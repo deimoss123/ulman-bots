@@ -10,7 +10,7 @@ import {
   SelectMenuBuilder,
   SelectMenuInteraction,
 } from 'discord.js';
-import interactionCache from '../utils/interactionCache';
+import interactionCache, { InteractionInCache } from '../utils/interactionCache';
 
 interface CallbackReturn {
   edit?: InteractionUpdateOptions | MessagePayload;
@@ -31,22 +31,23 @@ export default async function buttonHandler(
 ): Promise<void> {
   const collector = interactionMsg.createMessageComponentCollector({ time });
   let currentMessage = interactionMsg;
+  const userId = interaction.user.id;
 
   // pārbauda vai lietotājs ir interactionCache objektā, ja nav tad tiek pievienots kā {}
-  if (!interactionCache?.[interaction.user.id]) {
-    interactionCache[interaction.user.id] = {};
+  if (!interactionCache.get(userId)) {
+    interactionCache.set(userId, new Map<string, InteractionInCache>());
   }
 
   // ja interaction ar eksistējošu nosaukumu eksistē tad tā tiek apstādināta
-  if (interactionCache?.[interaction.user.id]?.[interactionName]) {
-    interactionCache[interaction.user.id][interactionName].collector.stop();
+  if (interactionCache.get(userId)?.get(interactionName)) {
+    interactionCache.get(userId)?.get(interactionName)?.collector.stop();
   }
 
   // pievieno interactionCache objektam pašreizējo interaction
-  interactionCache[interaction.user.id][interactionName] = {
+  interactionCache.get(userId)!.set(interactionName, {
     collector,
     isInteractionActive: isActive,
-  };
+  });
 
   collector.on('collect', async (componentInteraction) => {
     if (componentInteraction.user.id !== interaction.user.id) {
@@ -66,7 +67,10 @@ export default async function buttonHandler(
     }
 
     if (res?.setInactive) {
-      interactionCache[interaction.user.id][interactionName].isInteractionActive = false;
+      const userInteraction = interactionCache.get(userId)!.get(interactionName)!;
+      interactionCache
+        .get(userId)!
+        .set(interactionName, { ...userInteraction, isInteractionActive: false });
     }
 
     // neliela šizofrēnija
@@ -90,7 +94,7 @@ export default async function buttonHandler(
 
   collector.on('end', async () => {
     // izdzēš izbeigto interaction no interactionCache
-    delete interactionCache[interaction.user.id][interactionName];
+    interactionCache.get(userId)?.delete(interactionName);
 
     // pārbauda ziņai ir pogas
     if (!currentMessage?.components || !currentMessage.components.length) return;

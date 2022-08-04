@@ -25,7 +25,7 @@ interactionsCache struktūra:
 
 */
 
-interface InteractionInCache {
+export interface InteractionInCache {
   collector: InteractionCollector<ButtonInteraction | SelectMenuInteraction>;
 
   // nosaka vai komanda ir aktīva, piemēram ja griežas fenikss, tad tā IR aktīva
@@ -33,12 +33,12 @@ interface InteractionInCache {
   isInteractionActive: boolean;
 }
 
-const interactionCache: Record<
-  string, // lietotāja id
-  Record<
+const interactionCache = new Map<
+  string, // userId
+  Map<
     string, // interaction nosaukums (veikals, izmantot_velreiz, fenikss, ...)
     InteractionInCache
   >
-> = {};
+>();
 
 export default interactionCache;

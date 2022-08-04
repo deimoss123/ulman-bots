@@ -126,7 +126,7 @@ export const veikals: Command = {
           }
         }
       },
-      60000
+      3000
     );
   },
 };

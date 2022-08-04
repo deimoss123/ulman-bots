@@ -15,7 +15,7 @@ export default async function commandHandler(interaction: ChatInputCommandIntera
 
   if (command) {
     // pārbauda iekš interaction cache vai komanda nav aktīva
-    if (interactionCache?.[interaction.user.id]?.[command.data.name]?.isInteractionActive) {
+    if (interactionCache.get(interaction.user.id)?.get(command.data.name)?.isInteractionActive) {
       await interaction.reply(ephemeralReply('Šī komanda jau ir aktīva'));
       return;
     }
