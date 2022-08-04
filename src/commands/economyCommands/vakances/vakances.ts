@@ -26,15 +26,15 @@ export const JobPositions: Record<string, JobPosData> = {
     description: 'Strādāt pārtikas veikalā un nožēlot dzīvi',
     minLevel: 2,
   },
-  it_specialists: {
-    name: 'IT speciālists',
-    description: 'Labot printerus un grozīt aparātus',
-    minLevel: 5,
-  },
   velo_labotajs: {
     name: 'Velosipēdu labotājs',
     description: 'Labot padomju laiku velosipēdus',
-    minLevel: 9,
+    minLevel: 5,
+  },
+  it_specialists: {
+    name: 'IT speciālists',
+    description: 'Labot printerus un grozīt aparātus',
+    minLevel: 10,
   },
 };
 

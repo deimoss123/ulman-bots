@@ -5,12 +5,12 @@ import mugursoma from './usableItems/mugursoma';
 import latloto from './usableItems/latloto';
 import dizloto from './usableItems/dizloto';
 
-export type ItemKey = string
+export type ItemKey = string;
 
 export enum ItemCategory {
   ATKRITUMI,
   VEIKALS,
-  ZIVIS
+  ZIVIS,
 }
 
 const itemList: Record<ItemKey, Item> = {
@@ -88,7 +88,7 @@ const itemList: Record<ItemKey, Item> = {
     nameAkuDsk: 'metāllūžņus',
     isVirsiesuDzimte: true,
     categories: [ItemCategory.ATKRITUMI],
-    value: 5,
+    value: 10,
   },
   divainais_burkans: {
     nameNomVsk: 'dīvainais burkāns',
@@ -134,6 +134,15 @@ const itemList: Record<ItemKey, Item> = {
     allowDiscount: true,
     removedOnUse: true,
     use: mugursoma,
+  },
+  kartona_kaste: {
+    nameNomVsk: 'kartona kaste',
+    nameNomDsk: 'kartona kastes',
+    nameAkuVsk: 'kartona kasti',
+    nameAkuDsk: 'kartona kastes',
+    isVirsiesuDzimte: false,
+    categories: [ItemCategory.ATKRITUMI],
+    value: 15,
   },
 };
 

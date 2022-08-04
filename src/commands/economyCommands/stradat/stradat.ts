@@ -18,6 +18,7 @@ import StradatInteractions, {
 } from '../../../interfaces/StradatInteraction';
 import chance from '../../../items/helpers/chance';
 import setnieks from './darbi/setnieks';
+import veikala_darbinieks from './darbi/veikala_darbinieks';
 import { JobPositions } from '../vakances/vakances';
 import latiString from '../../../embeds/helpers/latiString';
 import itemString from '../../../embeds/helpers/itemString';
@@ -27,7 +28,8 @@ import xpAddedText from '../../../embeds/helpers/xpAddedText';
 import addLati from '../../../economy/addLati';
 import addItems from '../../../economy/addItems';
 
-const darbiRun: Record<string, StradatInteractions> = { setnieks };
+const darbiRun: Record<string, StradatInteractions> = { setnieks, veikala_darbinieks };
+
 const STRADAT_XP_MIN = 2;
 const STRADAT_XP_MAX = 4;
 
