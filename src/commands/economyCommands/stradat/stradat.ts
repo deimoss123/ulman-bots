@@ -27,6 +27,7 @@ import addXp from '../../../economy/addXp';
 import xpAddedText from '../../../embeds/helpers/xpAddedText';
 import addLati from '../../../economy/addLati';
 import addItems from '../../../economy/addItems';
+import addTimeCooldown from '../../../economy/addTimeCooldown';
 
 const darbiRun: Record<string, StradatInteractions> = { setnieks, veikala_darbinieks };
 
@@ -37,6 +38,7 @@ const stradat: Command = {
   title: 'Strādāt',
   description: 'Strādāt darbā un pelnīt naudu',
   color: commandColors.stradat,
+  cooldown: 59999_000,
   data: {
     name: 'stradat',
     description: 'Strādāt darbā un pelnīt naudu',
@@ -115,6 +117,8 @@ const stradat: Command = {
 
           const leveledUser = await addXp(i.user.id, xpToAdd);
           if (!leveledUser) return;
+
+          await addTimeCooldown(i.user.id, this.data.name);
 
           return {
             edit: {

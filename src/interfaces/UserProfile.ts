@@ -5,14 +5,27 @@ export interface ItemInProfile {
   amount: number;
 }
 
+export interface TimeCooldown {
+  name: string;
+  lastUsed: number;
+}
+
+export interface DailyCooldown {
+  name: string;
+  timesUsed: number;
+  dateWhenUsed: Date;
+}
+
 interface UserProfile {
   userId: string;
   lati: number;
   xp: number;
   level: number;
-  jobPosition: string;
+  jobPosition: string | null;
   itemCap: number;
   items: ItemInProfile[];
+  timeCooldowns: TimeCooldown[];
+  dailyCooldowns: DailyCooldown[];
 }
 
 export default UserProfile;

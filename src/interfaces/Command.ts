@@ -15,6 +15,9 @@ interface Command {
   // krāsa embediem
   color: number;
 
+  // milisekundes
+  cooldown?: number;
+
   // konfigurācija / komandām priekš reģistrēšanas
   data: ChatInputApplicationCommandData;
 

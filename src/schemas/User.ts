@@ -1,11 +1,12 @@
 import { Schema, model } from 'mongoose';
+import UserProfile from '../interfaces/UserProfile';
 
 const numberDefaulZero = {
   type: Number,
   default: 0,
 };
 
-const userSchema = new Schema({
+const userSchema = new Schema<UserProfile>({
   userId: {
     type: String,
     required: true,
@@ -24,8 +25,27 @@ const userSchema = new Schema({
   items: {
     type: [
       {
-        name: String,
-        amount: Number,
+        name: String, // mantas id (pudele, koka_makskere, ...)
+        amount: Number, // mantas daudzums
+      },
+    ],
+    default: [],
+  },
+  timeCooldowns: {
+    type: [
+      {
+        name: String, // komandas nosaukums
+        lastUsed: Number, // milisekundēs
+      },
+    ],
+    default: [],
+  },
+  dailyCooldowns: {
+    type: [
+      {
+        name: String, // komandas nosaukums (stradat, ubagot, ...),
+        timesUsed: Number, // cik reizes izmantota
+        dateWhenUsed: Date, // diena (datums) kad izmantota pēdējo reizi
       },
     ],
     default: [],

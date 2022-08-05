@@ -128,7 +128,7 @@ export default async function addXp(
       { new: true }
     );
 
-    userCache[userId] = resUser;
+    userCache[userId] = resUser as UserProfile;
     return {
       user: JSON.parse(JSON.stringify(user)),
       levelIncrease: calcRes.levelHasIncreased

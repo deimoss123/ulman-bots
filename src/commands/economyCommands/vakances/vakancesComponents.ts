@@ -1,7 +1,11 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, SelectMenuBuilder } from 'discord.js';
 import { JobPositions } from './vakances';
 
-export default function vakancesComponents(chosen: string, level: number, currentJob: string) {
+export default function vakancesComponents(
+  chosen: string,
+  level: number,
+  currentJob: string | null
+) {
   const options = Object.entries(JobPositions)
     .filter(([key, value]) => key !== currentJob && level >= value.minLevel)
     .map(([key, value]) => ({
