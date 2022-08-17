@@ -4,6 +4,7 @@ import divainais_burkans from './usableItems/divainais_burkans';
 import mugursoma from './usableItems/mugursoma';
 import latloto from './usableItems/latloto';
 import dizloto from './usableItems/dizloto';
+import kafija from './usableItems/kafija';
 
 export type ItemKey = string;
 
@@ -143,6 +144,18 @@ const itemList: Record<ItemKey, Item> = {
     isVirsiesuDzimte: false,
     categories: [ItemCategory.ATKRITUMI],
     value: 15,
+  },
+  kafija: {
+    nameNomVsk: 'kafija',
+    nameNomDsk: 'kafijas',
+    nameAkuVsk: 'kafiju',
+    nameAkuDsk: 'kafijas',
+    isVirsiesuDzimte: false,
+    categories: [ItemCategory.VEIKALS],
+    value: 50,
+    allowDiscount: true,
+    removedOnUse: false,
+    use: kafija,
   },
 };
 

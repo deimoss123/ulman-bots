@@ -1,9 +1,24 @@
 import { Schema, model } from 'mongoose';
 import UserProfile from '../interfaces/UserProfile';
 
-const numberDefaulZero = {
+const NumberDefaulZero = {
   type: Number,
   default: 0,
+};
+
+const DailyCooldownSchema = {
+  timesUsed: Number,
+  extraTimesUsed: Number,
+};
+
+export const dailyCooldownDefaultEach = {
+  timesUsed: 0,
+  extraTimesUsed: 0,
+};
+
+export const dailyCooldownDefault = {
+  stradat: dailyCooldownDefaultEach,
+  ubagot: dailyCooldownDefaultEach,
 };
 
 const userSchema = new Schema<UserProfile>({
@@ -11,13 +26,14 @@ const userSchema = new Schema<UserProfile>({
     type: String,
     required: true,
   },
-  lati: numberDefaulZero,
-  xp: numberDefaulZero, // pāri palikušais xp
-  level: numberDefaulZero,
+  lati: NumberDefaulZero,
+  xp: NumberDefaulZero, // pāri palikušais xp
+  level: NumberDefaulZero,
   jobPosition: {
     type: String,
     default: null,
   },
+
   itemCap: {
     type: Number,
     default: 50,
@@ -31,6 +47,7 @@ const userSchema = new Schema<UserProfile>({
     ],
     default: [],
   },
+
   timeCooldowns: {
     type: [
       {
@@ -40,15 +57,18 @@ const userSchema = new Schema<UserProfile>({
     ],
     default: [],
   },
+
+  lastDayUsed: {
+    type: String,
+    default: new Date().toLocaleDateString('en-GB'), // "1/1/1970"
+  },
   dailyCooldowns: {
-    type: [
-      {
-        name: String, // komandas nosaukums (stradat, ubagot, ...),
-        timesUsed: Number, // cik reizes izmantota
-        dateWhenUsed: Date, // diena (datums) kad izmantota pēdējo reizi
-      },
-    ],
-    default: [],
+    type: {
+      stradat: DailyCooldownSchema,
+      ubagot: DailyCooldownSchema,
+    },
+    // nav ideāli bet ok
+    default: dailyCooldownDefault,
   },
 });
 

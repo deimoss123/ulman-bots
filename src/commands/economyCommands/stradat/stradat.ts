@@ -4,6 +4,7 @@ import {
   ButtonStyle,
   ChatInputCommandInteraction,
   EmbedBuilder,
+  Message,
 } from 'discord.js';
 import findUser from '../../../economy/findUser';
 import buttonHandler from '../../../embeds/buttonHandler';
@@ -28,17 +29,30 @@ import xpAddedText from '../../../embeds/helpers/xpAddedText';
 import addLati from '../../../economy/addLati';
 import addItems from '../../../economy/addItems';
 import addTimeCooldown from '../../../economy/addTimeCooldown';
+import addDailyCooldown from '../../../economy/addDailyCooldown';
+import UserProfile, { DailyCooldowns } from '../../../interfaces/UserProfile';
 
 const darbiRun: Record<string, StradatInteractions> = { setnieks, veikala_darbinieks };
 
 const STRADAT_XP_MIN = 2;
 const STRADAT_XP_MAX = 4;
 
+const MAX_DAILY = 6;
+const MAX_EXTRA_DAILY = 3;
+
+function embedTitle({ jobPosition, dailyCooldowns }: UserProfile) {
+  return (
+    `Strādāt - ${JobPositions[jobPosition!].name} | ` +
+    `${dailyCooldowns.stradat.timesUsed}/${MAX_DAILY} | ` +
+    `${dailyCooldowns.stradat.extraTimesUsed}/${MAX_EXTRA_DAILY}`
+  );
+}
+
 const stradat: Command = {
   title: 'Strādāt',
   description: 'Strādāt darbā un pelnīt naudu',
   color: commandColors.stradat,
-  cooldown: 59999_000,
+  cooldown: 1_000,
   data: {
     name: 'stradat',
     description: 'Strādāt darbā un pelnīt naudu',
@@ -47,12 +61,21 @@ const stradat: Command = {
     const user = await findUser(i.user.id);
     if (!user) return i.reply(errorEmbed);
 
-    const { jobPosition } = user;
+    const { jobPosition, dailyCooldowns, items } = user;
+    let isExtraUse = false;
 
     if (!jobPosition) {
       return i.reply(
         ephemeralReply(
           'Lai strādātu tev ir nepieciešama profesija, to var izvēlēties ar komandu /vakances'
+        )
+      );
+    }
+
+    if (dailyCooldowns.stradat.extraTimesUsed >= MAX_EXTRA_DAILY) {
+      return i.reply(
+        ephemeralReply(
+          'Tu esi sasniedzis gan parasto, gan papildus **šodienas** strādāšanas limitu'
         )
       );
     }
@@ -69,17 +92,53 @@ const stradat: Command = {
       embedTemplate({
         i,
         color: this.color,
-        title: `Strādāt - ${JobPositions[jobPosition].name}`,
+        title: embedTitle(user),
         description: darbsRun.text,
       }).embeds![0]
     );
 
-    const interactionReply = await i.reply({
-      content: '\u200b',
-      embeds: [embed],
-      components: [btnRow],
-      fetchReply: true,
-    });
+    let interactionReply: Message;
+
+    if (dailyCooldowns.stradat.timesUsed >= MAX_DAILY) {
+      if (!items.find((item) => item.name === 'kafija')) {
+        return i.reply(
+          ephemeralReply(
+            'Tu esi sasniedzis maksimālo strādāšanas daudzumu šodien\n' +
+              `Lai strādātu vēlreiz tev ir nepieciešama ${itemString(itemList.kafija)}`
+          )
+        );
+      }
+
+      const stradatVelreizRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+          .setCustomId('stradat_velreiz')
+          .setStyle(ButtonStyle.Primary)
+          .setLabel('Strādāt vēlreiz (izdzert kafiju)')
+      );
+
+      const stradatVelreizEmbed = EmbedBuilder.from(
+        embedTemplate({
+          i,
+          color: this.color,
+          title: embedTitle(user),
+          description: 'Tu esi sasniedzis maksimālo strādāšanas daudzumu šodien\n',
+        }).embeds![0]
+      );
+
+      interactionReply = await i.reply({
+        content: '\u200b',
+        embeds: [stradatVelreizEmbed],
+        components: [stradatVelreizRow],
+        fetchReply: true,
+      });
+    } else {
+      interactionReply = await i.reply({
+        content: '\u200b',
+        embeds: [embed],
+        components: [btnRow],
+        fetchReply: true,
+      });
+    }
 
     const customIds = darbsRun.options.map((o) => o.customId);
 
@@ -89,6 +148,14 @@ const stradat: Command = {
       interactionReply,
       async (componentInteraction) => {
         const { customId } = componentInteraction;
+        if (customId === 'stradat_velreiz') {
+          await addItems(i.user.id, { kafija: -1 });
+          isExtraUse = true;
+          return {
+            edit: { embeds: [embed], components: [btnRow] },
+          };
+        }
+
         if (customIds.includes(customId)) {
           const choice = darbsRun.options.find((o) => o.customId === customId)!;
           const choiceResult = chance(choice.result).obj as StradatResult;
@@ -115,20 +182,25 @@ const stradat: Command = {
           const xpToAdd =
             Math.round(Math.random() * (STRADAT_XP_MAX - STRADAT_XP_MIN)) + STRADAT_XP_MIN;
 
+          // nav labs 3 datubāzes saucieni
+          await addTimeCooldown(i.user.id, this.data.name);
+          await addDailyCooldown(i.user.id, 'stradat', isExtraUse);
+
           const leveledUser = await addXp(i.user.id, xpToAdd);
           if (!leveledUser) return;
 
-          await addTimeCooldown(i.user.id, this.data.name);
-
           return {
+            setInactive: true,
             edit: {
               embeds: [
-                embed.setDescription(
-                  `${embed.data.description}\n` +
-                    `> Izvēle: \`${choice.label}\`\n` +
-                    `${choiceResult.text}\n\n` +
-                    rewardText
-                ),
+                embed
+                  .setTitle(embedTitle(leveledUser.user))
+                  .setDescription(
+                    `${embed.data.description}\n` +
+                      `> Izvēle: \`${choice.label}\`\n` +
+                      `${choiceResult.text}\n\n` +
+                      rewardText
+                  ),
                 new EmbedBuilder().setDescription(
                   xpAddedText(leveledUser, xpToAdd, 'Par strādāšanu tu saņēmi')
                 ),
@@ -138,7 +210,8 @@ const stradat: Command = {
           };
         }
       },
-      60000
+      60000,
+      true
     );
   },
 };

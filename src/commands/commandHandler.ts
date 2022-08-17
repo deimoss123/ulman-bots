@@ -6,6 +6,7 @@ import ephemeralReply from '../embeds/ephemeralReply';
 import logCommand from '../utils/logCommand';
 import findUser from '../economy/findUser';
 import millisToReadableTime from '../embeds/helpers/millisToReadableTime';
+import resetDailyCooldown from '../economy/resetDailyCooldown';
 
 export default async function commandHandler(interaction: ChatInputCommandInteraction) {
   if (!interaction.guild) {
@@ -20,10 +21,10 @@ export default async function commandHandler(interaction: ChatInputCommandIntera
       return interaction.reply(ephemeralReply('Šī komanda jau ir aktīva'));
     }
 
-    if (command.cooldown) {
-      const user = await findUser(interaction.user.id);
-      if (!user) return interaction.reply(errorEmbed);
+    const user = await findUser(interaction.user.id);
+    if (!user) return interaction.reply(errorEmbed);
 
+    if (command.cooldown) {
       const currentCooldown = user.timeCooldowns.find((c) => c.name === command?.data.name);
 
       if (currentCooldown) {
@@ -37,6 +38,9 @@ export default async function commandHandler(interaction: ChatInputCommandIntera
           );
       }
     }
+
+    const currentDay = new Date().toLocaleDateString('en-GB');
+    if (user.lastDayUsed !== currentDay) await resetDailyCooldown(interaction.user.id);
 
     await command.run(interaction);
     logCommand(interaction);

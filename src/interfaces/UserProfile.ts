@@ -10,11 +10,13 @@ export interface TimeCooldown {
   lastUsed: number;
 }
 
-export interface DailyCooldown {
-  name: string;
-  timesUsed: number;
-  dateWhenUsed: Date;
-}
+export type DailyCooldowns = Record<
+  'stradat' | 'ubagot',
+  {
+    timesUsed: number;
+    extraTimesUsed: number;
+  }
+>;
 
 interface UserProfile {
   userId: string;
@@ -22,10 +24,15 @@ interface UserProfile {
   xp: number;
   level: number;
   jobPosition: string | null;
+
   itemCap: number;
   items: ItemInProfile[];
+
   timeCooldowns: TimeCooldown[];
-  dailyCooldowns: DailyCooldown[];
+
+  // "1/1/1970"
+  lastDayUsed: string;
+  dailyCooldowns: DailyCooldowns;
 }
 
 export default UserProfile;
