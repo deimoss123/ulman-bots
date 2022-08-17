@@ -12,6 +12,7 @@ import smallEmbed from '../../../embeds/smallEmbed';
 interface JobPosData {
   name: string;
   description: string;
+  emojiId: string;
   minLevel: number;
 }
 
@@ -19,21 +20,25 @@ export const JobPositions: Record<string, JobPosData> = {
   setnieks: {
     name: 'Sētnieks',
     description: 'Tīrīt Latvijas netīrās ietves',
+    emojiId: '1009557051455848528',
     minLevel: 0,
   },
   veikala_darbinieks: {
     name: 'Veikala darbinieks',
     description: 'Strādāt pārtikas veikalā un nožēlot dzīvi',
+    emojiId: '1009557052282118155',
     minLevel: 2,
   },
   velo_labotajs: {
     name: 'Velosipēdu labotājs',
     description: 'Labot padomju laiku velosipēdus',
+    emojiId: '1009557053741748324',
     minLevel: 5,
   },
   it_specialists: {
     name: 'IT speciālists',
     description: 'Labot printerus un grozīt aparātus',
+    emojiId: '1009557050222727260',
     minLevel: 10,
   },
 };
@@ -60,10 +65,14 @@ const vakances: Command = {
         title: 'Vakances',
         color: this.color,
         description: `Pašreizējā profesija: **${
-          jobPosition ? JobPositions[jobPosition]!.name : 'nav'
+          jobPosition
+            ? `<:${jobPosition}:${JobPositions[jobPosition]!.emojiId}> ${
+                JobPositions[jobPosition]!.name
+              }`
+            : 'nav'
         }**`,
-        fields: Object.values(JobPositions).map((vakance) => ({
-          name: `${vakance.name} | ${vakance.minLevel}. līmenis`,
+        fields: Object.entries(JobPositions).map(([key, vakance]) => ({
+          name: `<:${key}:${vakance.emojiId}> ${vakance.name} | ${vakance.minLevel}. līmenis`,
           value: vakance.description,
           inline: false,
         })),
@@ -99,7 +108,9 @@ const vakances: Command = {
                   setJobPosition(i.user.id, chosenJob),
                   componentInteraction.reply(
                     smallEmbed(
-                      `Tu nomainīji profesiju uz **${JobPositions[chosenJob]!.name}**`,
+                      `Tu nomainīji profesiju uz ` +
+                        `<:${chosenJob}:${JobPositions[chosenJob]!.emojiId}> ` +
+                        `**${JobPositions[chosenJob]!.name}**`,
                       this.color
                     )
                   ),
