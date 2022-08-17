@@ -1,6 +1,6 @@
 /.idea/
+/.vscode/
 /node_modules/
 /dist/
 .env
-todo.txt
 /src/items/discounts/discounts.json
