@@ -30,7 +30,7 @@ import addLati from '../../../economy/addLati';
 import addItems from '../../../economy/addItems';
 import addTimeCooldown from '../../../economy/addTimeCooldown';
 import addDailyCooldown from '../../../economy/addDailyCooldown';
-import UserProfile, { DailyCooldowns } from '../../../interfaces/UserProfile';
+import UserProfile from '../../../interfaces/UserProfile';
 
 const darbiRun: Record<string, StradatInteractions> = { setnieks, veikala_darbinieks };
 
