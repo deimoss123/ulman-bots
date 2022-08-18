@@ -56,7 +56,7 @@ const iedot: Command = {
       return i.reply(ephemeralReply('Tu nevari iedot sev'));
     }
 
-    if (target.id === i.guild?.members?.me?.id) {
+    if (target.id === i.client.user?.id) {
       return i.reply(ephemeralReply('Tu nevari iedot Valsts bankai'));
     }
 
@@ -110,8 +110,9 @@ const iedot: Command = {
       );
     }
 
-    // atkal slikti, 3 datubāzes saucieni :/
+    // murgs, 4 datubāzes saucieni :/
     await addLati(i.user.id, -totalTax);
+    await addLati(i.client.user!.id, totalTax);
     await addItems(i.user.id, { [itemToGiveKey]: -amountToGive });
     const targetUserAfter = await addItems(target.id, { [itemToGiveKey]: amountToGive });
 
