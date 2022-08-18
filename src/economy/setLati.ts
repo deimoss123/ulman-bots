@@ -7,9 +7,11 @@ export default async function setLati(
   lati: number
 ): Promise<UserProfile | undefined> {
   try {
-    const res = await User.findOneAndUpdate(
-      { userId }, { $set: { lati } }, { new: true },
-    ) as UserProfile;
+    const res = (await User.findOneAndUpdate(
+      { userId },
+      { $set: { lati } },
+      { new: true, upsert: true }
+    )) as UserProfile;
 
     userCache[userId] = res;
 

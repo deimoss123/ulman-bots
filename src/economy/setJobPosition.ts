@@ -10,7 +10,7 @@ export default async function setJobPosition(
     const res = (await User.findOneAndUpdate(
       { userId },
       { $set: { jobPosition } },
-      { new: true }
+      { new: true, upsert: true }
     )) as UserProfile;
 
     userCache[userId] = res;

@@ -12,7 +12,7 @@ export default async function resetDailyCooldown(userId: string): Promise<UserPr
           dailyCooldowns: dailyCooldownDefault,
         },
       },
-      { new: true }
+      { new: true, upsert: true }
     )) as UserProfile;
 
     userCache[userId] = res;

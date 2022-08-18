@@ -4,12 +4,14 @@ import userCache from '../utils/userCache';
 
 export default async function addLati(
   userId: string,
-  lati: number,
+  lati: number
 ): Promise<UserProfile | undefined> {
   try {
-    const res = await User.findOneAndUpdate(
-      { userId }, { $inc: { lati } }, { new: true },
-    ) as UserProfile;
+    const res = (await User.findOneAndUpdate(
+      { userId },
+      { $inc: { lati } },
+      { new: true, upsert: true }
+    )) as UserProfile;
 
     userCache[userId] = res;
 

@@ -4,12 +4,14 @@ import userCache from '../utils/userCache';
 
 export default async function increaseInvCap(
   userId: string,
-  increaseAmount: number,
+  increaseAmount: number
 ): Promise<UserProfile | undefined> {
   try {
-    const res = await User.findOneAndUpdate(
-      { userId }, { $inc: { itemCap: increaseAmount } }, { new: true },
-    ) as UserProfile;
+    const res = (await User.findOneAndUpdate(
+      { userId },
+      { $inc: { itemCap: increaseAmount } },
+      { new: true, upsert: true }
+    )) as UserProfile;
 
     userCache[userId] = res;
 
