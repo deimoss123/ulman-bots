@@ -82,7 +82,7 @@ const iedot: Command = {
       );
     }
 
-    const totalTax = Math.floor(itemToGive.value * amountToGive * IEDOT_NODOKLIS);
+    const totalTax = Math.floor(itemToGive.value * amountToGive * IEDOT_NODOKLIS) || 1;
 
     if (user.lati < totalTax) {
       return i.reply(
