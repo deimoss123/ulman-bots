@@ -32,7 +32,7 @@ export default function vakancesComponents(
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
         .setCustomId('vakances_button')
-        .setLabel('Mainīt darbu')
+        .setLabel('Mainīt profesiju')
         .setStyle(chosen ? ButtonStyle.Primary : ButtonStyle.Secondary)
         .setDisabled(!chosen)
     ),
