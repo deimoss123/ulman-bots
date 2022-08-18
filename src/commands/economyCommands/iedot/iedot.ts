@@ -12,6 +12,10 @@ import commandColors from '../../../embeds/commandColors';
 import iedotAutocomplete from './iedotAutocomplete';
 import itemList from '../../../items/itemList';
 import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
+import latiString from '../../../embeds/helpers/latiString';
+import addLati from '../../../economy/addLati';
+
+const IEDOT_NODOKLIS = 0.2;
 
 const iedot: Command = {
   title: 'Iedot',
@@ -62,7 +66,7 @@ const iedot: Command = {
     const user = await findUser(i.user.id);
     if (!user) return i.reply(errorEmbed);
 
-    const { items } = user;
+    const { lati, items } = user;
 
     const itemInInv = items.find(({ name }) => name === itemToGiveKey);
     if (!itemInInv) {
@@ -70,32 +74,48 @@ const iedot: Command = {
     }
 
     if (itemInInv.amount < amountToGive) {
-      await i.reply(
+      return i.reply(
         ephemeralReply(
           `Tu nevari iedot ${itemString(itemToGive, amountToGive, true)}\n` +
             `Tev inventārā ir tikai ${itemString(itemToGive, itemInInv.amount)}`
         )
       );
-      return;
+    }
+
+    const totalTax = Math.floor(itemToGive.value * amountToGive * IEDOT_NODOKLIS);
+
+    if (user.lati < totalTax) {
+      return i.reply(
+        ephemeralReply(
+          `Tev nepietiek naudas lai samaksātu iedošanas nodokli (${itemString(
+            itemToGive,
+            amountToGive
+          )})\n` +
+            `Nodoklis ko maksāt - **${latiString(totalTax)}** ` +
+            `(${IEDOT_NODOKLIS * 100}% no mantu kopējās vērtības)\n` +
+            `Tev ir ${latiString(lati)}`
+        )
+      );
     }
 
     const targetUser = await findUser(target.id);
     if (!targetUser) return i.reply(errorEmbed);
 
     if (amountToGive > targetUser.itemCap - countItems(targetUser.items)) {
-      await i.reply(
+      return i.reply(
         ephemeralReply(
           `Tu nevari iedot ${itemString(itemToGive, amountToGive, true)}\n` +
-            `<@${target.id}> inventārā ir **${countFreeInvSlots(targetUser)}** brīvas vietas`
+            `<@${target.id}> inventārā ir tikai **${countFreeInvSlots(targetUser)}** brīvas vietas`
         )
       );
-      return;
     }
 
+    // atkal slikti, 3 datubāzes saucieni :/
+    await addLati(i.user.id, -totalTax);
+    await addItems(i.user.id, { [itemToGiveKey]: -amountToGive });
     const targetUserAfter = await addItems(target.id, { [itemToGiveKey]: amountToGive });
-    const res = await addItems(i.user.id, { [itemToGiveKey]: -amountToGive });
 
-    if (!res || !targetUserAfter) return i.reply(errorEmbed);
+    if (!targetUserAfter) return i.reply(errorEmbed);
 
     const targetUserItem = targetUserAfter.items.find(({ name }) => name === itemToGiveKey)!;
 
@@ -103,7 +123,11 @@ const iedot: Command = {
       embedTemplate({
         i,
         content: `<@${target.id}>`,
-        description: `Tu iedevi <@${target.id}> ${itemString(itemToGive, amountToGive, true)}`,
+        description:
+          `Tu iedevi <@${target.id}> ${itemString(itemToGive, amountToGive, true)}\n` +
+          `Nodoklis: **${latiString(totalTax)}** (${
+            IEDOT_NODOKLIS * 100
+          }% no iedoto mantu kopējās vērtības)`,
         color: this.color,
         fields: [
           {
