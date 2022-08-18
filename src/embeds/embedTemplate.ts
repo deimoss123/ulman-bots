@@ -5,6 +5,7 @@ import {
   ButtonInteraction,
   CommandInteraction,
   EmbedField,
+  GuildMember,
   InteractionReplyOptions,
   JSONEncodable,
   MessageActionRowComponentBuilder,
@@ -37,8 +38,12 @@ export default function embedTemplate(
         color: options.color ?? 0x000000,
         fields: options.fields ?? [],
         author: {
-          name: options.i.user.username,
-          icon_url: options.i.user.displayAvatarURL(),
+          name: (options.i.member as GuildMember).displayName,
+          icon_url: (options.i.member as GuildMember).displayAvatarURL(),
+        },
+        footer: {
+          icon_url: 'https://i.postimg.cc/Hnp1BG37/ulmanis-footer1.png',
+          text: `Versija: 4.0.0\u2800|\u2800Veidotājs: Deimoss#1984`,
         },
       },
     ],
