@@ -8,6 +8,8 @@ import addLati from '../../economy/addLati';
 import ephemeralReply from '../../embeds/ephemeralReply';
 import commandColors from '../../embeds/commandColors';
 
+const MAKSAT_NODOKLIS = 0.1;
+
 const maksat: Command = {
   title: 'Maksāt',
   description: 'Pārskaitīt citam lietotājam naudu',
@@ -46,19 +48,29 @@ const maksat: Command = {
     const user = await findUser(i.user.id);
     if (!user) return i.reply(errorEmbed);
 
+    const totalTax = Math.floor(latiToAdd * MAKSAT_NODOKLIS) || 1;
+    const totalToPay = latiToAdd + totalTax;
+
     // nepietiek lati
-    if (user.lati < latiToAdd) {
+    if (user.lati < totalToPay) {
+      const maxPay = Math.floor((1 / (1 + MAKSAT_NODOKLIS)) * user.lati);
+
       return i.reply(
-        embedTemplate({
-          i,
-          description:
-            `Tu nevari maksāt ${latiString(latiToAdd, true)}\n` + `Tev ir ${latiString(user.lati)}`,
-        })
+        ephemeralReply(
+          `Tu nevari maksāt **${latiToAdd}** + ` +
+            `**${totalTax}** (${MAKSAT_NODOKLIS * 100}% nodoklis) = ` +
+            `**${latiString(totalToPay, true)}**\n` +
+            `Tev ir **${latiString(user.lati)}**` +
+            (user.lati > 1
+              ? `\n\nLielākā summa ko tu vari vari maksāt ir **${latiString(maxPay)}**`
+              : '')
+        )
       );
     }
 
+    await addLati(i.client.user!.id, totalTax);
     const targetUser = await addLati(target.id, latiToAdd);
-    const resUser = await addLati(i.user.id, -latiToAdd);
+    const resUser = await addLati(i.user.id, -totalToPay);
 
     if (!targetUser || !resUser) return i.reply(errorEmbed);
 
@@ -66,7 +78,9 @@ const maksat: Command = {
       embedTemplate({
         i,
         content: `<@${target.id}>`,
-        description: `Tu samaksāji <@${target.id}> ${latiString(latiToAdd, true)}`,
+        description:
+          `Tu samaksāji <@${target.id}> **${latiString(latiToAdd, true)}**\n` +
+          `Nodoklis: ${latiString(totalTax)} (${MAKSAT_NODOKLIS * 100}%)`,
         color: this.color,
         fields: [
           {
