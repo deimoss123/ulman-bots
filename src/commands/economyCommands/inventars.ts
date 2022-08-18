@@ -9,6 +9,7 @@ import userString from '../../embeds/helpers/userString';
 import countItems from '../../items/helpers/countItems';
 import commandColors from '../../embeds/commandColors';
 import itemString from '../../embeds/helpers/itemString';
+import ephemeralReply from '../../embeds/ephemeralReply';
 
 const inventars: Command = {
   title: 'Inventārs',
@@ -29,9 +30,10 @@ const inventars: Command = {
     const target = i.options.getUser('lietotājs') || i.user;
 
     const targetUser = await findUser(target.id);
-    if (!targetUser) {
-      await i.reply(errorEmbed);
-      return;
+    if (!targetUser) return i.reply(errorEmbed);
+
+    if (target.id === i.client.user?.id) {
+      return i.reply(ephemeralReply('Tu nevari apskatīt Valsts Bankas inventāru'));
     }
 
     const { items, itemCap } = targetUser;

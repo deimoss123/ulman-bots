@@ -30,11 +30,11 @@ const profils: Command = {
     const user = await findUser(target.id);
     if (!user) return i.reply(errorEmbed);
 
-    const { level, xp, jobPosition } = user;
-
-    if (target.id === process.env.BOT_ID) {
+    if (target.id === i.guild?.members?.me?.id) {
       return i.reply(ephemeralReply('Tu nevari apskatīt Valsts Bankas profilu'));
     }
+
+    const { level, xp, jobPosition } = user;
 
     const targetText = target.id === i.user.id ? 'Tavs' : userString(target);
 

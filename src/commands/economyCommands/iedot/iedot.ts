@@ -49,34 +49,24 @@ const iedot: Command = {
     const amountToGive = i.options.getInteger('daudzums') ?? 1;
 
     if (target.id === i.user.id) {
-      await i.reply(ephemeralReply('Tu nevari iedot sev'));
-      return;
+      return i.reply(ephemeralReply('Tu nevari iedot sev'));
     }
 
-    if (target.id === process.env.BOT_ID) {
-      await i.reply(ephemeralReply('Tu nevari iedot Valsts bankai'));
-      return;
+    if (target.id === i.guild?.members?.me?.id) {
+      return i.reply(ephemeralReply('Tu nevari iedot Valsts bankai'));
     }
 
     const itemToGive = itemList[itemToGiveKey];
-    if (!itemToGive) {
-      await i.reply(wrongKeyEmbed);
-      return;
-    }
+    if (!itemToGive) return i.reply(wrongKeyEmbed);
 
     const user = await findUser(i.user.id);
-
-    if (!user) {
-      await i.reply(errorEmbed);
-      return;
-    }
+    if (!user) return i.reply(errorEmbed);
 
     const { items } = user;
 
     const itemInInv = items.find(({ name }) => name === itemToGiveKey);
     if (!itemInInv) {
-      await i.reply(ephemeralReply(`Tavā inventārā nav ${itemString(itemToGive)}`));
-      return;
+      return i.reply(ephemeralReply(`Tavā inventārā nav ${itemString(itemToGive)}`));
     }
 
     if (itemInInv.amount < amountToGive) {
@@ -90,10 +80,7 @@ const iedot: Command = {
     }
 
     const targetUser = await findUser(target.id);
-    if (!targetUser) {
-      await i.reply(errorEmbed);
-      return;
-    }
+    if (!targetUser) return i.reply(errorEmbed);
 
     if (amountToGive > targetUser.itemCap - countItems(targetUser.items)) {
       await i.reply(
@@ -108,10 +95,7 @@ const iedot: Command = {
     const targetUserAfter = await addItems(target.id, { [itemToGiveKey]: amountToGive });
     const res = await addItems(i.user.id, { [itemToGiveKey]: -amountToGive });
 
-    if (!res || !targetUserAfter) {
-      await i.reply(errorEmbed);
-      return;
-    }
+    if (!res || !targetUserAfter) return i.reply(errorEmbed);
 
     const targetUserItem = targetUserAfter.items.find(({ name }) => name === itemToGiveKey)!;
 

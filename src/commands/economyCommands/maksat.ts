@@ -36,40 +36,31 @@ const maksat: Command = {
     const latiToAdd = i.options.getInteger('latu_daudzums')!;
 
     if (target.id === i.user.id) {
-      await i.reply(ephemeralReply('Tu nevari maksāt sev'));
-      return;
+      return i.reply(ephemeralReply('Tu nevari maksāt sev'));
     }
 
-    if (target.id === process.env.BOT_ID) {
-      await i.reply(ephemeralReply('Tu nevari maksāt Valsts bankai'));
-      return;
+    if (target.id === i.client.user?.id) {
+      return i.reply(ephemeralReply('Tu nevari maksāt Valsts bankai'));
     }
 
     const user = await findUser(i.user.id);
-    if (!user) {
-      await i.reply(errorEmbed);
-      return;
-    }
+    if (!user) return i.reply(errorEmbed);
 
     // nepietiek lati
     if (user.lati < latiToAdd) {
-      await i.reply(
+      return i.reply(
         embedTemplate({
           i,
           description:
             `Tu nevari maksāt ${latiString(latiToAdd, true)}\n` + `Tev ir ${latiString(user.lati)}`,
         })
       );
-      return;
     }
 
     const targetUser = await addLati(target.id, latiToAdd);
     const resUser = await addLati(i.user.id, -latiToAdd);
 
-    if (!targetUser || !resUser) {
-      await i.reply(errorEmbed);
-      return;
-    }
+    if (!targetUser || !resUser) return i.reply(errorEmbed);
 
     await i.reply(
       embedTemplate({

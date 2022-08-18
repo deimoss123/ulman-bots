@@ -26,13 +26,10 @@ const maks: Command = {
     const target = i.options.getUser('lietotājs') ?? i.user;
 
     const user = await findUser(target.id);
-    if (!user) {
-      await i.reply(errorEmbed);
-      return;
-    }
+    if (!user) return i.reply(errorEmbed);
 
     let targetText = 'Tev';
-    if (target.id === process.env.BOT_ID) targetText = 'Valsts bankai';
+    if (target.id === i.client.user?.id) targetText = 'Valsts bankai';
     else if (target.id !== i.user.id) targetText = `${userString(target)}`;
 
     await i.reply(
