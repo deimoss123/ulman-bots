@@ -81,7 +81,7 @@ export default function veikalsComponents(
             label: capitalizeFirst(item.nameNomVsk),
             description: latiString(getItemPrice(key).price),
             value: key,
-            emoji: '922501450544857098',
+            emoji: item.emoji || '❓',
             default: key === chosenItem,
           }))
         )

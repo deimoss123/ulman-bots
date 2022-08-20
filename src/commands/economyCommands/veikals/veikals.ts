@@ -23,10 +23,7 @@ export const veikals: Command = {
   },
   async run(i: CommandInteraction) {
     const user = await findUser(i.user.id);
-    if (!user) {
-      await i.reply(errorEmbed);
-      return;
-    }
+    if (!user) return i.reply(errorEmbed);
 
     const shopItems = Object.entries(itemList)
       .filter(([_, item]) => item.categories.includes(ItemCategory.VEIKALS))
