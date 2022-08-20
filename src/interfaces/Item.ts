@@ -1,6 +1,6 @@
-// masīvs ar vismaz vienu vērtību
 import UsableItemReturn from './UsableItemReturn';
 
+// masīvs ar vismaz vienu vērtību
 interface categories extends Array<number> {
   0: number;
   [key: number]: number;
@@ -21,6 +21,9 @@ interface Item {
 
   // vai ir vīriešu dzimtes lietvārds
   isVirsiesuDzimte: boolean;
+
+  // emoji priekš mantas, piem. <:virve:922501450544857098>
+  emoji: string | null;
 
   // kategorijas - veikals, zivis utt
   categories: categories;
