@@ -1,3 +1,4 @@
+import { APIMessageComponentEmoji } from 'discord.js';
 import UsableItemReturn from './UsableItemReturn';
 
 // masīvs ar vismaz vienu vērtību
@@ -23,7 +24,7 @@ interface Item {
   isVirsiesuDzimte: boolean;
 
   // emoji priekš mantas, piem. <:virve:922501450544857098>
-  emoji: string | null;
+  emoji: APIMessageComponentEmoji | null;
 
   // kategorijas - veikals, zivis utt
   categories: categories;

@@ -54,6 +54,7 @@ export default async function izmantotRun(
       .setCustomId('izmantot_velreiz')
       .setLabel(`Izmantot vēlreiz (${itemsToUseLeft})`)
       .setStyle(ButtonStyle.Primary)
+      .setEmoji(itemToUse.emoji || { name: '❓' })
   );
 
   const replyMessage = embedTemplate({
@@ -96,6 +97,7 @@ export default async function izmantotRun(
             .setCustomId('izmantot_velreiz')
             .setLabel(`Izmantot vēlreiz (${itemsToUseLeft})`)
             .setStyle(buttonStyle)
+            .setEmoji(itemToUse.emoji || { name: '❓' })
             .setDisabled(true)
         );
 

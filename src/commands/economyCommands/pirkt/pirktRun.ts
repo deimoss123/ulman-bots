@@ -78,6 +78,7 @@ export default async function pirktRun(
       .setCustomId('pirkt_izmantot')
       .setLabel(`Izmantot (${resItems.amount})`)
       .setStyle(ButtonStyle.Primary)
+      .setEmoji(itemToBuy.emoji || { name: '❓' })
   );
 
   const replyMessage = embedTemplate({
@@ -127,6 +128,7 @@ export default async function pirktRun(
             .setCustomId('pirkt_izmantot')
             .setLabel(`Izmantot (${resItems.amount})`)
             .setStyle(buttonStyle)
+            .setEmoji(itemToBuy.emoji || { name: '❓' })
             .setDisabled(true)
         );
 
