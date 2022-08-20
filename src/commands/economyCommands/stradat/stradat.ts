@@ -114,6 +114,7 @@ const stradat: Command = {
           .setCustomId('stradat_velreiz')
           .setStyle(ButtonStyle.Primary)
           .setLabel('Strādāt vēlreiz (izdzert kafiju)')
+          .setEmoji(itemList.kafija.emoji!)
       );
 
       const stradatVelreizEmbed = EmbedBuilder.from(
