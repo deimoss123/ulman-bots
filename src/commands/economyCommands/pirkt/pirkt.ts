@@ -37,20 +37,16 @@ const pirkt: Command = {
     const amount = i.options.getInteger('daudzums') ?? 1;
 
     const itemToBuy = itemList[itemToBuyKey];
-    if (!itemToBuy) {
-      await i.reply(wrongKeyEmbed);
-      return;
-    }
+    if (!itemToBuy) return i.reply(wrongKeyEmbed);
 
     if (!itemToBuy.categories.includes(ItemCategory.VEIKALS)) {
-      await i.reply(
+      return i.reply(
         ephemeralReply(
           `**${itemString(itemToBuy)}** nav ` +
             (itemToBuy.isVirsiesuDzimte ? 'nopērkams' : 'nopērkama') +
             ' veikalā'
         )
       );
-      return;
     }
 
     await pirktRun(i, itemToBuyKey, amount, this.color);

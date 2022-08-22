@@ -25,12 +25,9 @@ export default async function pirktRun(
   itemToBuyKey: string,
   amountToBuy: number,
   embedColor: number
-): Promise<void> {
+): Promise<any> {
   const user = await findUser(i.user.id);
-  if (!user) {
-    await i.reply(errorEmbed);
-    return;
-  }
+  if (!user) return i.reply(errorEmbed);
 
   const itemToBuy = itemList[itemToBuyKey];
 
@@ -38,20 +35,19 @@ export default async function pirktRun(
   const totalCost = getItemPrice(itemToBuyKey).price * amountToBuy;
 
   if (totalCost > user.lati) {
-    await i.reply(
+    return i.reply(
       ephemeralReply(
         `Tev nepietiek naudas lai nopirktu ${itemString(itemToBuy, amountToBuy, true)}\n` +
           `Cena: ${latiString(totalCost)}\n` +
           `Tev ir ${latiString(user.lati)}`
       )
     );
-    return;
   }
 
   const freeSlots = countFreeInvSlots(user);
 
   if (freeSlots < amountToBuy) {
-    await i.reply(
+    return i.reply(
       ephemeralReply(
         `Tev nepietiek vietas inventārā lai nopirktu ${itemString(
           itemToBuy,
@@ -60,15 +56,37 @@ export default async function pirktRun(
         )}\n` + `Tev ir **${freeSlots}** brīvas vietas`
       )
     );
-    return;
   }
 
   await addLati(i.user.id, -totalCost);
   const userAfter = await addItems(i.user.id, { [itemToBuyKey]: amountToBuy });
 
-  if (!userAfter) {
-    await i.reply(errorEmbed);
-    return;
+  if (!userAfter) return i.reply(errorEmbed);
+
+  if (itemToBuy.attributes) {
+    const resSpecialItems = userAfter.specialItems.filter((item) => item.name === itemToBuyKey);
+
+    return i.reply(
+      embedTemplate({
+        i,
+        description:
+          `Tu nopirki **${itemString(itemToBuy, amountToBuy, true)}** ` +
+          `par ${latiString(totalCost, true)}`,
+        color: embedColor,
+        fields: [
+          {
+            name: 'Tev palika',
+            value: latiString(userAfter.lati),
+            inline: true,
+          },
+          {
+            name: 'Tev tagad ir',
+            value: itemString(itemList[itemToBuyKey], resSpecialItems.length),
+            inline: true,
+          },
+        ],
+      })
+    );
   }
 
   const resItems = userAfter.items.find((item) => item.name === itemToBuyKey)!;
@@ -85,7 +103,7 @@ export default async function pirktRun(
     i,
     description:
       `Tu nopirki **${itemString(itemToBuy, amountToBuy, true)}** ` +
-      `un iztērēji ${latiString(totalCost, true)}`,
+      `par ${latiString(totalCost, true)}`,
     color: embedColor,
     fields: [
       {

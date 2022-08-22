@@ -67,9 +67,13 @@ const inventars: Command = {
 
     const { items, specialItems, itemCap } = targetUser;
 
-    const totalValue = items.reduce((previous, { name, amount }) => {
-      return previous + itemList[name]!.value * amount;
-    }, 0);
+    const totalValue =
+      items.reduce((prev, { name, amount }) => {
+        return prev + itemList[name]!.value * amount;
+      }, 0) +
+      specialItems.reduce((prev, { name }) => {
+        return prev + itemList[name]!.value;
+      }, 0);
 
     await i.reply(
       embedTemplate({
