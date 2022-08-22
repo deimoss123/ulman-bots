@@ -1,4 +1,4 @@
-import UserProfile, { ItemInProfile } from '../../../interfaces/UserProfile';
+import UserProfile from '../../../interfaces/UserProfile';
 import Item from '../../../interfaces/Item';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import itemString from '../../../embeds/helpers/itemString';
