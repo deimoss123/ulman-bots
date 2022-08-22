@@ -5,6 +5,7 @@ import mugursoma from './usableItems/mugursoma';
 import latloto from './usableItems/latloto';
 import dizloto from './usableItems/dizloto';
 import kafija from './usableItems/kafija';
+import kafijas_aparats from './usableItems/kafijas_aparats';
 
 export type ItemKey = string;
 
@@ -210,6 +211,25 @@ const itemList: Record<ItemKey, Item> = {
     allowDiscount: true,
     removedOnUse: false,
     use: kafija,
+  },
+  kafijas_aparats: {
+    nameNomVsk: 'kafijas aparāts',
+    nameNomDsk: 'kafijas aparāti',
+    nameAkuVsk: 'kafijas aparātu',
+    nameAkuDsk: 'kafijas aparātus',
+    isVirsiesuDzimte: true,
+    emoji: {
+      id: '1011300411191341139',
+      name: 'kafijas_aparats',
+    },
+    categories: [ItemCategory.VEIKALS],
+    value: 100,
+    attributes: {
+      lastUsed: 0,
+    },
+    allowDiscount: false,
+    removedOnUse: false,
+    use: kafijas_aparats,
   },
 };
 

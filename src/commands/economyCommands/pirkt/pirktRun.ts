@@ -102,8 +102,7 @@ export default async function pirktRun(
   const replyMessage = embedTemplate({
     i,
     description:
-      `Tu nopirki **${itemString(itemToBuy, amountToBuy, true)}** ` +
-      `par ${latiString(totalCost, true)}`,
+      `Tu nopirki **${itemString(itemToBuy, amountToBuy, true)}** ` + `par ${totalCost} latiem`,
     color: embedColor,
     fields: [
       {

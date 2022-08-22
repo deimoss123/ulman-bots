@@ -8,7 +8,7 @@ export interface ItemInProfile {
 export interface ItemAttributes {
   timesUsed?: number;
   durability?: number;
-  lastUsed?: string; // unix millis
+  lastUsed?: number; // unix millis
   customName?: string;
 }
 

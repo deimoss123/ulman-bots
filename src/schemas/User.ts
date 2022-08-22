@@ -54,7 +54,7 @@ const userSchema = new Schema<UserProfile>({
         attributes: {
           timesUsed: Number,
           durability: Number,
-          lastUsed: String, // unix millis
+          lastUsed: Number, // unix millis
           customName: String,
         },
       },

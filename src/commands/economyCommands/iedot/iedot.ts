@@ -14,6 +14,7 @@ import itemList from '../../../items/itemList';
 import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
 import latiString from '../../../embeds/helpers/latiString';
 import addLati from '../../../economy/addLati';
+import iedotRunSpecial from './iedotRunSpecial';
 
 const IEDOT_NODOKLIS = 0.2;
 
@@ -66,7 +67,18 @@ const iedot: Command = {
     const user = await findUser(i.user.id);
     if (!user) return i.reply(errorEmbed);
 
-    const { lati, items } = user;
+    const targetUser = await findUser(target.id);
+    if (!targetUser) return i.reply(errorEmbed);
+
+    const { lati, items, specialItems } = user;
+
+    if (itemToGive.attributes) {
+      const specialItemInv = specialItems.filter(({ name }) => name === itemToGiveKey);
+      if (!specialItemInv.length) {
+        return i.reply(ephemeralReply(`Tavā inventārā nav ${itemString(itemToGive)}`));
+      }
+      return iedotRunSpecial(i, targetUser, itemToGiveKey, specialItemInv, this.color);
+    }
 
     const itemInInv = items.find(({ name }) => name === itemToGiveKey);
     if (!itemInInv) {
@@ -97,9 +109,6 @@ const iedot: Command = {
         )
       );
     }
-
-    const targetUser = await findUser(target.id);
-    if (!targetUser) return i.reply(errorEmbed);
 
     if (amountToGive > targetUser.itemCap - countItems(targetUser.items)) {
       return i.reply(

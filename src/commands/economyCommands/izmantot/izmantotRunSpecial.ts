@@ -94,6 +94,7 @@ export default async function izmantotRunSpecial(
                   value: useRes.text,
                   inline: false,
                 },
+                ...(useRes.fields || []),
               ],
             }).embeds,
             components: [],

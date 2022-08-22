@@ -33,7 +33,9 @@ export default function itemString(
   }
 
   if (amount === null) {
-    return `${emojiStr} ${name || capitalizeFirst(item.nameNomVsk)}`;
+    return akuzativs
+      ? `${emojiStr} ${name || capitalizeFirst(item.nameAkuVsk)}`
+      : `${emojiStr} ${name || capitalizeFirst(item.nameNomVsk)}`;
   }
 
   let result: string;
