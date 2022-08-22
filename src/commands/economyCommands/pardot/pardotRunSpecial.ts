@@ -82,7 +82,7 @@ export default async function pardotRunSpecial(
   if (itemsInInv.length === 1) {
     const soldValue = itemList[itemKey].value;
 
-    await removeItemsById(i.user.id, selectedIds);
+    await removeItemsById(i.user.id, [itemsInInv[0]._id!]);
     const user = await addLati(i.user.id, soldValue);
     if (!user) return i.reply(errorEmbed);
 
