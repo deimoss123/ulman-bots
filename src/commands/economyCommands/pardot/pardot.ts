@@ -129,7 +129,7 @@ const pardot: Command = {
       const itemToSellId = i.options.getString('nosaukums')!;
       const amountToSell = i.options.getInteger('daudzums') ?? 1;
 
-      const itemToSell = await validateOne(i, items, itemToSellId, amountToSell);
+      const itemToSell = await validateOne(i, user, itemToSellId, amountToSell, this.color);
       if (!itemToSell) return;
 
       itemsToSell = [
