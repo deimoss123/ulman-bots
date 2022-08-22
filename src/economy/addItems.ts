@@ -2,7 +2,7 @@ import findUser from './findUser';
 import User from '../schemas/User';
 import UserProfile from '../interfaces/UserProfile';
 import userCache from '../utils/userCache';
-import { ItemKey } from '../items/itemList';
+import itemList, { ItemKey } from '../items/itemList';
 
 export default async function addItems(
   userId: string,
@@ -12,10 +12,18 @@ export default async function addItems(
     const user = await findUser(userId);
     if (!user) return;
 
-    const { items } = user;
+    const { items, specialItems } = user;
 
     for (const [itemToAdd, amountToAdd] of Object.entries(itemsToAdd)) {
       if (amountToAdd === 0) continue;
+
+      const { attributes } = itemList[itemToAdd];
+
+      // pārbauda vai manta ir ar atribūtiem
+      if (attributes) {
+        specialItems.push(...Array(amountToAdd).fill({ name: itemToAdd, attributes }));
+        continue;
+      }
 
       // meklē lietotāja inventārā itemToAdd
       const itemIndex = items.findIndex((item) => item.name === itemToAdd);
@@ -39,7 +47,7 @@ export default async function addItems(
 
     const res = (await User.findOneAndUpdate(
       { userId },
-      { $set: { items } },
+      { $set: { items, specialItems } },
       { new: true }
     )) as UserProfile;
 

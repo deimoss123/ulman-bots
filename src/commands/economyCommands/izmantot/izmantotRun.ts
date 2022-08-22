@@ -15,33 +15,35 @@ import ItemString from '../../../embeds/helpers/itemString';
 import itemList from '../../../items/itemList';
 import buttonHandler from '../../../embeds/buttonHandler';
 import { ButtonBuilder } from '@discordjs/builders';
+import izmantotRunSpecial from './izmantotRunSpecial';
 
 export default async function izmantotRun(
   i: CommandInteraction | ButtonInteraction,
   itemToUseKey: string,
   embedColor: number
-): Promise<void> {
+): Promise<any> {
   const user = await findUser(i.user.id);
-  if (!user) {
-    await i.reply(errorEmbed);
-    return;
-  }
+  if (!user) return i.reply(errorEmbed);
 
-  const { items } = user;
+  const { items, specialItems } = user;
   const itemToUse = itemList[itemToUseKey];
+
+  if (itemToUse.attributes) {
+    const specialItemsInInv = specialItems.filter(({ name }) => name === itemToUseKey);
+    if (!specialItemsInInv.length) {
+      return i.reply(ephemeralReply(`Tavā inventārā nav **${itemString(itemToUse)}**`));
+    }
+    return izmantotRunSpecial(i, itemToUseKey, specialItemsInInv, embedColor);
+  }
 
   const itemInInv = items.find(({ name }) => name === itemToUseKey);
   if (!itemInInv) {
-    await i.reply(ephemeralReply(`Tavā inventārā nav **${itemString(itemToUse)}**`));
-    return;
+    return i.reply(ephemeralReply(`Tavā inventārā nav **${itemString(itemToUse)}**`));
   }
 
   if (itemToUse.removedOnUse) {
     const resUser = await addItems(i.user.id, { [itemToUseKey]: -1 });
-    if (!resUser) {
-      await i.reply(errorEmbed);
-      return;
-    }
+    if (!resUser) return i.reply(errorEmbed);
   }
 
   const itemsToUseLeft = itemInInv.amount - 1;

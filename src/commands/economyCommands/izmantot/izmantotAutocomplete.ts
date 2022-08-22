@@ -1,7 +1,7 @@
 import normalizeLatText from '../../../embeds/helpers/normalizeLatText';
 import { AutocompleteInteraction } from 'discord.js';
 import Item from '../../../interfaces/Item';
-import itemList from '../../../items/itemList';
+import itemList, { ItemKey } from '../../../items/itemList';
 import findUser from '../../../economy/findUser';
 import findItemsByQuery from '../../../items/helpers/findItemsByQuery';
 import capitalizeFirst from '../../../embeds/helpers/capitalizeFirst';
@@ -24,8 +24,9 @@ function filterByUsable(item: [string, Item]) {
   return !!item[1].use;
 }
 
-export default async function izmantotAutocomplete(interaction: AutocompleteInteraction): Promise<void> {
-  
+export default async function izmantotAutocomplete(
+  interaction: AutocompleteInteraction
+): Promise<void> {
   // lietotāja ievadītais teksts
   const focusedValue = normalizeLatText(interaction.options.getFocused() as string);
 
@@ -33,7 +34,15 @@ export default async function izmantotAutocomplete(interaction: AutocompleteInte
 
   const user = await findUser(interaction.user.id);
   if (user) {
-    allChoices = user.items.map(mapProfileItemsToItemsList).filter(filterByUsable);
+    const { specialItems } = user;
+    const specialItemsList = [...new Set(specialItems.map((item) => item.name))].map((key) => [
+      key,
+      itemList[key],
+    ]) as [ItemKey, Item][];
+
+    allChoices = [...user.items.map(mapProfileItemsToItemsList), ...specialItemsList].filter(
+      filterByUsable
+    );
   }
 
   if (!allChoices.length) {

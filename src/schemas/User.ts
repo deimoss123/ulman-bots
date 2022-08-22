@@ -47,6 +47,20 @@ const userSchema = new Schema<UserProfile>({
     ],
     default: [],
   },
+  specialItems: {
+    type: [
+      {
+        name: String,
+        attributes: {
+          timesUsed: Number,
+          durability: Number,
+          lastUsed: String, // unix millis
+          customName: String,
+        },
+      },
+    ],
+    default: [],
+  },
 
   timeCooldowns: {
     type: [

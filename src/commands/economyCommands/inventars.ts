@@ -10,6 +10,35 @@ import countItems from '../../items/helpers/countItems';
 import commandColors from '../../embeds/commandColors';
 import itemString from '../../embeds/helpers/itemString';
 import ephemeralReply from '../../embeds/ephemeralReply';
+import UserProfile from '../../interfaces/UserProfile';
+import Item from '../../interfaces/Item';
+import { displayAttributes } from '../../embeds/helpers/displayAttributes';
+
+function mapItems({ items, specialItems }: UserProfile) {
+  const specialItemsFields = specialItems.map((specialItem) => {
+    const { name, attributes } = specialItem;
+    const item = itemList[name] as Item;
+
+    return {
+      name: itemString(item, null, false, attributes?.customName),
+      value:
+        `${item.use ? '☑️' : '❌'} ${latiString(item.value)}\n` + displayAttributes(specialItem),
+      inline: true,
+    };
+  });
+
+  const itemFields = items.map(({ name, amount }) => {
+    const item = itemList[name] as Item;
+
+    return {
+      name: `${itemString(item)} x${amount}`,
+      value: `${item.use ? '☑️' : '❌'} ${latiString(item.value)}`,
+      inline: true,
+    };
+  });
+
+  return [...specialItemsFields, ...itemFields];
+}
 
 const inventars: Command = {
   title: 'Inventārs',
@@ -36,7 +65,7 @@ const inventars: Command = {
       return i.reply(ephemeralReply('Tu nevari apskatīt Valsts Bankas inventāru'));
     }
 
-    const { items, itemCap } = targetUser;
+    const { items, specialItems, itemCap } = targetUser;
 
     const totalValue = items.reduce((previous, { name, amount }) => {
       return previous + itemList[name]!.value * amount;
@@ -47,15 +76,12 @@ const inventars: Command = {
         i,
         title: target.id === i.user.id ? 'Tavs inventārs' : `${userString(target)} inventārs`,
         description: items.length
-          ? `Inventāra vērtība: **${latiString(totalValue)}**\n` +
-            `Inventārā ir **${countItems(items)}** mantas no **${itemCap}**`
+          ? `**${countItems(items) + specialItems.length}** mantas no **${itemCap}**\n` +
+            `Inventāra vērtība: **${latiString(totalValue)}**\n\n` +
+            `☑️ - izmantojams, ❌ - neizmantojams\n\u200b`
           : 'Tukšs inventārs :(',
         color: this.color,
-        fields: items.map(({ name, amount }) => ({
-          name: `${itemString(itemList[name]!)} x${amount}`,
-          value: `Vērtība: ${latiString(itemList[name]!.value)}`,
-          inline: true,
-        })),
+        fields: mapItems(targetUser),
       })
     );
   },

@@ -125,9 +125,17 @@ const itemList: Record<ItemKey, Item> = {
     nameAkuVsk: 'dīvaino burkānu',
     nameAkuDsk: 'dīvainos burkānus',
     isVirsiesuDzimte: true,
-    emoji: null,
+    emoji: {
+      id: '1011108345312186439',
+      name: 'divainais_burkans',
+      animated: true,
+    },
     categories: [ItemCategory.VEIKALS],
     value: 5000,
+    attributes: {
+      timesUsed: 0,
+      customName: '',
+    },
     allowDiscount: true,
     use: divainais_burkans,
   },

@@ -5,6 +5,19 @@ export interface ItemInProfile {
   amount: number;
 }
 
+export interface ItemAttributes {
+  timesUsed?: number;
+  durability?: number;
+  lastUsed?: string; // unix millis
+  customName?: string;
+}
+
+export interface SpecialItemInProfile {
+  _id?: string; // ObjectId
+  name: ItemKey;
+  attributes: ItemAttributes;
+}
+
 export interface TimeCooldown {
   name: string;
   lastUsed: number;
@@ -27,6 +40,7 @@ interface UserProfile {
 
   itemCap: number;
   items: ItemInProfile[];
+  specialItems: SpecialItemInProfile[];
 
   timeCooldowns: TimeCooldown[];
 

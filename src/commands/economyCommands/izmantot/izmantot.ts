@@ -30,19 +30,15 @@ const izmantot: Command = {
     const itemToUseKey = i.options.getString('nosaukums')!;
 
     const itemToUse = itemList[itemToUseKey];
-    if (!itemToUse) {
-      await i.reply(wrongKeyEmbed);
-      return;
-    }
+    if (!itemToUse) return i.reply(wrongKeyEmbed);
 
     if (!itemToUse.use) {
-      await i.reply(
+      return i.reply(
         ephemeralReply(
           `**${itemString(itemToUse)}** nav ` +
             (itemToUse.isVirsiesuDzimte ? 'izmantojams' : 'izmantojama')
         )
       );
-      return;
     }
 
     await izmantotRun(i, itemToUseKey, this.color);
