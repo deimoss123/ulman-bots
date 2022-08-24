@@ -26,7 +26,7 @@ export const veikals: Command = {
     if (!user) return i.reply(errorEmbed);
 
     const shopItems = Object.entries(itemList)
-      .filter(([_, item]) => item.categories.includes(ItemCategory.VEIKALS))
+      .filter(([, item]) => item.categories.includes(ItemCategory.VEIKALS))
       .sort((a, b) => b[1].value - a[1].value);
 
     const fields = shopItems.map(([key, item]) => {
