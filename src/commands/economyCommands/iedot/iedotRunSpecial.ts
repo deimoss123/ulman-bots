@@ -124,7 +124,6 @@ export default async function iedotRunSpecial(
     embedTemplate({
       i,
       color: embedColor,
-      content: `<@${targetUser.userId}>`,
       description:
         `Tavā inventārā ir ${itemString(itemObj, itemsInInv.length)}\n` +
         `No saraksta izvēlies vienu vai vairākas mantas ko iedot <@${targetUser.userId}>`,
@@ -164,9 +163,11 @@ export default async function iedotRunSpecial(
         if (!user) return;
 
         return {
-          edit: {
-            embeds: makeEmbed(i, user, targetUser, selectedItems, embedColor).embeds,
-            components: [],
+          end: true,
+          after: async () => {
+            await componentInteraction.reply(
+              makeEmbed(i, user, targetUser, selectedItems, embedColor)
+            );
           },
         };
       }
