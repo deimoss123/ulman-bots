@@ -10,24 +10,40 @@ import countItems from '../../items/helpers/countItems';
 import commandColors from '../../embeds/commandColors';
 import itemString from '../../embeds/helpers/itemString';
 import ephemeralReply from '../../embeds/ephemeralReply';
-import UserProfile from '../../interfaces/UserProfile';
+import UserProfile, { ItemInProfile } from '../../interfaces/UserProfile';
 import Item from '../../interfaces/Item';
 import { displayAttributes } from '../../embeds/helpers/displayAttributes';
 
 function mapItems({ items, specialItems }: UserProfile) {
-  const specialItemsFields = specialItems.map((specialItem) => {
-    const { name, attributes } = specialItem;
-    const item = itemList[name] as Item;
+  const specialItemsFields = specialItems
+    .sort((a, b) => itemList[b.name].value - itemList[a.name].value)
+    .map((specialItem) => {
+      const { name, attributes } = specialItem;
+      const item = itemList[name] as Item;
 
-    return {
-      name: itemString(item, null, false, attributes?.customName),
-      value:
-        `${item.use ? '☑️' : '❌'} ${latiString(item.value)}\n` + displayAttributes(specialItem),
-      inline: true,
-    };
+      return {
+        name: itemString(item, null, false, attributes?.customName),
+        value:
+          `${item.use ? '☑️' : '❌'} ${latiString(item.value)}\n` + displayAttributes(specialItem),
+        inline: true,
+      };
+    });
+
+  const usableItems: ItemInProfile[] = [];
+  const unusableItems: ItemInProfile[] = [];
+
+  items.forEach((item) => {
+    const itemObj = itemList[item.name];
+    if (itemObj.use) usableItems.push(item);
+    else unusableItems.push(item);
   });
 
-  const itemFields = items.map(({ name, amount }) => {
+  const sortedItems: ItemInProfile[] = [
+    ...usableItems.sort((a, b) => itemList[b.name].value - itemList[a.name].value),
+    ...unusableItems.sort((a, b) => itemList[b.name].value - itemList[a.name].value),
+  ];
+
+  const itemFields = sortedItems.map(({ name, amount }) => {
     const item = itemList[name] as Item;
 
     return {
