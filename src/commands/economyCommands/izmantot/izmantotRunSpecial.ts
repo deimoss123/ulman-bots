@@ -12,6 +12,7 @@ import embedTemplate from '../../../embeds/embedTemplate';
 import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import itemString, { itemStringCustom } from '../../../embeds/helpers/itemString';
 import Item from '../../../interfaces/Item';
+import UsableItemReturn from '../../../interfaces/UsableItemReturn';
 import { SpecialItemInProfile } from '../../../interfaces/UserProfile';
 import itemList, { ItemKey } from '../../../items/itemList';
 
@@ -24,7 +25,6 @@ function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: Item, selec
         .setOptions(
           itemsInInv.map((item) => ({
             label: itemStringCustom(itemObj, item.attributes?.customName),
-            // description: item._id!,
             description: displayAttributes(item, true),
             value: item._id!,
             emoji: itemObj.emoji || '❓',
@@ -42,6 +42,27 @@ function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: Item, selec
   ];
 }
 
+function makeEmbed(
+  i: CommandInteraction | ButtonInteraction,
+  itemObj: Item,
+  selectedItem: SpecialItemInProfile,
+  useRes: UsableItemReturn,
+  embedColor: number
+) {
+  return embedTemplate({
+    i,
+    color: embedColor,
+    fields: [
+      {
+        name: `Izmantot: ${itemString(itemObj, null, true, selectedItem.attributes?.customName)}`,
+        value: useRes.text,
+        inline: false,
+      },
+      ...(useRes.fields || []),
+    ],
+  });
+}
+
 export default async function izmantotRunSpecial(
   i: CommandInteraction | ButtonInteraction,
   itemKey: ItemKey,
@@ -51,56 +72,45 @@ export default async function izmantotRunSpecial(
   const itemObj = itemList[itemKey];
   let selectedItemId = '';
 
-  if (itemsInInv.length > 1) {
-    const msg = await i.reply(
-      embedTemplate({
-        i,
-        color: embedColor,
-        description:
-          `Tavā inventārā ir ${itemString(itemObj, itemsInInv.length)}\n` +
-          `No saraksta izvēlies kuru tu gribi izmantot`,
-        components: makeComponents(itemsInInv, itemObj),
-      })
-    );
-    await buttonHandler(i, 'izmantot', msg, async (componentInteraction) => {
-      const { customId } = componentInteraction;
-      if (customId === 'izmantot_special_select') {
-        if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
-        selectedItemId = componentInteraction.values[0]!;
-        return {
-          edit: {
-            components: makeComponents(itemsInInv, itemObj, selectedItemId),
-          },
-        };
-      } else if (customId === 'izmantot_special_confirm') {
-        if (componentInteraction.componentType !== ComponentType.Button) return;
-        const selectedItem = itemsInInv.find((item) => item._id === selectedItemId);
-        if (!selectedItem) return;
-        const useRes = await itemObj.use!(i.user.id, selectedItem);
-        return {
-          end: true,
-          edit: {
-            embeds: embedTemplate({
-              i,
-              color: embedColor,
-              fields: [
-                {
-                  name: `Izmantot: ${itemString(
-                    itemObj,
-                    null,
-                    true,
-                    selectedItem.attributes?.customName
-                  )}`,
-                  value: useRes.text,
-                  inline: false,
-                },
-                ...(useRes.fields || []),
-              ],
-            }).embeds,
-            components: [],
-          },
-        };
-      }
-    });
+  if (itemsInInv.length === 1) {
+    const selectedItem = itemsInInv[0];
+    const useRes = await itemObj.use!(i.user.id, selectedItem);
+    return i.reply(makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
   }
+
+  const msg = await i.reply(
+    embedTemplate({
+      i,
+      color: embedColor,
+      description:
+        `Tavā inventārā ir ${itemString(itemObj, itemsInInv.length)}\n` +
+        `No saraksta izvēlies kuru tu gribi izmantot`,
+      components: makeComponents(itemsInInv, itemObj),
+    })
+  );
+
+  await buttonHandler(i, 'izmantot', msg, async (componentInteraction) => {
+    const { customId } = componentInteraction;
+    if (customId === 'izmantot_special_select') {
+      if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
+      selectedItemId = componentInteraction.values[0]!;
+      return {
+        edit: {
+          components: makeComponents(itemsInInv, itemObj, selectedItemId),
+        },
+      };
+    } else if (customId === 'izmantot_special_confirm') {
+      if (componentInteraction.componentType !== ComponentType.Button) return;
+      const selectedItem = itemsInInv.find((item) => item._id === selectedItemId);
+      if (!selectedItem) return;
+      const useRes = await itemObj.use!(i.user.id, selectedItem);
+      return {
+        end: true,
+        edit: {
+          embeds: makeEmbed(i, itemObj, selectedItem, useRes, embedColor).embeds,
+          components: [],
+        },
+      };
+    }
+  });
 }

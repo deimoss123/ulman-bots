@@ -10,11 +10,13 @@ import addSpecialItems from '../../../economy/addSpecialItems';
 import removeItemsById from '../../../economy/removeItemsById';
 import buttonHandler from '../../../embeds/buttonHandler';
 import embedTemplate from '../../../embeds/embedTemplate';
+import ephemeralReply from '../../../embeds/ephemeralReply';
 import errorEmbed from '../../../embeds/errorEmbed';
 import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import itemString, { itemStringCustom } from '../../../embeds/helpers/itemString';
 import Item from '../../../interfaces/Item';
 import UserProfile, { SpecialItemInProfile } from '../../../interfaces/UserProfile';
+import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import itemList, { ItemKey } from '../../../items/itemList';
 
 async function iedotSpecialQuery(
@@ -85,6 +87,18 @@ function makeComponents(
   ];
 }
 
+function checkTargetInv(targetUser: UserProfile, amountToGive: number): boolean {
+  if (amountToGive > countFreeInvSlots(targetUser)) return false;
+  return true;
+}
+
+function noInvSpaceEmbed(targetUser: UserProfile, itemToGive: Item, amountToGive: number) {
+  return ephemeralReply(
+    `Tu nevari iedot ${itemString(itemToGive, amountToGive, true)}\n` +
+      `<@${targetUser.userId}> inventārā ir **${countFreeInvSlots(targetUser)}** brīvas vietas`
+  );
+}
+
 export default async function iedotRunSpecial(
   i: CommandInteraction,
   targetUser: UserProfile,
@@ -96,10 +110,14 @@ export default async function iedotRunSpecial(
   let selectedItems: SpecialItemInProfile[] = [];
 
   if (itemsInInv.length === 1) {
+    const hasInvSpace = checkTargetInv(targetUser, 1);
+    if (!hasInvSpace) {
+      return i.reply(noInvSpaceEmbed(targetUser, itemObj, 1));
+    }
     const user = await iedotSpecialQuery(i, targetUser, itemsInInv);
     if (!user) return i.reply(errorEmbed);
 
-    return i.reply(makeEmbed(i, user, targetUser, selectedItems, embedColor));
+    return i.reply(makeEmbed(i, user, targetUser, itemsInInv, embedColor));
   }
 
   const msg = await i.reply(
@@ -133,6 +151,14 @@ export default async function iedotRunSpecial(
       } else if (customId === 'iedot_special_confirm') {
         if (componentInteraction.componentType !== ComponentType.Button) return;
         if (!selectedItems.length) return;
+
+        const hasInvSpace = await checkTargetInv(targetUser, selectedItems.length);
+        if (!hasInvSpace) {
+          await componentInteraction.reply(
+            noInvSpaceEmbed(targetUser, itemObj, selectedItems.length)
+          );
+          return { end: true };
+        }
 
         const user = await iedotSpecialQuery(i, targetUser, selectedItems);
         if (!user) return;
