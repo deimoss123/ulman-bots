@@ -75,6 +75,7 @@ export default async function izmantotRunSpecial(
   if (itemsInInv.length === 1) {
     const selectedItem = itemsInInv[0];
     const useRes = await itemObj.use!(i.user.id, selectedItem);
+    if (useRes.custom) return useRes.custom(i, embedColor);
     return i.reply(makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
   }
 
@@ -89,28 +90,37 @@ export default async function izmantotRunSpecial(
     })
   );
 
-  await buttonHandler(i, 'izmantot', msg, async (componentInteraction) => {
-    const { customId } = componentInteraction;
-    if (customId === 'izmantot_special_select') {
-      if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
-      selectedItemId = componentInteraction.values[0]!;
-      return {
-        edit: {
-          components: makeComponents(itemsInInv, itemObj, selectedItemId),
-        },
-      };
-    } else if (customId === 'izmantot_special_confirm') {
-      if (componentInteraction.componentType !== ComponentType.Button) return;
-      const selectedItem = itemsInInv.find((item) => item._id === selectedItemId);
-      if (!selectedItem) return;
-      const useRes = await itemObj.use!(i.user.id, selectedItem);
-      return {
-        end: true,
-        edit: {
-          embeds: makeEmbed(i, itemObj, selectedItem, useRes, embedColor).embeds,
-          components: [],
-        },
-      };
-    }
-  });
+  await buttonHandler(
+    i,
+    'izmantot',
+    msg,
+    async (componentInteraction) => {
+      const { customId } = componentInteraction;
+      if (customId === 'izmantot_special_select') {
+        if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
+        selectedItemId = componentInteraction.values[0]!;
+        return {
+          edit: {
+            components: makeComponents(itemsInInv, itemObj, selectedItemId),
+          },
+        };
+      } else if (customId === 'izmantot_special_confirm') {
+        if (componentInteraction.componentType !== ComponentType.Button) return;
+        const selectedItem = itemsInInv.find((item) => item._id === selectedItemId);
+        if (!selectedItem) return;
+        const useRes = await itemObj.use!(i.user.id, selectedItem);
+
+        return {
+          end: true,
+          after: async () => {
+            if (useRes.custom) return useRes.custom(componentInteraction, embedColor);
+            await componentInteraction.reply(
+              makeEmbed(i, itemObj, selectedItem, useRes, embedColor)
+            );
+          },
+        };
+      }
+    },
+    60000
+  );
 }

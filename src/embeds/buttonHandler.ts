@@ -12,11 +12,12 @@ import {
 } from 'discord.js';
 import interactionCache, { InteractionInCache } from '../utils/interactionCache';
 
-interface CallbackReturn {
+export interface CallbackReturn {
   edit?: InteractionUpdateOptions | MessagePayload;
   end?: boolean;
   after?: () => Promise<void>;
   setInactive?: boolean;
+  doNothing?: boolean;
 }
 
 export default async function buttonHandler(
@@ -65,6 +66,8 @@ export default async function buttonHandler(
       await componentInteraction.deferUpdate();
       return;
     }
+
+    if (res?.doNothing) return;
 
     if (res?.setInactive) {
       const userInteraction = interactionCache.get(userId)!.get(interactionName)!;
