@@ -6,6 +6,7 @@ import latloto from './usableItems/latloto';
 import dizloto from './usableItems/dizloto';
 import kafija from './usableItems/kafija';
 import kafijas_aparats from './usableItems/kafijas_aparats';
+import velo from './usableItems/velo';
 
 export type ItemKey = string;
 
@@ -221,6 +222,7 @@ const itemList: Record<ItemKey, Item> = {
     emoji: null,
     categories: [ItemCategory.OTHER],
     value: 10,
+    use: velo,
   },
   velo_ritenis: {
     nameNomVsk: 'velosipēda ritenis',
@@ -231,6 +233,7 @@ const itemList: Record<ItemKey, Item> = {
     emoji: null,
     categories: [ItemCategory.OTHER],
     value: 10,
+    use: velo,
   },
   velo_kede: {
     nameNomVsk: 'velosipēda ķēde',
@@ -241,6 +244,7 @@ const itemList: Record<ItemKey, Item> = {
     emoji: null,
     categories: [ItemCategory.OTHER],
     value: 10,
+    use: velo,
   },
   velo_sture: {
     nameNomVsk: 'velosipēda stūre',
@@ -251,6 +255,7 @@ const itemList: Record<ItemKey, Item> = {
     emoji: null,
     categories: [ItemCategory.OTHER],
     value: 10,
+    use: velo,
   },
 
   // -- citas mantas --
