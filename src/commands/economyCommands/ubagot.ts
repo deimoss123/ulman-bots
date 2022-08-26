@@ -39,7 +39,7 @@ const ubagot: Command = {
   title: 'Ubagot',
   description: 'Ubagot uz ielas',
   color: commandColors.stradat,
-  cooldown: 1_800_000, // 30 min
+  cooldown: 1_200_000, // 20 min
   data: {
     name: 'ubagot',
     description: 'Ubagot uz ielas',
