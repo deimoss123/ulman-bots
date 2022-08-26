@@ -49,6 +49,8 @@ export default async function izmantotRun(
   const itemsToUseLeft = itemInInv.amount - 1;
 
   const res = await itemToUse.use!(i.user.id);
+  if (res.custom) return res.custom(i, embedColor);
+
   const resFields = res.fields || [];
 
   const componentRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
