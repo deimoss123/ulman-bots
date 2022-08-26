@@ -12,7 +12,6 @@ import setupCronJobs from './utils/setupCronJobs';
 import createDiscounts from './items/discounts/createDiscounts';
 import autocompleteHandler from './commands/autocompleteHandler';
 import chalk from 'chalk';
-import modalHandler from './commands/modalHandler';
 
 process.env.TZ = 'Europe/Riga';
 dotenv.config();
@@ -33,8 +32,6 @@ client.on('interactionCreate', async (i) => {
     await commandHandler(i as ChatInputCommandInteraction);
   } else if (i.type === InteractionType.ApplicationCommandAutocomplete) {
     await autocompleteHandler(i);
-  } else if (i.type === InteractionType.ModalSubmit) {
-    await modalHandler(i);
   }
 });
 
