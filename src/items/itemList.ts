@@ -13,6 +13,7 @@ export enum ItemCategory {
   ATKRITUMI,
   VEIKALS,
   ZIVIS,
+  OTHER,
 }
 
 const itemList: Record<ItemKey, Item> = {
@@ -230,6 +231,58 @@ const itemList: Record<ItemKey, Item> = {
     allowDiscount: false,
     removedOnUse: false,
     use: kafijas_aparats,
+  },
+
+  // -- velosipēds --
+  velosipeds: {
+    nameNomVsk: 'velosipēds',
+    nameNomDsk: 'velosipēdi',
+    nameAkuVsk: 'velosipēdu',
+    nameAkuDsk: 'velosipēdus',
+    isVirsiesuDzimte: true,
+    emoji: null,
+    categories: [ItemCategory.OTHER],
+    value: 500,
+  },
+  velo_ramis: {
+    nameNomVsk: 'velosipēda rāmis',
+    nameNomDsk: 'velosipēda rāmji',
+    nameAkuVsk: 'velosipēda rāmi',
+    nameAkuDsk: 'velosipēda rāmjus',
+    isVirsiesuDzimte: true,
+    emoji: null,
+    categories: [ItemCategory.OTHER],
+    value: 10,
+  },
+  velo_ritenis: {
+    nameNomVsk: 'velosipēda ritenis',
+    nameNomDsk: 'velosipēda riteņi',
+    nameAkuVsk: 'velosipēda riteni',
+    nameAkuDsk: 'velosipēda riteņus',
+    isVirsiesuDzimte: true,
+    emoji: null,
+    categories: [ItemCategory.OTHER],
+    value: 10,
+  },
+  velo_kede: {
+    nameNomVsk: 'velosipēda ķēde',
+    nameNomDsk: 'velosipēda ķēdes',
+    nameAkuVsk: 'velosipēda ķēdi',
+    nameAkuDsk: 'velosipēda ķēdes',
+    isVirsiesuDzimte: false,
+    emoji: null,
+    categories: [ItemCategory.OTHER],
+    value: 10,
+  },
+  velo_sture: {
+    nameNomVsk: 'velosipēda stūre',
+    nameNomDsk: 'velosipēda stūres',
+    nameAkuVsk: 'velosipēda stūri',
+    nameAkuDsk: 'velosipēda stūres',
+    isVirsiesuDzimte: false,
+    emoji: null,
+    categories: [ItemCategory.OTHER],
+    value: 10,
   },
 };
 
