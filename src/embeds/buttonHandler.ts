@@ -63,7 +63,7 @@ export default async function buttonHandler(
 
     const res = await callback(componentInteraction as ButtonInteraction | SelectMenuInteraction);
     if (!res) {
-      await componentInteraction.deferUpdate();
+      await componentInteraction.deferUpdate().catch((_) => _);
       return;
     }
 
