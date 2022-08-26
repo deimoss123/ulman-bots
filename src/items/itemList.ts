@@ -17,6 +17,7 @@ export enum ItemCategory {
 }
 
 const itemList: Record<ItemKey, Item> = {
+  // -- veikals --
   koka_makskere: {
     nameNomVsk: 'koka makšķere',
     nameNomDsk: 'koka makšķeres',
@@ -63,19 +64,6 @@ const itemList: Record<ItemKey, Item> = {
     allowDiscount: true,
     // use() {},
   },
-  pudele: {
-    nameNomVsk: 'stikla pudele',
-    nameNomDsk: 'stikla pudeles',
-    nameAkuVsk: 'stikla pudeli',
-    nameAkuDsk: 'stikla pudeles',
-    isVirsiesuDzimte: false,
-    emoji: {
-      id: '1009557011526074438',
-      name: 'pudele',
-    },
-    categories: [ItemCategory.ATKRITUMI],
-    value: 10,
-  },
   virve: {
     nameNomVsk: 'virve',
     nameNomDsk: 'virves',
@@ -86,7 +74,7 @@ const itemList: Record<ItemKey, Item> = {
       id: '1009557012855652453',
       name: 'virve',
     },
-    categories: [ItemCategory.VEIKALS, ItemCategory.ATKRITUMI],
+    categories: [ItemCategory.VEIKALS],
     value: 10,
     allowDiscount: true,
     removedOnUse: true,
@@ -107,19 +95,6 @@ const itemList: Record<ItemKey, Item> = {
     allowDiscount: true,
     removedOnUse: true,
     // use() {},
-  },
-  metalluznis: {
-    nameNomVsk: 'metāllūznis',
-    nameNomDsk: 'metāllūžņi',
-    nameAkuVsk: 'metāllūzni',
-    nameAkuDsk: 'metāllūžņus',
-    isVirsiesuDzimte: true,
-    emoji: {
-      id: '1009557007424040970',
-      name: 'metalluznis',
-    },
-    categories: [ItemCategory.ATKRITUMI],
-    value: 10,
   },
   divainais_burkans: {
     nameNomVsk: 'dīvainais burkāns',
@@ -184,6 +159,8 @@ const itemList: Record<ItemKey, Item> = {
     removedOnUse: true,
     use: mugursoma,
   },
+
+  // -- atkritumi --
   kartona_kaste: {
     nameNomVsk: 'kartona kaste',
     nameNomDsk: 'kartona kastes',
@@ -197,40 +174,31 @@ const itemList: Record<ItemKey, Item> = {
     categories: [ItemCategory.ATKRITUMI],
     value: 15,
   },
-  kafija: {
-    nameNomVsk: 'kafija',
-    nameNomDsk: 'kafijas',
-    nameAkuVsk: 'kafiju',
-    nameAkuDsk: 'kafijas',
+  pudele: {
+    nameNomVsk: 'stikla pudele',
+    nameNomDsk: 'stikla pudeles',
+    nameAkuVsk: 'stikla pudeli',
+    nameAkuDsk: 'stikla pudeles',
     isVirsiesuDzimte: false,
     emoji: {
-      id: '1009557001451356161',
-      name: 'kafija',
+      id: '1009557011526074438',
+      name: 'pudele',
     },
-    categories: [ItemCategory.VEIKALS],
-    value: 50,
-    allowDiscount: true,
-    removedOnUse: false,
-    use: kafija,
+    categories: [ItemCategory.ATKRITUMI],
+    value: 10,
   },
-  kafijas_aparats: {
-    nameNomVsk: 'kafijas aparāts',
-    nameNomDsk: 'kafijas aparāti',
-    nameAkuVsk: 'kafijas aparātu',
-    nameAkuDsk: 'kafijas aparātus',
+  metalluznis: {
+    nameNomVsk: 'metāllūznis',
+    nameNomDsk: 'metāllūžņi',
+    nameAkuVsk: 'metāllūzni',
+    nameAkuDsk: 'metāllūžņus',
     isVirsiesuDzimte: true,
     emoji: {
-      id: '1011300411191341139',
-      name: 'kafijas_aparats',
+      id: '1009557007424040970',
+      name: 'metalluznis',
     },
-    categories: [ItemCategory.VEIKALS],
-    value: 100,
-    attributes: {
-      lastUsed: 0,
-    },
-    allowDiscount: false,
-    removedOnUse: false,
-    use: kafijas_aparats,
+    categories: [ItemCategory.ATKRITUMI],
+    value: 10,
   },
 
   // -- velosipēds --
@@ -283,6 +251,43 @@ const itemList: Record<ItemKey, Item> = {
     emoji: null,
     categories: [ItemCategory.OTHER],
     value: 10,
+  },
+
+  // -- citas mantas --
+  kafija: {
+    nameNomVsk: 'kafija',
+    nameNomDsk: 'kafijas',
+    nameAkuVsk: 'kafiju',
+    nameAkuDsk: 'kafijas',
+    isVirsiesuDzimte: false,
+    emoji: {
+      id: '1009557001451356161',
+      name: 'kafija',
+    },
+    categories: [ItemCategory.VEIKALS],
+    value: 50,
+    allowDiscount: true,
+    removedOnUse: false,
+    use: kafija,
+  },
+  kafijas_aparats: {
+    nameNomVsk: 'kafijas aparāts',
+    nameNomDsk: 'kafijas aparāti',
+    nameAkuVsk: 'kafijas aparātu',
+    nameAkuDsk: 'kafijas aparātus',
+    isVirsiesuDzimte: true,
+    emoji: {
+      id: '1011300411191341139',
+      name: 'kafijas_aparats',
+    },
+    categories: [ItemCategory.VEIKALS],
+    value: 100,
+    attributes: {
+      lastUsed: 0,
+    },
+    allowDiscount: false,
+    removedOnUse: false,
+    use: kafijas_aparats,
   },
 };
 
