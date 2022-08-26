@@ -17,6 +17,7 @@ const _addXP: Command = {
         name: 'lietotājs',
         description: 'Lietotājs kam pievienot UlmaņPunktus',
         type: ApplicationCommandOptionType.User,
+        required: true,
       },
       {
         name: 'daudzums',
