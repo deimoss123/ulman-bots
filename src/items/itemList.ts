@@ -14,6 +14,7 @@ export enum ItemCategory {
   ATKRITUMI,
   VEIKALS,
   ZIVIS,
+  BRIVGRIEZIENS,
   OTHER,
 }
 
@@ -293,6 +294,52 @@ const itemList: Record<ItemKey, Item> = {
     allowDiscount: false,
     removedOnUse: false,
     use: kafijas_aparats,
+  },
+
+  // -- brīvgriezieni --
+  brivgriez10: {
+    nameNomVsk: '10 latu brīvgrieziens',
+    nameNomDsk: '10 latu brīvgriezieni',
+    nameAkuVsk: '10 latu brīvgriezienu',
+    nameAkuDsk: '10 latu brīvgriezienus',
+    isVirsiesuDzimte: true,
+    emoji: null,
+    categories: [ItemCategory.BRIVGRIEZIENS],
+    value: 1,
+    removedOnUse: false,
+  },
+  brivgriez25: {
+    nameNomVsk: '25 latu brīvgrieziens',
+    nameNomDsk: '25 latu brīvgriezieni',
+    nameAkuVsk: '25 latu brīvgriezienu',
+    nameAkuDsk: '25 latu brīvgriezienus',
+    isVirsiesuDzimte: true,
+    emoji: null,
+    categories: [ItemCategory.BRIVGRIEZIENS],
+    value: 1,
+    removedOnUse: false,
+  },
+  brivgriez50: {
+    nameNomVsk: '50 latu brīvgrieziens',
+    nameNomDsk: '50 latu brīvgriezieni',
+    nameAkuVsk: '50 latu brīvgriezienu',
+    nameAkuDsk: '50 latu brīvgriezienus',
+    isVirsiesuDzimte: true,
+    emoji: null,
+    categories: [ItemCategory.BRIVGRIEZIENS],
+    value: 1,
+    removedOnUse: false,
+  },
+  brivgriez100: {
+    nameNomVsk: '100 latu brīvgrieziens',
+    nameNomDsk: '100 latu brīvgriezieni',
+    nameAkuVsk: '100 latu brīvgriezienu',
+    nameAkuDsk: '100 latu brīvgriezienus',
+    isVirsiesuDzimte: true,
+    emoji: null,
+    categories: [ItemCategory.BRIVGRIEZIENS],
+    value: 1,
+    removedOnUse: false,
   },
 };
 
