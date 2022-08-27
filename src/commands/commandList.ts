@@ -14,6 +14,7 @@ import _addXP from './devCommands/_addXP';
 import vakances from './economyCommands/vakances/vakances';
 import stradat from './economyCommands/stradat/stradat';
 import ubagot from './economyCommands/ubagot';
+import feniks from './economyCommands/feniks/feniks';
 
 // komandu objektu saraksts
 export const commandList: Command[] = [
@@ -29,6 +30,7 @@ export const commandList: Command[] = [
   vakances,
   stradat,
   ubagot,
+  feniks,
 ];
 
 export const devCommandList: Command[] = [_addLati, _addItem, _addXP];
