@@ -46,5 +46,5 @@ export default async function iedotAutocomplete(
   }
 
   const queriedChoices = findItemsByQuery(focusedValue, allChoices);
-  await interaction.respond(queriedChoices.map(mapItemsToChoices));
+  await interaction.respond(queriedChoices.map(mapItemsToChoices)).catch((_) => _);
 }

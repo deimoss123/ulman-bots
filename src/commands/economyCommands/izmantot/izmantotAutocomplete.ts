@@ -51,5 +51,5 @@ export default async function izmantotAutocomplete(
   }
 
   const queriedChoices = findItemsByQuery(focusedValue, allChoices);
-  await interaction.respond(queriedChoices.map(mapItemsToChoices));
+  await interaction.respond(queriedChoices.map(mapItemsToChoices)).catch((_) => _);
 }

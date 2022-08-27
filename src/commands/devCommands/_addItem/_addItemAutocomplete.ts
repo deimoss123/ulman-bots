@@ -14,13 +14,14 @@ function mapItemsToChoices(itemInList: [string, Item]) {
   };
 }
 
-export default async function _addItemAutocomplete(interaction: AutocompleteInteraction): Promise<void> {
-
+export default async function _addItemAutocomplete(
+  interaction: AutocompleteInteraction
+): Promise<void> {
   // lietotāja ievadītais teksts
   const focusedValue = normalizeLatText(interaction.options.getFocused() as string);
 
-  const allChoices = Object.entries(itemList)
+  const allChoices = Object.entries(itemList);
 
-  const queriedChoices = findItemsByQuery(focusedValue, allChoices)
-  await interaction.respond(queriedChoices.map(mapItemsToChoices))
+  const queriedChoices = findItemsByQuery(focusedValue, allChoices);
+  await interaction.respond(queriedChoices.map(mapItemsToChoices)).catch((_) => _);
 }
