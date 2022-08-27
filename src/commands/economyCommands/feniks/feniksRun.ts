@@ -1,102 +1,163 @@
-import { ButtonInteraction, CommandInteraction } from 'discord.js';
+import { ButtonInteraction, CommandInteraction, Message } from 'discord.js';
+import addLati from '../../../economy/addLati';
+import findUser from '../../../economy/findUser';
 import embedTemplate from '../../../embeds/embedTemplate';
+import ephemeralReply from '../../../embeds/ephemeralReply';
 import latiString from '../../../embeds/helpers/latiString';
-import { ChanceValue } from '../../../items/helpers/chance';
-
-interface Laimests {
-  chance: ChanceValue;
-  multiplier: number;
-  emoji: string;
-
-  // piemēram [2, 3], ja reizinātājs summējas vairākiem
-  variations: number[];
-}
-
-export const fenkaLaimesti: Record<string, Laimests> = {
-  varde: {
-    chance: '*',
-    multiplier: 0.01,
-    emoji: '<:varde:894250302868443169>',
-    variations: [3, 5],
-  },
-  zivs: {
-    chance: 0.2,
-    multiplier: 0.05,
-    emoji: '<:zivs:894250303094947900>',
-    variations: [3, 5],
-  },
-  nuja: {
-    chance: 0.15,
-    multiplier: 0.1,
-    emoji: '<:nuja:894250302633553931>',
-    variations: [2, 3],
-  },
-  muskulis: {
-    chance: 0.1,
-    multiplier: 0.2,
-    emoji: '<:muskulis:894250303371763762>',
-    variations: [2, 3],
-  },
-  bacha: {
-    chance: 0.07,
-    multiplier: 0.5,
-    emoji: '<:bacha:894250303183020074>',
-    variations: [3],
-  },
-  izbrinits: {
-    chance: 0.03,
-    multiplier: 1,
-    emoji: '<:izbrinits:894250302914592788>',
-    variations: [3],
-  },
-  kabacis: {
-    chance: 0.01,
-    multiplier: 3,
-    emoji: '<:kabacis:894250303191388230>',
-    variations: [1, 2, 3],
-  },
-  ulmanis: {
-    chance: 0.007,
-    multiplier: 5,
-    emoji: '<:ulmanis:894250302839066624>',
-    variations: [1, 2, 3],
-  },
-  petnieks: {
-    chance: 0.002,
-    multiplier: 10,
-    emoji: '<a:petnieks:911599720928002059>',
-    variations: [1, 2, 3],
-  },
-};
+import chance from '../../../items/helpers/chance';
+import feniksLaimesti from './feniksLaimesti';
 
 const spinEmoji = {
   id: '917087131128700988',
   name: 'fenka1',
 };
 
-function makeEmbed(i: CommandInteraction | ButtonInteraction, likme: number) {
+function makeEmbed(
+  i: CommandInteraction | ButtonInteraction,
+  likme: number,
+  isFree: boolean,
+  spinRes?: CalcSpinRes,
+  wonLati?: number
+) {
+  let title = 'Griežas...';
+  let emojiRow = Array(5).fill(`<a:${spinEmoji.name}:${spinEmoji.id}>`).join('\u2800');
+
+  if (spinRes && wonLati !== undefined) {
+    const { res, totalMultiplier } = spinRes;
+
+    if (!totalMultiplier) title = 'Šodien nepaveicās, tu neko nelaimēji';
+    else title = `Tu laimēji ${latiString(wonLati, true)} | ${totalMultiplier}x`;
+
+    const emojiArr: string[] = [];
+
+    for (const [key, value] of Object.entries(res)) {
+      emojiArr.push(...Array(value).fill(feniksLaimesti[key].emoji));
+    }
+
+    emojiRow = emojiArr.join('\u2800');
+  }
+
   return [
     embedTemplate({
       i,
-      title: 'Griežas...',
+      title,
       color: 0x2e3035,
       description:
-        `>>\u2800\u2800${`<a:${spinEmoji.name}:${spinEmoji.id}>\u2800`.repeat(5)}\u2800<<\n\n` +
-        `**Likme:** ${latiString(likme)}`,
+        `**>>**\u2800\u2800${emojiRow}\u2800\u2800**<<**\n\n` +
+        `**Likme:** ${latiString(likme)} ${isFree ? '**(brīvgrieziens)**' : ''}`,
     }).embeds![0],
   ];
 }
 
-const laimesti = {};
+type Winners = { key: string; count: number }[];
+
+// rekursija :^)
+function variationsCalc(
+  variations: number[],
+  currentIndex: number,
+  key: string,
+  countLeft: number,
+  winners: Winners
+): Winners {
+  if (currentIndex < 0) return winners;
+
+  if (variations[currentIndex] <= countLeft) {
+    countLeft -= variations[currentIndex];
+    winners.push({ key, count: variations[currentIndex] });
+    return variationsCalc(variations, currentIndex, key, countLeft, winners);
+  }
+
+  return variationsCalc(variations, currentIndex - 1, key, countLeft, winners);
+}
+
+interface CalcSpinRes {
+  res: Record<string, number>;
+  winners: Winners;
+  totalMultiplier: number;
+}
+
+function calcSpin(): CalcSpinRes {
+  const res: Record<string, number> = {};
+  const winners: Winners = [];
+
+  for (let i = 0; i < 5; i++) {
+    const { key } = chance(feniksLaimesti);
+    res[key] = res[key] ? res[key] + 1 : 1;
+  }
+
+  // console.log(res);
+
+  for (const [key, value] of Object.entries(res)) {
+    const { variations } = feniksLaimesti[key];
+    winners.push(...variationsCalc(variations, variations.length - 1, key, value, []));
+  }
+
+  const totalMultiplier = winners.reduce(
+    (prev, curr) => prev + feniksLaimesti[curr.key].multiplier * curr.count ** 2,
+    0
+  );
+
+  // console.log();
+  // console.log('res', res);
+  // console.log('winners', winners);
+  // console.log('total multiplier', totalMultiplier);
+  // console.log();
+
+  return {
+    res,
+    winners,
+    totalMultiplier,
+  };
+}
+
+function testSpins(count: number) {
+  console.log('Testē griezienus...');
+
+  let totalMultiplierSum = 0;
+  for (let i = 0; i < count; i++) {
+    totalMultiplierSum += calcSpin().totalMultiplier;
+  }
+
+  console.log(`Skaits: ${count}, vidējais reizinātajs - ${totalMultiplierSum / count}`);
+}
 
 export default async function feniksRun(
   i: CommandInteraction | ButtonInteraction,
   likme: number,
   isFree = false
 ): Promise<any> {
-  const msg = await i.reply({
-    embeds: makeEmbed(i, likme),
+  const user = await findUser(i.user.id);
+  if (!user) return;
+
+  if (!isFree && likme > user.lati) {
+    return i.reply(
+      ephemeralReply(
+        `Tu nevari griezt aparātu ar likmi **${latiString(likme)}**\n` +
+          `Tev ir **${latiString(user.lati)}**`
+      )
+    );
+  }
+
+  const msgSpinning = await i.reply({
+    content: '\u200B',
+    embeds: makeEmbed(i, likme, isFree),
     components: [],
     fetchReply: true,
   });
+
+  // testSpins(1_000_000);
+
+  const spinRes = calcSpin();
+  const latiWon = Math.floor(likme * spinRes.totalMultiplier);
+
+  const msg = (await new Promise((res) => {
+    setTimeout(async () => {
+      const userAfter = await addLati(i.user.id, latiWon - (isFree ? 0 : likme));
+      res(
+        await msgSpinning.edit({
+          embeds: makeEmbed(i, likme, isFree, spinRes, latiWon),
+        })
+      );
+    }, 2000);
+  })) as Message;
 }

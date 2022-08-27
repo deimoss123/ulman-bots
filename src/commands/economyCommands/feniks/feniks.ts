@@ -5,14 +5,15 @@ import ephemeralReply from '../../../embeds/ephemeralReply';
 import errorEmbed from '../../../embeds/errorEmbed';
 import latiString from '../../../embeds/helpers/latiString';
 import Command from '../../../interfaces/Command';
-import feniksRun, { fenkaLaimesti } from './feniksRun';
+import feniksLaimesti from './feniksLaimesti';
+import feniksRun from './feniksRun';
 
 const MIN_LIKME = 20;
 
 function infoEmbed(i: CommandInteraction) {
   const fields: EmbedField[] = [];
 
-  for (const { variations, multiplier, emoji } of Object.values(fenkaLaimesti)) {
+  for (const { variations, multiplier, emoji } of Object.values(feniksLaimesti)) {
     const biggestNumLen = `${Math.max(...variations.map((v) => multiplier * v ** 2))}`.length;
     fields.push({
       name: '\u2800',
