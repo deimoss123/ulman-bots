@@ -1,12 +1,39 @@
-import { ApplicationCommandOptionType } from 'discord.js';
+import { ApplicationCommandOptionType, CommandInteraction, EmbedField } from 'discord.js';
 import findUser from '../../../economy/findUser';
+import embedTemplate from '../../../embeds/embedTemplate';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import errorEmbed from '../../../embeds/errorEmbed';
 import latiString from '../../../embeds/helpers/latiString';
 import Command from '../../../interfaces/Command';
-import feniksRun from './feniksRun';
+import feniksRun, { fenkaLaimesti } from './feniksRun';
 
 const MIN_LIKME = 20;
+
+function infoEmbed(i: CommandInteraction) {
+  const fields: EmbedField[] = [];
+
+  for (const { variations, multiplier, emoji } of Object.values(fenkaLaimesti)) {
+    const biggestNumLen = `${Math.max(...variations.map((v) => multiplier * v ** 2))}`.length;
+    fields.push({
+      name: '\u2800',
+      value: variations
+        .map(
+          (v) =>
+            `**\`` +
+            ' '.repeat(biggestNumLen - `${multiplier * v ** 2}`.length) +
+            `${multiplier * v ** 2}x\`** ${Array(v).fill(emoji).join(' ')}`
+        )
+        .join('\n'),
+      inline: true,
+    });
+  }
+
+  return embedTemplate({
+    i,
+    title: 'Feniksa reizinātāji',
+    fields,
+  });
+}
 
 const feniks: Command = {
   title: 'Feniks',
@@ -40,9 +67,19 @@ const feniks: Command = {
         description: 'Griezt aparātu ar visu naudu makā',
         type: ApplicationCommandOptionType.Subcommand,
       },
+      {
+        name: 'laimesti_info',
+        description: 'Apskatīt aparāta reizinātājus un laimestus',
+        type: ApplicationCommandOptionType.Subcommand,
+      },
     ],
   },
   async run(i) {
+    const subCommandName = i.options.getSubcommand();
+    if (subCommandName === 'laimesti_info') {
+      return i.reply(infoEmbed(i));
+    }
+
     const user = await findUser(i.user.id);
     if (!user) return i.reply(errorEmbed);
 
@@ -53,7 +90,6 @@ const feniks: Command = {
       );
     }
 
-    const subCommandName = i.options.getSubcommand();
     let likme = 0;
 
     if (subCommandName === 'virve')
