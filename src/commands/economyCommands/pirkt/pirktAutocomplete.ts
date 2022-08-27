@@ -23,7 +23,7 @@ export default async function pirktAutocomplete(
   const focusedValue = normalizeLatText(interaction.options.getFocused() as string);
 
   const allChoices = Object.entries(itemList)
-    .filter(([key, item]) => item.categories.includes(ItemCategory.VEIKALS)) // izfiltrētas veikala preces
+    .filter((obj) => obj[1].categories.includes(ItemCategory.VEIKALS)) // izfiltrētas veikala preces
     .sort((a, b) => b[1].value - a[1].value); // sakārtotas pēc vērtības
 
   const queriedChoices = findItemsByQuery(focusedValue, allChoices);
