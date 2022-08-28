@@ -2,6 +2,7 @@ import { Client, GatewayIntentBits } from 'discord.js';
 import { commandList, devCommandList } from './commands/commandList';
 import dotenv from 'dotenv';
 import validateEnv from './utils/validateEnv';
+import chalk from 'chalk';
 
 async function registerGuildCommands(client: Client) {
   const guild = await client.guilds.fetch(process.env.DEV_SERVER_ID!);
@@ -9,7 +10,7 @@ async function registerGuildCommands(client: Client) {
   await guild.commands
     .set([...commandList, ...devCommandList].map((command) => command.data))
     .then(() => {
-      console.log('Guild commands registered!');
+      console.log(chalk.green('Guild commands registered!'));
       process.exit(0);
     });
 }
