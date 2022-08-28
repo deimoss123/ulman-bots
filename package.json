@@ -7,7 +7,7 @@
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "register": "node dist/registerGuildCommands.js",
+    "register": "npm run build && node dist/registerGuildCommands.js",
     "lint": "eslint . --ext .ts"
   },
   "keywords": [],
