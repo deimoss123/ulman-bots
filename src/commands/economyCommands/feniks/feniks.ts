@@ -22,7 +22,7 @@ function infoEmbed(i: CommandInteraction) {
           (v) =>
             `**\`` +
             ' '.repeat(biggestNumLen - `${multiplier * v ** 2}`.length) +
-            `${multiplier * v ** 2}x\`** ${Array(v).fill(emoji).join(' ')}`
+            `${multiplier * v ** 2}x\`** ${emoji.noBorder.repeat(v)}`
         )
         .join('\n'),
       inline: true,
