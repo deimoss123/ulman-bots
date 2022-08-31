@@ -7,8 +7,10 @@ import {
   ComponentType,
   SelectMenuBuilder,
 } from 'discord.js';
+import findUser from '../../../economy/findUser';
 import buttonHandler from '../../../embeds/buttonHandler';
 import embedTemplate from '../../../embeds/embedTemplate';
+import ephemeralReply from '../../../embeds/ephemeralReply';
 import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import itemString, { itemStringCustom } from '../../../embeds/helpers/itemString';
 import Item from '../../../interfaces/Item';
@@ -106,8 +108,21 @@ export default async function izmantotRunSpecial(
         };
       } else if (customId === 'izmantot_special_confirm') {
         if (componentInteraction.componentType !== ComponentType.Button) return;
-        const selectedItem = itemsInInv.find((item) => item._id === selectedItemId);
-        if (!selectedItem) return;
+
+        const user = await findUser(i.user.id);
+        if (!user) return;
+
+        const selectedItem = user.specialItems.find((item) => item._id === selectedItemId);
+        if (!selectedItem) {
+          return {
+            after: async () => {
+              await componentInteraction.reply(
+                ephemeralReply('Tavs inventāra saturs ir mainījies, šī manta nav tavā inventārā')
+              );
+            },
+          };
+        }
+
         const useRes = await itemObj.use!(i.user.id, selectedItem);
 
         return {
