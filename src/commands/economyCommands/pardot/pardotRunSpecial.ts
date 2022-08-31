@@ -7,9 +7,11 @@ import {
   SelectMenuBuilder,
 } from 'discord.js';
 import addLati from '../../../economy/addLati';
+import findUser from '../../../economy/findUser';
 import removeItemsById from '../../../economy/removeItemsById';
 import buttonHandler from '../../../embeds/buttonHandler';
 import embedTemplate from '../../../embeds/embedTemplate';
+import ephemeralReply from '../../../embeds/ephemeralReply';
 import errorEmbed from '../../../embeds/errorEmbed';
 import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import itemString, { itemStringCustom } from '../../../embeds/helpers/itemString';
@@ -123,13 +125,31 @@ export default async function pardotRunSpecial(
 
         if (!selectedItems.length) return;
 
-        await removeItemsById(i.user.id, selectedIds);
-        const user = await addLati(i.user.id, soldValue);
+        const user = await findUser(i.user.id);
         if (!user) return;
+
+        const userItemIds = user.specialItems.map((item) => item._id!);
+        for (const id of selectedIds) {
+          if (!userItemIds.includes(id)) {
+            return {
+              after: async () => {
+                await componentInteraction.reply(
+                  ephemeralReply(
+                    'Tavs inventāra saturs ir mainījies, kāda no izvēlētām mantām nav tavā inventārā'
+                  )
+                );
+              },
+            };
+          }
+        }
+
+        await removeItemsById(i.user.id, selectedIds);
+        const userAfter = await addLati(i.user.id, soldValue);
+        if (!userAfter) return;
 
         return {
           edit: {
-            embeds: makeEmbed(i, user, selectedItems, soldValue, embedColor).embeds,
+            embeds: makeEmbed(i, userAfter, selectedItems, soldValue, embedColor).embeds,
             components: [],
           },
         };

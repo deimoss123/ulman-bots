@@ -213,25 +213,19 @@ export default async function iedotRunSpecial(
           };
         }
 
-        let hasItems = true;
         const userItemIds = user.specialItems.map((item) => item._id!);
         for (const specItem of selectedItems) {
           if (!userItemIds.includes(specItem._id!)) {
-            hasItems = false;
-            break;
+            return {
+              after: async () => {
+                await componentInteraction.reply(
+                  ephemeralReply(
+                    'Tavs inventāra saturs ir mainījies, kāda no izvēlētām mantām nav tavā inventārā'
+                  )
+                );
+              },
+            };
           }
-        }
-
-        if (!hasItems) {
-          return {
-            after: async () => {
-              await componentInteraction.reply(
-                ephemeralReply(
-                  'Tavs inventāra saturs ir mainījies, kāda no izvēlētām mantām nav tavā inventārā'
-                )
-              );
-            },
-          };
         }
 
         await addLati(i.user.id, -totalTax);
