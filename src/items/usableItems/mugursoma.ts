@@ -6,7 +6,8 @@ export default async function mugursoma(userId: string): Promise<UsableItemRetur
   const user = await increaseInvCap(userId, INCREASE_AMOUNT);
 
   return {
-    text:
-      `Inventāra maksimālā ietilpība palielināta no **${user!.itemCap - INCREASE_AMOUNT}** uz **${user!.itemCap}**`,
+    text: `Inventāra maksimālā ietilpība palielināta no **${
+      user!.itemCap - INCREASE_AMOUNT
+    }** uz **${user!.itemCap}**`,
   };
 }

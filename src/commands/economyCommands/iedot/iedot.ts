@@ -7,16 +7,33 @@ import itemString from '../../../embeds/helpers/itemString';
 import embedTemplate from '../../../embeds/embedTemplate';
 import addItems from '../../../economy/addItems';
 import countItems from '../../../items/helpers/countItems';
-import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import commandColors from '../../../embeds/commandColors';
 import iedotAutocomplete from './iedotAutocomplete';
 import itemList from '../../../items/itemList';
 import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
 import latiString from '../../../embeds/helpers/latiString';
 import addLati from '../../../economy/addLati';
-import iedotRunSpecial from './iedotRunSpecial';
+import iedotRunSpecial, { noInvSpaceEmbed } from './iedotRunSpecial';
+import Item from '../../../interfaces/Item';
 
-const IEDOT_NODOKLIS = 0.2;
+export const IEDOT_NODOKLIS = 0.2;
+
+export function cantPayTaxEmbed(
+  itemToGive: Item,
+  amountToGive: number,
+  totalTax: number,
+  userLati: number
+) {
+  return ephemeralReply(
+    `Tev nepietiek naudas lai samaksātu iedošanas nodokli (${itemString(
+      itemToGive,
+      amountToGive
+    )})\n` +
+      `Nodoklis ko maksāt - **${latiString(totalTax)}** ` +
+      `(${IEDOT_NODOKLIS * 100}% no mantu kopējās vērtības)\n` +
+      `Tev ir ${latiString(userLati)}`
+  );
+}
 
 const iedot: Command = {
   title: 'Iedot',
@@ -77,7 +94,7 @@ const iedot: Command = {
       if (!specialItemInv.length) {
         return i.reply(ephemeralReply(`Tavā inventārā nav ${itemString(itemToGive)}`));
       }
-      return iedotRunSpecial(i, targetUser, itemToGiveKey, specialItemInv, this.color);
+      return iedotRunSpecial(i, user, targetUser, itemToGiveKey, specialItemInv, this.color);
     }
 
     const itemInInv = items.find(({ name }) => name === itemToGiveKey);
@@ -97,26 +114,11 @@ const iedot: Command = {
     const totalTax = Math.floor(itemToGive.value * amountToGive * IEDOT_NODOKLIS) || 1;
 
     if (user.lati < totalTax) {
-      return i.reply(
-        ephemeralReply(
-          `Tev nepietiek naudas lai samaksātu iedošanas nodokli (${itemString(
-            itemToGive,
-            amountToGive
-          )})\n` +
-            `Nodoklis ko maksāt - **${latiString(totalTax)}** ` +
-            `(${IEDOT_NODOKLIS * 100}% no mantu kopējās vērtības)\n` +
-            `Tev ir ${latiString(lati)}`
-        )
-      );
+      return i.reply(cantPayTaxEmbed(itemToGive, amountToGive, totalTax, lati));
     }
 
     if (amountToGive > targetUser.itemCap - countItems(targetUser.items)) {
-      return i.reply(
-        ephemeralReply(
-          `Tu nevari iedot ${itemString(itemToGive, amountToGive, true)}\n` +
-            `<@${target.id}> inventārā ir tikai **${countFreeInvSlots(targetUser)}** brīvas vietas`
-        )
-      );
+      return i.reply(noInvSpaceEmbed(targetUser, itemToGive, amountToGive));
     }
 
     // murgs, 4 datubāzes saucieni :/
