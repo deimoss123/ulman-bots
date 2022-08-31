@@ -7,6 +7,7 @@ import dizloto from './usableItems/dizloto';
 import kafija from './usableItems/kafija';
 import kafijas_aparats from './usableItems/kafijas_aparats';
 import velo from './usableItems/velo';
+import divaina_mugursoma from './usableItems/divaina_mugursoma';
 
 export type ItemKey = string;
 
@@ -15,6 +16,7 @@ export enum ItemCategory {
   VEIKALS,
   ZIVIS,
   BRIVGRIEZIENS,
+  TIRGUS,
   OTHER,
 }
 
@@ -156,10 +158,44 @@ const itemList: Record<ItemKey, Item> = {
       name: 'mugursoma',
     },
     categories: [ItemCategory.VEIKALS],
-    value: 1500,
+    value: 500,
     allowDiscount: true,
-    removedOnUse: true,
+    removedOnUse: false,
     use: mugursoma,
+  },
+
+  // -- tirgus --
+  divaina_mugursoma: {
+    nameNomVsk: 'dīvainā mugursoma',
+    nameNomDsk: 'dīvainās mugursomas',
+    nameAkuVsk: 'dīvaino mugursomu',
+    nameAkuDsk: 'dīvainās mugursomas',
+    isVirsiesuDzimte: false,
+    emoji: null,
+    categories: [ItemCategory.TIRGUS],
+    value: 2000,
+    allowDiscount: true,
+    removedOnUse: false,
+    use: divaina_mugursoma,
+  },
+  kafijas_aparats: {
+    nameNomVsk: 'kafijas aparāts',
+    nameNomDsk: 'kafijas aparāti',
+    nameAkuVsk: 'kafijas aparātu',
+    nameAkuDsk: 'kafijas aparātus',
+    isVirsiesuDzimte: true,
+    emoji: {
+      id: '1011300411191341139',
+      name: 'kafijas_aparats',
+    },
+    categories: [ItemCategory.TIRGUS],
+    value: 100,
+    attributes: {
+      lastUsed: 0,
+    },
+    allowDiscount: false,
+    removedOnUse: false,
+    use: kafijas_aparats,
   },
 
   // -- atkritumi --
@@ -270,30 +306,11 @@ const itemList: Record<ItemKey, Item> = {
       id: '1009557001451356161',
       name: 'kafija',
     },
-    categories: [ItemCategory.VEIKALS],
+    categories: [ItemCategory.OTHER],
     value: 50,
     allowDiscount: true,
     removedOnUse: false,
     use: kafija,
-  },
-  kafijas_aparats: {
-    nameNomVsk: 'kafijas aparāts',
-    nameNomDsk: 'kafijas aparāti',
-    nameAkuVsk: 'kafijas aparātu',
-    nameAkuDsk: 'kafijas aparātus',
-    isVirsiesuDzimte: true,
-    emoji: {
-      id: '1011300411191341139',
-      name: 'kafijas_aparats',
-    },
-    categories: [ItemCategory.VEIKALS],
-    value: 100,
-    attributes: {
-      lastUsed: 0,
-    },
-    allowDiscount: false,
-    removedOnUse: false,
-    use: kafijas_aparats,
   },
 
   // -- brīvgriezieni --
