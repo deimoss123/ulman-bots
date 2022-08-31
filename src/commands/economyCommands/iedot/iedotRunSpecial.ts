@@ -156,10 +156,13 @@ export default async function iedotRunSpecial(
 
     // TODO: kad pievienotas mantas ar mainīgu vērtību (makšķeres) šo pārrēķināt
     totalTax = itemObj.value;
+    if (user.lati < totalTax) {
+      return i.reply(cantPayTaxEmbed(itemObj, 1, totalTax, user.lati));
+    }
 
     await addLati(i.user.id, -totalTax);
-    const user = await iedotSpecialQuery(i, targetUser, itemsInInv);
-    if (!user) return i.reply(errorEmbed);
+    const userAfter = await iedotSpecialQuery(i, targetUser, itemsInInv);
+    if (!userAfter) return i.reply(errorEmbed);
 
     return i.reply(makeEmbedAfter(i, totalTax, targetUser, itemsInInv, embedColor));
   }
@@ -182,10 +185,19 @@ export default async function iedotRunSpecial(
           componentInteraction.values.includes(item._id!)
         );
         totalTax = Math.floor(itemObj.value * selectedItems.length * IEDOT_NODOKLIS) || 1;
+
+        const userAfterSelect = await findUser(i.user.id);
+
         return {
           edit: {
             embeds: makeEmbed(i, itemsInInv, itemObj, targetUser.userId, embedColor, totalTax),
-            components: makeComponents(itemsInInv, itemObj, selectedItems, totalTax, user.lati),
+            components: makeComponents(
+              itemsInInv,
+              itemObj,
+              selectedItems,
+              totalTax,
+              userAfterSelect?.lati ?? user.lati
+            ),
           },
         };
       } else if (customId === 'iedot_special_confirm') {
