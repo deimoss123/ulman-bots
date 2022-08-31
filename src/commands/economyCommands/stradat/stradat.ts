@@ -31,6 +31,7 @@ import addItems from '../../../economy/addItems';
 import addTimeCooldown from '../../../economy/addTimeCooldown';
 import addDailyCooldown from '../../../economy/addDailyCooldown';
 import UserProfile from '../../../interfaces/UserProfile';
+import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 
 const darbiRun: Record<string, StradatInteractions> = { setnieks, veikala_darbinieks };
 
@@ -78,6 +79,10 @@ const stradat: Command = {
           'Tu esi sasniedzis gan parasto, gan papildus **šodienas** strādāšanas limitu'
         )
       );
+    }
+
+    if (!countFreeInvSlots(user)) {
+      return i.reply(ephemeralReply('Lai strādātu tev vajag vismaz vienu brīvu inventāra slotu'));
     }
 
     const darbsRun = chance(darbiRun[jobPosition]).obj as StradatVeids;

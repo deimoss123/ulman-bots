@@ -12,6 +12,7 @@ import latiString from '../../embeds/helpers/latiString';
 import xpAddedText from '../../embeds/helpers/xpAddedText';
 import Command from '../../interfaces/Command';
 import { DailyCooldowns } from '../../interfaces/UserProfile';
+import countFreeInvSlots from '../../items/helpers/countFreeInvSlots';
 
 const MAX_DAILY = 10;
 
@@ -52,6 +53,10 @@ const ubagot: Command = {
 
     if (dailyCooldowns.ubagot.timesUsed >= MAX_DAILY) {
       return i.reply(ephemeralReply('Tu esi sasniedzis maksimālo ubagošanas daudzumu šodien'));
+    }
+
+    if (!countFreeInvSlots(user)) {
+      return i.reply(ephemeralReply('Lai ubagotu tev vajag vismaz vienu brīvu inventāra slotu'));
     }
 
     const earnedLati = Math.floor(Math.random() * (LATI_MAX - LATI_MIN)) + LATI_MIN;
