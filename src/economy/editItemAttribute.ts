@@ -5,27 +5,28 @@ import findUser from './findUser';
 
 export default async function editItemAttribute(
   userId: string,
+  guildId: string,
   itemId: string,
   newAttributes: ItemAttributes
 ): Promise<{ user: UserProfile; newItem: SpecialItemInProfile } | void> {
   try {
-    const user = await findUser(userId);
+    const user = await findUser(userId, guildId);
     if (!user) return;
 
     const { specialItems } = user;
 
-    const itemIndex = specialItems.findIndex((i) => i._id === itemId);
+    const itemIndex = specialItems.findIndex(i => i._id === itemId);
     if (itemIndex === -1) return;
 
     specialItems[itemIndex].attributes = newAttributes;
 
     const res = (await User.findOneAndUpdate(
-      { userId },
+      { userId, guildId },
       { $set: { specialItems } },
       { new: true }
     )) as UserProfile;
 
-    userCache[userId] = res;
+    userCache[guildId][userId] = res;
 
     return { user: JSON.parse(JSON.stringify(res)), newItem: specialItems[itemIndex] };
   } catch (e: any) {

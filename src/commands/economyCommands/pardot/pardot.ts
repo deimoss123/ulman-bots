@@ -73,7 +73,10 @@ const pardot: Command = {
   },
   autocomplete: pardotAutocomplete,
   async run(i: ChatInputCommandInteraction) {
-    const user = await findUser(i.user.id);
+    const userId = i.user.id;
+    const guildId = i.guildId!;
+
+    const user = await findUser(userId, guildId);
     if (!user) return i.reply(errorEmbed);
 
     const subCommandName = i.options.getSubcommand();
@@ -102,13 +105,13 @@ const pardot: Command = {
 
       switch (typeToSell) {
         case 'atkritumi': {
-          itemsToSell = itemsToSell.filter((item) =>
+          itemsToSell = itemsToSell.filter(item =>
             item.item.categories.includes(ItemCategory.ATKRITUMI)
           );
           break;
         }
         case 'zivis': {
-          itemsToSell = itemsToSell.filter((item) =>
+          itemsToSell = itemsToSell.filter(item =>
             item.item.categories.includes(ItemCategory.ZIVIS)
           );
           break;
@@ -151,7 +154,7 @@ const pardot: Command = {
       sellObj[name] = -amount;
     });
 
-    if (!(await addItems(i.user.id, sellObj)) || !(await addLati(i.user.id, soldItemsValue))) {
+    if (!(await addItems(userId, guildId, sellObj)) || !(await addLati(userId, guildId, soldItemsValue))) {
       return i.reply(errorEmbed);
     }
 
@@ -163,7 +166,7 @@ const pardot: Command = {
           {
             name: 'Tu pārdevi',
             value: itemsToSell
-              .map((item) => `> ${itemString(item.item, item.amount, true)}`)
+              .map(item => `> ${itemString(item.item, item.amount, true)}`)
               .join('\n'),
             inline: false,
           },

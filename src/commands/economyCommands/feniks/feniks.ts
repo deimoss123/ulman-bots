@@ -81,7 +81,10 @@ const feniks: Command = {
       return i.reply(infoEmbed(i));
     }
 
-    const user = await findUser(i.user.id);
+    const userId = i.user.id
+    const guildId = i.guildId!
+
+    const user = await findUser(userId, guildId);
     if (!user) return i.reply(errorEmbed);
 
     const { lati } = user;

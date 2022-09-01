@@ -1,4 +1,5 @@
 import { APIMessageComponentEmoji } from 'discord.js';
+import { ItemKey } from '../items/itemList';
 import UsableItemReturn from './UsableItemReturn';
 import { ItemAttributes, SpecialItemInProfile } from './UserProfile';
 
@@ -7,6 +8,13 @@ interface categories extends Array<number> {
   0: number;
   [key: number]: number;
 }
+
+export type UsableItemFunc = (
+  userId: string,
+  guildId: string,
+  itemKey: ItemKey,
+  specialItem?: SpecialItemInProfile
+) => Promise<UsableItemReturn>;
 
 interface Item {
   // nominatīvs vienskaitlis
@@ -44,7 +52,7 @@ interface Item {
   removedOnUse?: boolean;
 
   // ko manta darīs lietojot /izmantot komandu
-  use?: (userId: string, specialItem?: SpecialItemInProfile) => Promise<UsableItemReturn>;
+  use?: UsableItemFunc;
 }
 
 export default Item;

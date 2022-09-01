@@ -26,13 +26,15 @@ import { cantPayTaxEmbed, IEDOT_NODOKLIS } from './iedot';
 async function iedotSpecialQuery(
   i: CommandInteraction,
   targetUser: UserProfile,
+  guildId: string,
   selectedItems: SpecialItemInProfile[]
 ) {
   const user = await removeItemsById(
     i.user.id,
-    selectedItems.map((item) => item._id!)
+    guildId,
+    selectedItems.map(item => item._id!)
   );
-  await addSpecialItems(targetUser.userId, selectedItems);
+  await addSpecialItems(targetUser.userId, guildId, selectedItems);
   return user;
 }
 
@@ -49,7 +51,7 @@ function makeEmbedAfter(
     content: `<@${targetUser.userId}>`,
     description: `**Nodoklis: ** ${latiString(taxLati)}\n` + `<@${targetUser.userId}> tu iedevi:`,
     fields: [
-      ...itemsToGive.map((item) => ({
+      ...itemsToGive.map(item => ({
         name: itemString(itemList[item.name], null, true, item.attributes.customName),
         value: displayAttributes(item),
         inline: false,
@@ -85,7 +87,7 @@ function makeComponents(
   userLati = 0,
   hasGiven = false
 ) {
-  const selectedIds = selectedItems.map((item) => item._id!);
+  const selectedIds = selectedItems.map(item => item._id!);
 
   return [
     new ActionRowBuilder<SelectMenuBuilder>().addComponents(
@@ -95,7 +97,7 @@ function makeComponents(
         .setMinValues(1)
         .setMaxValues(itemsInInv.length)
         .setOptions(
-          itemsInInv.map((item) => ({
+          itemsInInv.map(item => ({
             label: itemStringCustom(itemObj, item.attributes?.customName),
             description: displayAttributes(item, true),
             value: item._id!,
@@ -142,6 +144,9 @@ export default async function iedotRunSpecial(
   itemsInInv: SpecialItemInProfile[],
   embedColor: number
 ) {
+  const userId = i.user.id;
+  const guildId = i.guildId!;
+
   const itemObj = itemList[itemKey];
   let selectedItems: SpecialItemInProfile[] = [];
 
@@ -160,8 +165,8 @@ export default async function iedotRunSpecial(
       return i.reply(cantPayTaxEmbed(itemObj, 1, totalTax, user.lati));
     }
 
-    await addLati(i.user.id, -totalTax);
-    const userAfter = await iedotSpecialQuery(i, targetUser, itemsInInv);
+    await addLati(userId, guildId, -totalTax);
+    const userAfter = await iedotSpecialQuery(i, targetUser, guildId, itemsInInv);
     if (!userAfter) return i.reply(errorEmbed);
 
     return i.reply(makeEmbedAfter(i, totalTax, targetUser, itemsInInv, embedColor));
@@ -177,16 +182,14 @@ export default async function iedotRunSpecial(
     i,
     'iedot',
     msg,
-    async (componentInteraction) => {
+    async componentInteraction => {
       const { customId } = componentInteraction;
       if (customId === 'iedot_special_select') {
         if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
-        selectedItems = itemsInInv.filter((item) =>
-          componentInteraction.values.includes(item._id!)
-        );
+        selectedItems = itemsInInv.filter(item => componentInteraction.values.includes(item._id!));
         totalTax = Math.floor(itemObj.value * selectedItems.length * IEDOT_NODOKLIS) || 1;
 
-        const userAfterSelect = await findUser(i.user.id);
+        const userAfterSelect = await findUser(userId, guildId);
 
         return {
           edit: {
@@ -212,7 +215,7 @@ export default async function iedotRunSpecial(
           return { end: true };
         }
 
-        const user = await findUser(i.user.id);
+        const user = await findUser(userId, guildId);
         if (!user) return;
 
         if (user.lati < totalTax) {
@@ -225,7 +228,7 @@ export default async function iedotRunSpecial(
           };
         }
 
-        const userItemIds = user.specialItems.map((item) => item._id!);
+        const userItemIds = user.specialItems.map(item => item._id!);
         for (const specItem of selectedItems) {
           if (!userItemIds.includes(specItem._id!)) {
             return {
@@ -240,8 +243,8 @@ export default async function iedotRunSpecial(
           }
         }
 
-        await addLati(i.user.id, -totalTax);
-        const userAfter = await iedotSpecialQuery(i, targetUser, selectedItems);
+        await addLati(userId, guildId, -totalTax);
+        const userAfter = await iedotSpecialQuery(i, targetUser, guildId, selectedItems);
         if (!userAfter) return;
 
         return {

@@ -9,6 +9,6 @@ export default function logCommand(i: CommandInteraction) {
       chalk.bold(`${i.user.username}#${i.user.discriminator}`),
       chalk.gray(`(${i.guildId})`),
       i.toString().substring(1),
-    ].join(' '),
+    ].join(' ')
   );
 }

@@ -4,10 +4,11 @@ import { Snowflake } from 'discord.js';
 /*
 User cache glabā lietotāju ekonomijas informāciju
 {
-  '222631002265092096': <UserProfile>,
-  <user_id>: <UserProfile>
+  <guildId>: {
+    <userId>: <UserProfile>
+  }
 }
 */
-const userCache: Record<Snowflake, UserProfile> = {};
+const userCache: Record<Snowflake, Record<Snowflake, UserProfile>> = {};
 
 export default userCache;

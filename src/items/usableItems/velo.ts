@@ -16,7 +16,7 @@ import ephemeralReply from '../../embeds/ephemeralReply';
 import errorEmbed from '../../embeds/errorEmbed';
 import itemString from '../../embeds/helpers/itemString';
 import xpAddedText from '../../embeds/helpers/xpAddedText';
-import UsableItemReturn from '../../interfaces/UsableItemReturn';
+import { UsableItemFunc } from '../../interfaces/Item';
 import { ItemInProfile } from '../../interfaces/UserProfile';
 import itemList, { ItemKey } from '../itemList';
 
@@ -67,7 +67,7 @@ function calcReqItems(items: ItemInProfile[]) {
   let hasAll = true;
 
   for (const [key] of Object.entries(requiredItems)) {
-    const amount = items.find((i) => i.name === key)?.amount ?? 0;
+    const amount = items.find(i => i.name === key)?.amount ?? 0;
     reqItemsInv[key] = amount;
     if (!amount) hasAll = false;
   }
@@ -92,11 +92,11 @@ function makeComponents(hasAll: boolean) {
 
 const VELO_XP = 10;
 
-export default async function velo(): Promise<UsableItemReturn> {
+const velo: UsableItemFunc = async (userId, guildId) => {
   return {
     text: '',
     custom: async (i, color) => {
-      const user = await findUser(i.user.id);
+      const user = await findUser(userId, guildId);
       if (!user) return i.reply(errorEmbed);
 
       const reqItemsInv = calcReqItems(user.items);
@@ -111,12 +111,12 @@ export default async function velo(): Promise<UsableItemReturn> {
         i,
         'izmantot_velo',
         msg,
-        async (interaction) => {
+        async interaction => {
           const { customId } = interaction;
           if (interaction.componentType !== ComponentType.Button) return;
 
           if (customId === 'izveidot_velosipedu') {
-            const user = await findUser(i.user.id);
+            const user = await findUser(userId, guildId);
             if (!user) return;
 
             const { hasAll } = calcReqItems(user.items);
@@ -134,8 +134,8 @@ export default async function velo(): Promise<UsableItemReturn> {
               itemsToRemove[key] = -value;
             }
 
-            const userAfter = await addItems(i.user.id, { ...itemsToRemove, velosipeds: 1 });
-            const userAfterXP = await addXp(i.user.id, VELO_XP);
+            const userAfter = await addItems(userId, guildId, { ...itemsToRemove, velosipeds: 1 });
+            const userAfterXP = await addXp(userId, guildId, VELO_XP);
             if (!userAfter || !userAfterXP) {
               await interaction.reply(errorEmbed);
               return;
@@ -175,4 +175,6 @@ export default async function velo(): Promise<UsableItemReturn> {
       );
     },
   };
-}
+};
+
+export default velo;

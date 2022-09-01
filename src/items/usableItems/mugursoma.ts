@@ -1,15 +1,15 @@
-import UsableItemReturn from '../../interfaces/UsableItemReturn';
 import increaseInvCap from '../../economy/increaseInvCap';
 import findUser from '../../economy/findUser';
 import itemString from '../../embeds/helpers/itemString';
 import itemList from '../itemList';
 import addItems from '../../economy/addItems';
+import { UsableItemFunc } from '../../interfaces/Item';
 
 export const INCREASE_CAP_1 = 100;
 const INCREASE_AMOUNT = 5;
 
-export default async function mugursoma(userId: string): Promise<UsableItemReturn> {
-  const user = await findUser(userId);
+const mugursoma: UsableItemFunc = async (userId, guildId) => {
+  const user = await findUser(userId, guildId);
   if (!user) {
     return { text: 'UlmaņBota kļūda' };
   }
@@ -24,12 +24,14 @@ export default async function mugursoma(userId: string): Promise<UsableItemRetur
     };
   }
 
-  await addItems(userId, { mugursoma: -1 });
-  await increaseInvCap(userId, INCREASE_AMOUNT);
+  await addItems(userId, guildId, { mugursoma: -1 });
+  await increaseInvCap(userId, guildId, INCREASE_AMOUNT);
 
   return {
     text:
       `Inventāra maksimālā ietilpība palielināta ` +
       `no **${user.itemCap}** uz **${user.itemCap + INCREASE_AMOUNT}**`,
   };
-}
+};
+
+export default mugursoma;

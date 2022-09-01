@@ -22,11 +22,14 @@ export const veikals: Command = {
     description: 'Atvērt veikalu',
   },
   async run(i: CommandInteraction) {
-    const user = await findUser(i.user.id);
+    const userId = i.user.id;
+    const guildId = i.guildId!;
+
+    const user = await findUser(userId, guildId);
     if (!user) return i.reply(errorEmbed);
 
     const shopItems = Object.entries(itemList)
-      .filter((obj) => obj[1].categories.includes(ItemCategory.VEIKALS))
+      .filter(obj => obj[1].categories.includes(ItemCategory.VEIKALS))
       .sort((a, b) => b[1].value - a[1].value);
 
     const fields = shopItems.map(([key, item]) => {
@@ -68,7 +71,7 @@ export const veikals: Command = {
       i,
       'veikals',
       interactionReply! as Message,
-      async (componentInteraction) => {
+      async componentInteraction => {
         switch (componentInteraction.customId) {
           case 'veikals_prece':
             if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
@@ -95,7 +98,7 @@ export const veikals: Command = {
 
             let buttonStyle = ButtonStyle.Success;
 
-            const userBeforeBuy = await findUser(i.user.id);
+            const userBeforeBuy = await findUser(userId, guildId);
             if (userBeforeBuy) {
               const totalCost = getItemPrice(chosenItem).price * chosenAmount;
               if (

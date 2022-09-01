@@ -22,7 +22,10 @@ export default async function izmantotRun(
   itemToUseKey: string,
   embedColor: number
 ): Promise<any> {
-  const user = await findUser(i.user.id);
+  const userId = i.user.id;
+  const guildId = i.guildId!;
+
+  const user = await findUser(userId, guildId);
   if (!user) return i.reply(errorEmbed);
 
   const { items, specialItems } = user;
@@ -42,13 +45,13 @@ export default async function izmantotRun(
   }
 
   if (itemToUse.removedOnUse) {
-    const resUser = await addItems(i.user.id, { [itemToUseKey]: -1 });
+    const resUser = await addItems(userId, guildId, { [itemToUseKey]: -1 });
     if (!resUser) return i.reply(errorEmbed);
   }
 
   const itemsToUseLeft = itemInInv.amount - 1;
 
-  const res = await itemToUse.use!(i.user.id);
+  const res = await itemToUse.use!(userId, guildId, itemToUseKey);
   if (res.custom) return res.custom(i, embedColor);
 
   const resFields = res.fields || [];
@@ -83,15 +86,15 @@ export default async function izmantotRun(
     i,
     'izmantot',
     interactionReply!,
-    async (componentInteraction) => {
+    async componentInteraction => {
       if (componentInteraction.customId === 'izmantot_velreiz') {
         if (componentInteraction.componentType !== ComponentType.Button) return;
 
         let buttonStyle = ButtonStyle.Success;
 
-        const userBeforeUse = await findUser(i.user.id);
+        const userBeforeUse = await findUser(userId, guildId);
         if (userBeforeUse) {
-          if (!userBeforeUse.items.find((item) => item.name === itemToUseKey)) {
+          if (!userBeforeUse.items.find(item => item.name === itemToUseKey)) {
             buttonStyle = ButtonStyle.Danger;
           }
         }

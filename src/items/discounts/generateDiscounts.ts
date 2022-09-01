@@ -13,9 +13,9 @@ export interface DiscountedItems {
 
 export default function generateDiscounts() {
   // saraksts ar mantām kurām var būt atlaides
-  const discountableItems = Object.entries(itemList).filter(
-    ([_, item]) => item.categories.includes(ItemCategory.VEIKALS) && item.allowDiscount,
-  ).map(([key, _]) => key);
+  const discountableItems = Object.entries(itemList)
+    .filter(([, item]) => item.categories.includes(ItemCategory.VEIKALS) && item.allowDiscount)
+    .map(([key]) => key);
 
   // nejauši izvēlās cik mantām būs atlaides
   let discountCount = Math.floor(Math.random() * MAX_ITEMS) + MIN_ITEMS;
@@ -29,9 +29,8 @@ export default function generateDiscounts() {
     const item = discountableItems[index];
 
     // nejauši izvēlēta atlaide
-    discountedItems[item] = Math.floor(
-      (Math.random() * (MAX_DISCOUNT - MIN_DISCOUNT) + MIN_DISCOUNT) * 100,
-    ) / 100;
+    discountedItems[item] =
+      Math.floor((Math.random() * (MAX_DISCOUNT - MIN_DISCOUNT) + MIN_DISCOUNT) * 100) / 100;
 
     // izņem no saraksta nocenoto mantu
     discountableItems.splice(index, 1);

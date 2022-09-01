@@ -2,7 +2,7 @@ import Item from '../../interfaces/Item';
 import stringSimilarity from 'string-similarity';
 import normalizeLatText from '../../embeds/helpers/normalizeLatText';
 
-type ItemWithRating = [string, Item, number]
+type ItemWithRating = [string, Item, number];
 
 function removeRating(item: ItemWithRating): [string, Item] {
   return [item[0], item[1]];
@@ -14,9 +14,9 @@ function filterGreaterThan(num: number) {
 
 export default function findItemsByQuery(
   query: string,
-  itemsToQuery: [string, Item][],
+  itemsToQuery: [string, Item][]
 ): [string, Item][] {
-  const itemsToQueryNames = itemsToQuery.map(([key, item]) => normalizeLatText(item.nameNomVsk));
+  const itemsToQueryNames = itemsToQuery.map(([, item]) => normalizeLatText(item.nameNomVsk));
   const queryResult = stringSimilarity.findBestMatch(query, itemsToQueryNames);
 
   if (queryResult.bestMatch.rating === 0) {
@@ -24,8 +24,10 @@ export default function findItemsByQuery(
   }
 
   // pievieno reitingu katrai mantai sarakstā
-  const itemsWithRatings: ItemWithRating[] =
-    queryResult.ratings.map(({ rating }, index) => [...itemsToQuery[index], rating]);
+  const itemsWithRatings: ItemWithRating[] = queryResult.ratings.map(({ rating }, index) => [
+    ...itemsToQuery[index],
+    rating,
+  ]);
 
   // sakārto pēc reitinga
   const sortedItemsWithRatings = itemsWithRatings.sort((a, b) => b[2] - a[2]);

@@ -12,12 +12,16 @@ function testLaimesti(laimesti: ChanceRecord) {
   console.log(total / count);
 }
 
-export default async function loto(userId: string, laimesti: ChanceRecord): Promise<UsableItemReturn> {
+export default async function loto(
+  userId: string,
+  guildId: string,
+  laimesti: ChanceRecord
+): Promise<UsableItemReturn> {
   const res = chance(laimesti);
 
   // testLaimesti(laimesti)
 
-  await addLati(userId, res.obj.reward);
+  await addLati(userId, guildId, res.obj.reward);
 
   let text = 'Tu neko nelaimēji :(';
   if (res.key !== 'lose') {

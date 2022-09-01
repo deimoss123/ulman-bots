@@ -32,7 +32,7 @@ const _addLati: Command = {
     const target = i.options.getUser('lietotājs')!;
     const latiToAdd = i.options.getInteger('latu_daudzums')!;
 
-    const targetUser = await findUser(target.id);
+    const targetUser = await findUser(target.id, i.guildId!);
     if (!targetUser) {
       await i.reply(errorEmbed);
       return;
@@ -48,7 +48,7 @@ const _addLati: Command = {
       })
     );
 
-    await addLati(target.id, latiToAdd);
+    await addLati(target.id, i.guildId!, latiToAdd);
   },
 };
 

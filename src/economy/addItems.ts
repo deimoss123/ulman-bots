@@ -6,10 +6,11 @@ import itemList, { ItemKey } from '../items/itemList';
 
 export default async function addItems(
   userId: string,
+  guildId: string,
   itemsToAdd: Record<ItemKey, number>
 ): Promise<UserProfile | undefined> {
   try {
-    const user = await findUser(userId);
+    const user = await findUser(userId, guildId);
     if (!user) return;
 
     const { items, specialItems } = user;
@@ -26,7 +27,7 @@ export default async function addItems(
       }
 
       // meklē lietotāja inventārā itemToAdd
-      const itemIndex = items.findIndex((item) => item.name === itemToAdd);
+      const itemIndex = items.findIndex(item => item.name === itemToAdd);
 
       // ja nav lietotājam datubāzē, tad ievieto jaunu item objektu
       if (itemIndex === -1) {
@@ -46,12 +47,12 @@ export default async function addItems(
     }
 
     const res = (await User.findOneAndUpdate(
-      { userId },
+      { userId, guildId },
       { $set: { items, specialItems } },
       { new: true }
     )) as UserProfile;
 
-    userCache[userId] = res;
+    userCache[guildId][userId] = res;
 
     return JSON.parse(JSON.stringify(res));
   } catch (e: any) {

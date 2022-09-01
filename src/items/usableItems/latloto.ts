@@ -1,7 +1,9 @@
-import UsableItemReturn from '../../interfaces/UsableItemReturn';
 import loto from '../../casino/loto';
 import laimestiLatloto from '../../casino/laimesti/laimestiLatloto';
+import { UsableItemFunc } from '../../interfaces/Item';
 
-export default async function latloto(userId: string): Promise<UsableItemReturn> {
-  return await loto(userId, laimestiLatloto);
+const latloto: UsableItemFunc = async (userId, guildId) =>  {
+  return await loto(userId, guildId, laimestiLatloto);
 }
+
+export default latloto

@@ -27,7 +27,7 @@ client.once('ready', () => {
   mongo().then(() => console.log('Connected to MongoDB'));
 });
 
-client.on('interactionCreate', async (i) => {
+client.on('interactionCreate', async i => {
   if (i.type === InteractionType.ApplicationCommand) {
     await commandHandler(i as ChatInputCommandInteraction);
   } else if (i.type === InteractionType.ApplicationCommandAutocomplete) {

@@ -182,7 +182,10 @@ export default async function feniksRun(
   likme: number,
   isFree = false
 ): Promise<any> {
-  const user = await findUser(i.user.id);
+  const userId = i.user.id;
+  const guildId = i.guildId!;
+
+  const user = await findUser(userId, guildId);
   if (!user) return;
 
   if (!isFree && likme > user.lati) {
@@ -206,9 +209,9 @@ export default async function feniksRun(
   const spinRes = calcSpin();
   const latiWon = Math.floor(likme * spinRes.totalMultiplier);
 
-  const msg = (await new Promise((res) => {
+  const msg = (await new Promise(res => {
     setTimeout(async () => {
-      const userAfter = await addLati(i.user.id, latiWon - (isFree ? 0 : likme));
+      const userAfter = await addLati(userId, guildId, latiWon - (isFree ? 0 : likme));
       res(
         await msgSpinning.edit({
           embeds: makeEmbed(i, likme, isFree, spinRes, latiWon),

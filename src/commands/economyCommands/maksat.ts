@@ -37,6 +37,9 @@ const maksat: Command = {
     const target = i.options.getUser('lietotājs')!;
     const latiToAdd = i.options.getInteger('latu_daudzums')!;
 
+    const userId = i.user.id;
+    const guildId = i.guildId!;
+
     if (target.id === i.user.id) {
       return i.reply(ephemeralReply('Tu nevari maksāt sev'));
     }
@@ -45,7 +48,7 @@ const maksat: Command = {
       return i.reply(ephemeralReply('Tu nevari maksāt Valsts bankai'));
     }
 
-    const user = await findUser(i.user.id);
+    const user = await findUser(userId, guildId);
     if (!user) return i.reply(errorEmbed);
 
     const totalTax = Math.floor(latiToAdd * MAKSAT_NODOKLIS) || 1;
@@ -68,9 +71,9 @@ const maksat: Command = {
       );
     }
 
-    await addLati(i.client.user!.id, totalTax);
-    const targetUser = await addLati(target.id, latiToAdd);
-    const resUser = await addLati(i.user.id, -totalToPay);
+    await addLati(i.client.user!.id, guildId, totalTax);
+    const targetUser = await addLati(target.id, guildId, latiToAdd);
+    const resUser = await addLati(userId, guildId, -totalToPay);
 
     if (!targetUser || !resUser) return i.reply(errorEmbed);
 

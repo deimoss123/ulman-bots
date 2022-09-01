@@ -5,22 +5,23 @@ import findUser from './findUser';
 
 export default async function removeItemsById(
   userId: string,
+  guildId: string,
   itemIds: string[]
 ): Promise<UserProfile | void> {
   try {
-    const user = await findUser(userId);
+    const user = await findUser(userId, guildId);
     if (!user) return;
 
     const { specialItems } = user;
-    const newItems = specialItems.filter((item) => !itemIds.includes(item._id!));
+    const newItems = specialItems.filter(item => !itemIds.includes(item._id!));
 
     const res = (await User.findOneAndUpdate(
-      { userId },
+      { userId, guildId },
       { $set: { specialItems: newItems } },
       { new: true }
     )) as UserProfile;
 
-    userCache[userId] = res;
+    userCache[guildId][userId] = res;
 
     return JSON.parse(JSON.stringify(res));
   } catch (e: any) {

@@ -32,10 +32,10 @@ export default async function izmantotAutocomplete(
 
   let allChoices: [string, Item][] = Object.entries(itemList).filter(filterByUsable);
 
-  const user = await findUser(interaction.user.id);
+  const user = await findUser(interaction.user.id, interaction.guildId!);
   if (user) {
     const { specialItems } = user;
-    const specialItemsList = [...new Set(specialItems.map((item) => item.name))].map((key) => [
+    const specialItemsList = [...new Set(specialItems.map(item => item.name))].map(key => [
       key,
       itemList[key],
     ]) as [ItemKey, Item][];
@@ -51,5 +51,5 @@ export default async function izmantotAutocomplete(
   }
 
   const queriedChoices = findItemsByQuery(focusedValue, allChoices);
-  await interaction.respond(queriedChoices.map(mapItemsToChoices)).catch((_) => _);
+  await interaction.respond(queriedChoices.map(mapItemsToChoices)).catch(_ => _);
 }

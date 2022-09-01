@@ -12,7 +12,7 @@ export default function getItemPrice(itemKey: string) {
   let itemPrice = itemList[itemKey].value * 2;
 
   if (discounts[itemKey]) {
-    itemPrice *= (1 - discounts[itemKey]);
+    itemPrice *= 1 - discounts[itemKey];
   }
 
   return {

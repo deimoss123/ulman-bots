@@ -33,6 +33,7 @@ export type DailyCooldowns = Record<
 
 interface UserProfile {
   userId: string;
+  guildId: string;
   lati: number;
   xp: number;
   level: number;

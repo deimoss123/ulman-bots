@@ -27,7 +27,7 @@ import buttonHandler from '../../embeds/buttonHandler';
 function mapItems({ items, specialItems }: UserProfile) {
   const specialItemsFields = specialItems
     .sort((a, b) => itemList[b.name].value - itemList[a.name].value)
-    .map((specialItem) => {
+    .map(specialItem => {
       const { name, attributes } = specialItem;
       const item = itemList[name] as Item;
 
@@ -42,7 +42,7 @@ function mapItems({ items, specialItems }: UserProfile) {
   const usableItems: ItemInProfile[] = [];
   const unusableItems: ItemInProfile[] = [];
 
-  items.forEach((item) => {
+  items.forEach(item => {
     const itemObj = itemList[item.name];
     if (itemObj.use) usableItems.push(item);
     else unusableItems.push(item);
@@ -148,8 +148,8 @@ const inventars: Command = {
   },
   async run(i: ChatInputCommandInteraction) {
     const target = i.options.getUser('lietotājs') || i.user;
-
-    const targetUser = await findUser(target.id);
+    
+    const targetUser = await findUser(target.id, i.guildId!);
     if (!targetUser) return i.reply(errorEmbed);
 
     if (target.id === i.client.user?.id) {
@@ -174,7 +174,7 @@ const inventars: Command = {
       i,
       'inventārs',
       msg,
-      async (interaction) => {
+      async interaction => {
         const { customId } = interaction;
         if (interaction.componentType !== ComponentType.Button) return;
 

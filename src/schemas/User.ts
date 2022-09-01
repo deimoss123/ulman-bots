@@ -1,6 +1,12 @@
 import { Schema, model } from 'mongoose';
 import UserProfile from '../interfaces/UserProfile';
 
+const ReqStringIndex = {
+  type: String,
+  required: true,
+  index: true,
+};
+
 const NumberDefaulZero = {
   type: Number,
   default: 0,
@@ -22,10 +28,8 @@ export const dailyCooldownDefault = {
 };
 
 const userSchema = new Schema<UserProfile>({
-  userId: {
-    type: String,
-    required: true,
-  },
+  userId: ReqStringIndex,
+  guildId: ReqStringIndex,
   lati: NumberDefaulZero,
   xp: NumberDefaulZero, // pāri palikušais xp
   level: NumberDefaulZero,

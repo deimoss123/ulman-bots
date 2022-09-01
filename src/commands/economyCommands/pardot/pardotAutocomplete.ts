@@ -31,7 +31,7 @@ export default async function pardotAutocomplete(
     (a, b) => b[1].value - a[1].value
   );
 
-  const user = await findUser(interaction.user.id);
+  const user = await findUser(interaction.user.id, interaction.guildId!);
   if (user) {
     const { specialItems } = user;
     const specialItemsList = [...new Set(specialItems.map((item) => item.name))].map((key) => [

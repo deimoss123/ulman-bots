@@ -19,8 +19,7 @@ import errorEmbed from '../../embeds/errorEmbed';
 import itemString from '../../embeds/helpers/itemString';
 import latiString from '../../embeds/helpers/latiString';
 import smallEmbed from '../../embeds/smallEmbed';
-import UsableItemReturn from '../../interfaces/UsableItemReturn';
-import { SpecialItemInProfile } from '../../interfaces/UserProfile';
+import { UsableItemFunc } from '../../interfaces/Item';
 import itemList from '../itemList';
 
 export const BURKANS_CHANGE_NAME_COST = 1000;
@@ -38,7 +37,7 @@ function makeComponents(lati: number) {
 }
 
 async function handleModal(i: ModalSubmitInteraction) {
-  const user = await findUser(i.user.id);
+  const user = await findUser(i.user.id, i.guildId!);
   if (!user) return i.reply(errorEmbed);
 
   if (user.lati < BURKANS_CHANGE_NAME_COST) {
@@ -52,19 +51,19 @@ async function handleModal(i: ModalSubmitInteraction) {
   const burkansId = i.customId.substring('burkans_modal_'.length);
   const newName = i.fields.getTextInputValue('burkans_modal_input').trim();
 
-  const burkansPrev = user.specialItems.find((item) => item._id === burkansId);
+  const burkansPrev = user.specialItems.find(item => item._id === burkansId);
   if (!burkansPrev) return i.reply(errorEmbed);
 
   if (newName === burkansPrev.attributes.customName) {
     return i.reply(ephemeralReply('Jaunajam burkāna vārdam ir jāatšķiras no vecā'));
   }
 
-  const res = await editItemAttribute(i.user.id, burkansId, {
+  const res = await editItemAttribute(i.user.id, i.guildId!, burkansId, {
     ...burkansPrev.attributes,
     customName: newName,
   });
   if (!res) return i.reply(errorEmbed);
-  await addLati(i.user.id, -BURKANS_CHANGE_NAME_COST);
+  await addLati(i.user.id, i.guildId!, -BURKANS_CHANGE_NAME_COST);
 
   await i.reply(
     smallEmbed(
@@ -86,14 +85,11 @@ async function handleModal(i: ModalSubmitInteraction) {
   );
 }
 
-export default async function divainais_burkans(
-  userId: string,
-  specialItem?: SpecialItemInProfile
-): Promise<UsableItemReturn> {
+const divainais_burkans: UsableItemFunc = async (userId, guildId, _, specialItem) => {
   return {
     text: '',
     custom: async (i, color) => {
-      const res = await editItemAttribute(userId, specialItem!._id!, {
+      const res = await editItemAttribute(userId, guildId, specialItem!._id!, {
         ...specialItem!.attributes,
         timesUsed: specialItem!.attributes.timesUsed! + 1,
       });
@@ -120,12 +116,12 @@ export default async function divainais_burkans(
           components: makeComponents(res.user.lati),
         })
       );
-      await buttonHandler(i, 'izmantot_burkans', msg, async (interaction) => {
+      await buttonHandler(i, 'izmantot_burkans', msg, async interaction => {
         const { customId } = interaction;
         if (customId === 'change_name_burkans') {
           if (interaction.componentType !== ComponentType.Button) return;
 
-          const user = await findUser(interaction.user.id);
+          const user = await findUser(userId, guildId);
           if (!user) return;
 
           if (user.lati < BURKANS_CHANGE_NAME_COST) {
@@ -155,14 +151,16 @@ export default async function divainais_burkans(
           );
           interaction
             .awaitModalSubmit({
-              filter: (i) => i.customId.startsWith('burkans_modal'),
+              filter: i => i.customId.startsWith('burkans_modal'),
               time: 60_000,
             })
             .then(handleModal)
-            .catch((_) => _);
+            .catch(_ => _);
           return { end: true };
         }
       });
     },
   };
-}
+};
+
+export default divainais_burkans;

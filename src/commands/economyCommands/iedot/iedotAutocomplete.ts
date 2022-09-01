@@ -28,7 +28,7 @@ export default async function iedotAutocomplete(
 
   let allChoices: [string, Item][] = Object.entries(itemList);
 
-  const user = await findUser(interaction.user.id);
+  const user = await findUser(interaction.user.id, interaction.guildId!);
   if (!user) return;
 
   const { specialItems, items } = user;

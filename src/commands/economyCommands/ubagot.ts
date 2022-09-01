@@ -46,7 +46,10 @@ const ubagot: Command = {
     description: 'Ubagot uz ielas',
   },
   async run(i) {
-    const user = await findUser(i.user.id);
+    const userId = i.user.id;
+    const guildId = i.guildId!;
+
+    const user = await findUser(userId, guildId);
     if (!user) return i.reply(errorEmbed);
 
     const { dailyCooldowns } = user;
@@ -62,11 +65,11 @@ const ubagot: Command = {
     const earnedLati = Math.floor(Math.random() * (LATI_MAX - LATI_MIN)) + LATI_MIN;
     const xpToAdd = Math.round(Math.random() * (XP_MAX - XP_MIN)) + XP_MIN;
 
-    await addLati(i.user.id, earnedLati);
-    await addTimeCooldown(i.user.id, this.data.name);
-    await addDailyCooldown(i.user.id, 'ubagot');
+    await addLati(userId, guildId, earnedLati);
+    await addTimeCooldown(userId, guildId, this.data.name);
+    await addDailyCooldown(userId, guildId, 'ubagot');
 
-    const leveledUser = await addXp(i.user.id, xpToAdd);
+    const leveledUser = await addXp(userId, guildId, xpToAdd);
     if (!leveledUser) return i.reply(errorEmbed);
 
     await i.reply({
@@ -79,4 +82,5 @@ const ubagot: Command = {
     });
   },
 };
+
 export default ubagot;

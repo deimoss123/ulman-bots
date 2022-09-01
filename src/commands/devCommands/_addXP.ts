@@ -31,7 +31,7 @@ const _addXP: Command = {
     const target = i.options.getUser('lietotājs')!;
     const xpToAdd = i.options.getInteger('daudzums')!;
 
-    const leveledUser = await addXp(target.id, xpToAdd);
+    const leveledUser = await addXp(target.id, i.guildId!, xpToAdd);
     if (!leveledUser) return i.reply(errorEmbed);
 
     const { user, levelIncrease, maxLevelReward } = leveledUser;

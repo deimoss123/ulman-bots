@@ -52,7 +52,10 @@ const vakances: Command = {
     description: 'Apskatīties pieejamās darba vakances',
   },
   async run(i: ChatInputCommandInteraction) {
-    const user = await findUser(i.user.id);
+    const userId = i.user.id;
+    const guildId = i.guildId!;
+
+    const user = await findUser(userId, guildId);
     if (!user) return i.reply(errorEmbed);
 
     const { jobPosition, level } = user;
@@ -84,7 +87,7 @@ const vakances: Command = {
       i,
       'vakances',
       interactionReply! as Message,
-      async (componentInteraction) => {
+      async componentInteraction => {
         switch (componentInteraction.customId) {
           case 'vakances_select':
             if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
@@ -105,7 +108,7 @@ const vakances: Command = {
               },
               after: async () => {
                 await Promise.all([
-                  setJobPosition(i.user.id, chosenJob),
+                  setJobPosition(userId, guildId, chosenJob),
                   componentInteraction.reply(
                     smallEmbed(
                       `Tu nomainīji profesiju uz ` +
@@ -114,7 +117,7 @@ const vakances: Command = {
                       this.color
                     )
                   ),
-                ]).catch((_) => _);
+                ]).catch(_ => _);
               },
             };
         }

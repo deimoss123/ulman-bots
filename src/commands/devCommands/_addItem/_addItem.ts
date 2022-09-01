@@ -56,7 +56,7 @@ const _addItem: Command = {
       })
     );
 
-    await addItem(target.id, { [itemToAddKey]: amountToAdd });
+    await addItem(target.id, i.guildId!, { [itemToAddKey]: amountToAdd });
   },
 };
 

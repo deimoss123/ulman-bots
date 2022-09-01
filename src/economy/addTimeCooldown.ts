@@ -5,10 +5,11 @@ import findUser from './findUser';
 
 export default async function addTimeCooldown(
   userId: string,
+  guildId: string,
   commandName: string
 ): Promise<UserProfile | void> {
   try {
-    const res = await findUser(userId);
+    const res = await findUser(userId, guildId);
     if (!res) return;
 
     const { timeCooldowns } = res;
@@ -21,11 +22,11 @@ export default async function addTimeCooldown(
     }
 
     const resUser = (await User.findOneAndUpdate(
-      { userId },
+      { userId, guildId },
       { $set: { timeCooldowns } },
       { new: true }
     )) as UserProfile;
-    userCache[userId] = resUser;
+    userCache[guildId][userId] = resUser;
 
     return JSON.parse(JSON.stringify(resUser)) as UserProfile;
   } catch (e: any) {

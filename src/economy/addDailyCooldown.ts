@@ -5,11 +5,12 @@ import findUser from './findUser';
 
 export default async function addDailyCooldown(
   userId: string,
+  guildId: string,
   commandName: 'stradat' | 'ubagot',
   isExtraUses = false
 ): Promise<UserProfile | void> {
   try {
-    const res = await findUser(userId);
+    const res = await findUser(userId, guildId);
     if (!res) return;
 
     const { dailyCooldowns } = res;
@@ -20,9 +21,9 @@ export default async function addDailyCooldown(
       dailyCooldowns[commandName].timesUsed++;
     }
 
-    await User.updateOne({ userId }, { $set: { dailyCooldowns } });
+    await User.updateOne({ userId, guildId }, { $set: { dailyCooldowns } });
 
-    userCache[userId] = res;
+    userCache[guildId][userId] = res;
 
     return JSON.parse(JSON.stringify(res));
   } catch (e: any) {

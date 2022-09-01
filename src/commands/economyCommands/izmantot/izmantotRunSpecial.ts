@@ -25,7 +25,7 @@ function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: Item, selec
         .setCustomId('izmantot_special_select')
         .setPlaceholder('Izvēlies kuru izmantot')
         .setOptions(
-          itemsInInv.map((item) => ({
+          itemsInInv.map(item => ({
             label: itemStringCustom(itemObj, item.attributes?.customName),
             description: displayAttributes(item, true),
             value: item._id!,
@@ -71,12 +71,15 @@ export default async function izmantotRunSpecial(
   itemsInInv: SpecialItemInProfile[],
   embedColor: number
 ): Promise<any> {
+  const userId = i.user.id;
+  const guildId = i.guildId!;
+
   const itemObj = itemList[itemKey];
   let selectedItemId = '';
 
   if (itemsInInv.length === 1) {
     const selectedItem = itemsInInv[0];
-    const useRes = await itemObj.use!(i.user.id, selectedItem);
+    const useRes = await itemObj.use!(userId, guildId, itemKey, selectedItem);
     if (useRes.custom) return useRes.custom(i, embedColor);
     return i.reply(makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
   }
@@ -96,7 +99,7 @@ export default async function izmantotRunSpecial(
     i,
     'izmantot',
     msg,
-    async (componentInteraction) => {
+    async componentInteraction => {
       const { customId } = componentInteraction;
       if (customId === 'izmantot_special_select') {
         if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
@@ -109,10 +112,10 @@ export default async function izmantotRunSpecial(
       } else if (customId === 'izmantot_special_confirm') {
         if (componentInteraction.componentType !== ComponentType.Button) return;
 
-        const user = await findUser(i.user.id);
+        const user = await findUser(userId, guildId);
         if (!user) return;
 
-        const selectedItem = user.specialItems.find((item) => item._id === selectedItemId);
+        const selectedItem = user.specialItems.find(item => item._id === selectedItemId);
         if (!selectedItem) {
           return {
             after: async () => {
@@ -123,7 +126,7 @@ export default async function izmantotRunSpecial(
           };
         }
 
-        const useRes = await itemObj.use!(i.user.id, selectedItem);
+        const useRes = await itemObj.use!(userId, guildId, itemKey, selectedItem);
 
         return {
           end: true,

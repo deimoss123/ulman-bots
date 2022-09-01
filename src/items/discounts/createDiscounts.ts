@@ -2,9 +2,9 @@ import * as fs from 'fs';
 import generateDiscounts from './generateDiscounts';
 
 export function getDiscountsFilePath() {
-  return './' +
-    (process.env.NODE_ENV === 'PROD' ? 'dist' : 'src') +
-    '/items/discounts/discounts.json';
+  return (
+    './' + (process.env.NODE_ENV === 'PROD' ? 'dist' : 'src') + '/items/discounts/discounts.json'
+  );
 }
 
 // izveido discounts.json failu ja tāds neeksistē

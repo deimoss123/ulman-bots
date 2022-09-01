@@ -2,21 +2,26 @@ import UserProfile from '../interfaces/UserProfile';
 import User from '../schemas/User';
 import userCache from '../utils/userCache';
 
-export default async function findUser(userId: string): Promise<UserProfile | undefined> {
+export default async function findUser(
+  userId: string,
+  guildId: string
+): Promise<UserProfile | undefined> {
   try {
-    if (userCache?.[userId]) return JSON.parse(JSON.stringify(userCache[userId]));
+    if (userCache[guildId]?.[userId]) return JSON.parse(JSON.stringify(userCache[guildId][userId]));
 
-    const result = (await User.findOne({ userId })) as UserProfile;
+    const result = (await User.findOne({ userId, guildId })) as UserProfile;
 
     if (result) {
-      userCache[userId] = result;
+      if (!userCache[guildId]) userCache[guildId] = {};
+      userCache[guildId][userId] = result;
       return JSON.parse(JSON.stringify(result));
     }
 
-    const newUser = await new User({ userId });
+    const newUser = await new User({ userId, guildId });
     newUser.save();
 
-    userCache[userId] = newUser as UserProfile;
+    if (!userCache[guildId]) userCache[guildId] = {};
+    userCache[guildId][userId] = newUser as UserProfile;
     return JSON.parse(JSON.stringify(newUser)) as UserProfile;
   } catch (e: any) {
     console.log(new Date().toLocaleString(), e.message);

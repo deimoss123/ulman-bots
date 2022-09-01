@@ -70,7 +70,10 @@ const iedot: Command = {
     const itemToGiveKey = i.options.getString('nosaukums')!;
     const amountToGive = i.options.getInteger('daudzums') ?? 1;
 
-    if (target.id === i.user.id) {
+    const userId = i.user.id;
+    const guildId = i.guildId!;
+
+    if (target.id === userId) {
       return i.reply(ephemeralReply('Tu nevari iedot sev'));
     }
 
@@ -81,10 +84,10 @@ const iedot: Command = {
     const itemToGive = itemList[itemToGiveKey];
     if (!itemToGive) return i.reply(wrongKeyEmbed);
 
-    const user = await findUser(i.user.id);
+    const user = await findUser(userId, guildId);
     if (!user) return i.reply(errorEmbed);
 
-    const targetUser = await findUser(target.id);
+    const targetUser = await findUser(target.id, guildId);
     if (!targetUser) return i.reply(errorEmbed);
 
     const { lati, items, specialItems } = user;
@@ -122,10 +125,10 @@ const iedot: Command = {
     }
 
     // murgs, 4 datubāzes saucieni :/
-    await addLati(i.user.id, -totalTax);
-    await addLati(i.client.user!.id, totalTax);
-    await addItems(i.user.id, { [itemToGiveKey]: -amountToGive });
-    const targetUserAfter = await addItems(target.id, { [itemToGiveKey]: amountToGive });
+    await addLati(userId, guildId, -totalTax);
+    await addLati(i.client.user!.id, guildId, totalTax);
+    await addItems(userId, guildId, { [itemToGiveKey]: -amountToGive });
+    const targetUserAfter = await addItems(target.id, guildId, { [itemToGiveKey]: amountToGive });
 
     if (!targetUserAfter) return i.reply(errorEmbed);
 

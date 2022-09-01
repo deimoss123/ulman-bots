@@ -3,18 +3,14 @@ import editItemAttribute from '../../economy/editItemAttribute';
 import findUser from '../../economy/findUser';
 import itemString from '../../embeds/helpers/itemString';
 import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
-import UsableItemReturn from '../../interfaces/UsableItemReturn';
-import { SpecialItemInProfile } from '../../interfaces/UserProfile';
+import { UsableItemFunc } from '../../interfaces/Item';
 import countFreeInvSlots from '../helpers/countFreeInvSlots';
 import itemList from '../itemList';
 
 // 24 stundas
 export const KAFIJAS_APARATS_COOLDOWN = 86_400_000;
 
-export default async function kafijas_aparats(
-  userId: string,
-  specialItem?: SpecialItemInProfile
-): Promise<UsableItemReturn> {
+const kafijas_aparats: UsableItemFunc = async (userId, guildId, _, specialItem) => {
   const lastUsed = specialItem!.attributes.lastUsed!;
   if (Date.now() - lastUsed < KAFIJAS_APARATS_COOLDOWN) {
     return {
@@ -25,7 +21,7 @@ export default async function kafijas_aparats(
         )}\``,
     };
   }
-  const user = await findUser(userId);
+  const user = await findUser(userId, guildId);
   if (!user) return { text: 'Ulmaņbota kļūda' };
 
   if (!countFreeInvSlots(user)) {
@@ -35,11 +31,11 @@ export default async function kafijas_aparats(
         `tev ir nepieciešama vismaz **1** brīva vieta inventārā`,
     };
   }
-  await editItemAttribute(userId, specialItem!._id!, { lastUsed: Date.now() });
-  const userAfter = await addItems(userId, { kafija: 1 });
+  await editItemAttribute(userId, guildId, specialItem!._id!, { lastUsed: Date.now() });
+  const userAfter = await addItems(userId, guildId, { kafija: 1 });
   if (!userAfter) return { text: 'Ulmaņbota kļūda' };
 
-  const itemCount = userAfter.items.find((item) => item.name === 'kafija')?.amount || 1;
+  const itemCount = userAfter.items.find(item => item.name === 'kafija')?.amount || 1;
 
   return {
     text: `Nākamā kafija pēc \`${millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - 1)}\``,
@@ -56,4 +52,6 @@ export default async function kafijas_aparats(
       },
     ],
   };
-}
+};
+
+export default kafijas_aparats;

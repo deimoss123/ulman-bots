@@ -1,5 +1,4 @@
 import User from '../schemas/User';
-import { Snowflake } from 'discord.js';
 import UserProfile from '../interfaces/UserProfile';
 import userCache from '../utils/userCache';
 import findUser from './findUser';
@@ -87,11 +86,12 @@ export interface AddXpReturn {
 }
 
 export default async function addXp(
-  userId: Snowflake,
+  userId: string,
+  guildId: string,
   xpToAdd: number
 ): Promise<AddXpReturn | void> {
   try {
-    const user = await findUser(userId);
+    const user = await findUser(userId, guildId);
     if (!user) return;
 
     const oldLevel = user.level;
@@ -112,7 +112,7 @@ export default async function addXp(
         }
         if (reward.item) {
           // ideāli būtu neveikt velvienu datubāzes pieprasījumu bet addItems ir daudz loģika un šis ir vieglāk
-          await addItems(userId, reward.item);
+          await addItems(userId, guildId, reward.item);
         }
       }
     }
@@ -123,12 +123,12 @@ export default async function addXp(
     }
 
     const resUser = await User.findOneAndUpdate(
-      { userId },
+      { userId, guildId },
       { $set: { lati: user.lati, xp: user.xp, level: user.level } },
       { new: true }
     );
 
-    userCache[userId] = resUser as UserProfile;
+    userCache[guildId][userId] = resUser as UserProfile;
     return {
       user: JSON.parse(JSON.stringify(user)),
       levelIncrease: calcRes.levelHasIncreased

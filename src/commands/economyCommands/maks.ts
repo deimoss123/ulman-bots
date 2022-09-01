@@ -25,7 +25,7 @@ const maks: Command = {
   async run(i: ChatInputCommandInteraction) {
     const target = i.options.getUser('lietotājs') ?? i.user;
 
-    const user = await findUser(target.id);
+    const user = await findUser(target.id, i.guildId!);
     if (!user) return i.reply(errorEmbed);
 
     let targetText = 'Tev';

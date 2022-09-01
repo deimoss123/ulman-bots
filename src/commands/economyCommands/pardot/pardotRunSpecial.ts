@@ -29,7 +29,7 @@ function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: Item, selec
         .setMinValues(1)
         .setMaxValues(itemsInInv.length)
         .setOptions(
-          itemsInInv.map((item) => ({
+          itemsInInv.map(item => ({
             label: itemStringCustom(itemObj, item.attributes?.customName),
             // description: item._id!,
             description: displayAttributes(item, true),
@@ -61,7 +61,7 @@ function makeEmbed(
     title: 'Tu pārdevi:',
     color,
     fields: [
-      ...soldItems.map((item) => ({
+      ...soldItems.map(item => ({
         name: itemString(itemList[item.name], null, false, item.attributes.customName),
         value: displayAttributes(item),
         inline: false,
@@ -78,14 +78,17 @@ export default async function pardotRunSpecial(
   itemsInInv: SpecialItemInProfile[],
   embedColor: number
 ) {
+  const userId = i.user.id;
+  const guildId = i.guildId!;
+
   const itemObj = itemList[itemKey];
   let selectedIds: string[] = [];
 
   if (itemsInInv.length === 1) {
     const soldValue = itemList[itemKey].value;
 
-    await removeItemsById(i.user.id, [itemsInInv[0]._id!]);
-    const user = await addLati(i.user.id, soldValue);
+    await removeItemsById(userId, guildId, [itemsInInv[0]._id!]);
+    const user = await addLati(userId, guildId, soldValue);
     if (!user) return i.reply(errorEmbed);
 
     return i.reply(makeEmbed(i, user, itemsInInv, soldValue, embedColor));
@@ -106,7 +109,7 @@ export default async function pardotRunSpecial(
     i,
     'pardot',
     msg,
-    async (componentInteraction) => {
+    async componentInteraction => {
       const { customId } = componentInteraction;
       if (customId === 'pardot_special_select') {
         if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
@@ -118,17 +121,17 @@ export default async function pardotRunSpecial(
         };
       } else if (customId === 'pardot_special_confirm') {
         if (componentInteraction.componentType !== ComponentType.Button) return;
-        const selectedItems = itemsInInv.filter((item) => selectedIds.includes(item._id!));
+        const selectedItems = itemsInInv.filter(item => selectedIds.includes(item._id!));
         const soldValue = selectedItems.reduce((prev, { name }) => {
           return prev + itemList[name]!.value;
         }, 0);
 
         if (!selectedItems.length) return;
 
-        const user = await findUser(i.user.id);
+        const user = await findUser(userId, guildId);
         if (!user) return;
 
-        const userItemIds = user.specialItems.map((item) => item._id!);
+        const userItemIds = user.specialItems.map(item => item._id!);
         for (const id of selectedIds) {
           if (!userItemIds.includes(id)) {
             return {
@@ -143,8 +146,8 @@ export default async function pardotRunSpecial(
           }
         }
 
-        await removeItemsById(i.user.id, selectedIds);
-        const userAfter = await addLati(i.user.id, soldValue);
+        await removeItemsById(userId, guildId, selectedIds);
+        const userAfter = await addLati(userId, guildId, soldValue);
         if (!userAfter) return;
 
         return {

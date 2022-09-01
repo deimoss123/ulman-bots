@@ -26,7 +26,10 @@ export default async function pirktRun(
   amountToBuy: number,
   embedColor: number
 ): Promise<any> {
-  const user = await findUser(i.user.id);
+  const userId = i.user.id;
+  const guildId = i.guildId!;
+
+  const user = await findUser(userId, guildId);
   if (!user) return i.reply(errorEmbed);
 
   const itemToBuy = itemList[itemToBuyKey];
@@ -58,13 +61,13 @@ export default async function pirktRun(
     );
   }
 
-  await addLati(i.user.id, -totalCost);
-  const userAfter = await addItems(i.user.id, { [itemToBuyKey]: amountToBuy });
+  await addLati(userId, guildId, -totalCost);
+  const userAfter = await addItems(userId, guildId, { [itemToBuyKey]: amountToBuy });
 
   if (!userAfter) return i.reply(errorEmbed);
 
   if (itemToBuy.attributes) {
-    const resSpecialItems = userAfter.specialItems.filter((item) => item.name === itemToBuyKey);
+    const resSpecialItems = userAfter.specialItems.filter(item => item.name === itemToBuyKey);
 
     return i.reply(
       embedTemplate({
@@ -88,7 +91,7 @@ export default async function pirktRun(
     );
   }
 
-  const resItems = userAfter.items.find((item) => item.name === itemToBuyKey)!;
+  const resItems = userAfter.items.find(item => item.name === itemToBuyKey)!;
 
   const componentRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
@@ -126,15 +129,15 @@ export default async function pirktRun(
     i,
     'pirkt',
     interactionReply!,
-    async (componentInteraction) => {
+    async componentInteraction => {
       if (componentInteraction.customId === 'pirkt_izmantot') {
         if (componentInteraction.componentType !== ComponentType.Button) return;
 
         let buttonStyle = ButtonStyle.Success;
 
-        const userBeforeUse = await findUser(i.user.id);
+        const userBeforeUse = await findUser(userId, guildId);
         if (userBeforeUse) {
-          if (!userBeforeUse.items.find((item) => item.name === itemToBuyKey)) {
+          if (!userBeforeUse.items.find(item => item.name === itemToBuyKey)) {
             buttonStyle = ButtonStyle.Danger;
           }
         }

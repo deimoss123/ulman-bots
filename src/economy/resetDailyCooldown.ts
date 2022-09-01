@@ -2,10 +2,13 @@ import UserProfile from '../interfaces/UserProfile';
 import User, { dailyCooldownDefault } from '../schemas/User';
 import userCache from '../utils/userCache';
 
-export default async function resetDailyCooldown(userId: string): Promise<UserProfile | void> {
+export default async function resetDailyCooldown(
+  userId: string,
+  guildId: string
+): Promise<UserProfile | void> {
   try {
     const res = (await User.findOneAndUpdate(
-      { userId },
+      { userId, guildId },
       {
         $set: {
           lastDayUsed: new Date().toLocaleDateString('en-GB'),
@@ -15,7 +18,8 @@ export default async function resetDailyCooldown(userId: string): Promise<UserPr
       { new: true, upsert: true }
     )) as UserProfile;
 
-    userCache[userId] = res;
+    if (!userCache[guildId]) userCache[guildId] = {};
+    userCache[guildId][userId] = res;
 
     return JSON.parse(JSON.stringify(res));
   } catch (e: any) {

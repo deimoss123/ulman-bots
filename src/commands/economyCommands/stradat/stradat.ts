@@ -59,7 +59,10 @@ const stradat: Command = {
     description: 'Strādāt darbā un pelnīt naudu',
   },
   async run(i: ChatInputCommandInteraction) {
-    const user = await findUser(i.user.id);
+    const userId = i.user.id;
+    const guildId = i.guildId!;
+
+    const user = await findUser(userId, guildId);
     if (!user) return i.reply(errorEmbed);
 
     const { jobPosition, dailyCooldowns, items } = user;
@@ -88,7 +91,7 @@ const stradat: Command = {
     const darbsRun = chance(darbiRun[jobPosition]).obj as StradatVeids;
 
     const btnRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-      ...darbsRun.options.map((o) =>
+      ...darbsRun.options.map(o =>
         new ButtonBuilder().setCustomId(o.customId).setStyle(ButtonStyle.Primary).setLabel(o.label)
       )
     );
@@ -105,7 +108,7 @@ const stradat: Command = {
     let interactionReply: Message;
 
     if (dailyCooldowns.stradat.timesUsed >= MAX_DAILY) {
-      if (!items.find((item) => item.name === 'kafija')) {
+      if (!items.find(item => item.name === 'kafija')) {
         return i.reply(
           ephemeralReply(
             'Tu esi sasniedzis maksimālo strādāšanas daudzumu šodien\n' +
@@ -146,16 +149,16 @@ const stradat: Command = {
       });
     }
 
-    const customIds = darbsRun.options.map((o) => o.customId);
+    const customIds = darbsRun.options.map(o => o.customId);
 
     await buttonHandler(
       i,
       'stradat',
       interactionReply,
-      async (componentInteraction) => {
+      async componentInteraction => {
         const { customId } = componentInteraction;
         if (customId === 'stradat_velreiz') {
-          await addItems(i.user.id, { kafija: -1 });
+          await addItems(userId, guildId, { kafija: -1 });
           isExtraUse = true;
           return {
             edit: { embeds: [embed], components: [btnRow] },
@@ -163,7 +166,7 @@ const stradat: Command = {
         }
 
         if (customIds.includes(customId)) {
-          const choice = darbsRun.options.find((o) => o.customId === customId)!;
+          const choice = darbsRun.options.find(o => o.customId === customId)!;
           const choiceResult = chance(choice.result).obj as StradatResult;
 
           let rewardText = 'Tu neko nenopelnīji';
@@ -174,11 +177,11 @@ const stradat: Command = {
               const latiToAdd = Math.round(
                 Math.random() * (reward.lati[1] - reward.lati[0]) + reward.lati[0]
               );
-              await addLati(i.user.id, latiToAdd);
+              await addLati(userId, guildId, latiToAdd);
               rewardText += `**${latiString(latiToAdd, true)}** `;
             }
             if (reward.items) {
-              await addItems(i.user.id, reward.items);
+              await addItems(userId, guildId, reward.items);
               rewardText += Object.entries(reward.items)
                 .map(([key, amount]) => itemString(itemList[key], amount, true))
                 .join(' ');
@@ -189,10 +192,10 @@ const stradat: Command = {
             Math.round(Math.random() * (STRADAT_XP_MAX - STRADAT_XP_MIN)) + STRADAT_XP_MIN;
 
           // nav labs 3 datubāzes saucieni
-          await addTimeCooldown(i.user.id, this.data.name);
-          await addDailyCooldown(i.user.id, 'stradat', isExtraUse);
+          await addTimeCooldown(userId, guildId, this.data.name);
+          await addDailyCooldown(userId, guildId, 'stradat', isExtraUse);
 
-          const leveledUser = await addXp(i.user.id, xpToAdd);
+          const leveledUser = await addXp(userId, guildId, xpToAdd);
           if (!leveledUser) return;
 
           return {
