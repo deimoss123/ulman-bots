@@ -9,7 +9,7 @@ function removeRating(item: ItemWithRating): [string, Item] {
 }
 
 function filterGreaterThan(num: number) {
-  return (item: ItemWithRating) => item[2] >= num;
+  return (item: ItemWithRating) => item[2] >= num - 0.2;
 }
 
 export default function findItemsByQuery(
@@ -20,7 +20,7 @@ export default function findItemsByQuery(
   const queryResult = stringSimilarity.findBestMatch(query, itemsToQueryNames);
 
   if (queryResult.bestMatch.rating === 0) {
-    return itemsToQuery;
+    return itemsToQuery.slice(0, 25);
   }
 
   // pievieno reitingu katrai mantai sarakstā
@@ -34,9 +34,8 @@ export default function findItemsByQuery(
 
   // console.log(sortedItemsWithRatings.map(a => [a[0], a[2]]));
 
-  // izfiltrē mantas ar retinga soli 0.1
-  // ja lielākais reitings ir 0.3, tad tiek filtrētas mantas tikai ar reitingu kas lielāks par 0.3
-  // ja lielāks par 0.5, tad filtrētas pēc 0.5 utt.
-  const highestValue = Math.floor(queryResult.bestMatch.rating * 10) / 10;
-  return sortedItemsWithRatings.filter(filterGreaterThan(highestValue)).map(removeRating);
+  return sortedItemsWithRatings
+    .filter(filterGreaterThan(queryResult.bestMatch.rating))
+    .map(removeRating)
+    .slice(0, 25);
 }
