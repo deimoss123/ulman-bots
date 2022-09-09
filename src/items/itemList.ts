@@ -8,6 +8,7 @@ import kafija from './usableItems/kafija';
 import kafijas_aparats from './usableItems/kafijas_aparats';
 import velo from './usableItems/velo';
 import divaina_mugursoma from './usableItems/divaina_mugursoma';
+import petnieks from './usableItems/petnieks';
 
 export type ItemKey = string;
 
@@ -193,9 +194,24 @@ const itemList: Record<ItemKey, Item> = {
     attributes: {
       lastUsed: 0,
     },
-    allowDiscount: false,
     removedOnUse: false,
     use: kafijas_aparats,
+  },
+  petnieks: {
+    nameNomVsk: 'pētnieks',
+    nameNomDsk: 'pētnieki',
+    nameAkuVsk: 'pētnieku',
+    nameAkuDsk: 'pētniekus',
+    isVirsiesuDzimte: true,
+    emoji: null,
+    categories: [ItemCategory.TIRGUS],
+    value: 100,
+    attributes: {
+      lastUsed: 0,
+      foundItemKey: '',
+    },
+    removedOnUse: false,
+    use: petnieks,
   },
 
   // -- atkritumi --

@@ -16,9 +16,7 @@ const kafijas_aparats: UsableItemFunc = async (userId, guildId, _, specialItem) 
     return {
       text:
         `Tu nevari uztaisīt ${itemString(itemList.kafija, null, true)}, jo tā tiek gatavota\n` +
-        `Nākamā kafija pēc \`${millisToReadableTime(
-          KAFIJAS_APARATS_COOLDOWN - Date.now() + lastUsed
-        )}\``,
+        `Nākamā kafija pēc \`${millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - Date.now() + lastUsed)}\``,
     };
   }
   const user = await findUser(userId, guildId);

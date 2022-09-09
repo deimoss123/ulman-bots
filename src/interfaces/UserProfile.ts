@@ -6,10 +6,15 @@ export interface ItemInProfile {
 }
 
 export interface ItemAttributes {
+  // dīvainā burkāna atribūti
   timesUsed?: number;
-  durability?: number;
-  lastUsed?: number; // unix millis
   customName?: string;
+
+  // makšķerēm
+  durability?: number;
+
+  lastUsed?: number; // kafijas aparāts, pētnieks (unix millis)
+  foundItemKey?: ItemKey; // priekš pētnieka, brīvgrieziens
 }
 
 export interface SpecialItemInProfile {

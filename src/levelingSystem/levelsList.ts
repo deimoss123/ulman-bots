@@ -65,6 +65,9 @@ const levelsList: Record<number, LevelMilestone> = {
   10: {
     xp: 50,
     reward: {
+      item: {
+        kafijas_aparats: 1,
+      },
       taxDiscount: {
         giveTax: 0.13,
         payTax: 0.09,
@@ -110,7 +113,7 @@ const levelsList: Record<number, LevelMilestone> = {
   20: {
     xp: 100,
     reward: {
-      item: { brivgriez100: 2 },
+      item: { brivgriez100: 1, petnieks: 1 },
       taxDiscount: {
         payTax: 0.08,
       },

@@ -3,6 +3,7 @@ import User from '../schemas/User';
 import UserProfile from '../interfaces/UserProfile';
 import userCache from '../utils/userCache';
 import itemList, { ItemKey } from '../items/itemList';
+import { getRandFreeSpin } from '../items/usableItems/petnieks';
 
 export default async function addItems(
   userId: string,
@@ -22,6 +23,7 @@ export default async function addItems(
 
       // pārbauda vai manta ir ar atribūtiem
       if (attributes) {
+        if ('foundItemKey' in attributes) attributes.foundItemKey = await getRandFreeSpin();
         specialItems.push(...Array(amountToAdd).fill({ name: itemToAdd, attributes }));
         continue;
       }
