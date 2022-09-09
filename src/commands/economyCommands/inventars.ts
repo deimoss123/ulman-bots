@@ -24,7 +24,30 @@ import Item from '../../interfaces/Item';
 import { displayAttributes } from '../../embeds/helpers/displayAttributes';
 import buttonHandler from '../../embeds/buttonHandler';
 
+type ItemType = 'not_usable' | 'usable' | 'special' | 'not_sellable';
+const itemTypes: Record<ItemType, { text: string; emoji?: string }> = {
+  not_sellable: {
+    text: 'nepārdodama un neiedodama manta',
+    emoji: '<:check3:1017598453032943636>',
+  },
+  special: {
+    text: 'īpaša manta ar atribūtiem',
+    emoji: '<:check2:1017601966555267132>',
+  },
+  usable: {
+    text: 'izmantojams',
+    emoji: '<:check1:1017600596213235723>',
+  },
+  not_usable: {
+    text: 'neizmantojams',
+    emoji: '<:cross:1017600096143151164>',
+  },
+};
+
 function mapItems({ items, specialItems }: UserProfile) {
+  const itemTypesInInv = new Set<ItemType>();
+  if (specialItems.length) itemTypesInInv.add('special');
+
   const specialItemsFields = specialItems
     .sort((a, b) => itemList[b.name].value - itemList[a.name].value)
     .map(specialItem => {
@@ -33,8 +56,7 @@ function mapItems({ items, specialItems }: UserProfile) {
 
       return {
         name: itemString(item, null, false, attributes?.customName),
-        value:
-          `${item.use ? '☑️' : '❌'} ${latiString(item.value)}\n` + displayAttributes(specialItem),
+        value: `${itemTypes.special.emoji} ${latiString(item.value)}\n` + displayAttributes(specialItem),
         inline: true,
       };
     });
@@ -56,14 +78,24 @@ function mapItems({ items, specialItems }: UserProfile) {
   const itemFields = sortedItems.map(({ name, amount }) => {
     const item = itemList[name] as Item;
 
+    let currentItemType: ItemType;
+
+    if (item.use) currentItemType = 'usable';
+    else currentItemType = 'not_usable';
+
+    itemTypesInInv.add(currentItemType);
+
     return {
       name: `${itemString(item)} x${amount}`,
-      value: `${item.use ? '☑️' : '❌'} ${latiString(item.value)}`,
+      value: `${itemTypes[currentItemType].emoji} ${latiString(item.value)}`,
       inline: true,
     };
   });
 
-  return [...specialItemsFields, ...itemFields];
+  return {
+    fields: [...specialItemsFields, ...itemFields],
+    itemTypesInv: Array.from(itemTypesInInv),
+  };
 }
 
 const INV_PAGE_SIZE = 12;
@@ -74,7 +106,8 @@ function makeEmbed(
   targetUser: UserProfile,
   fields: EmbedField[],
   color: number,
-  currentPage: number
+  currentPage: number,
+  itemTypesInv: ItemType[]
 ) {
   const { items, specialItems, itemCap } = targetUser;
 
@@ -94,7 +127,12 @@ function makeEmbed(
     description: items.length
       ? `**${countItems(items) + specialItems.length}** mantas no **${itemCap}**\n` +
         `Inventāra vērtība: **${latiString(totalValue)}**\n\n` +
-        `☑️ - izmantojams, ❌ - neizmantojams\n\u200b`
+        Object.entries(itemTypes).reduce(
+          (prev, [key, { text, emoji }]) =>
+            itemTypesInv.includes(key as ItemType) ? prev + `${emoji} - ${text}\n` : prev,
+          ''
+        ) +
+        '\u2800'
       : 'Tukšs inventārs :(',
     color,
     fields: fieldsToShow,
@@ -123,11 +161,7 @@ function paginationRow(currentPage: number, totalPages: number) {
 
 function sellRow() {
   return new ActionRowBuilder<ButtonBuilder>().addComponents(
-    new ButtonBuilder()
-      .setCustomId('__')
-      .setLabel(`test`)
-      .setStyle(ButtonStyle.Primary)
-      .setDisabled(true)
+    new ButtonBuilder().setCustomId('__').setLabel(`test`).setStyle(ButtonStyle.Primary).setDisabled(true)
   );
 }
 
@@ -148,7 +182,7 @@ const inventars: Command = {
   },
   async run(i: ChatInputCommandInteraction) {
     const target = i.options.getUser('lietotājs') || i.user;
-    
+
     const targetUser = await findUser(target.id, i.guildId!);
     if (!targetUser) return i.reply(errorEmbed);
 
@@ -156,7 +190,7 @@ const inventars: Command = {
       return i.reply(ephemeralReply('Tu nevari apskatīt Valsts Bankas inventāru'));
     }
 
-    const fields = mapItems(targetUser);
+    const { fields, itemTypesInv } = mapItems(targetUser);
 
     const totalPages = Math.ceil(fields.length / INV_PAGE_SIZE);
     let currentPage = 0;
@@ -165,7 +199,7 @@ const inventars: Command = {
     if (fields.length > INV_PAGE_SIZE) components.unshift(paginationRow(currentPage, totalPages));
 
     const msg = await i.reply({
-      embeds: makeEmbed(i, target, targetUser, fields, this.color, currentPage),
+      embeds: makeEmbed(i, target, targetUser, fields, this.color, currentPage, itemTypesInv),
       components,
       fetchReply: true,
     });
@@ -184,7 +218,7 @@ const inventars: Command = {
             if (currentPage >= totalPages) currentPage = totalPages - 1;
             return {
               edit: {
-                embeds: makeEmbed(i, target, targetUser, fields, this.color, currentPage),
+                embeds: makeEmbed(i, target, targetUser, fields, this.color, currentPage, itemTypesInv),
                 components: [paginationRow(currentPage, totalPages), sellRow()],
               },
             };
@@ -194,7 +228,7 @@ const inventars: Command = {
             if (currentPage < 0) currentPage = 0;
             return {
               edit: {
-                embeds: makeEmbed(i, target, targetUser, fields, this.color, currentPage),
+                embeds: makeEmbed(i, target, targetUser, fields, this.color, currentPage, itemTypesInv),
                 components: [paginationRow(currentPage, totalPages), sellRow()],
               },
             };
