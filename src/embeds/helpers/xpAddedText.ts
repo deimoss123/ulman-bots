@@ -29,21 +29,34 @@ export default function xpAddedText(
 
   let levelIncreaseText = '';
   if (levelIncrease) {
-    let rewardText = '';
+    const rewardsArr: string[] = [];
     let addedLati = 0;
     for (const levelReward of levelIncrease.rewards) {
       if (levelReward.lati) addedLati += levelReward.lati;
-      if (levelReward.item)
-        rewardText += Object.entries(levelReward.item)
-          .map(([key, amount]) => itemString(itemList[key], amount))
-          .join(', ');
+      if (levelReward.item) {
+        rewardsArr.push(
+          ...Object.entries(levelReward.item).map(([key, amount]) =>
+            itemString(itemList[key], amount)
+          )
+        );
+      }
+      if (levelReward.taxDiscount) {
+        const { payTax, giveTax } = levelReward.taxDiscount;
+        const taxArr: string[] = [];
+        if (payTax) taxArr.push(`maksāšanai (**${payTax * 100}%**)`);
+        if (giveTax) taxArr.push(`iedošanai (**${giveTax * 100}%**)`);
+        rewardsArr.push('Nodokļu atvieglojumu ' + taxArr.join(' un '));
+      }
+    }
+
+    if (addedLati) {
+      rewardsArr.unshift(latiString(addedLati, true));
     }
 
     levelIncreaseText =
       `\nPalielināts līmenis **${levelIncrease.from}** ➔ **${levelIncrease.to}**\n` +
-      `Līmeņa palielināšanas bonuss: ${
-        addedLati ? `${latiString(addedLati)} ` : ''
-      }${rewardText}\n`;
+      `Tu saņēmi:\n` +
+      rewardsArr.map(r => `> ${r}`).join('\n');
   }
 
   return (

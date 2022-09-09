@@ -21,7 +21,7 @@ import Item from '../../../interfaces/Item';
 import UserProfile, { SpecialItemInProfile } from '../../../interfaces/UserProfile';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import itemList, { ItemKey } from '../../../items/itemList';
-import { cantPayTaxEmbed, IEDOT_NODOKLIS } from './iedot';
+import { cantPayTaxEmbed } from './iedot';
 
 async function iedotSpecialQuery(
   i: CommandInteraction,
@@ -66,6 +66,7 @@ function makeEmbed(
   itemObj: Item,
   targetUserId: string,
   embedColor: number,
+  user: UserProfile,
   taxLati?: number
 ) {
   return embedTemplate({
@@ -75,7 +76,7 @@ function makeEmbed(
       `Tavā inventārā ir ${itemString(itemObj, itemsInInv.length)}\n` +
       `No saraksta izvēlies vienu vai vairākas mantas ko iedot <@${targetUserId}>\n\n` +
       `**Nodoklis:** ${taxLati ? latiString(taxLati) : '-'} ` +
-      `(${IEDOT_NODOKLIS * 100}% no mantu kopējās vērtības)`,
+      `(${user.giveTax * 100}% no mantu kopējās vērtības)`,
   }).embeds!;
 }
 
@@ -162,7 +163,7 @@ export default async function iedotRunSpecial(
     // TODO: kad pievienotas mantas ar mainīgu vērtību (makšķeres) šo pārrēķināt
     totalTax = itemObj.value;
     if (user.lati < totalTax) {
-      return i.reply(cantPayTaxEmbed(itemObj, 1, totalTax, user.lati));
+      return i.reply(cantPayTaxEmbed(itemObj, 1, totalTax, user));
     }
 
     await addLati(userId, guildId, -totalTax);
@@ -173,7 +174,7 @@ export default async function iedotRunSpecial(
   }
 
   const msg = await i.reply({
-    embeds: makeEmbed(i, itemsInInv, itemObj, targetUser.userId, embedColor),
+    embeds: makeEmbed(i, itemsInInv, itemObj, targetUser.userId, embedColor, user),
     components: makeComponents(itemsInInv, itemObj, selectedItems),
     fetchReply: true,
   });
@@ -187,19 +188,34 @@ export default async function iedotRunSpecial(
       if (customId === 'iedot_special_select') {
         if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
         selectedItems = itemsInInv.filter(item => componentInteraction.values.includes(item._id!));
-        totalTax = Math.floor(itemObj.value * selectedItems.length * IEDOT_NODOKLIS) || 1;
 
         const userAfterSelect = await findUser(userId, guildId);
+        if (!userAfterSelect) {
+          await componentInteraction.reply(errorEmbed);
+          return {
+            doNothing: true,
+          };
+        }
+
+        totalTax = Math.floor(itemObj.value * selectedItems.length * userAfterSelect.giveTax) || 1;
 
         return {
           edit: {
-            embeds: makeEmbed(i, itemsInInv, itemObj, targetUser.userId, embedColor, totalTax),
+            embeds: makeEmbed(
+              i,
+              itemsInInv,
+              itemObj,
+              targetUser.userId,
+              embedColor,
+              userAfterSelect,
+              totalTax
+            ),
             components: makeComponents(
               itemsInInv,
               itemObj,
               selectedItems,
               totalTax,
-              userAfterSelect?.lati ?? user.lati
+              userAfterSelect.lati
             ),
           },
         };
@@ -222,7 +238,7 @@ export default async function iedotRunSpecial(
           return {
             after: async () => {
               await componentInteraction.reply(
-                cantPayTaxEmbed(itemObj, selectedItems.length, totalTax, user.lati)
+                cantPayTaxEmbed(itemObj, selectedItems.length, totalTax, user)
               );
             },
           };

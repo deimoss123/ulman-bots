@@ -108,11 +108,15 @@ export default async function addXp(
       for (const reward of calcRes.rewards!) {
         if (reward.lati) {
           user.lati += reward.lati;
-          continue;
         }
         if (reward.item) {
           // ideāli būtu neveikt velvienu datubāzes pieprasījumu bet addItems ir daudz loģika un šis ir vieglāk
           await addItems(userId, guildId, reward.item);
+        }
+        if (reward.taxDiscount) {
+          const { payTax, giveTax } = reward.taxDiscount;
+          if (payTax) user.payTax = payTax;
+          if (giveTax) user.giveTax = giveTax;
         }
       }
     }
@@ -122,11 +126,7 @@ export default async function addXp(
       user.xp = 0;
     }
 
-    const resUser = await User.findOneAndUpdate(
-      { userId, guildId },
-      { $set: { lati: user.lati, xp: user.xp, level: user.level } },
-      { new: true }
-    );
+    const resUser = await User.findOneAndUpdate({ userId, guildId }, { ...user }, { new: true });
 
     userCache[guildId][userId] = resUser as UserProfile;
     return {

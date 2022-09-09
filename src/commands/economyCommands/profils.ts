@@ -34,7 +34,7 @@ const profils: Command = {
       return i.reply(ephemeralReply('Tu nevari apskatīt Valsts Bankas profilu'));
     }
 
-    const { level, xp, jobPosition } = user;
+    const { level, xp, jobPosition, payTax, giveTax } = user;
 
     const targetText = target.id === i.user.id ? 'Tavs' : userString(target);
 
@@ -63,7 +63,14 @@ const profils: Command = {
         color: this.color,
         title: `${targetText} profils`,
         description:
-          `Profesija: \`${jobPosition ? JobPositions[jobPosition].name : 'Bezdarbnieks'}\`\n\n` +
+          `Profesija: **${
+            jobPosition
+              ? `<:${jobPosition}:${JobPositions[jobPosition]!.emojiId}> ` +
+                `${JobPositions[jobPosition]!.name}`
+              : 'Bezdarbnieks'
+          }**\n` +
+          `Maksāšanas nodoklis: **${payTax * 100}%**\n` +
+          `Iedošanas nodoklis: **${giveTax * 100}%**\n\n` +
           `${maxLevelText}Līmenis: **${level}** ${maxLevelEmoji} ${xpText}\n${xpBar}`,
         fields: [
           {

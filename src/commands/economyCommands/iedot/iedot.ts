@@ -15,14 +15,13 @@ import latiString from '../../../embeds/helpers/latiString';
 import addLati from '../../../economy/addLati';
 import iedotRunSpecial, { noInvSpaceEmbed } from './iedotRunSpecial';
 import Item from '../../../interfaces/Item';
-
-export const IEDOT_NODOKLIS = 0.2;
+import UserProfile from '../../../interfaces/UserProfile';
 
 export function cantPayTaxEmbed(
   itemToGive: Item,
   amountToGive: number,
   totalTax: number,
-  userLati: number
+  user: UserProfile
 ) {
   return ephemeralReply(
     `Tev nepietiek naudas lai samaksātu iedošanas nodokli (${itemString(
@@ -30,8 +29,8 @@ export function cantPayTaxEmbed(
       amountToGive
     )})\n` +
       `Nodoklis ko maksāt - **${latiString(totalTax)}** ` +
-      `(${IEDOT_NODOKLIS * 100}% no mantu kopējās vērtības)\n` +
-      `Tev ir ${latiString(userLati)}`
+      `(${user.giveTax * 100}% no mantu kopējās vērtības)\n` +
+      `Tev ir ${latiString(user.lati)}`
   );
 }
 
@@ -90,7 +89,7 @@ const iedot: Command = {
     const targetUser = await findUser(target.id, guildId);
     if (!targetUser) return i.reply(errorEmbed);
 
-    const { lati, items, specialItems } = user;
+    const { items, specialItems } = user;
 
     if (itemToGive.attributes) {
       const specialItemInv = specialItems.filter(({ name }) => name === itemToGiveKey);
@@ -114,10 +113,10 @@ const iedot: Command = {
       );
     }
 
-    const totalTax = Math.floor(itemToGive.value * amountToGive * IEDOT_NODOKLIS) || 1;
+    const totalTax = Math.floor(itemToGive.value * amountToGive * user.giveTax) || 1;
 
     if (user.lati < totalTax) {
-      return i.reply(cantPayTaxEmbed(itemToGive, amountToGive, totalTax, lati));
+      return i.reply(cantPayTaxEmbed(itemToGive, amountToGive, totalTax, user));
     }
 
     if (amountToGive > targetUser.itemCap - countItems(targetUser.items)) {
@@ -141,7 +140,7 @@ const iedot: Command = {
         description:
           `Tu iedevi <@${target.id}> ${itemString(itemToGive, amountToGive, true)}\n` +
           `Nodoklis: **${latiString(totalTax)}** (${
-            IEDOT_NODOKLIS * 100
+            user.giveTax * 100
           }% no iedoto mantu kopējās vērtības)`,
         color: this.color,
         fields: [

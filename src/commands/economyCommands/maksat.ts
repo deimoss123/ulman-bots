@@ -8,8 +8,6 @@ import addLati from '../../economy/addLati';
 import ephemeralReply from '../../embeds/ephemeralReply';
 import commandColors from '../../embeds/commandColors';
 
-const MAKSAT_NODOKLIS = 0.1;
-
 const maksat: Command = {
   title: 'Maksāt',
   description: 'Pārskaitīt citam lietotājam naudu',
@@ -51,17 +49,17 @@ const maksat: Command = {
     const user = await findUser(userId, guildId);
     if (!user) return i.reply(errorEmbed);
 
-    const totalTax = Math.floor(latiToAdd * MAKSAT_NODOKLIS) || 1;
+    const totalTax = Math.floor(latiToAdd * user.payTax) || 1;
     const totalToPay = latiToAdd + totalTax;
 
     // nepietiek lati
     if (user.lati < totalToPay) {
-      const maxPay = Math.floor((1 / (1 + MAKSAT_NODOKLIS)) * user.lati);
+      const maxPay = Math.floor((1 / (1 + user.payTax)) * user.lati);
 
       return i.reply(
         ephemeralReply(
           `Tu nevari maksāt **${latiToAdd}** + ` +
-            `**${totalTax}** (${MAKSAT_NODOKLIS * 100}% nodoklis) = ` +
+            `**${totalTax}** (${user.payTax * 100}% nodoklis) = ` +
             `**${latiString(totalToPay, true)}**\n` +
             `Tev ir **${latiString(user.lati)}**` +
             (user.lati > 1
@@ -83,7 +81,7 @@ const maksat: Command = {
         content: `<@${target.id}>`,
         description:
           `Tu samaksāji <@${target.id}> **${latiString(latiToAdd, true)}**\n` +
-          `Nodoklis: ${latiString(totalTax)} (${MAKSAT_NODOKLIS * 100}%)`,
+          `Nodoklis: ${latiString(totalTax)} (${user.payTax * 100}%)`,
         color: this.color,
         fields: [
           {
