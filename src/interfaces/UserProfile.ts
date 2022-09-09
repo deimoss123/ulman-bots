@@ -43,6 +43,9 @@ interface UserProfile {
   items: ItemInProfile[];
   specialItems: SpecialItemInProfile[];
 
+  payTax: number;
+  giveTax: number;
+
   timeCooldowns: TimeCooldown[];
 
   // "1/1/1970"

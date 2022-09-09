@@ -66,6 +66,15 @@ const userSchema = new Schema<UserProfile>({
     default: [],
   },
 
+  payTax: {
+    type: Number,
+    default: 0.1,
+  },
+  giveTax: {
+    type: Number,
+    default: 0.15,
+  },
+
   timeCooldowns: {
     type: [
       {
