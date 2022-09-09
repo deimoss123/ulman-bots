@@ -42,9 +42,7 @@ async function handleModal(i: ModalSubmitInteraction) {
 
   if (user.lati < BURKANS_CHANGE_NAME_COST) {
     return i.reply(
-      ephemeralReply(
-        'Tev nepietiek naudas lai nomainītu burkāna nosaukumu\n' + `Tev ir ${latiString(user.lati)}`
-      )
+      ephemeralReply('Tev nepietiek naudas lai nomainītu burkāna nosaukumu\n' + `Tev ir ${latiString(user.lati)}`)
     );
   }
 
@@ -68,18 +66,8 @@ async function handleModal(i: ModalSubmitInteraction) {
   await i.reply(
     smallEmbed(
       'Burkāna nosakums veiksmīgi nomainīts\n' +
-        `No: ${itemString(
-          itemList.divainais_burkans,
-          null,
-          false,
-          burkansPrev.attributes.customName
-        )}\n` +
-        `Uz: **${itemString(
-          itemList.divainais_burkans,
-          null,
-          false,
-          res.newItem.attributes.customName
-        )}**`,
+        `No: ${itemString(itemList.divainais_burkans, null, false, burkansPrev.attributes.customName)}\n` +
+        `Uz: **${itemString(itemList.divainais_burkans, null, false, res.newItem.attributes.customName)}**`,
       0xffffff
     )
   );
@@ -95,6 +83,8 @@ const divainais_burkans: UsableItemFunc = async (userId, guildId, _, specialItem
       });
       if (!res) return i.reply(errorEmbed);
 
+      const { timesUsed } = res.newItem.attributes;
+
       const msg = await i.reply(
         embedTemplate({
           i,
@@ -109,7 +99,8 @@ const divainais_burkans: UsableItemFunc = async (userId, guildId, _, specialItem
               )}`,
               value:
                 'Tu nokodies dīvaino burkānu, **mmmm** tas bija ļoti garšīgs\n' +
-                `Šis burkāns ir nokosts **${res.newItem.attributes.timesUsed!}** reizes`,
+                `Šis burkāns ir nokosts **${res.newItem.attributes.timesUsed!}** ` +
+                `reiz${timesUsed! % 10 === 1 && timesUsed! % 100 !== 11 ? 'i' : 'es'}`,
               inline: false,
             },
           ],
@@ -127,8 +118,7 @@ const divainais_burkans: UsableItemFunc = async (userId, guildId, _, specialItem
           if (user.lati < BURKANS_CHANGE_NAME_COST) {
             await i.reply(
               ephemeralReply(
-                'Tev nepietiek naudas lai nomainītu burkāna nosaukumu\n' +
-                  `Tev ir ${latiString(user.lati)}`
+                'Tev nepietiek naudas lai nomainītu burkāna nosaukumu\n' + `Tev ir ${latiString(user.lati)}`
               )
             );
             return;
