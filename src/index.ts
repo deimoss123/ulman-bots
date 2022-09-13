@@ -1,9 +1,4 @@
-import {
-  ChatInputCommandInteraction,
-  Client,
-  GatewayIntentBits,
-  InteractionType,
-} from 'discord.js';
+import { Client, GatewayIntentBits } from 'discord.js';
 import dotenv from 'dotenv';
 import validateEnv from './utils/validateEnv';
 import mongo from './utils/mongo';
@@ -28,13 +23,13 @@ client.once('ready', () => {
 });
 
 client.on('interactionCreate', async i => {
-  if (i.type === InteractionType.ApplicationCommand) {
-    await commandHandler(i as ChatInputCommandInteraction);
-  } else if (i.type === InteractionType.ApplicationCommandAutocomplete) {
+  if (i.isChatInputCommand()) {
+    await commandHandler(i);
+  } else if (i.isAutocomplete()) {
     await autocompleteHandler(i);
   }
 });
 
-client
-  .login(process.env.BOT_TOKEN)
-  .then(() => console.log(chalk.yellow(client.user!.tag) + ' logged in'));
+client.login(process.env.BOT_TOKEN).then(() => {
+  console.log(chalk.yellow(client.user!.tag) + ' logged in');
+});
