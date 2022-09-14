@@ -98,6 +98,19 @@ const userSchema = new Schema<UserProfile>({
     // nav ideāli bet ok
     default: dailyCooldownDefault,
   },
+
+  status: {
+    type: {
+      aizsargats: Number,
+      laupitajs: Number,
+      juridisks: Number,
+    },
+    default: {
+      aizsargats: 0,
+      laupitajs: 0,
+      juridisks: 0,
+    },
+  },
 });
 
 export default model('User', userSchema);

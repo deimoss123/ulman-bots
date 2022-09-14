@@ -107,48 +107,54 @@ const divainais_burkans: UsableItemFunc = async (userId, guildId, _, specialItem
           components: makeComponents(res.user.lati),
         })
       );
-      await buttonHandler(i, 'izmantot_burkans', msg, async interaction => {
-        const { customId } = interaction;
-        if (customId === 'change_name_burkans') {
-          if (interaction.componentType !== ComponentType.Button) return;
+      await buttonHandler(
+        i,
+        'izmantot_burkans',
+        msg,
+        async interaction => {
+          const { customId } = interaction;
+          if (customId === 'change_name_burkans') {
+            if (interaction.componentType !== ComponentType.Button) return;
 
-          const user = await findUser(userId, guildId);
-          if (!user) return;
+            const user = await findUser(userId, guildId);
+            if (!user) return;
 
-          if (user.lati < BURKANS_CHANGE_NAME_COST) {
-            await i.reply(
-              ephemeralReply(
-                'Tev nepietiek naudas lai nomainītu burkāna nosaukumu\n' + `Tev ir ${latiString(user.lati)}`
-              )
-            );
-            return;
-          }
-
-          await interaction.showModal(
-            new ModalBuilder()
-              .setCustomId(`burkans_modal_${specialItem!._id}`)
-              .setTitle('Mainīt dīvainā burkāna nosaukumu')
-              .addComponents(
-                new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-                  new TextInputBuilder()
-                    .setCustomId('burkans_modal_input')
-                    .setLabel('Jaunais nosaukums')
-                    .setStyle(TextInputStyle.Short)
-                    .setMinLength(1)
-                    .setMaxLength(10)
+            if (user.lati < BURKANS_CHANGE_NAME_COST) {
+              await i.reply(
+                ephemeralReply(
+                  'Tev nepietiek naudas lai nomainītu burkāna nosaukumu\n' + `Tev ir ${latiString(user.lati)}`
                 )
-              )
-          );
-          interaction
-            .awaitModalSubmit({
-              filter: i => i.customId.startsWith('burkans_modal'),
-              time: 60_000,
-            })
-            .then(handleModal)
-            .catch(_ => _);
-          return { end: true };
-        }
-      });
+              );
+              return;
+            }
+
+            await interaction.showModal(
+              new ModalBuilder()
+                .setCustomId(`burkans_modal_${specialItem!._id}`)
+                .setTitle('Mainīt dīvainā burkāna nosaukumu')
+                .addComponents(
+                  new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
+                    new TextInputBuilder()
+                      .setCustomId('burkans_modal_input')
+                      .setLabel('Jaunais nosaukums')
+                      .setStyle(TextInputStyle.Short)
+                      .setMinLength(1)
+                      .setMaxLength(10)
+                  )
+                )
+            );
+            interaction
+              .awaitModalSubmit({
+                filter: i => i.customId.startsWith('burkans_modal'),
+                time: 60_000,
+              })
+              .then(handleModal)
+              .catch(_ => _);
+            return { end: true };
+          }
+        },
+        20000
+      );
     },
   };
 };

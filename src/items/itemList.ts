@@ -9,6 +9,7 @@ import kafijas_aparats from './usableItems/kafijas_aparats';
 import velo from './usableItems/velo';
 import divaina_mugursoma from './usableItems/divaina_mugursoma';
 import petnieks from './usableItems/petnieks';
+import juridiska_zivs from './usableItems/juridiska_zivs';
 
 export type ItemKey = string;
 
@@ -305,6 +306,8 @@ const itemList: Record<ItemKey, Item> = {
     emoji: null,
     categories: [ItemCategory.ZIVIS],
     value: 50,
+    removedOnUse: true,
+    use: juridiska_zivs,
   },
   divaina_zivs: {
     nameNomVsk: 'dīvainā zivs',

@@ -8,6 +8,14 @@ import embedTemplate from '../../embeds/embedTemplate';
 import levelsList, { MAX_LEVEL } from '../../levelingSystem/levelsList';
 import ephemeralReply from '../../embeds/ephemeralReply';
 import { JobPositions } from './vakances/vakances';
+import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
+import { UserStatusName } from '../../interfaces/UserProfile';
+
+export const statusList: Record<UserStatusName, string> = {
+  aizsargats: 'Aizsargāts',
+  laupitajs: 'Laupītājs',
+  juridisks: 'Juridiska persona',
+};
 
 const profils: Command = {
   title: 'Profils',
@@ -34,7 +42,7 @@ const profils: Command = {
       return i.reply(ephemeralReply('Tu nevari apskatīt Valsts Bankas profilu'));
     }
 
-    const { level, xp, jobPosition, payTax, giveTax } = user;
+    const { level, xp, jobPosition, payTax, giveTax, status } = user;
 
     const targetText = target.id === i.user.id ? 'Tavs' : userString(target);
 
@@ -50,11 +58,19 @@ const profils: Command = {
       maxLevelEmoji = '';
       xpText = `| UlmaņPunkti: ${xp}/${levelsList[level + 1]!.xp}`;
 
-      const filledSlots = '#'.repeat(
-        Math.round((XP_BAR_LENGTH / levelsList[user.level + 1].xp) * xp)
-      );
+      const filledSlots = '#'.repeat(Math.round((XP_BAR_LENGTH / levelsList[user.level + 1].xp) * xp));
       xpBar += filledSlots + '-'.repeat(XP_BAR_LENGTH - filledSlots.length);
       xpBar = `**${user.level}** \`[${xpBar}]\` **${user.level + 1}**`;
+    }
+
+    const currentTime = Date.now();
+
+    let payTaxText = `**${payTax * 100}%**`;
+    let giveTaxText = `**${giveTax * 100}%**`;
+
+    if (status.juridisks > currentTime) {
+      payTaxText = `~~${payTax * 100}%~~ **0%**`;
+      giveTaxText = `~~${giveTax * 100}%~~ **0%**`;
     }
 
     await i.reply(
@@ -65,20 +81,22 @@ const profils: Command = {
         description:
           `Profesija: **${
             jobPosition
-              ? `<:${jobPosition}:${JobPositions[jobPosition]!.emojiId}> ` +
-                `${JobPositions[jobPosition]!.name}`
+              ? `<:${jobPosition}:${JobPositions[jobPosition]!.emojiId}> ` + `${JobPositions[jobPosition]!.name}`
               : 'Bezdarbnieks'
           }**\n` +
-          `Maksāšanas nodoklis: **${payTax * 100}%**\n` +
-          `Iedošanas nodoklis: **${giveTax * 100}%**\n\n` +
-          `${maxLevelText}Līmenis: **${level}** ${maxLevelEmoji} ${xpText}\n${xpBar}`,
-        fields: [
-          {
-            name: 'Statusi',
-            value: '-',
-            inline: false,
-          },
-        ],
+          `Maksāšanas nodoklis: ${payTaxText}\n` +
+          `Iedošanas nodoklis: ${giveTaxText}\n\n` +
+          `${maxLevelText}Līmenis: **${level}** ${maxLevelEmoji} ${xpText}\n${xpBar}\n\n` +
+          '**Statusi: **',
+        fields: Object.entries(statusList).map(([key, latName]) => {
+          const time = status[key as UserStatusName];
+
+          return {
+            name: latName,
+            value: `\`\`\`${time < currentTime ? '-' : millisToReadableTime(time - currentTime)}\`\`\``,
+            inline: true,
+          };
+        }),
       })
     );
   },

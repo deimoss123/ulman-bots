@@ -14,7 +14,7 @@ export default async function addTimeCooldown(
 
     const { timeCooldowns } = res;
 
-    const cooldownIndex = timeCooldowns.findIndex((cooldown) => cooldown.name === commandName);
+    const cooldownIndex = timeCooldowns.findIndex(cooldown => cooldown.name === commandName);
     if (cooldownIndex === -1) {
       timeCooldowns.push({ name: commandName, lastUsed: Date.now() });
     } else {

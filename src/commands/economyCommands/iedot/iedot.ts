@@ -17,17 +17,9 @@ import iedotRunSpecial, { noInvSpaceEmbed } from './iedotRunSpecial';
 import Item from '../../../interfaces/Item';
 import UserProfile from '../../../interfaces/UserProfile';
 
-export function cantPayTaxEmbed(
-  itemToGive: Item,
-  amountToGive: number,
-  totalTax: number,
-  user: UserProfile
-) {
+export function cantPayTaxEmbed(itemToGive: Item, amountToGive: number, totalTax: number, user: UserProfile) {
   return ephemeralReply(
-    `Tev nepietiek naudas lai samaksātu iedošanas nodokli (${itemString(
-      itemToGive,
-      amountToGive
-    )})\n` +
+    `Tev nepietiek naudas lai samaksātu iedošanas nodokli (${itemString(itemToGive, amountToGive)})\n` +
       `Nodoklis ko maksāt - **${latiString(totalTax)}** ` +
       `(${user.giveTax * 100}% no mantu kopējās vērtības)\n` +
       `Tev ir ${latiString(user.lati)}`
@@ -89,14 +81,15 @@ const iedot: Command = {
     const targetUser = await findUser(target.id, guildId);
     if (!targetUser) return i.reply(errorEmbed);
 
-    const { items, specialItems } = user;
+    const { items, specialItems, status } = user;
+    const hasJuridisks = status.juridisks > Date.now();
 
     if (itemToGive.attributes) {
       const specialItemInv = specialItems.filter(({ name }) => name === itemToGiveKey);
       if (!specialItemInv.length) {
         return i.reply(ephemeralReply(`Tavā inventārā nav ${itemString(itemToGive)}`));
       }
-      return iedotRunSpecial(i, user, targetUser, itemToGiveKey, specialItemInv, this.color);
+      return iedotRunSpecial(i, user, targetUser, itemToGiveKey, specialItemInv, this.color, hasJuridisks);
     }
 
     const itemInInv = items.find(({ name }) => name === itemToGiveKey);
@@ -113,7 +106,7 @@ const iedot: Command = {
       );
     }
 
-    const totalTax = Math.floor(itemToGive.value * amountToGive * user.giveTax) || 1;
+    const totalTax = hasJuridisks ? 0 : Math.floor(itemToGive.value * amountToGive * user.giveTax) || 1;
 
     if (user.lati < totalTax) {
       return i.reply(cantPayTaxEmbed(itemToGive, amountToGive, totalTax, user));
@@ -124,8 +117,10 @@ const iedot: Command = {
     }
 
     // murgs, 4 datubāzes saucieni :/
-    await addLati(userId, guildId, -totalTax);
-    await addLati(i.client.user!.id, guildId, totalTax);
+    if (!hasJuridisks) {
+      await addLati(userId, guildId, -totalTax);
+      await addLati(i.client.user!.id, guildId, totalTax);
+    }
     await addItems(userId, guildId, { [itemToGiveKey]: -amountToGive });
     const targetUserAfter = await addItems(target.id, guildId, { [itemToGiveKey]: amountToGive });
 
@@ -139,9 +134,8 @@ const iedot: Command = {
         content: `<@${target.id}>`,
         description:
           `Tu iedevi <@${target.id}> ${itemString(itemToGive, amountToGive, true)}\n` +
-          `Nodoklis: **${latiString(totalTax)}** (${
-            user.giveTax * 100
-          }% no iedoto mantu kopējās vērtības)`,
+          `Nodoklis: **${latiString(totalTax)}** ` +
+          (hasJuridisks ? '(juridiska persona)' : `(${user.giveTax * 100}% no iedoto mantu kopējās vērtības)`),
         color: this.color,
         fields: [
           {

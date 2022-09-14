@@ -49,7 +49,9 @@ const maksat: Command = {
     const user = await findUser(userId, guildId);
     if (!user) return i.reply(errorEmbed);
 
-    const totalTax = Math.floor(latiToAdd * user.payTax) || 1;
+    const hasJuridisks = user.status.juridisks > Date.now();
+
+    const totalTax = hasJuridisks ? 0 : Math.floor(latiToAdd * user.payTax) || 1;
     const totalToPay = latiToAdd + totalTax;
 
     // nepietiek lati
@@ -62,14 +64,14 @@ const maksat: Command = {
             `**${totalTax}** (${user.payTax * 100}% nodoklis) = ` +
             `**${latiString(totalToPay, true)}**\n` +
             `Tev ir **${latiString(user.lati)}**` +
-            (user.lati > 1
-              ? `\n\nLielākā summa ko tu vari vari maksāt ir **${latiString(maxPay)}**`
-              : '')
+            (user.lati > 1 ? `\n\nLielākā summa ko tu vari vari maksāt ir **${latiString(maxPay)}**` : '')
         )
       );
     }
 
-    await addLati(i.client.user!.id, guildId, totalTax);
+    if (!hasJuridisks) {
+      await addLati(i.client.user!.id, guildId, totalTax);
+    }
     const targetUser = await addLati(target.id, guildId, latiToAdd);
     const resUser = await addLati(userId, guildId, -totalToPay);
 
@@ -81,7 +83,8 @@ const maksat: Command = {
         content: `<@${target.id}>`,
         description:
           `Tu samaksāji <@${target.id}> **${latiString(latiToAdd, true)}**\n` +
-          `Nodoklis: ${latiString(totalTax)} (${user.payTax * 100}%)`,
+          `Nodoklis: ` +
+          (hasJuridisks ? '0 lati (juridiska persona)' : `${latiString(totalTax)} (${user.payTax * 100}%)`),
         color: this.color,
         fields: [
           {

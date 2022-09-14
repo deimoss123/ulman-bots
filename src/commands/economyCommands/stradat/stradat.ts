@@ -13,10 +13,7 @@ import embedTemplate from '../../../embeds/embedTemplate';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import errorEmbed from '../../../embeds/errorEmbed';
 import Command from '../../../interfaces/Command';
-import StradatInteractions, {
-  StradatResult,
-  StradatVeids,
-} from '../../../interfaces/StradatInteraction';
+import StradatInteractions, { StradatResult, StradatVeids } from '../../../interfaces/StradatInteraction';
 import chance from '../../../items/helpers/chance';
 import setnieks from './darbi/setnieks';
 import veikala_darbinieks from './darbi/veikala_darbinieks';
@@ -70,18 +67,12 @@ const stradat: Command = {
 
     if (!jobPosition) {
       return i.reply(
-        ephemeralReply(
-          'Lai strādātu tev ir nepieciešama profesija, to var izvēlēties ar komandu /vakances'
-        )
+        ephemeralReply('Lai strādātu tev ir nepieciešama profesija, to var izvēlēties ar komandu `/vakances`')
       );
     }
 
     if (dailyCooldowns.stradat.extraTimesUsed >= MAX_EXTRA_DAILY) {
-      return i.reply(
-        ephemeralReply(
-          'Tu esi sasniedzis gan parasto, gan papildus **šodienas** strādāšanas limitu'
-        )
-      );
+      return i.reply(ephemeralReply('Tu esi sasniedzis gan parasto, gan papildus **šodienas** strādāšanas limitu'));
     }
 
     if (!countFreeInvSlots(user)) {
@@ -174,9 +165,7 @@ const stradat: Command = {
           if (reward) {
             rewardText = 'Tu nopelnīji ';
             if (reward.lati) {
-              const latiToAdd = Math.round(
-                Math.random() * (reward.lati[1] - reward.lati[0]) + reward.lati[0]
-              );
+              const latiToAdd = Math.round(Math.random() * (reward.lati[1] - reward.lati[0]) + reward.lati[0]);
               await addLati(userId, guildId, latiToAdd);
               rewardText += `**${latiString(latiToAdd, true)}** `;
             }
@@ -188,8 +177,7 @@ const stradat: Command = {
             }
           }
 
-          const xpToAdd =
-            Math.round(Math.random() * (STRADAT_XP_MAX - STRADAT_XP_MIN)) + STRADAT_XP_MIN;
+          const xpToAdd = Math.round(Math.random() * (STRADAT_XP_MAX - STRADAT_XP_MIN)) + STRADAT_XP_MIN;
 
           // nav labs 3 datubāzes saucieni
           await addTimeCooldown(userId, guildId, this.data.name);
@@ -210,9 +198,7 @@ const stradat: Command = {
                       `${choiceResult.text}\n\n` +
                       rewardText
                   ),
-                new EmbedBuilder().setDescription(
-                  xpAddedText(leveledUser, xpToAdd, 'Par strādāšanu tu saņēmi')
-                ),
+                new EmbedBuilder().setDescription(xpAddedText(leveledUser, xpToAdd, 'Par strādāšanu tu saņēmi')),
               ],
               components: [],
             },

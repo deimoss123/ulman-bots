@@ -36,6 +36,9 @@ export type DailyCooldowns = Record<
   }
 >;
 
+export type UserStatusName = 'aizsargats' | 'laupitajs' | 'juridisks';
+export type UserStatus = Record<UserStatusName, number>;
+
 interface UserProfile {
   userId: string;
   guildId: string;
@@ -56,6 +59,8 @@ interface UserProfile {
   // "1/1/1970"
   lastDayUsed: string;
   dailyCooldowns: DailyCooldowns;
+
+  status: UserStatus;
 }
 
 export default UserProfile;
