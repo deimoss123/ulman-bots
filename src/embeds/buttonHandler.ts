@@ -11,6 +11,7 @@ import {
   SelectMenuInteraction,
 } from 'discord.js';
 import interactionCache, { InteractionInCache } from '../utils/interactionCache';
+import errorEmbed from './errorEmbed';
 
 export interface CallbackReturn {
   edit?: InteractionUpdateOptions | MessagePayload;
@@ -18,15 +19,14 @@ export interface CallbackReturn {
   after?: () => Promise<void>;
   setInactive?: boolean;
   doNothing?: boolean;
+  error?: boolean;
 }
 
 export default async function buttonHandler(
   interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction,
   interactionName: string,
   interactionMsg: Message,
-  callback: (
-    buttonInteraction: ButtonInteraction | SelectMenuInteraction
-  ) => Promise<CallbackReturn | void>,
+  callback: (buttonInteraction: ButtonInteraction | SelectMenuInteraction) => Promise<CallbackReturn | void>,
   time = 15000,
   isActive = false
 ): Promise<void> {
@@ -50,10 +50,10 @@ export default async function buttonHandler(
     isInteractionActive: isActive,
   });
 
-  collector.on('collect', async (componentInteraction) => {
+  collector.on('collect', async componentInteraction => {
     if (componentInteraction.user.id !== interaction.user.id) {
       await componentInteraction.reply({
-        content: 'Šī poga nav domāta tev',
+        content: 'Nav pieklājīgi spaidīt svešu cilvēku pogas :^)',
         ephemeral: true,
       });
       return;
@@ -63,17 +63,20 @@ export default async function buttonHandler(
 
     const res = await callback(componentInteraction as ButtonInteraction | SelectMenuInteraction);
     if (!res) {
-      await componentInteraction.deferUpdate().catch((_) => _);
+      await componentInteraction.deferUpdate().catch(_ => _);
       return;
     }
 
     if (res?.doNothing) return;
 
+    if (res.error) {
+      await componentInteraction.reply(errorEmbed);
+      return;
+    }
+
     if (res?.setInactive) {
       const userInteraction = interactionCache.get(userId)!.get(interactionName)!;
-      interactionCache
-        .get(userId)!
-        .set(interactionName, { ...userInteraction, isInteractionActive: false });
+      interactionCache.get(userId)!.set(interactionName, { ...userInteraction, isInteractionActive: false });
     }
 
     // neliela šizofrēnija
@@ -88,9 +91,7 @@ export default async function buttonHandler(
       }
     }
 
-    if (res?.end) {
-      collector.stop();
-    }
+    if (res?.end) collector.stop();
 
     await res.after?.();
   });
@@ -107,9 +108,9 @@ export default async function buttonHandler(
     const editedMessageComponents: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[] = [];
 
     // iziet cauri visām pogām message objektā un atspējo tās
-    currentMessage.components.forEach((row) => {
+    currentMessage.components.forEach(row => {
       const editedRow = new ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>();
-      row.components.forEach((component) => {
+      row.components.forEach(component => {
         if (!component.data.disabled) areAllComponentsAlreadyDisabled = false;
 
         if (component.type === ComponentType.Button) {
