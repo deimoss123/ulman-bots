@@ -14,14 +14,14 @@ function infoEmbed(i: CommandInteraction) {
   const fields: EmbedField[] = [];
 
   for (const { variations, multiplier, emoji } of Object.values(feniksLaimesti)) {
-    const biggestNumLen = `${Math.max(...variations.map((v) => multiplier * v ** 2))}`.length;
+    const biggestNumLen = `${Math.max(...variations.map(v => multiplier * v ** 2))}`.length;
     fields.push({
       name: '\u2800',
       value: variations
         .map(
-          (v) =>
+          v =>
             `**\`` +
-            ' '.repeat(biggestNumLen - `${multiplier * v ** 2}`.length) +
+            // ' '.repeat(biggestNumLen - `${multiplier * v ** 2}`.length) +
             `${multiplier * v ** 2}x\`** ${emoji.noBorder.repeat(v)}`
         )
         .join('\n'),
@@ -81,23 +81,20 @@ const feniks: Command = {
       return i.reply(infoEmbed(i));
     }
 
-    const userId = i.user.id
-    const guildId = i.guildId!
+    const userId = i.user.id;
+    const guildId = i.guildId!;
 
     const user = await findUser(userId, guildId);
     if (!user) return i.reply(errorEmbed);
 
     const { lati } = user;
     if (lati < MIN_LIKME) {
-      return i.reply(
-        ephemeralReply(`Tev vajag vismaz **${latiString(MIN_LIKME, true)}** lai grieztu aparātu`)
-      );
+      return i.reply(ephemeralReply(`Tev vajag vismaz **${latiString(MIN_LIKME, true)}** lai grieztu aparātu`));
     }
 
     let likme = 0;
 
-    if (subCommandName === 'virve')
-      likme = Math.floor(Math.random() * (lati - MIN_LIKME)) + MIN_LIKME;
+    if (subCommandName === 'virve') likme = Math.floor(Math.random() * (lati - MIN_LIKME)) + MIN_LIKME;
     else if (subCommandName === 'viss') likme = lati;
     else if (subCommandName === 'likme') likme = i.options.getInteger('likme_lati')!;
 
@@ -105,8 +102,7 @@ const feniks: Command = {
     if (likme > lati) {
       return i.reply(
         ephemeralReply(
-          `Tu nevari griezt aparātu ar likmi **${latiString(likme)}**\n` +
-            `Tev ir **${latiString(lati)}**`
+          `Tu nevari griezt aparātu ar likmi **${latiString(likme)}**\n` + `Tev ir **${latiString(lati)}**`
         )
       );
     }

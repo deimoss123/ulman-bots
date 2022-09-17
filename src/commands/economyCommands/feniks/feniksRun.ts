@@ -73,7 +73,7 @@ function makeEmbed(
   wonLati?: number
 ) {
   let title = 'Griežas...';
-  let emojiRow = Array(EMOJI_COUNT).fill(`<a:${spinEmoji.name}:${spinEmoji.id}>`).join('⬛');
+  let emojiRow = Array(EMOJI_COUNT).fill(`<a:${spinEmoji.name}:${spinEmoji.id}>`).join('');
 
   if (spinRes && wonLati !== undefined) {
     const { res, totalMultiplier } = spinRes;
@@ -87,7 +87,7 @@ function makeEmbed(
       emojiArr.push(...Array(value).fill(feniksLaimesti[key].emoji.noBorder));
     }
 
-    emojiRow = makeEmojiRow(spinRes).join('⬛');
+    emojiRow = makeEmojiRow(spinRes).join('');
   }
 
   return [
@@ -146,12 +146,8 @@ function calcSpin(): CalcSpinRes {
   }
 
   const totalMultiplier =
-    Math.floor(
-      winners.reduce(
-        (prev, curr) => prev + feniksLaimesti[curr.key].multiplier * curr.count ** 2,
-        0
-      ) * 100
-    ) / 100;
+    Math.floor(winners.reduce((prev, curr) => prev + feniksLaimesti[curr.key].multiplier * curr.count ** 2, 0) * 100) /
+    100;
 
   // console.log();
   // console.log('res', res);
@@ -191,8 +187,7 @@ export default async function feniksRun(
   if (!isFree && likme > user.lati) {
     return i.reply(
       ephemeralReply(
-        `Tu nevari griezt aparātu ar likmi **${latiString(likme)}**\n` +
-          `Tev ir **${latiString(user.lati)}**`
+        `Tu nevari griezt aparātu ar likmi **${latiString(likme)}**\n` + `Tev ir **${latiString(user.lati)}**`
       )
     );
   }
@@ -204,7 +199,7 @@ export default async function feniksRun(
     fetchReply: true,
   });
 
-  // testSpins(1_000_000);
+  testSpins(1_000_000);
 
   const spinRes = calcSpin();
   const latiWon = Math.floor(likme * spinRes.totalMultiplier);

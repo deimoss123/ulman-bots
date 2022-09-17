@@ -16,7 +16,7 @@ interface Laimests {
 const feniksLaimesti: Record<string, Laimests> = {
   varde: {
     chance: '*',
-    multiplier: 0.05,
+    multiplier: 0.01,
     emoji: {
       noBorder: '<:f_varde:1013586155117219970>',
       allBorder: '<:f_varde_ab:1013586204987510974>',
@@ -24,11 +24,11 @@ const feniksLaimesti: Record<string, Laimests> = {
       midBorder: '<:f_varde_mb:1013586269244239952>',
       rightBorder: '<:f_varde_rb:1013586298520477777>',
     },
-    variations: [1, 3, 5],
+    variations: [3, 5],
   },
   zoss: {
-    chance: 0.2,
-    multiplier: 0.1,
+    chance: 0.3,
+    multiplier: 0.05,
     emoji: {
       noBorder: '<:f_zoss:1013570309745561692>',
       allBorder: '<:f_zoss_ab:1013586206224830505>',
@@ -36,11 +36,11 @@ const feniksLaimesti: Record<string, Laimests> = {
       midBorder: '<:f_zoss_mb:1013586270682890300>',
       rightBorder: '<:f_zoss_rb:1013586299875229707>',
     },
-    variations: [2, 4, 6],
+    variations: [3, 4],
   },
   trolaseja: {
-    chance: 0.15,
-    multiplier: 0.2,
+    chance: 0.1,
+    multiplier: 0.1,
     emoji: {
       noBorder: '<:f_trolaseja:1013586153603072101>',
       allBorder: '<:f_trolaseja_ab:1013586203288801280>',
@@ -48,11 +48,11 @@ const feniksLaimesti: Record<string, Laimests> = {
       midBorder: '<:f_trolaseja_mb:1013586267147087902>',
       rightBorder: '<:f_trolaseja_rb:1013586297467719841>',
     },
-    variations: [2, 3, 6],
+    variations: [2, 5],
   },
   tjz: {
-    chance: 0.1,
-    multiplier: 0.3,
+    chance: 0.07,
+    multiplier: 0.2,
     emoji: {
       noBorder: '<:f_tjz:1013563347691634739>',
       allBorder: '<:f_tjz_ab:1013563306591670343>',
@@ -60,11 +60,11 @@ const feniksLaimesti: Record<string, Laimests> = {
       midBorder: '<:f_tjz_mb:1013563244532744202>',
       rightBorder: '<:f_tjz_rb:1013563214149197884>',
     },
-    variations: [2, 4],
+    variations: [1, 3, 6],
   },
   vacaps: {
-    chance: 0.07,
-    multiplier: 0.5,
+    chance: 0.02,
+    multiplier: 0.4,
     emoji: {
       noBorder: '<:f_vacaps:1013563349365170277>',
       allBorder: '<:f_vacaps_ab:1013563308156145714>',
@@ -72,10 +72,10 @@ const feniksLaimesti: Record<string, Laimests> = {
       midBorder: '<:f_vacaps_mb:1013563245925244959>',
       rightBorder: '<:f_vacaps_rb:1013563215835304116>',
     },
-    variations: [2, 4],
+    variations: [1, 2, 5],
   },
   radio: {
-    chance: 0.03,
+    chance: 0.02,
     multiplier: 1,
     emoji: {
       noBorder: '<:f_radio:1013563346554990613>',
@@ -84,7 +84,7 @@ const feniksLaimesti: Record<string, Laimests> = {
       midBorder: '<:f_radio_mb:1013563243316379788>',
       rightBorder: '<:f_radio_rb:1013563212618276945>',
     },
-    variations: [3, 6],
+    variations: [1, 2, 4],
   },
   kabacis: {
     chance: 0.01,
@@ -99,7 +99,7 @@ const feniksLaimesti: Record<string, Laimests> = {
     variations: [1, 2, 3],
   },
   ulmanis: {
-    chance: 0.007,
+    chance: 0.005,
     multiplier: 5,
     emoji: {
       noBorder: '<a:f_ulmanis:1013513084654067893>',
@@ -111,7 +111,7 @@ const feniksLaimesti: Record<string, Laimests> = {
     variations: [1, 2, 3],
   },
   petnieks: {
-    chance: 0.002,
+    chance: 0.001,
     multiplier: 10,
     emoji: {
       noBorder: '<a:f_petnieks:1013477350027042938>',
