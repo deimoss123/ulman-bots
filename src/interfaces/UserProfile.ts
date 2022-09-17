@@ -39,6 +39,18 @@ export type DailyCooldowns = Record<
 export type UserStatusName = 'aizsargats' | 'laupitajs' | 'juridisks';
 export type UserStatus = Record<UserStatusName, number>;
 
+interface FishObj {
+  time: number;
+  itemKey: ItemKey;
+}
+
+export interface UserFishing {
+  selectedRod: string | null;
+  usesLeft: number;
+  lastCoughtFish: FishObj | null;
+  futureFishList: FishObj[] | null;
+  coughtFishes: Record<ItemKey, number> | null;
+}
 interface UserProfile {
   userId: string;
   guildId: string;
@@ -61,6 +73,8 @@ interface UserProfile {
   dailyCooldowns: DailyCooldowns;
 
   status: UserStatus;
+
+  fishing: UserFishing;
 }
 
 export default UserProfile;

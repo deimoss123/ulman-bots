@@ -10,6 +10,8 @@ import velo from './usableItems/velo';
 import divaina_mugursoma from './usableItems/divaina_mugursoma';
 import petnieks from './usableItems/petnieks';
 import juridiska_zivs from './usableItems/juridiska_zivs';
+import maksekeresData from '../commands/economyCommands/zvejot/makskeresData';
+import makskere from './usableItems/makskere';
 
 export type ItemKey = string;
 
@@ -17,6 +19,7 @@ export enum ItemCategory {
   ATKRITUMI,
   VEIKALS,
   ZIVIS,
+  MAKSKERE,
   BRIVGRIEZIENS,
   TIRGUS,
   OTHER,
@@ -34,10 +37,13 @@ const itemList: Record<ItemKey, Item> = {
       id: '1009557004651601931',
       name: 'kokamakskere',
     },
-    categories: [ItemCategory.VEIKALS],
+    categories: [ItemCategory.VEIKALS, ItemCategory.MAKSKERE],
     value: 100,
+    attributes: {
+      durability: maksekeresData.koka_makskere.maxDurability,
+    },
     allowDiscount: true,
-    // use() {},
+    use: makskere,
   },
   latloto: {
     nameNomVsk: 'latloto biļete',
@@ -144,10 +150,13 @@ const itemList: Record<ItemKey, Item> = {
     nameAkuDsk: 'dīvainās makšķeres',
     isVirsiesuDzimte: false,
     emoji: null,
-    categories: [ItemCategory.VEIKALS],
+    categories: [ItemCategory.VEIKALS, ItemCategory.MAKSKERE],
     value: 500,
+    attributes: {
+      durability: maksekeresData.divaina_makskere.maxDurability,
+    },
     allowDiscount: true,
-    // use:
+    use: makskere,
   },
   mugursoma: {
     nameNomVsk: 'mugursoma',

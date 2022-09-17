@@ -1,5 +1,6 @@
+import maksekeresData from '../../commands/economyCommands/zvejot/makskeresData';
 import { ItemAttributes, SpecialItemInProfile } from '../../interfaces/UserProfile';
-import itemList from '../../items/itemList';
+import itemList, { ItemCategory } from '../../items/itemList';
 import { KAFIJAS_APARATS_COOLDOWN } from '../../items/usableItems/kafijas_aparats';
 import { PETNIEKS_COOLDOWN } from '../../items/usableItems/petnieks';
 import millisToReadableTime from './millisToReadableTime';
@@ -29,11 +30,19 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false) {
             `${millisToReadableTime(PETNIEKS_COOLDOWN - Date.now() + n)}` +
             (inline ? '' : '`'),
     },
+    makskeres: {
+      durability: (n: number) => `Izturība: ${n}/${maksekeresData[item.name].maxDurability}`,
+    },
   };
 
   const attributes = Object.entries(item.attributes).filter(item => !hiddenAttributes.includes(item[0]));
 
-  const textArr = attributes.map(([key, value]) => attributesLat[item.name][key](value, item.attributes));
+  const textArr = attributes.map(([key, value]) => {
+    let name = item.name;
+    if (itemList[name].categories.includes(ItemCategory.MAKSKERE)) name = 'makskeres';
+
+    return attributesLat[name][key](value, item.attributes);
+  });
   if (inline) return textArr.join(', ');
   return textArr.join('\n');
 }

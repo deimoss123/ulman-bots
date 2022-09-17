@@ -111,6 +111,33 @@ const userSchema = new Schema<UserProfile>({
       juridisks: 0,
     },
   },
+  fishing: {
+    selectedRod: {
+      type: String,
+      default: null,
+    },
+    usesLeft: NumberDefaulZero,
+    lastCoughtFish: {
+      type: {
+        time: Number,
+        itemKey: String,
+      },
+      default: null,
+    },
+    futureFishList: {
+      type: [
+        {
+          type: Number,
+          itemKey: String,
+        },
+      ],
+      default: null,
+    },
+    coughtFishes: {
+      type: {},
+      default: null,
+    },
+  },
 });
 
 export default model('User', userSchema);

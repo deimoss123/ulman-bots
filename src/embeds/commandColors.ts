@@ -10,6 +10,7 @@ const commandColors = {
   profils: 0x82e576,
   vakances: 0x6b8d7a,
   stradat: 0x5b1919,
+  zvejot: 0x4260f5,
 };
 
 export default commandColors;
