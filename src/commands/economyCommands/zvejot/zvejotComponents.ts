@@ -4,28 +4,40 @@ import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import UserProfile from '../../../interfaces/UserProfile';
 import itemList, { ItemCategory } from '../../../items/itemList';
 
-export default function zvejotComponents(
-  isFishing: boolean,
-  selectedFishingRodId: string,
-  { specialItems, fishing }: UserProfile
-): ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[] {
-  const buttons: ButtonBuilder[] = [];
+const collectFishButton = new ButtonBuilder()
+  .setCustomId('collect_fish')
+  .setLabel('Savākt copi')
+  .setStyle(ButtonStyle.Success);
 
-  if (!isFishing) {
+export default function zvejotComponents(
+  { specialItems, fishing }: UserProfile,
+  selectedFishingRodId?: string
+): ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[] {
+  if (!fishing.selectedRod) {
     const rodsInInv = specialItems.filter(item => itemList[item.name].categories.includes(ItemCategory.MAKSKERE));
     if (!rodsInInv.length) {
       const btnRow = [
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder()
-            .setCustomId('nuja')
-            .setLabel('Tev nav nevienas makšķeres')
-            .setStyle(ButtonStyle.Secondary)
-            .setDisabled(true)
-        ),
+        new ButtonBuilder()
+          .setCustomId('nuja')
+          .setLabel('Tev nav nevienas makšķeres')
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(true),
       ];
 
-      return btnRow;
+      if (fishing.coughtFishes && fishing.coughtFishes.length) btnRow.push(collectFishButton);
+
+      return [new ActionRowBuilder<ButtonBuilder>().addComponents(btnRow)];
     }
+
+    const btnRow = [
+      new ButtonBuilder()
+        .setCustomId('start_fishing_btn')
+        .setLabel('Sākt zvejot')
+        .setStyle(selectedFishingRodId ? ButtonStyle.Primary : ButtonStyle.Secondary)
+        .setDisabled(!selectedFishingRodId),
+    ];
+
+    if (fishing.coughtFishes && fishing.coughtFishes.length) btnRow.push(collectFishButton);
 
     return [
       new ActionRowBuilder<SelectMenuBuilder>().addComponents(
@@ -42,26 +54,16 @@ export default function zvejotComponents(
             }))
           )
       ),
-      new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder()
-          .setCustomId('start_fishing_btn')
-          .setLabel('Sākt zvejot')
-          .setStyle(selectedFishingRodId ? ButtonStyle.Primary : ButtonStyle.Secondary)
-          .setDisabled(!selectedFishingRodId)
-      ),
+      new ActionRowBuilder<ButtonBuilder>().addComponents(...btnRow),
     ];
   }
 
-  if (isFishing) {
-    buttons.push(
-      new ButtonBuilder().setCustomId('collect_fish').setLabel('Savākt zivis').setStyle(ButtonStyle.Primary)
-    );
-  } else {
-  }
-
-  const actionRows: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[] = [
-    new ActionRowBuilder<ButtonBuilder>().addComponents(buttons),
+  const buttons = [
+    collectFishButton,
+    new ButtonBuilder().setCustomId('remove_fishing_rod').setLabel('Noņemt makšķeri').setStyle(ButtonStyle.Primary),
   ];
+
+  const actionRows = [new ActionRowBuilder<ButtonBuilder>().addComponents(...buttons)];
 
   return actionRows;
 }

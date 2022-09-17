@@ -1,13 +1,17 @@
-import { CommandInteraction, ComponentType, EmbedBuilder, InteractionType } from 'discord.js';
+import { ComponentType, EmbedBuilder } from 'discord.js';
+import addSpecialItems from '../../../economy/addSpecialItems';
 import findUser from '../../../economy/findUser';
+import removeItemsById from '../../../economy/removeItemsById';
 import setFishing from '../../../economy/setFishing';
 import buttonHandler from '../../../embeds/buttonHandler';
 import commandColors from '../../../embeds/commandColors';
-import embedTemplate from '../../../embeds/embedTemplate';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import errorEmbed from '../../../embeds/errorEmbed';
+import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
+import itemString from '../../../embeds/helpers/itemString';
 import Command from '../../../interfaces/Command';
-import { UserFishing } from '../../../interfaces/UserProfile';
+import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
+import itemList from '../../../items/itemList';
 import zvejotComponents from './zvejotComponents';
 import { zvejotEmbed } from './zvejotEmbeds';
 
@@ -42,7 +46,7 @@ export const zvejot: Command = {
 
     const interactionReply = await i.reply({
       embeds: zvejotEmbed(i, this.color, user),
-      components: zvejotComponents(false, selectedFishingRod, user),
+      components: zvejotComponents(user, selectedFishingRod),
       fetchReply: true,
     });
 
@@ -59,7 +63,7 @@ export const zvejot: Command = {
 
             return {
               edit: {
-                components: zvejotComponents(false, selectedFishingRodId, user),
+                components: zvejotComponents(user, selectedFishingRodId),
               },
             };
           }
@@ -76,7 +80,10 @@ export const zvejot: Command = {
               return { end: true };
             }
 
-            // TODO: noņemt makšķeri no inv
+            if (!(await removeItemsById(userId, guildId, [selectedFishingRodId]))) {
+              return { error: true };
+            }
+
             const userAfter = await setFishing(userId, guildId, {
               selectedRod: rod.name,
               usesLeft: rod.attributes.durability!,
@@ -86,6 +93,59 @@ export const zvejot: Command = {
             return {
               edit: {
                 embeds: zvejotEmbed(i, this.color, userAfter),
+                components: zvejotComponents(userAfter),
+              },
+            };
+          }
+          case 'remove_fishing_rod': {
+            if (interaction.componentType !== ComponentType.Button) return;
+
+            const user = await findUser(userId, guildId);
+            if (!user) return { error: true };
+
+            const { fishing } = user;
+            const { selectedRod, usesLeft } = fishing;
+
+            if (!selectedRod) return { error: true };
+
+            if (countFreeInvSlots(user) < 5) {
+              await interaction.reply(
+                ephemeralReply(
+                  'Tu nevari noņemt maksķeri, jo tev inventārā nav vietas\nTev vajag vismaz **5** brīvas vietas'
+                )
+              );
+              return { end: true };
+            }
+
+            if (!(await setFishing(userId, guildId, { selectedRod: null, usesLeft: 0 }))) {
+              return { error: true };
+            }
+
+            const specialItemObj = { name: selectedRod, attributes: { durability: usesLeft } };
+
+            const userAfter = await addSpecialItems(userId, guildId, [specialItemObj]);
+            if (!userAfter) return { error: true };
+
+            selectedFishingRod = '';
+            selectedFishingRodId = '';
+
+            return {
+              edit: {
+                embeds: zvejotEmbed(i, this.color, userAfter),
+                components: zvejotComponents(userAfter, selectedFishingRodId),
+              },
+              after: async () => {
+                await interaction.reply({
+                  embeds: [
+                    new EmbedBuilder()
+                      .setDescription('Tev inventāram tikai pievienota:')
+                      .setFields({
+                        name: itemString(itemList[selectedRod]),
+                        value: displayAttributes(specialItemObj),
+                      })
+                      .setColor(this.color),
+                  ],
+                });
               },
             };
           }

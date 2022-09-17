@@ -11,6 +11,7 @@ export function zvejotEmbed(i: CommandInteraction, color: number, { fishing }: U
   return embedTemplate({
     i,
     color,
+    content: '\u200B',
     fields: [
       {
         name: 'Izvēlētā makšķere',
