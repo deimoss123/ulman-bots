@@ -124,16 +124,17 @@ function makeEmbed(
   return embedTemplate({
     i,
     title: targetUser.userId === i.user.id ? 'Tavs inventārs' : `${userString(target)} inventārs`,
-    description: items.length
-      ? `**${countItems(items) + specialItems.length}** mantas no **${itemCap}**\n` +
-        `Inventāra vērtība: **${latiString(totalValue)}**\n\n` +
-        Object.entries(itemTypes).reduce(
-          (prev, [key, { text, emoji }]) =>
-            itemTypesInv.includes(key as ItemType) ? prev + `${emoji} - ${text}\n` : prev,
-          ''
-        ) +
-        '\u2800'
-      : 'Tukšs inventārs :(',
+    description:
+      items.length + specialItems.length
+        ? `**${countItems(items) + specialItems.length}** mantas no **${itemCap}**\n` +
+          `Inventāra vērtība: **${latiString(totalValue)}**\n\n` +
+          Object.entries(itemTypes).reduce(
+            (prev, [key, { text, emoji }]) =>
+              itemTypesInv.includes(key as ItemType) ? prev + `${emoji} - ${text}\n` : prev,
+            ''
+          ) +
+          '\u2800'
+        : 'Tukšs inventārs :(',
     color,
     fields: fieldsToShow,
   }).embeds;
