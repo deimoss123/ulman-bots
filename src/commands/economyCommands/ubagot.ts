@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
+import { ChatInputCommandInteraction } from 'discord.js';
 import addDailyCooldown from '../../economy/addDailyCooldown';
 import addLati from '../../economy/addLati';
 import addTimeCooldown from '../../economy/addTimeCooldown';
