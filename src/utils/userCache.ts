@@ -9,6 +9,10 @@ User cache glabā lietotāju ekonomijas informāciju
   }
 }
 */
-const userCache: Record<Snowflake, Record<Snowflake, UserProfile>> = {};
+let userCache: Record<Snowflake, Record<Snowflake, UserProfile>> = {};
+
+export function clearCache() {
+  userCache = {};
+}
 
 export default userCache;

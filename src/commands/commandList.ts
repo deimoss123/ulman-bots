@@ -16,6 +16,7 @@ import stradat from './economyCommands/stradat/stradat';
 import ubagot from './economyCommands/ubagot';
 import feniks from './economyCommands/feniks/feniks';
 import { zvejot } from './economyCommands/zvejot/zvejot';
+import _clearCache from './devCommands/_clearCache';
 
 // komandu objektu saraksts
 export const commandList: Command[] = [
@@ -35,4 +36,4 @@ export const commandList: Command[] = [
   zvejot,
 ];
 
-export const devCommandList: Command[] = [_addLati, _addItem, _addXP];
+export const devCommandList: Command[] = [_addLati, _addItem, _addXP, _clearCache];
