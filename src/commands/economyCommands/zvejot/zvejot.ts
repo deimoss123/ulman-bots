@@ -1,4 +1,4 @@
-import { ComponentType, EmbedBuilder } from 'discord.js';
+import { bold, ComponentType, EmbedBuilder } from 'discord.js';
 import addSpecialItems from '../../../economy/addSpecialItems';
 import findUser from '../../../economy/findUser';
 import removeItemsById from '../../../economy/removeItemsById';
@@ -9,13 +9,17 @@ import ephemeralReply from '../../../embeds/ephemeralReply';
 import errorEmbed from '../../../embeds/errorEmbed';
 import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import itemString from '../../../embeds/helpers/itemString';
+import latiString from '../../../embeds/helpers/latiString';
+import smallEmbed from '../../../embeds/smallEmbed';
 import Command from '../../../interfaces/Command';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import itemList from '../../../items/itemList';
+import maksekeresData from './makskeresData';
+import syncFishing from './syncFishing';
 import zvejotComponents from './zvejotComponents';
 import { zvejotEmbed } from './zvejotEmbeds';
 
-export const ZVEJOT_MIN_LEVEL = 0;
+export const ZVEJOT_MIN_LEVEL = 3;
 
 export const zvejot: Command = {
   title: 'Zvejot',
@@ -32,10 +36,10 @@ export const zvejot: Command = {
     let selectedFishingRod = '';
     let selectedFishingRodId = '';
 
-    const user = await findUser(userId, guildId);
-    if (!user) return i.reply(errorEmbed);
+    const userCheckLevel = await findUser(userId, guildId);
+    if (!userCheckLevel) return i.reply(errorEmbed);
 
-    if (user.level < ZVEJOT_MIN_LEVEL) {
+    if (userCheckLevel.level < ZVEJOT_MIN_LEVEL) {
       return i.reply(
         ephemeralReply(
           `Lai zvejotu tev ir nepieciešams **${ZVEJOT_MIN_LEVEL}**. līmenis\n` +
@@ -44,8 +48,11 @@ export const zvejot: Command = {
       );
     }
 
+    const user = await syncFishing(userId, guildId);
+    if (!user) return i.reply(errorEmbed);
+
     const interactionReply = await i.reply({
-      embeds: zvejotEmbed(i, this.color, user),
+      embeds: zvejotEmbed(i, user),
       components: zvejotComponents(user, selectedFishingRod),
       fetchReply: true,
     });
@@ -58,8 +65,10 @@ export const zvejot: Command = {
         switch (interaction.customId) {
           case 'select_fishing_rod': {
             if (interaction.componentType !== ComponentType.SelectMenu) return;
-
             [selectedFishingRod, selectedFishingRodId] = interaction.values[0].split(' ');
+
+            const user = await findUser(userId, guildId);
+            if (!user) return { error: true };
 
             return {
               edit: {
@@ -84,23 +93,65 @@ export const zvejot: Command = {
               return { error: true };
             }
 
-            const userAfter = await setFishing(userId, guildId, {
+            await setFishing(userId, guildId, {
               selectedRod: rod.name,
               usesLeft: rod.attributes.durability!,
             });
+
+            const userAfter = await syncFishing(userId, guildId, true, true);
             if (!userAfter) return { error: true };
 
             return {
               edit: {
-                embeds: zvejotEmbed(i, this.color, userAfter),
+                embeds: zvejotEmbed(i, userAfter),
                 components: zvejotComponents(userAfter),
+              },
+            };
+          }
+          case 'collect_fish_btn': {
+            if (interaction.componentType !== ComponentType.Button) return;
+            const user = await syncFishing(userId, guildId);
+            if (!user || !user.fishing.caughtFishes) return { error: true };
+
+            const fishesToAdd = user.fishing.caughtFishes;
+
+            // TODO: pārbaudīt vai inventārā ir vieta un zivis pievienot
+            // TODO: pievienot xp par zivīm
+
+            if (!(await setFishing(userId, guildId, { caughtFishes: null }))) {
+              return { error: true };
+            }
+
+            const userAfter = await syncFishing(userId, guildId, true);
+            if (!userAfter) return { error: true };
+
+            return {
+              edit: {
+                embeds: zvejotEmbed(i, userAfter),
+                components: zvejotComponents(userAfter),
+              },
+              after: async () => {
+                await interaction.reply({
+                  embeds: [
+                    new EmbedBuilder()
+                      .setDescription('Tu savāci copi:')
+                      .setColor(this.color)
+                      .setFields(
+                        ...Object.entries(fishesToAdd).map(([itemKey, amount]) => ({
+                          name: itemString(itemList[itemKey], amount),
+                          value: `Vērtība: ${latiString(itemList[itemKey].value)}`,
+                          inline: true,
+                        }))
+                      ),
+                  ],
+                });
               },
             };
           }
           case 'remove_fishing_rod': {
             if (interaction.componentType !== ComponentType.Button) return;
 
-            const user = await findUser(userId, guildId);
+            const user = await syncFishing(userId, guildId);
             if (!user) return { error: true };
 
             const { fishing } = user;
@@ -117,7 +168,7 @@ export const zvejot: Command = {
               return { end: true };
             }
 
-            if (!(await setFishing(userId, guildId, { selectedRod: null, usesLeft: 0 }))) {
+            if (!(await setFishing(userId, guildId, { selectedRod: null, usesLeft: 0, futureFishList: [] }))) {
               return { error: true };
             }
 
@@ -131,7 +182,7 @@ export const zvejot: Command = {
 
             return {
               edit: {
-                embeds: zvejotEmbed(i, this.color, userAfter),
+                embeds: zvejotEmbed(i, userAfter),
                 components: zvejotComponents(userAfter, selectedFishingRodId),
               },
               after: async () => {
@@ -146,6 +197,50 @@ export const zvejot: Command = {
                       .setColor(this.color),
                   ],
                 });
+              },
+            };
+          }
+          case 'fix_fishing_rod': {
+            if (interaction.componentType !== ComponentType.Button) return;
+            const user = await syncFishing(userId, guildId);
+            if (!user || !user.fishing.selectedRod) return { error: true };
+
+            const { fishing, lati } = user;
+
+            // TODO pārbaudi latus
+
+            const usesLeft = maksekeresData[fishing.selectedRod!].maxDurability;
+            if (!(await setFishing(userId, guildId, { usesLeft }))) {
+              return { error: true };
+            }
+
+            const userAfter = await syncFishing(userId, guildId, true);
+            if (!userAfter) return { error: true };
+
+            return {
+              edit: {
+                embeds: zvejotEmbed(i, userAfter),
+                components: zvejotComponents(userAfter),
+              },
+              after: async () => {
+                await interaction.reply(
+                  smallEmbed(
+                    `Tu salaboji ${bold(itemString(itemList[fishing.selectedRod!], null, true))} par x latiem`,
+                    this.color
+                  )
+                );
+              },
+            };
+          }
+          case 'test_button': {
+            if (interaction.componentType !== ComponentType.Button) return;
+            const user = await syncFishing(userId, guildId);
+            if (!user) return { error: true };
+
+            return {
+              edit: {
+                embeds: zvejotEmbed(i, user),
+                components: zvejotComponents(user),
               },
             };
           }

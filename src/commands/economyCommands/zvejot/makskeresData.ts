@@ -1,7 +1,7 @@
 import { ChanceValue } from '../../../items/helpers/chance';
 import { ItemKey } from '../../../items/itemList';
 
-type FishChance = Record<
+export type FishChance = Record<
   ItemKey,
   {
     chance: ChanceValue;
@@ -26,6 +26,7 @@ const maksekeresData: Record<
       lidaka: { chance: '*', cost: 1 },
       asaris: { chance: '*', cost: 1 },
       lasis: { chance: '*', cost: 1 },
+      latloto: { chance: 0.15, cost: 3 },
     },
   },
   divaina_makskere: {

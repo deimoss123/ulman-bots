@@ -278,7 +278,7 @@ const itemList: Record<ItemKey, Item> = {
   },
   asaris: {
     nameNomVsk: 'asaris',
-    nameNomDsk: 'asarus',
+    nameNomDsk: 'asari',
     nameAkuVsk: 'asari',
     nameAkuDsk: 'asarus',
     isVirsiesuDzimte: true,

@@ -112,12 +112,16 @@ const userSchema = new Schema<UserProfile>({
     },
   },
   fishing: {
+    maxCapacity: {
+      type: Number,
+      default: 10,
+    },
     selectedRod: {
       type: String,
       default: null,
     },
     usesLeft: NumberDefaulZero,
-    lastCoughtFish: {
+    lastCaughtFish: {
       type: {
         time: Number,
         itemKey: String,
@@ -127,13 +131,13 @@ const userSchema = new Schema<UserProfile>({
     futureFishList: {
       type: [
         {
-          type: Number,
+          time: Number,
           itemKey: String,
         },
       ],
       default: null,
     },
-    coughtFishes: {
+    caughtFishes: {
       type: {},
       default: null,
     },
