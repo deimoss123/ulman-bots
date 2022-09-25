@@ -12,7 +12,7 @@ const spinEmoji = {
   name: 'fenka1',
 };
 
-const EMOJI_COUNT = 6;
+const EMOJI_COUNT = 5;
 
 function shuffleArray<T>(arr: T[]): T[] {
   const array = [...arr];
@@ -21,48 +21,6 @@ function shuffleArray<T>(arr: T[]): T[] {
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
-}
-
-interface EmojiRowGroup {
-  key: string;
-  count: number;
-  isMatching: boolean;
-}
-
-function makeEmojiRow(spinRes: CalcSpinRes): string[] {
-  const { res, winners } = spinRes;
-
-  let emojiRowGrouped: EmojiRowGroup[] = [];
-
-  for (const w of winners) {
-    emojiRowGrouped.push({ ...w, isMatching: true });
-    res[w.key] -= w.count;
-  }
-
-  for (const [key, count] of Object.entries(res)) {
-    emojiRowGrouped.push(...Array(count).fill({ key, count: 1, isMatching: false }));
-  }
-
-  emojiRowGrouped = shuffleArray<EmojiRowGroup>(emojiRowGrouped);
-
-  const emojiRowFinal: string[] = [];
-  for (const { key, count, isMatching } of emojiRowGrouped) {
-    const { emoji } = feniksLaimesti[key];
-    if (!isMatching) {
-      emojiRowFinal.push(emoji.noBorder);
-      continue;
-    }
-
-    // yandere dev tipa programmēšana
-    for (let i = 0; i < count; i++) {
-      if (count === 1) emojiRowFinal.push(emoji.allBorder);
-      else if (i === 0) emojiRowFinal.push(emoji.leftBorder);
-      else if (i === count - 1) emojiRowFinal.push(emoji.rightBorder);
-      else emojiRowFinal.push(emoji.midBorder);
-    }
-  }
-
-  return emojiRowFinal;
 }
 
 function makeEmbed(
@@ -76,18 +34,18 @@ function makeEmbed(
   let emojiRow = Array(EMOJI_COUNT).fill(`<a:${spinEmoji.name}:${spinEmoji.id}>`).join('');
 
   if (spinRes && wonLati !== undefined) {
-    const { res, totalMultiplier } = spinRes;
+    const { emojiGroups, totalMultiplier } = spinRes;
 
     if (!totalMultiplier) title = 'Šodien nepaveicās, tu neko nelaimēji';
     else title = `Tu laimēji ${latiString(wonLati, true)} | ${totalMultiplier}x`;
 
     const emojiArr: string[] = [];
 
-    for (const [key, value] of Object.entries(res)) {
-      emojiArr.push(...Array(value).fill(feniksLaimesti[key].emoji.noBorder));
+    for (const { name, count } of emojiGroups) {
+      emojiArr.push(...Array(count).fill(feniksLaimesti[name].emoji));
     }
 
-    emojiRow = makeEmojiRow(spinRes).join('');
+    emojiRow = emojiArr.join('');
   }
 
   return [
@@ -102,62 +60,46 @@ function makeEmbed(
   ];
 }
 
-type Winners = { key: string; count: number }[];
-
-// rekursija :^)
-function variationsCalc(
-  variations: number[],
-  currentIndex: number,
-  key: string,
-  countLeft: number,
-  winners: Winners
-): Winners {
-  if (currentIndex < 0) return winners;
-
-  if (variations[currentIndex] <= countLeft) {
-    countLeft -= variations[currentIndex];
-    winners.push({ key, count: variations[currentIndex] });
-    return variationsCalc(variations, currentIndex, key, countLeft, winners);
-  }
-
-  return variationsCalc(variations, currentIndex - 1, key, countLeft, winners);
-}
-
 interface CalcSpinRes {
-  res: Record<string, number>;
-  winners: Winners;
+  emojiGroups: {
+    name: string;
+    count: number;
+    isWinner: boolean;
+  }[];
   totalMultiplier: number;
 }
 
 function calcSpin(): CalcSpinRes {
   const res: Record<string, number> = {};
-  const winners: Winners = [];
+  let emojiGroups: CalcSpinRes['emojiGroups'] = [];
+  let totalMultiplier = 0;
 
   for (let i = 0; i < EMOJI_COUNT; i++) {
     const { key } = chance(feniksLaimesti);
     res[key] = res[key] ? res[key] + 1 : 1;
   }
 
-  // console.log(res);
-
-  for (const [key, value] of Object.entries(res)) {
-    const { variations } = feniksLaimesti[key];
-    winners.push(...variationsCalc(variations, variations.length - 1, key, value, []));
+  for (const [name, count] of Object.entries(res)) {
+    const { multipliers } = feniksLaimesti[name];
+    if (multipliers?.[count]) {
+      totalMultiplier += multipliers[count];
+      emojiGroups.push({ name, count, isWinner: true });
+    } else {
+      emojiGroups.push(...Array(count).fill({ name, count: 1, isWinner: false }));
+    }
   }
 
-  const totalMultiplier =
-    Math.floor(winners.reduce((prev, curr) => prev + feniksLaimesti[curr.key].multiplier * curr.count ** 2, 0) * 100) /
-    100;
+  emojiGroups = shuffleArray(emojiGroups);
+  totalMultiplier = Math.floor(totalMultiplier * 100) / 100;
 
-  // console.log();
+  // console.log('-'.repeat(50));
   // console.log('res', res);
-  // console.log('winners', winners);
   // console.log('total multiplier', totalMultiplier);
-  // console.log();
+  // console.log('emojiGroups', emojiGroups);
+  // console.log('-'.repeat(50));
 
   return {
-    res,
-    winners,
+    emojiGroups,
     totalMultiplier,
   };
 }
@@ -199,7 +141,7 @@ export default async function feniksRun(
     fetchReply: true,
   });
 
-  testSpins(1_000_000);
+  // testSpins(1_000_000);
 
   const spinRes = calcSpin();
   const latiWon = Math.floor(likme * spinRes.totalMultiplier);

@@ -13,17 +13,11 @@ const MIN_LIKME = 20;
 function infoEmbed(i: CommandInteraction) {
   const fields: EmbedField[] = [];
 
-  for (const { variations, multiplier, emoji } of Object.values(feniksLaimesti)) {
-    const biggestNumLen = `${Math.max(...variations.map(v => multiplier * v ** 2))}`.length;
+  for (const { multipliers, emoji } of Object.values(feniksLaimesti)) {
     fields.push({
       name: '\u2800',
-      value: variations
-        .map(
-          v =>
-            `**\`` +
-            // ' '.repeat(biggestNumLen - `${multiplier * v ** 2}`.length) +
-            `${multiplier * v ** 2}x\`** ${emoji.noBorder.repeat(v)}`
-        )
+      value: Object.entries(multipliers)
+        .map(([n, mult]) => `**\`` + `${mult}x\`** ${emoji.repeat(Number(n))}`)
         .join('\n'),
       inline: true,
     });
