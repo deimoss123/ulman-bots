@@ -33,7 +33,9 @@ export default function xpAddedEmbed(leveledUser: AddXpReturn, xpToAdd: number, 
     for (const levelReward of levelIncrease.rewards) {
       if (levelReward.lati) addedLati += levelReward.lati;
       if (levelReward.item) {
-        rewardsArr.push(...Object.entries(levelReward.item).map(([key, amount]) => itemString(itemList[key], amount)));
+        rewardsArr.push(
+          ...Object.entries(levelReward.item).map(([key, amount]) => itemString(itemList[key], amount, true))
+        );
       }
       if (levelReward.taxDiscount) {
         const { payTax, giveTax } = levelReward.taxDiscount;
