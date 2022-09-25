@@ -38,8 +38,8 @@ export default function xpAddedEmbed(leveledUser: AddXpReturn, xpToAdd: number, 
       if (levelReward.taxDiscount) {
         const { payTax, giveTax } = levelReward.taxDiscount;
         const taxArr: string[] = [];
-        if (payTax) taxArr.push(`maksāšanai (**${payTax * 100}%**)`);
-        if (giveTax) taxArr.push(`iedošanai (**${giveTax * 100}%**)`);
+        if (payTax) taxArr.push(`maksāšanai (**${Math.floor(payTax * 100)}%**)`);
+        if (giveTax) taxArr.push(`iedošanai (**${Math.floor(giveTax * 100)}%**)`);
         rewardsArr.push('Nodokļu atvieglojumu ' + taxArr.join(' un '));
       }
     }

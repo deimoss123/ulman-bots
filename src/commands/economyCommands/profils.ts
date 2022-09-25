@@ -1,6 +1,6 @@
 import Command from '../../interfaces/Command';
 import commandColors from '../../embeds/commandColors';
-import { ApplicationCommandOptionType, ChatInputCommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType, ChatInputCommandInteraction, codeBlock } from 'discord.js';
 import findUser from '../../economy/findUser';
 import errorEmbed from '../../embeds/errorEmbed';
 import userString from '../../embeds/helpers/userString';
@@ -65,12 +65,12 @@ const profils: Command = {
 
     const currentTime = Date.now();
 
-    let payTaxText = `**${payTax * 100}%**`;
-    let giveTaxText = `**${giveTax * 100}%**`;
+    let payTaxText = `**${Math.floor(payTax * 100)}%**`;
+    let giveTaxText = `**${Math.floor(giveTax * 100)}%**`;
 
     if (status.juridisks > currentTime) {
-      payTaxText = `~~${payTax * 100}%~~ **0%**`;
-      giveTaxText = `~~${giveTax * 100}%~~ **0%**`;
+      payTaxText = `~~${Math.floor(payTax * 100)}%~~ **0%**`;
+      giveTaxText = `~~${Math.floor(giveTax * 100)}%~~ **0%**`;
     }
 
     await i.reply(
@@ -93,7 +93,7 @@ const profils: Command = {
 
           return {
             name: latName,
-            value: `\`\`\`${time < currentTime ? '-' : millisToReadableTime(time - currentTime)}\`\`\``,
+            value: codeBlock(time < currentTime ? '-' : millisToReadableTime(time - currentTime)),
             inline: true,
           };
         }),
