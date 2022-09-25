@@ -50,7 +50,7 @@ const stradat: Command = {
   title: 'Strādāt',
   description: 'Strādāt darbā un pelnīt naudu',
   color: commandColors.stradat,
-  cooldown: 0, //1_800_000, // 30 min
+  cooldown: 1_800_000, // 30 min
   data: {
     name: 'stradat',
     description: 'Strādāt darbā un pelnīt naudu',
