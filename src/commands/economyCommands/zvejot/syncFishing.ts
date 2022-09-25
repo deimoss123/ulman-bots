@@ -5,7 +5,7 @@ import chance from '../../../items/helpers/chance';
 import maksekeresData, { FishChance } from './makskeresData';
 import { ZVEJOT_MIN_LEVEL } from './zvejot';
 
-const ONE_HOUR = 500; // 3_600_000;
+const ONE_HOUR = 3_600_000;
 
 function generateFish(fishing: UserFishing, currentTime: number, overrideFish = false): FishObj[] {
   const fishList: FishObj[] = overrideFish ? [] : fishing.futureFishList || [];

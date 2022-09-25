@@ -1,21 +1,30 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, SelectMenuBuilder } from 'discord.js';
 import capitalizeFirst from '../../../embeds/helpers/capitalizeFirst';
 import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
+import latiString from '../../../embeds/helpers/latiString';
 import UserProfile from '../../../interfaces/UserProfile';
 import itemList, { ItemCategory } from '../../../items/itemList';
 import maksekeresData from './makskeresData';
+import { calcRepairCost } from './zvejot';
+
+const ziveEmoji = {
+  name: 'zive',
+  id: '1023703062054965329',
+  animated: true,
+};
 
 const collectFishButton = new ButtonBuilder()
   .setCustomId('collect_fish_btn')
   .setLabel('Savākt copi')
-  .setStyle(ButtonStyle.Success);
+  .setStyle(ButtonStyle.Success)
+  .setEmoji(ziveEmoji);
 
 export default function zvejotComponents(
   user: UserProfile,
   selectedFishingRodId?: string
 ): ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[] {
   const { specialItems, fishing } = user;
-  const { selectedRod, usesLeft, caughtFishes: coughtFishes } = fishing;
+  const { selectedRod, usesLeft, caughtFishes } = fishing;
 
   if (!selectedRod) {
     const rodsInInv = specialItems.filter(item => itemList[item.name].categories.includes(ItemCategory.MAKSKERE));
@@ -28,7 +37,7 @@ export default function zvejotComponents(
           .setDisabled(true),
       ];
 
-      if (coughtFishes && coughtFishes.length) btnRow.push(collectFishButton);
+      if (caughtFishes && caughtFishes.length) btnRow.push(collectFishButton);
 
       return [new ActionRowBuilder<ButtonBuilder>().addComponents(btnRow)];
     }
@@ -41,7 +50,7 @@ export default function zvejotComponents(
         .setDisabled(!selectedFishingRodId),
     ];
 
-    if (coughtFishes && Object.keys(coughtFishes).length) btnRow.push(collectFishButton);
+    if (caughtFishes && Object.keys(caughtFishes).length) btnRow.push(collectFishButton);
 
     return [
       new ActionRowBuilder<SelectMenuBuilder>().addComponents(
@@ -63,17 +72,32 @@ export default function zvejotComponents(
   }
 
   const buttons = [
-    new ButtonBuilder().setCustomId('remove_fishing_rod').setLabel('Noņemt makšķeri').setStyle(ButtonStyle.Secondary),
-    new ButtonBuilder().setCustomId('test_button').setLabel('Test').setStyle(ButtonStyle.Secondary),
+    new ButtonBuilder()
+      .setCustomId('remove_fishing_rod')
+      .setLabel('Noņemt makšķeri')
+      .setStyle(ButtonStyle.Secondary)
+      .setEmoji(itemList[selectedRod].emoji || '❓'),
   ];
-
-  if (usesLeft < maksekeresData[selectedRod].maxDurability) {
-    buttons.unshift(
-      new ButtonBuilder().setCustomId('fix_fishing_rod').setLabel(`Salabot makšķeri`).setStyle(ButtonStyle.Primary)
+  if (user.guildId === process.env.DEV_SERVER_ID) {
+    buttons.push(
+      new ButtonBuilder()
+        .setCustomId('test_button')
+        .setLabel('Atjaunot (testēšanas poga)')
+        .setStyle(ButtonStyle.Secondary)
     );
   }
 
-  if (coughtFishes && Object.keys(coughtFishes).length) {
+  if (usesLeft < maksekeresData[selectedRod].maxDurability) {
+    buttons.unshift(
+      new ButtonBuilder()
+        .setCustomId('fix_fishing_rod')
+        .setLabel(`Salabot makšķeri (${latiString(calcRepairCost(selectedRod, usesLeft))})`)
+        .setStyle(ButtonStyle.Primary)
+        .setEmoji('🔧')
+    );
+  }
+
+  if (caughtFishes && Object.keys(caughtFishes).length) {
     buttons.unshift(collectFishButton);
   }
 

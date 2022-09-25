@@ -15,8 +15,8 @@ const zvejaEmojis = {
   cope3: '<a:cope_3:1023406400665305118>',
   cope4: '<a:cope_4:1023406403207041046>',
   cope5: '<a:cope_5:1023406409334919288>',
-  udens: '<a:udens:920839237920768050>',
-  udenszive: '<a:udenszive:920839478174683136>',
+  udens: '<a:udens:1023702377901080616>',
+  udenszive: '<a:udenszive:1023702584986439762>',
 };
 
 function zvejaEmojiString() {
@@ -80,7 +80,7 @@ export function zvejotEmbed(i: CommandInteraction, { fishing }: UserProfile) {
   const tips = tipsString(fishing);
   if (tips)
     fields.unshift({
-      name: '❗ Tu nevari zvejot, jo',
+      name: '❗ Tu nevari zvejot, jo ❗',
       value: tips,
       inline: false,
     });
@@ -88,7 +88,7 @@ export function zvejotEmbed(i: CommandInteraction, { fishing }: UserProfile) {
   if (caughtFishes && Object.keys(caughtFishes).length) {
     fields.push(
       ...Object.entries(caughtFishes).map(([key, amount]) => ({
-        name: itemString(itemList[key], amount, true),
+        name: itemString(itemList[key], amount),
         value: `Vērtība: ${latiString(itemList[key].value)}`,
         inline: true,
       }))
@@ -97,7 +97,6 @@ export function zvejotEmbed(i: CommandInteraction, { fishing }: UserProfile) {
 
   return embedTemplate({
     i,
-    content: '\u200B',
     color: commandColors.zvejot,
     fields,
   }).embeds;

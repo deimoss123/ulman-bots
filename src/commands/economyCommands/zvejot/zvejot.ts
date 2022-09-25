@@ -1,5 +1,8 @@
 import { bold, ComponentType, EmbedBuilder } from 'discord.js';
+import addItems from '../../../economy/addItems';
+import addLati from '../../../economy/addLati';
 import addSpecialItems from '../../../economy/addSpecialItems';
+import addXp from '../../../economy/addXp';
 import findUser from '../../../economy/findUser';
 import removeItemsById from '../../../economy/removeItemsById';
 import setFishing from '../../../economy/setFishing';
@@ -10,14 +13,25 @@ import errorEmbed from '../../../embeds/errorEmbed';
 import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import itemString from '../../../embeds/helpers/itemString';
 import latiString from '../../../embeds/helpers/latiString';
+import xpAddedEmbed from '../../../embeds/helpers/xpAddedEmbed';
 import smallEmbed from '../../../embeds/smallEmbed';
 import Command from '../../../interfaces/Command';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
-import itemList from '../../../items/itemList';
+import itemList, { ItemKey } from '../../../items/itemList';
 import maksekeresData from './makskeresData';
 import syncFishing from './syncFishing';
 import zvejotComponents from './zvejotComponents';
 import { zvejotEmbed } from './zvejotEmbeds';
+
+export function calcRepairCost(itemKey: ItemKey, usesLeft: number) {
+  const price = itemList[itemKey].value * 2;
+  if (usesLeft <= 0) return price;
+
+  const { maxDurability } = maksekeresData[itemKey];
+  if (usesLeft === maxDurability) return 0;
+
+  return Math.ceil(((maxDurability - usesLeft) / maxDurability) * price);
+}
 
 export const ZVEJOT_MIN_LEVEL = 3;
 
@@ -52,6 +66,7 @@ export const zvejot: Command = {
     if (!user) return i.reply(errorEmbed);
 
     const interactionReply = await i.reply({
+      content: '\u200B',
       embeds: zvejotEmbed(i, user),
       components: zvejotComponents(user, selectedFishingRod),
       fetchReply: true,
@@ -114,35 +129,49 @@ export const zvejot: Command = {
             if (!user || !user.fishing.caughtFishes) return { error: true };
 
             const fishesToAdd = user.fishing.caughtFishes;
+            const fishCount = Object.values(fishesToAdd).reduce((p, c) => p + c, 0);
+            const xpToAdd = fishCount;
 
-            // TODO: pārbaudīt vai inventārā ir vieta un zivis pievienot
-            // TODO: pievienot xp par zivīm
-
-            if (!(await setFishing(userId, guildId, { caughtFishes: null }))) {
-              return { error: true };
+            const freeSlots = countFreeInvSlots(user);
+            if (freeSlots < fishCount) {
+              return {
+                edit: {
+                  embeds: zvejotEmbed(i, user),
+                  components: zvejotComponents(user),
+                },
+                after: async () => {
+                  await interaction.reply(
+                    ephemeralReply(
+                      `Tev nav vietas inventārā lai savāktu **${fishCount}** mantas no copes\n` +
+                        `Tev ir **${freeSlots}** brīvas vietas`
+                    )
+                  );
+                },
+              };
             }
 
-            const userAfter = await syncFishing(userId, guildId, true);
-            if (!userAfter) return { error: true };
+            await setFishing(userId, guildId, { caughtFishes: null });
+            await addItems(userId, guildId, fishesToAdd);
+            await syncFishing(userId, guildId, true);
+
+            const leveledUser = await addXp(userId, guildId, xpToAdd);
+            if (!leveledUser) return { error: true };
 
             return {
               edit: {
-                embeds: zvejotEmbed(i, userAfter),
-                components: zvejotComponents(userAfter),
+                embeds: zvejotEmbed(i, leveledUser.user),
+                components: zvejotComponents(leveledUser.user),
               },
               after: async () => {
                 await interaction.reply({
                   embeds: [
-                    new EmbedBuilder()
-                      .setDescription('Tu savāci copi:')
-                      .setColor(this.color)
-                      .setFields(
-                        ...Object.entries(fishesToAdd).map(([itemKey, amount]) => ({
-                          name: itemString(itemList[itemKey], amount),
-                          value: `Vērtība: ${latiString(itemList[itemKey].value)}`,
-                          inline: true,
-                        }))
-                      ),
+                    new EmbedBuilder().setColor(this.color).setFields({
+                      name: 'Tu savāci copi:',
+                      value: Object.entries(fishesToAdd)
+                        .map(([key, amount]) => `> ${itemString(itemList[key], amount, true)}`)
+                        .join('\n'),
+                    }),
+                    xpAddedEmbed(leveledUser, xpToAdd, 'No zvejošanas tu ieguvi'),
                   ],
                 });
               },
@@ -159,12 +188,8 @@ export const zvejot: Command = {
 
             if (!selectedRod) return { error: true };
 
-            if (countFreeInvSlots(user) < 5) {
-              await interaction.reply(
-                ephemeralReply(
-                  'Tu nevari noņemt maksķeri, jo tev inventārā nav vietas\nTev vajag vismaz **5** brīvas vietas'
-                )
-              );
+            if (!countFreeInvSlots(user)) {
+              await interaction.reply(ephemeralReply('Tu nevari noņemt maksķeri, jo tev inventārā nav vietas'));
               return { end: true };
             }
 
@@ -207,12 +232,30 @@ export const zvejot: Command = {
 
             const { fishing, lati } = user;
 
-            // TODO pārbaudi latus
+            const repairCost = calcRepairCost(fishing.selectedRod!, fishing.usesLeft);
+            if (!repairCost) return { error: true };
 
-            const usesLeft = maksekeresData[fishing.selectedRod!].maxDurability;
-            if (!(await setFishing(userId, guildId, { usesLeft }))) {
-              return { error: true };
+            if (lati < repairCost) {
+              return {
+                edit: {
+                  embeds: zvejotEmbed(i, user),
+                  components: zvejotComponents(user),
+                },
+                after: async () => {
+                  await interaction.reply(
+                    ephemeralReply(
+                      `Tev nepietiek nauda lai salabotu makšķeri - ${latiString(repairCost)}\n` +
+                        `Tev ir ${latiString(lati)}`
+                    )
+                  );
+                },
+              };
             }
+
+            const { maxDurability } = maksekeresData[fishing.selectedRod!];
+
+            await setFishing(userId, guildId, { usesLeft: maxDurability });
+            await addLati(userId, guildId, repairCost);
 
             const userAfter = await syncFishing(userId, guildId, true);
             if (!userAfter) return { error: true };
@@ -225,7 +268,8 @@ export const zvejot: Command = {
               after: async () => {
                 await interaction.reply(
                   smallEmbed(
-                    `Tu salaboji ${bold(itemString(itemList[fishing.selectedRod!], null, true))} par x latiem`,
+                    `Tu salaboji ${bold(itemString(itemList[fishing.selectedRod!], null, true))} - ` +
+                      latiString(repairCost),
                     this.color
                   )
                 );
