@@ -2,11 +2,7 @@ import User from '../schemas/User';
 import UserProfile from '../interfaces/UserProfile';
 import userCache from '../utils/userCache';
 import findUser from './findUser';
-import levelsList, {
-  LevelReward,
-  MAX_LEVEL,
-  MAX_LEVEL_REWARD_PER_XP,
-} from '../levelingSystem/levelsList';
+import levelsList, { LevelReward, MAX_LEVEL, MAX_LEVEL_REWARD_PER_XP } from '../levelingSystem/levelsList';
 import addItems from './addItems';
 
 interface CalcLevelReturn {
@@ -51,10 +47,7 @@ function calcLevel(
 
   const nextLevelInList = levelsList[nextLevel + 1];
   if (excessXp >= nextLevelInList.xp) {
-    return calcLevel(currentLevel, excessXp - nextLevelInList.xp, nextLevel + 1, [
-      ...rewards,
-      nextLevelInList.reward,
-    ]);
+    return calcLevel(currentLevel, excessXp - nextLevelInList.xp, nextLevel + 1, [...rewards, nextLevelInList.reward]);
   }
 
   // palielinās līmenis, bet nav sasniegts max līmenis
@@ -85,11 +78,7 @@ export interface AddXpReturn {
   maxLevelReward: null | number; // ja sasniedzis maksimālo līmeni tad liekus xp dod latus
 }
 
-export default async function addXp(
-  userId: string,
-  guildId: string,
-  xpToAdd: number
-): Promise<AddXpReturn | void> {
+export default async function addXp(userId: string, guildId: string, xpToAdd: number): Promise<AddXpReturn | void> {
   try {
     const user = await findUser(userId, guildId);
     if (!user) return;
@@ -111,7 +100,8 @@ export default async function addXp(
         }
         if (reward.item) {
           // ideāli būtu neveikt velvienu datubāzes pieprasījumu bet addItems ir daudz loģika un šis ir vieglāk
-          await addItems(userId, guildId, reward.item);
+          const res = await addItems(userId, guildId, reward.item);
+          if (res) user.items = res.items;
         }
         if (reward.taxDiscount) {
           const { payTax, giveTax } = reward.taxDiscount;
@@ -131,9 +121,7 @@ export default async function addXp(
     userCache[guildId][userId] = resUser as UserProfile;
     return {
       user: JSON.parse(JSON.stringify(user)),
-      levelIncrease: calcRes.levelHasIncreased
-        ? { from: oldLevel, to: user.level, rewards: calcRes.rewards! }
-        : null,
+      levelIncrease: calcRes.levelHasIncreased ? { from: oldLevel, to: user.level, rewards: calcRes.rewards! } : null,
       maxLevelReward: calcRes.maxLevelReward || null,
       excessXp: calcRes.excessXp,
     };
