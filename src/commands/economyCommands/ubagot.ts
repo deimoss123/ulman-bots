@@ -9,7 +9,7 @@ import embedTemplate from '../../embeds/embedTemplate';
 import ephemeralReply from '../../embeds/ephemeralReply';
 import errorEmbed from '../../embeds/errorEmbed';
 import latiString from '../../embeds/helpers/latiString';
-import xpAddedText from '../../embeds/helpers/xpAddedText';
+import xpAddedEmbed from '../../embeds/helpers/xpAddedEmbed';
 import Command from '../../interfaces/Command';
 import { DailyCooldowns } from '../../interfaces/UserProfile';
 import countFreeInvSlots from '../../items/helpers/countFreeInvSlots';
@@ -75,9 +75,7 @@ const ubagot: Command = {
     await i.reply({
       embeds: [
         ubagotEmbed(i, leveledUser.user.dailyCooldowns, earnedLati, this.color),
-        new EmbedBuilder()
-          .setDescription(xpAddedText(leveledUser, xpToAdd, 'Par ubagošanu tu saņēmi'))
-          .setColor(0xffffff),
+        xpAddedEmbed(leveledUser, xpToAdd, 'Par ubagošanu tu saņēmi'),
       ],
     });
   },

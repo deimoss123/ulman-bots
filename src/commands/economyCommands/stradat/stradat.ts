@@ -22,7 +22,7 @@ import latiString from '../../../embeds/helpers/latiString';
 import itemString from '../../../embeds/helpers/itemString';
 import itemList from '../../../items/itemList';
 import addXp from '../../../economy/addXp';
-import xpAddedText from '../../../embeds/helpers/xpAddedText';
+import xpAddedEmbed from '../../../embeds/helpers/xpAddedEmbed';
 import addLati from '../../../economy/addLati';
 import addItems from '../../../economy/addItems';
 import addTimeCooldown from '../../../economy/addTimeCooldown';
@@ -50,7 +50,7 @@ const stradat: Command = {
   title: 'Strādāt',
   description: 'Strādāt darbā un pelnīt naudu',
   color: commandColors.stradat,
-  cooldown: 1_800_000, // 30 min
+  cooldown: 0, //1_800_000, // 30 min
   data: {
     name: 'stradat',
     description: 'Strādāt darbā un pelnīt naudu',
@@ -198,7 +198,7 @@ const stradat: Command = {
                       `${choiceResult.text}\n\n` +
                       rewardText
                   ),
-                new EmbedBuilder().setDescription(xpAddedText(leveledUser, xpToAdd, 'Par strādāšanu tu saņēmi')),
+                xpAddedEmbed(leveledUser, xpToAdd, 'Par strādāšanu tu saņēmi'),
               ],
               components: [],
             },

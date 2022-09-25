@@ -15,7 +15,7 @@ import embedTemplate from '../../embeds/embedTemplate';
 import ephemeralReply from '../../embeds/ephemeralReply';
 import errorEmbed from '../../embeds/errorEmbed';
 import itemString from '../../embeds/helpers/itemString';
-import xpAddedText from '../../embeds/helpers/xpAddedText';
+import xpAddedEmbed from '../../embeds/helpers/xpAddedEmbed';
 import { UsableItemFunc } from '../../interfaces/Item';
 import { ItemInProfile } from '../../interfaces/UserProfile';
 import itemList, { ItemKey } from '../itemList';
@@ -27,20 +27,12 @@ const requiredItems: Record<ItemKey, number> = {
   velo_sture: 1,
 };
 
-function makeEmbed(
-  i: CommandInteraction | ButtonInteraction,
-  reqItemsInv: Record<ItemKey, number>,
-  color: number
-) {
+function makeEmbed(i: CommandInteraction | ButtonInteraction, reqItemsInv: Record<ItemKey, number>, color: number) {
   const maxLength = Math.max(...Object.values(reqItemsInv)).toString().length;
 
   return embedTemplate({
     i,
-    description: `Ar velosipēda detaļām tu vari sataisīt **${itemString(
-      itemList['velosipeds'],
-      null,
-      true
-    )}**`,
+    description: `Ar velosipēda detaļām tu vari sataisīt **${itemString(itemList['velosipeds'], null, true)}**`,
     fields: [
       {
         name: 'Nepieciešamās detaļas:',
@@ -48,9 +40,7 @@ function makeEmbed(
           .map(([key, amount]) => {
             return (
               `${amount ? '✅' : '❌'} ` +
-              `\` ${' '.repeat(maxLength - `${amount}`.length)}${amount}/${
-                requiredItems[key]
-              } \` ` +
+              `\` ${' '.repeat(maxLength - `${amount}`.length)}${amount}/${requiredItems[key]} \` ` +
               itemString(itemList[key])
             );
           })
@@ -121,9 +111,7 @@ const velo: UsableItemFunc = async (userId, guildId) => {
 
             const { hasAll } = calcReqItems(user.items);
             if (!hasAll) {
-              await interaction.reply(
-                ephemeralReply('Tev nav nepieciešamās detaļas, inventāra saturs ir mainījies')
-              );
+              await interaction.reply(ephemeralReply('Tev nav nepieciešamās detaļas, inventāra saturs ir mainījies'));
               return {
                 end: true,
               };
@@ -153,18 +141,10 @@ const velo: UsableItemFunc = async (userId, guildId) => {
                   embeds: [
                     new EmbedBuilder()
                       .setDescription(
-                        `No velosipēda detaļām tu sataisīji **${itemString(
-                          itemList.velosipeds,
-                          1,
-                          true
-                        )}**`
+                        `No velosipēda detaļām tu sataisīji **${itemString(itemList.velosipeds, 1, true)}**`
                       )
                       .setColor(color),
-                    new EmbedBuilder()
-                      .setDescription(
-                        xpAddedText(userAfterXP, VELO_XP, 'Par velosipēda sataisīšanu tu ieguvi')
-                      )
-                      .setColor(0xffffff),
+                    xpAddedEmbed(userAfterXP, VELO_XP, 'Par velosipēda sataisīšanu tu ieguvi'),
                   ],
                 });
               },
