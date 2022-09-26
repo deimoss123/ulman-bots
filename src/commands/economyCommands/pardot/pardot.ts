@@ -20,54 +20,37 @@ const pardot: Command = {
   color: commandColors.pardot,
   data: {
     name: 'pardot',
-    description: 'Pārdot lietu no sava inventāra',
+    description: 'Pārdot mantas no sava inventāra',
     options: [
       {
-        name: 'vienu',
-        description: 'Pārdot vienu lietu pēc id',
+        name: 'pec_nosaukuma',
+        description: 'Pārdot mantu pēc nosaukuma',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'nosaukums',
-            description: 'Lieta ko vēlies pārdot',
+            description: 'Mantas nosaukums',
             type: ApplicationCommandOptionType.String,
             autocomplete: true,
             required: true,
           },
           {
             name: 'daudzums',
-            description: 'Cik daudz lietas vēlies pārdot',
+            description: 'Cik daudz mantas vēlies pārdot',
             type: ApplicationCommandOptionType.Integer,
             min_value: 1,
           },
         ],
       },
       {
-        name: 'pēc_tipa',
-        description: 'Pārdot visas lietas pēc tipa (zivis, atkritumi, utt.)',
+        name: 'neizmantojamās',
+        description: 'Pārdot visas neizmantojamās mantas',
         type: ApplicationCommandOptionType.Subcommand,
-        options: [
-          {
-            name: 'tips',
-            description: 'Kāda tipa lietas pārdot',
-            type: ApplicationCommandOptionType.String,
-            required: true,
-            choices: [
-              {
-                name: 'Atkritumi',
-                value: 'atkritumi',
-              },
-              {
-                name: 'Zivis',
-                value: 'zivis',
-              },
-              {
-                name: 'Visu',
-                value: 'visu',
-              },
-            ],
-          },
-        ],
+      },
+      {
+        name: 'visas',
+        description: 'Pārdot pilnīgi VISAS mantas inventārā (bīstami)',
+        type: ApplicationCommandOptionType.Subcommand,
       },
     ],
   },
@@ -105,15 +88,11 @@ const pardot: Command = {
 
       switch (typeToSell) {
         case 'atkritumi': {
-          itemsToSell = itemsToSell.filter(item =>
-            item.item.categories.includes(ItemCategory.ATKRITUMI)
-          );
+          itemsToSell = itemsToSell.filter(item => item.item.categories.includes(ItemCategory.ATKRITUMI));
           break;
         }
         case 'zivis': {
-          itemsToSell = itemsToSell.filter(item =>
-            item.item.categories.includes(ItemCategory.ZIVIS)
-          );
+          itemsToSell = itemsToSell.filter(item => item.item.categories.includes(ItemCategory.ZIVIS));
           break;
         }
         case 'visu': {
@@ -144,10 +123,7 @@ const pardot: Command = {
       ];
     }
 
-    const soldItemsValue = itemsToSell.reduce(
-      (previous, { item, amount }) => previous + item.value * amount,
-      0
-    );
+    const soldItemsValue = itemsToSell.reduce((previous, { item, amount }) => previous + item.value * amount, 0);
 
     const sellObj: Record<string, number> = {};
     itemsToSell.forEach(({ name, amount }) => {
@@ -165,9 +141,7 @@ const pardot: Command = {
         fields: [
           {
             name: 'Tu pārdevi',
-            value: itemsToSell
-              .map(item => `> ${itemString(item.item, item.amount, true)}`)
-              .join('\n'),
+            value: itemsToSell.map(item => `> ${itemString(item.item, item.amount, true)}`).join('\n'),
             inline: false,
           },
           {

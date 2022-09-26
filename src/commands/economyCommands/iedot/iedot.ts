@@ -89,7 +89,7 @@ const iedot: Command = {
       if (!specialItemInv.length) {
         return i.reply(ephemeralReply(`Tavā inventārā nav ${itemString(itemToGive)}`));
       }
-      return iedotRunSpecial(i, user, targetUser, itemToGiveKey, specialItemInv, this.color, hasJuridisks);
+      return iedotRunSpecial(i, user, targetUser, itemToGiveKey, specialItemInv, hasJuridisks);
     }
 
     const itemInInv = items.find(({ name }) => name === itemToGiveKey);

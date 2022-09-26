@@ -1,5 +1,22 @@
+import maksekeresData from '../../commands/economyCommands/zvejot/makskeresData';
 import ephemeralReply from '../../embeds/ephemeralReply';
-import { UsableItemFunc } from '../../interfaces/Item';
+import Item, { UsableItemFunc } from '../../interfaces/Item';
+import itemList from '../itemList';
+
+export function makskereCustomValue(itemKey: string): Item['customValue'] {
+  return ({ durability }) => {
+    const { value } = itemList[itemKey];
+    const { maxDurability } = maksekeresData[itemKey];
+
+    if (durability! <= 0) return 1;
+
+    if (durability! < maxDurability) {
+      return Math.floor((durability! / maxDurability) * value);
+    }
+
+    return value;
+  };
+}
 
 const makskere: UsableItemFunc = async () => {
   return {

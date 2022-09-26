@@ -19,7 +19,7 @@ import countItems from '../../items/helpers/countItems';
 import commandColors from '../../embeds/commandColors';
 import itemString from '../../embeds/helpers/itemString';
 import ephemeralReply from '../../embeds/ephemeralReply';
-import UserProfile, { ItemInProfile } from '../../interfaces/UserProfile';
+import UserProfile, { ItemInProfile, SpecialItemInProfile } from '../../interfaces/UserProfile';
 import Item from '../../interfaces/Item';
 import { displayAttributes } from '../../embeds/helpers/displayAttributes';
 import buttonHandler from '../../embeds/buttonHandler';
@@ -49,14 +49,25 @@ function mapItems({ items, specialItems }: UserProfile) {
   if (specialItems.length) itemTypesInInv.add('special');
 
   const specialItemsFields = specialItems
-    .sort((a, b) => itemList[b.name].value - itemList[a.name].value)
+    .sort((a, b) => {
+      const itemA = itemList[a.name];
+      const itemB = itemList[b.name];
+
+      return (
+        (itemB.customValue ? itemB.customValue(b.attributes) : itemB.value) -
+        (itemA.customValue ? itemA.customValue(a.attributes) : itemA.value)
+      );
+    })
+
     .map(specialItem => {
       const { name, attributes } = specialItem;
       const item = itemList[name] as Item;
 
+      const value = item.customValue ? item.customValue(attributes) : item.value;
+
       return {
         name: itemString(item, null, false, attributes?.customName),
-        value: `${itemTypes.special.emoji} ${latiString(item.value)}\n` + displayAttributes(specialItem),
+        value: `${itemTypes.special.emoji} ${latiString(value)}\n` + displayAttributes(specialItem),
         inline: true,
       };
     });
@@ -98,6 +109,17 @@ function mapItems({ items, specialItems }: UserProfile) {
   };
 }
 
+export function getInvValue(items: ItemInProfile[], specialItems: SpecialItemInProfile[]) {
+  return (
+    items.reduce((prev, { name, amount }) => {
+      return prev + itemList[name]!.value * amount;
+    }, 0) +
+    specialItems.reduce((prev, { name, attributes }) => {
+      return prev + (itemList[name].customValue ? itemList[name].customValue!(attributes) : itemList[name].value);
+    }, 0)
+  );
+}
+
 const INV_PAGE_SIZE = 12;
 
 function makeEmbed(
@@ -105,19 +127,12 @@ function makeEmbed(
   target: User,
   targetUser: UserProfile,
   fields: EmbedField[],
-  color: number,
   currentPage: number,
   itemTypesInv: ItemType[]
 ) {
   const { items, specialItems, itemCap } = targetUser;
 
-  const totalValue =
-    items.reduce((prev, { name, amount }) => {
-      return prev + itemList[name]!.value * amount;
-    }, 0) +
-    specialItems.reduce((prev, { name }) => {
-      return prev + itemList[name]!.value;
-    }, 0);
+  const totalValue = getInvValue(items, specialItems);
 
   const fieldsToShow = fields.slice(currentPage * INV_PAGE_SIZE, (currentPage + 1) * INV_PAGE_SIZE);
 
@@ -135,7 +150,7 @@ function makeEmbed(
           ) +
           '\u2800'
         : 'Tukšs inventārs :(',
-    color,
+    color: commandColors.inventars,
     fields: fieldsToShow,
   }).embeds;
 }
@@ -200,7 +215,7 @@ const inventars: Command = {
     if (fields.length > INV_PAGE_SIZE) components.unshift(paginationRow(currentPage, totalPages));
 
     const msg = await i.reply({
-      embeds: makeEmbed(i, target, targetUser, fields, this.color, currentPage, itemTypesInv),
+      embeds: makeEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
       components,
       fetchReply: true,
     });
@@ -219,7 +234,7 @@ const inventars: Command = {
             if (currentPage >= totalPages) currentPage = totalPages - 1;
             return {
               edit: {
-                embeds: makeEmbed(i, target, targetUser, fields, this.color, currentPage, itemTypesInv),
+                embeds: makeEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
                 components: [paginationRow(currentPage, totalPages), sellRow()],
               },
             };
@@ -229,7 +244,7 @@ const inventars: Command = {
             if (currentPage < 0) currentPage = 0;
             return {
               edit: {
-                embeds: makeEmbed(i, target, targetUser, fields, this.color, currentPage, itemTypesInv),
+                embeds: makeEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
                 components: [paginationRow(currentPage, totalPages), sellRow()],
               },
             };

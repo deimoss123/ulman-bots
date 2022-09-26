@@ -11,6 +11,7 @@ import addSpecialItems from '../../../economy/addSpecialItems';
 import findUser from '../../../economy/findUser';
 import removeItemsById from '../../../economy/removeItemsById';
 import buttonHandler from '../../../embeds/buttonHandler';
+import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import errorEmbed from '../../../embeds/errorEmbed';
@@ -43,20 +44,22 @@ function makeEmbedAfter(
   taxLati: number,
   targetUser: UserProfile,
   itemsToGive: SpecialItemInProfile[],
-  color: number,
-  hasJuridisks: boolean
+  hasJuridisks: boolean,
+  itemObj: Item
 ) {
   return embedTemplate({
     i,
-    color,
+    color: commandColors.iedot,
     content: `<@${targetUser.userId}>`,
     description:
       `**Nodoklis:** ${hasJuridisks ? '0 lati (juridiska persona)' : latiString(taxLati)}\n` +
       `<@${targetUser.userId}> tu iedevi:`,
     fields: [
       ...itemsToGive.map(item => ({
-        name: itemString(itemList[item.name], null, true, item.attributes.customName),
-        value: displayAttributes(item),
+        name: itemString(itemObj, null, true, item.attributes.customName),
+        value:
+          `Vērtība: ${latiString(itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value)}\n` +
+          displayAttributes(item),
         inline: false,
       })),
     ],
@@ -68,21 +71,20 @@ function makeEmbed(
   itemsInInv: SpecialItemInProfile[],
   itemObj: Item,
   targetUserId: string,
-  embedColor: number,
   user: UserProfile,
   hasJuridisks: boolean,
   taxLati?: number
 ) {
   return embedTemplate({
     i,
-    color: embedColor,
+    color: commandColors.iedot,
     description:
       `Tavā inventārā ir ${itemString(itemObj, itemsInInv.length)}\n` +
       `No saraksta izvēlies vienu vai vairākas mantas ko iedot <@${targetUserId}>\n\n` +
       `**Nodoklis:** ` +
       (hasJuridisks
         ? `**0 lati** (juridiska persona)`
-        : `${taxLati ? latiString(taxLati) : '-'} (${user.giveTax * 100}% no mantu kopējās vērtības)`),
+        : `${taxLati ? latiString(taxLati) : '-'} (${Math.floor(user.giveTax * 100)}% no mantu kopējās vērtības)`),
   }).embeds!;
 }
 
@@ -106,7 +108,9 @@ function makeComponents(
         .setOptions(
           itemsInInv.map(item => ({
             label: itemStringCustom(itemObj, item.attributes?.customName),
-            description: displayAttributes(item, true),
+            description:
+              `${latiString(itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value)} | ` +
+              displayAttributes(item, true),
             value: item._id!,
             emoji: itemObj.emoji || '❓',
             default: !!selectedIds.length && selectedIds!.includes(item._id!),
@@ -149,7 +153,6 @@ export default async function iedotRunSpecial(
   targetUser: UserProfile,
   itemKey: ItemKey,
   itemsInInv: SpecialItemInProfile[],
-  embedColor: number,
   hasJuridisks: boolean
 ) {
   const userId = i.user.id;
@@ -167,8 +170,12 @@ export default async function iedotRunSpecial(
       return i.reply(noInvSpaceEmbed(targetUser, itemObj, 1));
     }
 
-    // TODO: kad pievienotas mantas ar mainīgu vērtību (makšķeres) šo pārrēķināt
-    totalTax = hasJuridisks ? 0 : Math.floor(itemObj.value * user.giveTax);
+    if (hasJuridisks) totalTax = 0;
+    else {
+      const value = itemObj.customValue ? itemObj.customValue(itemsInInv[0].attributes) : itemObj.value;
+      totalTax = Math.floor(value * user.giveTax);
+    }
+
     if (user.lati < totalTax) {
       return i.reply(cantPayTaxEmbed(itemObj, 1, totalTax, user));
     }
@@ -177,14 +184,15 @@ export default async function iedotRunSpecial(
       await addLati(userId, guildId, -totalTax);
       await addLati(i.client.user!.id, guildId, totalTax);
     }
+
     const userAfter = await iedotSpecialQuery(i, targetUser, guildId, itemsInInv);
     if (!userAfter) return i.reply(errorEmbed);
 
-    return i.reply(makeEmbedAfter(i, totalTax, targetUser, itemsInInv, embedColor, hasJuridisks));
+    return i.reply(makeEmbedAfter(i, totalTax, targetUser, itemsInInv, hasJuridisks, itemObj));
   }
 
   const msg = await i.reply({
-    embeds: makeEmbed(i, itemsInInv, itemObj, targetUser.userId, embedColor, user, hasJuridisks),
+    embeds: makeEmbed(i, itemsInInv, itemObj, targetUser.userId, user, hasJuridisks),
     components: makeComponents(itemsInInv, itemObj, selectedItems),
     fetchReply: true,
   });
@@ -200,27 +208,21 @@ export default async function iedotRunSpecial(
         selectedItems = itemsInInv.filter(item => componentInteraction.values.includes(item._id!));
 
         const userAfterSelect = await findUser(userId, guildId);
-        if (!userAfterSelect) {
-          await componentInteraction.reply(errorEmbed);
-          return {
-            doNothing: true,
-          };
-        }
+        if (!userAfterSelect) return { error: true };
 
-        totalTax = hasJuridisks ? 0 : Math.floor(itemObj.value * selectedItems.length * userAfterSelect.giveTax) || 1;
+        if (hasJuridisks) totalTax = 0;
+        else {
+          totalTax =
+            Math.floor(
+              (itemObj.customValue
+                ? selectedItems.reduce((prev, item) => prev + itemObj.customValue!(item.attributes), 0)
+                : itemObj.value * selectedItems.length) * userAfterSelect.giveTax
+            ) || 1;
+        }
 
         return {
           edit: {
-            embeds: makeEmbed(
-              i,
-              itemsInInv,
-              itemObj,
-              targetUser.userId,
-              embedColor,
-              userAfterSelect,
-              hasJuridisks,
-              totalTax
-            ),
+            embeds: makeEmbed(i, itemsInInv, itemObj, targetUser.userId, userAfterSelect, hasJuridisks, totalTax),
             components: makeComponents(itemsInInv, itemObj, selectedItems, totalTax, userAfterSelect.lati),
           },
         };
@@ -235,7 +237,7 @@ export default async function iedotRunSpecial(
         }
 
         const user = await findUser(userId, guildId);
-        if (!user) return;
+        if (!user) return { error: true };
 
         if (user.lati < totalTax) {
           return {
@@ -263,7 +265,7 @@ export default async function iedotRunSpecial(
           await addLati(i.client.user!.id, guildId, totalTax);
         }
         const userAfter = await iedotSpecialQuery(i, targetUser, guildId, selectedItems);
-        if (!userAfter) return;
+        if (!userAfter) return { error: true };
 
         return {
           end: true,
@@ -272,7 +274,7 @@ export default async function iedotRunSpecial(
           },
           after: async () => {
             await componentInteraction.reply(
-              makeEmbedAfter(i, totalTax, targetUser, selectedItems, embedColor, hasJuridisks)
+              makeEmbedAfter(i, totalTax, targetUser, selectedItems, hasJuridisks, itemObj)
             );
           },
         };

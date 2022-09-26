@@ -41,6 +41,9 @@ interface Item {
   // mantas vērtība
   value: number;
 
+  // speciāla vērtība, piem. makšķeres izturība ietekmē vērtību
+  customValue?: (attributes: ItemAttributes) => number;
+
   // mantu atribūtas, piem., cik reizes lietots, cik izturība, utt.
   // norāda noklusējuma daudzumu
   attributes?: ItemAttributes;

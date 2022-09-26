@@ -11,7 +11,7 @@ import divaina_mugursoma from './usableItems/divaina_mugursoma';
 import petnieks from './usableItems/petnieks';
 import juridiska_zivs from './usableItems/juridiska_zivs';
 import maksekeresData from '../commands/economyCommands/zvejot/makskeresData';
-import makskere from './usableItems/makskere';
+import makskere, { makskereCustomValue } from './usableItems/makskere';
 
 export type ItemKey = string;
 
@@ -39,6 +39,7 @@ const itemList: Record<ItemKey, Item> = {
     },
     categories: [ItemCategory.VEIKALS, ItemCategory.MAKSKERE],
     value: 100,
+    customValue: makskereCustomValue('koka_makskere'),
     attributes: {
       durability: maksekeresData.koka_makskere.maxDurability,
     },
@@ -121,6 +122,15 @@ const itemList: Record<ItemKey, Item> = {
     },
     categories: [ItemCategory.VEIKALS],
     value: 5000,
+    customValue: ({ customName }) => {
+      // humors
+      if (customName!.toLowerCase().includes('seks')) return 6969;
+
+      // pārbauda kirilicu
+      if (/[а-яА-ЯЁё]/.test(customName!)) return 0;
+
+      return 5000;
+    },
     attributes: {
       timesUsed: 0,
       customName: '',
@@ -152,6 +162,7 @@ const itemList: Record<ItemKey, Item> = {
     emoji: null,
     categories: [ItemCategory.VEIKALS, ItemCategory.MAKSKERE],
     value: 500,
+    customValue: makskereCustomValue('divaina_makskere'),
     attributes: {
       durability: maksekeresData.divaina_makskere.maxDurability,
     },
