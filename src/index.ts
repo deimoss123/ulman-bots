@@ -7,6 +7,7 @@ import setupCronJobs from './utils/setupCronJobs';
 import createDiscounts from './items/discounts/createDiscounts';
 import autocompleteHandler from './commands/autocompleteHandler';
 import chalk from 'chalk';
+import setBotPresence from './utils/setBotPresence';
 
 process.env.TZ = 'Europe/Riga';
 dotenv.config();
@@ -18,7 +19,8 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once('ready', () => {
   createDiscounts();
-  setupCronJobs();
+  setBotPresence(client);
+  setupCronJobs(client);
   mongo().then(() => console.log('Connected to MongoDB'));
 });
 
