@@ -123,7 +123,7 @@ export function getInvValue(items: ItemInProfile[], specialItems: SpecialItemInP
 
 const INV_PAGE_SIZE = 12;
 
-function makeEmbed(
+function invEmbed(
   i: ChatInputCommandInteraction,
   target: User,
   targetUser: UserProfile,
@@ -252,13 +252,9 @@ const inventars: Command = {
     const totalPages = Math.ceil(fields.length / INV_PAGE_SIZE);
     let currentPage = 0;
 
-    const components = [];
-    if (fields.length > INV_PAGE_SIZE) components.push(paginationRow(currentPage, totalPages));
-    if (target.id === i.user.id && targetUser.items.length) components.push(sellRow(targetUser));
-
     const msg = await i.reply({
-      embeds: makeEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
-      components,
+      embeds: invEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
+      components: invComponents(i, targetUser, fields, currentPage, totalPages),
       fetchReply: true,
     });
 
@@ -278,7 +274,7 @@ const inventars: Command = {
             if (currentPage >= totalPages) currentPage = totalPages - 1;
             return {
               edit: {
-                embeds: makeEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
+                embeds: invEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
                 components: invComponents(i, targetUser, fields, currentPage, totalPages),
               },
             };
@@ -288,7 +284,7 @@ const inventars: Command = {
             if (currentPage < 0) currentPage = 0;
             return {
               edit: {
-                embeds: makeEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
+                embeds: invEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
                 components: invComponents(i, targetUser, fields, currentPage, totalPages),
               },
             };
@@ -298,7 +294,7 @@ const inventars: Command = {
 
             return {
               edit: {
-                embeds: makeEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
+                embeds: invEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
                 components: invComponents(i, targetUser, fields, currentPage, totalPages, buttonsPressed),
               },
               after: async () => {
@@ -310,7 +306,7 @@ const inventars: Command = {
             if (!buttonsPressed.includes('visas')) buttonsPressed.push('visas');
             return {
               edit: {
-                embeds: makeEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
+                embeds: invEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
                 components: invComponents(i, targetUser, fields, currentPage, totalPages, buttonsPressed),
               },
               after: async () => {
