@@ -23,6 +23,7 @@ import UserProfile, { ItemInProfile, SpecialItemInProfile } from '../../interfac
 import Item from '../../interfaces/Item';
 import { displayAttributes } from '../../embeds/helpers/displayAttributes';
 import buttonHandler from '../../embeds/buttonHandler';
+import pardotRun from './pardot/pardotRun';
 
 type ItemType = 'not_usable' | 'usable' | 'special' | 'not_sellable';
 const itemTypes: Record<ItemType, { text: string; emoji?: string }> = {
@@ -175,10 +176,50 @@ function paginationRow(currentPage: number, totalPages: number) {
   );
 }
 
-function sellRow() {
-  return new ActionRowBuilder<ButtonBuilder>().addComponents(
-    new ButtonBuilder().setCustomId('__').setLabel(`test`).setStyle(ButtonStyle.Primary).setDisabled(true)
+function sellRow({ items }: UserProfile, buttonsPressed: ('visas' | 'neizmantojamas')[] = []) {
+  const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder()
+      .setCustomId('inv_pardot_visas')
+      .setLabel('Pārdot visas mantas')
+      .setStyle(buttonsPressed.includes('visas') ? ButtonStyle.Success : ButtonStyle.Primary)
+      .setDisabled(buttonsPressed.includes('visas'))
   );
+
+  const hasUnusableItems = items.find(item => !itemList[item.name].use);
+  if (hasUnusableItems) {
+    row.addComponents(
+      new ButtonBuilder()
+        .setCustomId('inv_pardot_neizmantojamas')
+        .setLabel('Pārdot neizmantojamās mantas')
+        .setStyle(buttonsPressed.includes('neizmantojamas') ? ButtonStyle.Success : ButtonStyle.Primary)
+        .setDisabled(buttonsPressed.includes('neizmantojamas'))
+    );
+  }
+
+  return row;
+}
+
+function invComponents(
+  i: ChatInputCommandInteraction,
+  targetUser: UserProfile,
+  fields: {
+    name: string;
+    value: string;
+    inline: boolean;
+  }[],
+  currentPage?: number,
+  totalPages?: number,
+  buttonsPressed: ('visas' | 'neizmantojamas')[] = []
+) {
+  const rows: ActionRowBuilder<ButtonBuilder>[] = [];
+  if (fields.length > INV_PAGE_SIZE) {
+    rows.push(paginationRow(currentPage!, totalPages!));
+  }
+  if (targetUser.userId === i.user.id && (targetUser.items.length || targetUser.specialItems.length)) {
+    rows.push(sellRow(targetUser, buttonsPressed));
+  }
+
+  return rows;
 }
 
 const inventars: Command = {
@@ -211,8 +252,9 @@ const inventars: Command = {
     const totalPages = Math.ceil(fields.length / INV_PAGE_SIZE);
     let currentPage = 0;
 
-    const components = [sellRow()];
-    if (fields.length > INV_PAGE_SIZE) components.unshift(paginationRow(currentPage, totalPages));
+    const components = [];
+    if (fields.length > INV_PAGE_SIZE) components.push(paginationRow(currentPage, totalPages));
+    if (target.id === i.user.id && targetUser.items.length) components.push(sellRow(targetUser));
 
     const msg = await i.reply({
       embeds: makeEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
@@ -220,13 +262,15 @@ const inventars: Command = {
       fetchReply: true,
     });
 
+    const buttonsPressed: ('visas' | 'neizmantojamas')[] = [];
+
     await buttonHandler(
       i,
       'inventārs',
       msg,
-      async interaction => {
-        const { customId } = interaction;
-        if (interaction.componentType !== ComponentType.Button) return;
+      async int => {
+        const { customId } = int;
+        if (int.componentType !== ComponentType.Button) return;
 
         switch (customId) {
           case 'inv_prev_page': {
@@ -235,7 +279,7 @@ const inventars: Command = {
             return {
               edit: {
                 embeds: makeEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
-                components: [paginationRow(currentPage, totalPages), sellRow()],
+                components: invComponents(i, targetUser, fields, currentPage, totalPages),
               },
             };
           }
@@ -245,7 +289,32 @@ const inventars: Command = {
             return {
               edit: {
                 embeds: makeEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
-                components: [paginationRow(currentPage, totalPages), sellRow()],
+                components: invComponents(i, targetUser, fields, currentPage, totalPages),
+              },
+            };
+          }
+          case 'inv_pardot_neizmantojamas': {
+            if (!buttonsPressed.includes('neizmantojamas')) buttonsPressed.push('neizmantojamas');
+
+            return {
+              edit: {
+                embeds: makeEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
+                components: invComponents(i, targetUser, fields, currentPage, totalPages, buttonsPressed),
+              },
+              after: async () => {
+                await pardotRun(int, 'neizmantojamās');
+              },
+            };
+          }
+          case 'inv_pardot_visas': {
+            if (!buttonsPressed.includes('visas')) buttonsPressed.push('visas');
+            return {
+              edit: {
+                embeds: makeEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
+                components: invComponents(i, targetUser, fields, currentPage, totalPages, buttonsPressed),
+              },
+              after: async () => {
+                await pardotRun(int, 'visas');
               },
             };
           }
