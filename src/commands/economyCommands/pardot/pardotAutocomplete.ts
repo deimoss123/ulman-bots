@@ -21,32 +21,28 @@ function mapProfileItemsToItemsList(item: ItemInProfile): [string, Item] {
   return [item.name, itemList[item.name]];
 }
 
-export default async function pardotAutocomplete(
-  interaction: AutocompleteInteraction
-): Promise<void> {
+export default async function pardotAutocomplete(interaction: AutocompleteInteraction): Promise<void> {
   // lietotāja ievadītais teksts
   const focusedValue = normalizeLatText(interaction.options.getFocused() as string);
 
-  let allChoices: [string, Item][] = Object.entries(itemList).sort(
-    (a, b) => b[1].value - a[1].value
-  );
+  let allChoices: [string, Item][] = Object.entries(itemList).sort((a, b) => b[1].value - a[1].value);
 
   const user = await findUser(interaction.user.id, interaction.guildId!);
   if (user) {
     const { specialItems } = user;
-    const specialItemsList = [...new Set(specialItems.map((item) => item.name))].map((key) => [
-      key,
-      itemList[key],
-    ]) as [ItemKey, Item][];
+    const specialItemsList = [...new Set(specialItems.map(item => item.name))].map(key => [key, itemList[key]]) as [
+      ItemKey,
+      Item
+    ][];
 
     allChoices = [...user.items.map(mapProfileItemsToItemsList), ...specialItemsList];
   }
 
   if (!allChoices.length) {
-    await interaction.respond([{ name: 'Tev nav ko pārdot', value: '' }]);
+    await interaction.respond([{ name: 'Tev nav ko pārdot', value: 'no-items-inv' }]);
     return;
   }
 
   const queriedChoices = findItemsByQuery(focusedValue, allChoices);
-  await interaction.respond(queriedChoices.map(mapItemsToChoices)).catch((_) => _);
+  await interaction.respond(queriedChoices.map(mapItemsToChoices)).catch(_ => _);
 }

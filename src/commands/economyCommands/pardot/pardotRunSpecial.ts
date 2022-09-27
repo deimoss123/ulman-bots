@@ -19,6 +19,7 @@ import latiString from '../../../embeds/helpers/latiString';
 import Item from '../../../interfaces/Item';
 import UserProfile, { SpecialItemInProfile } from '../../../interfaces/UserProfile';
 import itemList, { ItemKey } from '../../../items/itemList';
+import { PIRKT_PARDOT_NODOKLIS } from './pardot';
 
 function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: Item, selectedIds: string[]) {
   return [
@@ -85,9 +86,10 @@ export default async function pardotRunSpecial(
   let selectedIds: string[] = [];
 
   if (itemsInInv.length === 1) {
-    const soldValue = itemList[itemKey].value;
+    const soldValue = itemObj.customValue ? itemObj.customValue(itemsInInv[0].attributes) : itemObj.value;
 
     await removeItemsById(userId, guildId, [itemsInInv[0]._id!]);
+    await addLati(i.client.user!.id, guildId, Math.floor(soldValue * PIRKT_PARDOT_NODOKLIS));
     const user = await addLati(userId, guildId, soldValue);
     if (!user) return i.reply(errorEmbed);
 
@@ -122,23 +124,24 @@ export default async function pardotRunSpecial(
       } else if (customId === 'pardot_special_confirm') {
         if (componentInteraction.componentType !== ComponentType.Button) return;
         const selectedItems = itemsInInv.filter(item => selectedIds.includes(item._id!));
-        const soldValue = selectedItems.reduce((prev, { name }) => {
-          return prev + itemList[name]!.value;
+        const soldValue = selectedItems.reduce((p, { attributes }) => {
+          return p + (itemObj.customValue ? itemObj.customValue(attributes) : itemObj.value);
         }, 0);
 
         if (!selectedItems.length) return;
 
         const user = await findUser(userId, guildId);
-        if (!user) return;
+        if (!user) return { error: true };
 
         const userItemIds = user.specialItems.map(item => item._id!);
         for (const id of selectedIds) {
           if (!userItemIds.includes(id)) {
             return {
+              end: true,
               after: async () => {
                 await componentInteraction.reply(
                   ephemeralReply(
-                    'Tavs inventāra saturs ir mainījies, kāda no izvēlētām mantām nav tavā inventārā'
+                    '**Kļūda:** tavs inventāra saturs ir mainījies, kāda no izvēlētām mantām vairs nav tavā inventārā'
                   )
                 );
               },
@@ -147,8 +150,9 @@ export default async function pardotRunSpecial(
         }
 
         await removeItemsById(userId, guildId, selectedIds);
+        await addLati(i.client.user!.id, guildId, Math.floor(soldValue * PIRKT_PARDOT_NODOKLIS));
         const userAfter = await addLati(userId, guildId, soldValue);
-        if (!userAfter) return;
+        if (!userAfter) return { error: true };
 
         return {
           edit: {

@@ -6,9 +6,11 @@ import { CommandInteraction } from 'discord.js';
 import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
 import itemList from '../../../items/itemList';
 import pardotRunSpecial from './pardotRunSpecial';
+import { emptyInvEmbed } from './pardot';
 
 interface ValidateOneReturn {
   key: string;
+  amount: number;
   item: Item;
 }
 
@@ -19,6 +21,11 @@ export const validateOne = async (
   amountToSell: number,
   embedColor: number
 ): Promise<ValidateOneReturn | undefined> => {
+  if (itemToSellKey === 'no-items-inv') {
+    await i.reply(emptyInvEmbed());
+    return;
+  }
+
   const itemToSell = itemList[itemToSellKey];
   if (!itemToSell) {
     await i.reply(wrongKeyEmbed);
@@ -28,7 +35,7 @@ export const validateOne = async (
   const { items, specialItems } = user;
 
   if (itemToSell.attributes) {
-    const specialItemsInv = specialItems.filter((item) => item.name === itemToSellKey);
+    const specialItemsInv = specialItems.filter(item => item.name === itemToSellKey);
     if (!specialItemsInv.length) {
       await i.reply(ephemeralReply(`Tavā inventārā nav **${itemString(itemToSell)}**`));
       return;
@@ -44,18 +51,9 @@ export const validateOne = async (
     return;
   }
 
-  if (itemInInv.amount < amountToSell) {
-    await i.reply(
-      ephemeralReply(
-        `Tu nevari pārdot ${itemString(itemToSell, amountToSell, true)}\n` +
-          `Tev inventārā ir tikai ${itemString(itemToSell, itemInInv.amount)}`
-      )
-    );
-    return;
-  }
-
   return {
     key: itemToSellKey,
+    amount: itemInInv.amount < amountToSell ? itemInInv.amount : amountToSell,
     item: itemToSell,
   };
 };

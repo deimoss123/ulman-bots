@@ -1,18 +1,20 @@
 import Command from '../../../interfaces/Command';
-import { ApplicationCommandOptionType, ChatInputCommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord.js';
 import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
-import embedTemplate from '../../../embeds/embedTemplate';
-import ephemeralReply from '../../../embeds/ephemeralReply';
-import itemList, { ItemCategory } from '../../../items/itemList';
-import itemString from '../../../embeds/helpers/itemString';
-import latiString from '../../../embeds/helpers/latiString';
-import Item from '../../../interfaces/Item';
 import { validateOne } from './pardotValidate';
-import addItems from '../../../economy/addItems';
-import addLati from '../../../economy/addLati';
 import commandColors from '../../../embeds/commandColors';
 import pardotAutocomplete from './pardotAutocomplete';
+import pardotRun, { pardotEmbed } from './pardotRun';
+import addItems from '../../../economy/addItems';
+import addLati from '../../../economy/addLati';
+import ephemeralReply from '../../../embeds/ephemeralReply';
+
+export const PIRKT_PARDOT_NODOKLIS = 0.05;
+
+export function emptyInvEmbed() {
+  return ephemeralReply('Tev nav ko pārdot, tev ir tukšs inventārs');
+}
 
 const pardot: Command = {
   title: 'Pārdot',
@@ -55,7 +57,7 @@ const pardot: Command = {
     ],
   },
   autocomplete: pardotAutocomplete,
-  async run(i: ChatInputCommandInteraction) {
+  async run(i) {
     const userId = i.user.id;
     const guildId = i.guildId!;
 
@@ -64,99 +66,27 @@ const pardot: Command = {
 
     const subCommandName = i.options.getSubcommand();
 
-    let itemsToSell: {
-      name: string;
-      amount: number;
-      item: Item;
-    }[] = [];
-
-    const { items } = user;
-
-    if (!items.length) {
-      return i.reply(ephemeralReply('Tev nav ko pārdot, tev ir tukšs inventārs'));
+    if (['neizmantojamās', 'visas'].includes(subCommandName)) {
+      pardotRun(i, subCommandName as 'neizmantojamās' | 'visas');
     }
 
-    // pārdot pēc tipa
-    if (subCommandName === 'pēc_tipa') {
-      const typeToSell = i.options.getString('tips');
-
-      itemsToSell = items.map(({ name, amount }) => ({
-        name,
-        amount,
-        item: itemList[name]!,
-      }));
-
-      switch (typeToSell) {
-        case 'atkritumi': {
-          itemsToSell = itemsToSell.filter(item => item.item.categories.includes(ItemCategory.ATKRITUMI));
-          break;
-        }
-        case 'zivis': {
-          itemsToSell = itemsToSell.filter(item => item.item.categories.includes(ItemCategory.ZIVIS));
-          break;
-        }
-        case 'visu': {
-          // TODO pievienot paziņojumu "VAI TIEŠĀM VĒLIES PĀRDOT VISAS MANTAs"
-          break;
-        }
-      }
-
-      if (!itemsToSell.length) {
-        return i.reply(ephemeralReply(`Tev nav ko pārdot tipā: \`${typeToSell}\``));
-      }
-    }
-
-    // pārdot vienu
-    if (subCommandName === 'vienu') {
+    if (subCommandName === 'pec_nosaukuma') {
       const itemToSellId = i.options.getString('nosaukums')!;
       const amountToSell = i.options.getInteger('daudzums') ?? 1;
 
-      const itemToSell = await validateOne(i, user, itemToSellId, amountToSell, this.color);
-      if (!itemToSell) return;
+      const validateRes = await validateOne(i, user, itemToSellId, amountToSell, this.color);
+      if (!validateRes) return;
 
-      itemsToSell = [
-        {
-          name: itemToSell.key,
-          amount: amountToSell,
-          item: itemToSell.item,
-        },
-      ];
+      const { key, amount, item } = validateRes;
+      const soldItemsValue = item.value * amount;
+      const itemsToSell = [{ name: key, amount, item }];
+
+      await addItems(userId, guildId, { [key]: -amount });
+      await addLati(userId, guildId, soldItemsValue);
+      await addLati(i.client.user!.id, guildId, Math.floor(soldItemsValue * PIRKT_PARDOT_NODOKLIS));
+
+      await i.reply(pardotEmbed(i, user, itemsToSell, soldItemsValue));
     }
-
-    const soldItemsValue = itemsToSell.reduce((previous, { item, amount }) => previous + item.value * amount, 0);
-
-    const sellObj: Record<string, number> = {};
-    itemsToSell.forEach(({ name, amount }) => {
-      sellObj[name] = -amount;
-    });
-
-    if (!(await addItems(userId, guildId, sellObj)) || !(await addLati(userId, guildId, soldItemsValue))) {
-      return i.reply(errorEmbed);
-    }
-
-    await i.reply(
-      embedTemplate({
-        i,
-        color: this.color,
-        fields: [
-          {
-            name: 'Tu pārdevi',
-            value: itemsToSell.map(item => `> ${itemString(item.item, item.amount, true)}`).join('\n'),
-            inline: false,
-          },
-          {
-            name: 'Tu ieguvi',
-            value: latiString(soldItemsValue, true),
-            inline: true,
-          },
-          {
-            name: 'Tev tagad ir',
-            value: latiString(soldItemsValue + user.lati),
-            inline: true,
-          },
-        ],
-      })
-    );
   },
 };
 
