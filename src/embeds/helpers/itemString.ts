@@ -28,7 +28,7 @@ export default function itemString(
   let name = '';
   if (customName) {
     if (item.nameNomVsk === 'dīvainais burkāns') {
-      name = `"${customName}" burkāns`;
+      name = akuzativs ? `"${customName}" burkānu` : `"${customName}" burkāns`;
     }
   }
 
