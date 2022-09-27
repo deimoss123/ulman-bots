@@ -149,7 +149,7 @@ function makeEmbed(
             ''
           ) +
           '\u2800'
-        : 'Tukšs inventārs :(',
+        : 'Tev nav nevienas mantas (diezgan bēdīgi)\nIzmanto komandu `/ulmaņbots`',
     color: commandColors.inventars,
     fields: fieldsToShow,
   }).embeds;
