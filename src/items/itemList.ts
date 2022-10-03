@@ -210,7 +210,7 @@ const itemList: Record<ItemKey, Item> = {
       id: '1011300411191341139',
       name: 'kafijas_aparats',
     },
-    categories: [ItemCategory.TIRGUS],
+    categories: [ItemCategory.TIRGUS, ItemCategory.VEIKALS], // TODO: noņemt no veikala
     value: 100,
     attributes: {
       lastUsed: 0,

@@ -25,13 +25,18 @@ function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: Item, selec
         .setCustomId('izmantot_special_select')
         .setPlaceholder('Izvēlies kuru izmantot')
         .setOptions(
-          itemsInInv.map(item => ({
-            label: itemStringCustom(itemObj, item.attributes?.customName),
-            description: displayAttributes(item, true),
-            value: item._id!,
-            emoji: itemObj.emoji || '❓',
-            default: selectedId === item._id,
-          }))
+          itemsInInv
+            .slice(0, 25)
+            .sort((a, b) =>
+              itemObj.customValue ? itemObj.customValue(b.attributes) - itemObj.customValue(a.attributes) : 0
+            )
+            .map(item => ({
+              label: itemStringCustom(itemObj, item.attributes?.customName),
+              description: displayAttributes(item, true),
+              value: item._id!,
+              emoji: itemObj.emoji || '❓',
+              default: selectedId === item._id,
+            }))
         )
     ),
     new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -89,7 +94,7 @@ export default async function izmantotRunSpecial(
       i,
       color: embedColor,
       description:
-        `Tavā inventārā ir ${itemString(itemObj, itemsInInv.length)}\n` +
+        `Tavā inventārā ir **${itemString(itemObj, itemsInInv.length)}**\n` +
         `No saraksta izvēlies kuru tu gribi izmantot`,
       components: makeComponents(itemsInInv, itemObj),
     })
@@ -132,9 +137,7 @@ export default async function izmantotRunSpecial(
           end: true,
           after: async () => {
             if (useRes.custom) return useRes.custom(componentInteraction, embedColor);
-            await componentInteraction.reply(
-              makeEmbed(i, itemObj, selectedItem, useRes, embedColor)
-            );
+            await componentInteraction.reply(makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
           },
         };
       }

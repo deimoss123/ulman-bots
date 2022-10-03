@@ -30,14 +30,20 @@ function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: Item, selec
         .setMinValues(1)
         .setMaxValues(itemsInInv.length)
         .setOptions(
-          itemsInInv.map(item => ({
-            label: itemStringCustom(itemObj, item.attributes?.customName),
-            // description: item._id!,
-            description: displayAttributes(item, true),
-            value: item._id!,
-            emoji: itemObj.emoji || '❓',
-            default: !!selectedIds.length && selectedIds!.includes(item._id!),
-          }))
+          itemsInInv
+            .slice(0, 25)
+            .sort((a, b) =>
+              itemObj.customValue ? itemObj.customValue(b.attributes) - itemObj.customValue(a.attributes) : 0
+            )
+            .map(item => ({
+              label: itemStringCustom(itemObj, item.attributes?.customName),
+              description:
+                `${latiString(itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value)} | ` +
+                displayAttributes(item, true),
+              value: item._id!,
+              emoji: itemObj.emoji || '❓',
+              default: !!selectedIds.length && selectedIds!.includes(item._id!),
+            }))
         )
     ),
     new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -101,7 +107,7 @@ export default async function pardotRunSpecial(
       i,
       color: embedColor,
       description:
-        `Tavā inventārā ir ${itemString(itemObj, itemsInInv.length)}\n` +
+        `Tavā inventārā ir **${itemString(itemObj, itemsInInv.length)}**\n` +
         `No saraksta izvēlies vienu vai vairākas mantas kuras pārdot`,
       components: makeComponents(itemsInInv, itemObj, selectedIds),
     })

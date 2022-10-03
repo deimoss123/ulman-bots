@@ -19,6 +19,8 @@ import itemList from '../../../items/itemList';
 import buttonHandler from '../../../embeds/buttonHandler';
 import izmantotRun from '../izmantot/izmantotRun';
 import getItemPrice from '../../../items/helpers/getItemPrice';
+import { PIRKT_PARDOT_NODOKLIS } from '../pardot/pardot';
+import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems';
 
 export default async function pirktRun(
   i: CommandInteraction | ButtonInteraction,
@@ -52,15 +54,20 @@ export default async function pirktRun(
   if (freeSlots < amountToBuy) {
     return i.reply(
       ephemeralReply(
-        `Tev nepietiek vietas inventārā lai nopirktu ${itemString(
-          itemToBuy,
-          amountToBuy,
-          true
-        )}\n` + `Tev ir **${freeSlots}** brīvas vietas`
+        `Tev nepietiek vietas inventārā lai nopirktu ${itemString(itemToBuy, amountToBuy, true)}\n` +
+          `Tev ir **${freeSlots}** brīvas vietas`
       )
     );
   }
 
+  if (itemToBuy.attributes) {
+    const checkRes = checkUserSpecialItems(user, itemToBuyKey, amountToBuy);
+    if (!checkRes.valid) {
+      return i.reply(ephemeralReply(`Neizdevās nopirkt, jo ${checkRes.reason}`));
+    }
+  }
+
+  await addLati(i.client.user!.id, guildId, Math.floor(totalCost * PIRKT_PARDOT_NODOKLIS));
   await addLati(userId, guildId, -totalCost);
   const userAfter = await addItems(userId, guildId, { [itemToBuyKey]: amountToBuy });
 
@@ -72,8 +79,7 @@ export default async function pirktRun(
     return i.reply(
       embedTemplate({
         i,
-        description:
-          `Tu nopirki **${itemString(itemToBuy, amountToBuy, true)}** ` + `par ${totalCost} latiem`,
+        description: `Tu nopirki **${itemString(itemToBuy, amountToBuy, true)}** ` + `par ${totalCost} latiem`,
         color: embedColor,
         fields: [
           {
@@ -103,8 +109,7 @@ export default async function pirktRun(
 
   const replyMessage = embedTemplate({
     i,
-    description:
-      `Tu nopirki **${itemString(itemToBuy, amountToBuy, true)}** ` + `par ${totalCost} latiem`,
+    description: `Tu nopirki **${itemString(itemToBuy, amountToBuy, true)}** ` + `par ${totalCost} latiem`,
     color: embedColor,
     fields: [
       {

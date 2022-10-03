@@ -20,6 +20,7 @@ import itemString, { itemStringCustom } from '../../../embeds/helpers/itemString
 import latiString from '../../../embeds/helpers/latiString';
 import Item from '../../../interfaces/Item';
 import UserProfile, { SpecialItemInProfile } from '../../../interfaces/UserProfile';
+import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import itemList, { ItemKey } from '../../../items/itemList';
 import { cantPayTaxEmbed } from './iedot';
@@ -79,7 +80,7 @@ function makeEmbed(
     i,
     color: commandColors.iedot,
     description:
-      `Tavā inventārā ir ${itemString(itemObj, itemsInInv.length)}\n` +
+      `Tavā inventārā ir **${itemString(itemObj, itemsInInv.length)}**\n` +
       `No saraksta izvēlies vienu vai vairākas mantas ko iedot <@${targetUserId}>\n\n` +
       `**Nodoklis:** ` +
       (hasJuridisks
@@ -106,15 +107,20 @@ function makeComponents(
         .setMinValues(1)
         .setMaxValues(itemsInInv.length)
         .setOptions(
-          itemsInInv.map(item => ({
-            label: itemStringCustom(itemObj, item.attributes?.customName),
-            description:
-              `${latiString(itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value)} | ` +
-              displayAttributes(item, true),
-            value: item._id!,
-            emoji: itemObj.emoji || '❓',
-            default: !!selectedIds.length && selectedIds!.includes(item._id!),
-          }))
+          itemsInInv
+            .slice(0, 25)
+            .sort((a, b) =>
+              itemObj.customValue ? itemObj.customValue(b.attributes) - itemObj.customValue(a.attributes) : 0
+            )
+            .map(item => ({
+              label: itemStringCustom(itemObj, item.attributes?.customName),
+              description:
+                `${latiString(itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value)} | ` +
+                displayAttributes(item, true),
+              value: item._id!,
+              emoji: itemObj.emoji || '❓',
+              default: !!selectedIds.length && selectedIds!.includes(item._id!),
+            }))
         )
     ),
     new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -168,6 +174,11 @@ export default async function iedotRunSpecial(
     const hasInvSpace = checkTargetInv(targetUser, 1);
     if (!hasInvSpace) {
       return i.reply(noInvSpaceEmbed(targetUser, itemObj, 1));
+    }
+
+    const checkRes = checkUserSpecialItems(targetUser, itemKey);
+    if (!checkRes.valid) {
+      return i.reply(ephemeralReply(`Neizdevās iedot, jo ${checkRes.reason}`));
     }
 
     if (hasJuridisks) totalTax = 0;
@@ -230,9 +241,18 @@ export default async function iedotRunSpecial(
         if (componentInteraction.componentType !== ComponentType.Button) return;
         if (!selectedItems.length) return;
 
-        const hasInvSpace = await checkTargetInv(targetUser, selectedItems.length);
+        const targetUserNew = await findUser(targetUser.userId, guildId);
+        if (!targetUserNew) return { error: true };
+
+        const hasInvSpace = checkTargetInv(targetUserNew, selectedItems.length);
         if (!hasInvSpace) {
-          await componentInteraction.reply(noInvSpaceEmbed(targetUser, itemObj, selectedItems.length));
+          componentInteraction.reply(noInvSpaceEmbed(targetUserNew, itemObj, selectedItems.length));
+          return { end: true };
+        }
+
+        const checkRes = checkUserSpecialItems(targetUserNew, itemKey, selectedItems.length);
+        if (!checkRes.valid) {
+          componentInteraction.reply(ephemeralReply(`Neizdevās iedot, jo ${checkRes.reason}`));
           return { end: true };
         }
 

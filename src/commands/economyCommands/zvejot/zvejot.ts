@@ -16,6 +16,7 @@ import latiString from '../../../embeds/helpers/latiString';
 import xpAddedEmbed from '../../../embeds/helpers/xpAddedEmbed';
 import smallEmbed from '../../../embeds/smallEmbed';
 import Command from '../../../interfaces/Command';
+import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import itemList, { ItemKey } from '../../../items/itemList';
 import maksekeresData from './makskeresData';
@@ -100,7 +101,7 @@ export const zvejot: Command = {
             const rod = user.specialItems.find(item => item._id === selectedFishingRodId);
 
             if (!rod) {
-              await interaction.reply(ephemeralReply('Hmmm, šī maksķere ir maģiski pazudusi no tava inventāra'));
+              interaction.reply(ephemeralReply('Hmmm, šī maksķere ir maģiski pazudusi no tava inventāra'));
               return { end: true };
             }
 
@@ -150,6 +151,17 @@ export const zvejot: Command = {
               };
             }
 
+            const specialItemsToAdd = Object.entries(fishesToAdd).filter(([name]) => itemList[name].attributes);
+            if (specialItemsToAdd.length) {
+              for (const [name, amount] of specialItemsToAdd) {
+                const checkRes = checkUserSpecialItems(user, name, amount);
+                if (!checkRes.valid) {
+                  interaction.reply(ephemeralReply(`Tu nevari savāk zveju, jo ${checkRes.reason}`));
+                  return { end: true };
+                }
+              }
+            }
+
             await setFishing(userId, guildId, { caughtFishes: null });
             await addItems(userId, guildId, fishesToAdd);
             await syncFishing(userId, guildId, true);
@@ -189,7 +201,13 @@ export const zvejot: Command = {
             if (!selectedRod) return { error: true };
 
             if (!countFreeInvSlots(user)) {
-              await interaction.reply(ephemeralReply('Tu nevari noņemt maksķeri, jo tev inventārā nav vietas'));
+              interaction.reply(ephemeralReply('Tu nevari noņemt maksķeri, jo tev inventārā nav vietas'));
+              return { end: true };
+            }
+
+            const checkRes = checkUserSpecialItems(user, selectedRod);
+            if (!checkRes.valid) {
+              interaction.reply(ephemeralReply(`Tu nevari noņemt makšķeri, jo ${checkRes.reason}`));
               return { end: true };
             }
 

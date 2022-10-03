@@ -58,13 +58,16 @@ export default function zvejotComponents(
           .setCustomId('select_fishing_rod')
           .setPlaceholder('Izvēlies makšķeri')
           .addOptions(
-            rodsInInv.map(item => ({
-              label: capitalizeFirst(itemList[item.name].nameNomVsk),
-              value: `${item.name} ${item._id}`,
-              emoji: itemList[item.name].emoji ?? '❓',
-              description: displayAttributes(item, true),
-              default: selectedFishingRodId === item._id,
-            }))
+            rodsInInv
+              .slice(0, 25)
+              .sort((a, b) => itemList[b.name].customValue!(b.attributes) - itemList[a.name].customValue!(a.attributes))
+              .map(item => ({
+                label: capitalizeFirst(itemList[item.name].nameNomVsk),
+                value: `${item.name} ${item._id}`,
+                emoji: itemList[item.name].emoji ?? '❓',
+                description: displayAttributes(item, true),
+                default: selectedFishingRodId === item._id,
+              }))
           )
       ),
       new ActionRowBuilder<ButtonBuilder>().addComponents(...btnRow),
