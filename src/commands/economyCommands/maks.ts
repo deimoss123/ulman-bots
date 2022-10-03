@@ -36,7 +36,7 @@ const maks: Command = {
       embedTemplate({
         i,
         title: 'Maks',
-        description: `${targetText} ir ${latiString(user.lati)}`,
+        description: `${targetText} ir ${latiString(user.lati, false, true)}`,
         color: this.color,
       })
     );

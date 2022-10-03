@@ -1,9 +1,11 @@
-export default function latiString(lati: number, akuzativs = false): string {
+export default function latiString(lati: number, akuzativs = false, bold = false): string {
+  const latiStr = bold ? `**${lati}**` : lati;
+
   // vienskaitlis
   if (lati % 10 === 1 && lati % 100 !== 11) {
-    return akuzativs ? `${lati} latu` : `${lati} lats`;
+    return akuzativs ? `${latiStr} latu` : `${latiStr} lats`;
   }
 
   // daudzskaitlis
-  return akuzativs ? `${lati} latus` : `${lati} lati`;
+  return akuzativs ? `${latiStr} latus` : `${latiStr} lati`;
 }
