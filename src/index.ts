@@ -24,12 +24,9 @@ client.once('ready', () => {
   mongo().then(() => console.log('Connected to MongoDB'));
 });
 
-client.on('interactionCreate', async i => {
-  if (i.isChatInputCommand()) {
-    await commandHandler(i);
-  } else if (i.isAutocomplete()) {
-    await autocompleteHandler(i);
-  }
+client.on('interactionCreate', i => {
+  if (i.isChatInputCommand()) commandHandler(i);
+  else if (i.isAutocomplete()) autocompleteHandler(i);
 });
 
 client.login(process.env.BOT_TOKEN).then(() => {
