@@ -34,7 +34,7 @@ export function calcRepairCost(itemKey: ItemKey, usesLeft: number) {
   return Math.ceil(((maxDurability - usesLeft) / maxDurability) * price);
 }
 
-export const ZVEJOT_MIN_LEVEL = 3;
+export const ZVEJOT_MIN_LEVEL = 0;
 
 export const zvejot: Command = {
   title: 'Zvejot',

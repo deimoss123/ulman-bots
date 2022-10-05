@@ -44,6 +44,9 @@ interface Item {
   // speciāla vērtība, piem. makšķeres izturība ietekmē vērtību
   customValue?: (attributes: ItemAttributes) => number;
 
+  // cena priekš tirgus
+  tirgusPrice?: { items: Record<ItemKey, number>; lati?: number };
+
   // mantu atribūtas, piem., cik reizes lietots, cik izturība, utt.
   // norāda noklusējuma daudzumu
   attributes?: ItemAttributes;

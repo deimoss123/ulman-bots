@@ -13,6 +13,7 @@ const maksekeresData: Record<
   ItemKey,
   {
     maxDurability: number;
+    repairable: boolean;
     timeMinHours: number;
     timeMaxHours: number;
     fishChances: FishChance;
@@ -20,23 +21,88 @@ const maksekeresData: Record<
 > = {
   koka_makskere: {
     maxDurability: 15,
+    repairable: true,
     timeMinHours: 3.5,
     timeMaxHours: 4.0,
     fishChances: {
       lidaka: { chance: '*', cost: 1 },
       asaris: { chance: '*', cost: 1 },
       lasis: { chance: '*', cost: 1 },
-      latloto: { chance: 0.15, cost: 3 },
+      metalluznis: { chance: '*', cost: 1 },
+      brivgriez25: { chance: '*', cost: 1 },
+
+      brivgriez50: { chance: 0.1, cost: 2 },
+      latloto: { chance: 0.1, cost: 2 },
+      divaina_zivs: { chance: 0.1, cost: 2 },
+
+      juridiska_zivs: { chance: 0.05, cost: 3 },
+      loto_zivs: { chance: 0.03, cost: 3 },
+      pulkstens_zivs: { chance: 0.01, cost: 3 },
     },
   },
   divaina_makskere: {
-    maxDurability: 80,
+    maxDurability: 60,
+    repairable: true,
     timeMinHours: 2.5,
     timeMaxHours: 3.0,
     fishChances: {
       lidaka: { chance: '*', cost: 1 },
       asaris: { chance: '*', cost: 1 },
       lasis: { chance: '*', cost: 1 },
+      metalluznis: { chance: '*', cost: 1 },
+      brivgriez25: { chance: '*', cost: 1 },
+
+      brivgriez50: { chance: 0.1, cost: 2 },
+      latloto: { chance: 0.1, cost: 2 },
+      divaina_zivs: { chance: 0.1, cost: 2 },
+
+      juridiska_zivs: { chance: 0.1, cost: 3 },
+      loto_zivs: { chance: 0.05, cost: 3 },
+      pulkstens_zivs: { chance: 0.02, cost: 3 },
+      brivgriez100: { chance: 0.01, cost: 3 },
+    },
+  },
+  loto_makskere: {
+    maxDurability: 20,
+    repairable: true,
+    timeMinHours: 3.5,
+    timeMaxHours: 4,
+    fishChances: {
+      brivgriez25: { chance: '*', cost: 1 },
+      latloto: { chance: '*', cost: 1 },
+
+      brivgriez50: { chance: 0.15, cost: 2 },
+      dizloto: { chance: 0.15, cost: 2 },
+
+      brivgriez100: { chance: 0.1, cost: 3 },
+      loto_zivs: { chance: 0.1, cost: 3 },
+
+      petnieks: { chance: 0.005, cost: 5 },
+    },
+  },
+  luznu_makskere: {
+    maxDurability: 7,
+    repairable: false,
+    timeMinHours: 2.5,
+    timeMaxHours: 3,
+    fishChances: {
+      velo_ramis: { chance: '*', cost: 1 },
+      velo_ritenis: { chance: '*', cost: 1 },
+      velo_kede: { chance: '*', cost: 1 },
+      velo_sture: { chance: '*', cost: 1 },
+      metalluznis: { chance: 0.1, cost: 1 },
+    },
+  },
+  dizmakskere: {
+    maxDurability: 1,
+    repairable: false,
+    timeMinHours: 24,
+    timeMaxHours: 24,
+    fishChances: {
+      // TODO: kaķis, taras aparāts,
+      divaina_mugursoma: { chance: '*', cost: 1 },
+      kafijas_aparats: { chance: '*', cost: 1 },
+      petnieks: { chance: '*', cost: 1 },
     },
   },
 };
