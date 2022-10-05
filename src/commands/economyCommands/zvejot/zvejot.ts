@@ -229,7 +229,7 @@ export const zvejot: Command = {
                 components: zvejotComponents(userAfter, selectedFishingRodId),
               },
               after: async () => {
-                await interaction.reply({
+                interaction.reply({
                   embeds: [
                     new EmbedBuilder()
                       .setDescription('Tev inventāram tikai pievienota:')
@@ -248,6 +248,13 @@ export const zvejot: Command = {
             const user = await syncFishing(userId, guildId);
             if (!user || !user.fishing.selectedRod) return { error: true };
 
+            const selectedRod = user.fishing.selectedRod;
+
+            if (!maksekeresData[selectedRod].repairable) {
+              interaction.reply(ephemeralReply(`${itemString(itemList[selectedRod])} nav salabojama`));
+              return { doNothing: true };
+            }
+
             const { fishing, lati } = user;
 
             const repairCost = calcRepairCost(fishing.selectedRod!, fishing.usesLeft);
@@ -260,10 +267,10 @@ export const zvejot: Command = {
                   components: zvejotComponents(user),
                 },
                 after: async () => {
-                  await interaction.reply(
+                  interaction.reply(
                     ephemeralReply(
-                      `Tev nepietiek nauda lai salabotu makšķeri - ${latiString(repairCost)}\n` +
-                        `Tev ir ${latiString(lati)}`
+                      `Tev nepietiek nauda lai salabotu makšķeri - ${latiString(repairCost, false, true)}\n` +
+                        `Tev ir ${latiString(lati, false, true)}`
                     )
                   );
                 },
@@ -284,7 +291,7 @@ export const zvejot: Command = {
                 components: zvejotComponents(userAfter),
               },
               after: async () => {
-                await interaction.reply(
+                interaction.reply(
                   smallEmbed(
                     `Tu salaboji ${bold(itemString(itemList[fishing.selectedRod!], null, true))} - ` +
                       latiString(repairCost),

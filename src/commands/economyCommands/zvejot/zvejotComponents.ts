@@ -90,12 +90,19 @@ export default function zvejotComponents(
     );
   }
 
-  if (usesLeft < maksekeresData[selectedRod].maxDurability) {
+  const { maxDurability, repairable } = maksekeresData[selectedRod];
+
+  if (usesLeft < maxDurability) {
     buttons.unshift(
       new ButtonBuilder()
         .setCustomId('fix_fishing_rod')
-        .setLabel(`Salabot makšķeri (${latiString(calcRepairCost(selectedRod, usesLeft))})`)
-        .setStyle(ButtonStyle.Primary)
+        .setLabel(
+          repairable
+            ? `Salabot makšķeri (${latiString(calcRepairCost(selectedRod, usesLeft))})`
+            : 'Šī makšķere nav salabojama'
+        )
+        .setStyle(repairable ? ButtonStyle.Primary : ButtonStyle.Danger)
+        .setDisabled(!repairable)
         .setEmoji('🔧')
     );
   }
