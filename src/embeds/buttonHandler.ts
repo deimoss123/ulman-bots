@@ -27,7 +27,7 @@ export default async function buttonHandler(
   interactionName: string,
   interactionMsg: Message,
   callback: (buttonInteraction: ButtonInteraction | SelectMenuInteraction) => Promise<CallbackReturn | void>,
-  time = 15000,
+  time = 30000,
   isActive = false
 ): Promise<void> {
   const collector = interactionMsg.createMessageComponentCollector({ time });
