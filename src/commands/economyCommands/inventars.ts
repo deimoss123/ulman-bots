@@ -19,7 +19,7 @@ import countItems from '../../items/helpers/countItems';
 import commandColors from '../../embeds/commandColors';
 import itemString from '../../embeds/helpers/itemString';
 import ephemeralReply from '../../embeds/ephemeralReply';
-import UserProfile, { ItemInProfile, SpecialItemInProfile } from '../../interfaces/UserProfile';
+import UserProfile, { ItemInProfile } from '../../interfaces/UserProfile';
 import Item from '../../interfaces/Item';
 import { displayAttributes } from '../../embeds/helpers/displayAttributes';
 import buttonHandler from '../../embeds/buttonHandler';
