@@ -1,5 +1,5 @@
 import Command from '../../../interfaces/Command';
-import { ButtonStyle, CommandInteraction, ComponentType, Message, time } from 'discord.js';
+import { ButtonStyle, CommandInteraction, ComponentType, Message } from 'discord.js';
 import itemList, { ItemCategory } from '../../../items/itemList';
 import embedTemplate from '../../../embeds/embedTemplate';
 import latiString from '../../../embeds/helpers/latiString';
