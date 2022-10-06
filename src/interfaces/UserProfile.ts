@@ -52,6 +52,31 @@ export interface UserFishing {
   futureFishList: FishObj[] | null;
   caughtFishes: Record<ItemKey, number> | null;
 }
+
+export interface UserStats {
+  spentShop: number;
+  soldShop: number;
+  taxPaid: number;
+  paidLati: number;
+  receivedLati: number;
+  stolenLati: number;
+  lostStealingLati: number;
+
+  caughtFishCount: number;
+  timeSpentFishing: number;
+
+  fenkaBiggestWin: number;
+  fenkaBiggestBet: number;
+  fenkaSpent: number;
+  fenkaWon: number;
+  fenkaSpinCount: number;
+
+  rulBiggestWin: number;
+  rulBiggestBet: number;
+  rulSpent: number;
+  rulWon: number;
+  rulSpinCount: number;
+}
 interface UserProfile {
   userId: string;
   guildId: string;

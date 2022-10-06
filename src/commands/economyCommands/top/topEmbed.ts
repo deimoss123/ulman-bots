@@ -8,7 +8,7 @@ import { TOP_LIMIT } from './top';
 export default function topEmbed(
   sortedUsers: UserProfile[],
   i: ChatInputCommandInteraction,
-  { title, displayValue, totalReduceFunc, partOfTotal }: SortDataEntry
+  { title, displayValue, totalReduceFunc, partOfTotal, topDescription }: SortDataEntry
 ) {
   const total = totalReduceFunc && sortedUsers.reduce(totalReduceFunc, 0);
 
@@ -36,6 +36,7 @@ export default function topEmbed(
 
   return embedTemplate({
     i,
+    description: total ? topDescription!(total) : undefined,
     color: commandColors.top,
     title: `${title} tops`,
     fields,

@@ -7,7 +7,7 @@ import topEmbed from './topEmbed';
 import findUser from '../../../economy/findUser';
 import sortData from './sortData';
 
-export const TOP_LIMIT = 3;
+export const TOP_LIMIT = 10;
 
 const top: Command = {
   title: 'Top',
@@ -39,9 +39,9 @@ const top: Command = {
 
     const usersToFetch = sortedUsers.slice(0, TOP_LIMIT).map(user => user.userId);
     if (!usersToFetch.includes(userId)) usersToFetch.push(userId);
-    await i.guild?.members.fetch({ user: usersToFetch });
 
-    await defer;
+    await Promise.all([i.guild!.members.fetch({ user: usersToFetch }), defer]);
+
     i.editReply(topEmbed(sortedUsers, i, sortDataObj));
   },
 };
