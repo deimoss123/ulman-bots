@@ -1,5 +1,5 @@
 import Command from '../../../interfaces/Command';
-import { ButtonStyle, CommandInteraction, ComponentType, Message } from 'discord.js';
+import { ButtonStyle, CommandInteraction, ComponentType, Message, time } from 'discord.js';
 import itemList, { ItemCategory } from '../../../items/itemList';
 import embedTemplate from '../../../embeds/embedTemplate';
 import latiString from '../../../embeds/helpers/latiString';
@@ -12,6 +12,7 @@ import pirktRun from '../pirkt/pirktRun';
 import errorEmbed from '../../../embeds/errorEmbed';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import getItemPrice from '../../../items/helpers/getItemPrice';
+import millisToReadableTime from '../../../embeds/helpers/millisToReadableTime';
 
 export const veikals: Command = {
   title: 'Veikals',
@@ -51,13 +52,17 @@ export const veikals: Command = {
       };
     });
 
+    const midnight = new Date().setHours(24, 0, 0, 0);
+    const timeUntilMidnight = midnight - Date.now();
+
     const interactionReply = await i.reply(
       embedTemplate({
         i,
         title: 'Veikals',
         description:
           'Nopirkt preci: `/pirkt <nosaukums> <daudzums>\n`' +
-          'Atlaides mainās katru dienu plkst. `00:00`',
+          `Atlaides mainās katru dienu plkst. <t:${Math.floor(midnight / 1000)}:t> ` +
+          `(pēc ${millisToReadableTime(timeUntilMidnight)})`,
         color: this.color,
         fields,
         components: veikalsComponents(shopItems, user),
@@ -101,10 +106,7 @@ export const veikals: Command = {
             const userBeforeBuy = await findUser(userId, guildId);
             if (userBeforeBuy) {
               const totalCost = getItemPrice(chosenItem).price * chosenAmount;
-              if (
-                userBeforeBuy.lati < totalCost ||
-                countFreeInvSlots(userBeforeBuy) < chosenAmount
-              ) {
+              if (userBeforeBuy.lati < totalCost || countFreeInvSlots(userBeforeBuy) < chosenAmount) {
                 buttonStyle = ButtonStyle.Danger;
               }
             }
@@ -112,16 +114,9 @@ export const veikals: Command = {
             return {
               end: true,
               edit: {
-                components: veikalsComponents(
-                  shopItems,
-                  user,
-                  chosenItem,
-                  chosenAmount,
-                  buttonStyle
-                ),
+                components: veikalsComponents(shopItems, user, chosenItem, chosenAmount, buttonStyle),
               },
-              after: async () =>
-                pirktRun(componentInteraction, chosenItem, chosenAmount, commandColors.pirkt),
+              after: async () => pirktRun(componentInteraction, chosenItem, chosenAmount, commandColors.pirkt),
             };
           }
         }
