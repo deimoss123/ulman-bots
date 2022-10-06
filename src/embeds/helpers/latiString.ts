@@ -1,5 +1,5 @@
 export default function latiString(lati: number, akuzativs = false, bold = false): string {
-  const latiStr = bold ? `**${lati}**` : lati;
+  const latiStr = bold ? `**${Math.floor(lati)}**` : Math.floor(lati);
 
   // vienskaitlis
   if (lati % 10 === 1 && lati % 100 !== 11) {
