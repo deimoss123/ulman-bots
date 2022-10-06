@@ -110,8 +110,11 @@ export default async function pardotRun(
     const itemsToSellObj: Record<ItemKey, number> = {};
     for (const { name, amount } of itemsToSell) itemsToSellObj[name] = -amount;
 
-    await addLati(userId, guildId, soldItemsValue);
-    await addLati(i.client.user!.id, guildId, Math.floor(soldItemsValue * PIRKT_PARDOT_NODOKLIS));
+    await Promise.all([
+      addLati(userId, guildId, soldItemsValue),
+      addLati(i.client.user!.id, guildId, Math.floor(soldItemsValue * PIRKT_PARDOT_NODOKLIS)),
+    ]);
+
     await addItems(userId, guildId, itemsToSellObj);
 
     return i.reply(pardotEmbed(i, user, itemsToSell, soldItemsValue));
@@ -163,8 +166,10 @@ export default async function pardotRun(
           return p + (item.customValue ? item.customValue(attributes!) : item.value * (amount || 1));
         }, 0);
 
-        await addLati(i.client.user!.id, guildId, Math.floor(soldItemsValue * PIRKT_PARDOT_NODOKLIS));
-        await setUser(userId, guildId, { lati: lati + soldItemsValue, items: [], specialItems: [] });
+        await Promise.all([
+          addLati(i.client.user!.id, guildId, Math.floor(soldItemsValue * PIRKT_PARDOT_NODOKLIS)),
+          setUser(userId, guildId, { lati: lati + soldItemsValue, items: [], specialItems: [] }),
+        ]);
 
         return {
           end: true,

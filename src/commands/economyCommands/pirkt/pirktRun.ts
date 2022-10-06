@@ -67,9 +67,11 @@ export default async function pirktRun(
     }
   }
 
-  await addLati(i.client.user!.id, guildId, Math.floor(totalCost * PIRKT_PARDOT_NODOKLIS));
-  await addLati(userId, guildId, -totalCost);
-  const userAfter = await addItems(userId, guildId, { [itemToBuyKey]: amountToBuy });
+  const [userAfter] = await Promise.all([
+    addItems(userId, guildId, { [itemToBuyKey]: amountToBuy }),
+    addLati(i.client.user!.id, guildId, Math.floor(totalCost * PIRKT_PARDOT_NODOKLIS)),
+    addLati(userId, guildId, -totalCost),
+  ]);
 
   if (!userAfter) return i.reply(errorEmbed);
 
