@@ -11,6 +11,7 @@ const commandColors = {
   vakances: 0x6b8d7a,
   stradat: 0x5b1919,
   zvejot: 0x4260f5,
+  top: 0xf5e042,
 };
 
 export default commandColors;

@@ -110,7 +110,7 @@ function mapItems({ items, specialItems }: UserProfile) {
   };
 }
 
-export function getInvValue(items: ItemInProfile[], specialItems: SpecialItemInProfile[]) {
+export function getInvValue({ items, specialItems }: UserProfile) {
   return (
     items.reduce((prev, { name, amount }) => {
       return prev + itemList[name]!.value * amount;
@@ -133,7 +133,7 @@ function invEmbed(
 ) {
   const { items, specialItems, itemCap } = targetUser;
 
-  const totalValue = getInvValue(items, specialItems);
+  const totalValue = getInvValue(targetUser);
 
   const fieldsToShow = fields.slice(currentPage * INV_PAGE_SIZE, (currentPage + 1) * INV_PAGE_SIZE);
 
