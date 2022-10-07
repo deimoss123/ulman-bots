@@ -3,6 +3,7 @@ import { ItemAttributes, SpecialItemInProfile } from '../../interfaces/UserProfi
 import itemList, { ItemCategory } from '../../items/itemList';
 import { KAFIJAS_APARATS_COOLDOWN } from '../../items/usableItems/kafijas_aparats';
 import { PETNIEKS_COOLDOWN } from '../../items/usableItems/petnieks';
+import latiString from './latiString';
 import millisToReadableTime from './millisToReadableTime';
 
 const hiddenAttributes = ['customName', 'foundItemKey'];
@@ -32,6 +33,10 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false) {
     },
     makskeres: {
       durability: (n: number) => `Izturība: ${n}/${maksekeresData[item.name].maxDurability}`,
+    },
+    naudas_maiss: {
+      latiCollected: (n: number) =>
+        n ? `Maisā ir ${latiString(n, false, !inline)}` : `${inline ? '' : '**'}Maiss ir tukšs${inline ? '' : '**'}`,
     },
   };
 

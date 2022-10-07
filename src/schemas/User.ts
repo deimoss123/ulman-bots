@@ -61,6 +61,7 @@ const userSchema = new Schema<UserProfile>({
           durability: Number,
           lastUsed: Number, // unix millis
           foundItemKey: String,
+          latiCollected: Number,
         },
       },
     ],

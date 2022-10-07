@@ -12,6 +12,7 @@ import petnieks from './usableItems/petnieks';
 import juridiska_zivs from './usableItems/juridiska_zivs';
 import maksekeresData from '../commands/economyCommands/zvejot/makskeresData';
 import makskere, { makskereCustomValue } from './usableItems/makskere';
+import naudas_maiss from './usableItems/naudas_maiss';
 
 export type ItemKey = string;
 
@@ -122,14 +123,15 @@ const itemList: Record<ItemKey, Item> = {
     },
     categories: [ItemCategory.VEIKALS],
     value: 5000,
-    customValue: ({ customName }) => {
+    // eslint-disable-next-line func-names
+    customValue: function ({ customName }) {
       // humors
       if (customName!.toLowerCase().includes('seks')) return 6969;
 
       // pārbauda kirilicu
       if (/[а-яА-ЯЁё]/.test(customName!)) return 0;
 
-      return 5000;
+      return this.value;
     },
     attributes: {
       timesUsed: 0,
@@ -270,6 +272,26 @@ const itemList: Record<ItemKey, Item> = {
     },
     removedOnUse: false,
     use: makskere,
+  },
+  naudas_maiss: {
+    nameNomVsk: 'naudas maiss',
+    nameNomDsk: 'naudas maisi',
+    nameAkuVsk: 'naudas maisu',
+    nameAkuDsk: 'naudas maisus',
+    isVirsiesuDzimte: true,
+    emoji: null,
+    categories: [ItemCategory.TIRGUS],
+    value: 10,
+    // eslint-disable-next-line func-names
+    customValue: function ({ latiCollected }) {
+      return latiCollected || this.value;
+    },
+    tirgusPrice: { items: { nazis: 1 } },
+    attributes: {
+      latiCollected: 0,
+    },
+    removedOnUse: false,
+    use: naudas_maiss,
   },
 
   // -- atkritumi --

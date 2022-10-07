@@ -1,14 +1,18 @@
 import { ApplicationCommandOptionType } from 'discord.js';
 import addLati from '../../economy/addLati';
 import addTimeCooldown from '../../economy/addTimeCooldown';
+import editItemAttribute from '../../economy/editItemAttribute';
 import findUser from '../../economy/findUser';
 import commandColors from '../../embeds/commandColors';
 import embedTemplate from '../../embeds/embedTemplate';
 import ephemeralReply from '../../embeds/ephemeralReply';
 import errorEmbed from '../../embeds/errorEmbed';
+import { displayAttributes } from '../../embeds/helpers/displayAttributes';
+import itemString from '../../embeds/helpers/itemString';
 import latiString from '../../embeds/helpers/latiString';
 import iconEmojis from '../../embeds/iconEmojis';
 import Command from '../../interfaces/Command';
+import itemList from '../../items/itemList';
 import { statusList } from './profils';
 
 const ZAGT_MIN_LATI = 100;
@@ -16,6 +20,9 @@ const ZAGT_MAX_LATI = 1000;
 
 const BASE_STEAL_CHANCE = 0.35;
 const NAZIS_STEAL_CHANCE = 0.6;
+
+const MIN_BANKA_STEAL = 800;
+const MAX_BANKA_STEAL = 1500;
 
 const zagt: Command = {
   title: 'Zagt',
@@ -48,6 +55,51 @@ const zagt: Command = {
     if (!user || !targetUser) return i.reply(errorEmbed);
 
     const currentTime = Date.now();
+
+    // zagt no valsts bankas
+    if (target.id === i.client.user!.id) {
+      if (targetUser.lati < MIN_BANKA_STEAL) {
+        return i.reply(
+          ephemeralReply(`Lai apzagtu Valsts banku, tai ir jābūt vismaz ${latiString(MIN_BANKA_STEAL, false, true)}`)
+        );
+      }
+
+      const maiss = user.specialItems.find(item => item.name === 'naudas_maiss' && item.attributes.latiCollected === 0);
+      if (!maiss) {
+        return i.reply(
+          ephemeralReply(`Lai apzagtu Valsts banku tev ir nepieciešams tukšs **${itemString(itemList.naudas_maiss)}**`)
+        );
+      }
+
+      const maxSteal = targetUser.lati > MAX_BANKA_STEAL ? MAX_BANKA_STEAL : targetUser.lati;
+      const stolenAmount = Math.floor(Math.random() * (maxSteal - MIN_BANKA_STEAL)) + MIN_BANKA_STEAL;
+
+      const [userAfter, bankaUser] = await Promise.all([
+        editItemAttribute(i.user.id, guildId, maiss._id!, { latiCollected: stolenAmount }),
+        addLati(i.client.user!.id, guildId, -stolenAmount),
+        addTimeCooldown(i.user.id, guildId, 'zagt'),
+      ]);
+      if (!userAfter || !bankaUser) return i.reply(errorEmbed);
+
+      return i.reply(
+        embedTemplate({
+          i,
+          color: this.color,
+          title: `${iconEmojis.checkmark} Zagt no Valsts Bankas`,
+          description:
+            `No Valsts bankas tu nozagi ${latiString(stolenAmount, true, true)}\n\n` +
+            `Tavam inventāram tika pievienots:\n` +
+            `**${itemString(itemList.naudas_maiss)}** (${displayAttributes(userAfter.newItem)})`,
+          fields: [
+            {
+              name: 'Valsts bankai palika',
+              value: latiString(bankaUser.lati),
+              inline: true,
+            },
+          ],
+        })
+      );
+    }
 
     if (targetUser.status.aizsargats > currentTime) {
       return i.reply(ephemeralReply(`Tu nevari zagt kamēr ${target} ir **"${statusList.aizsargats}"** statuss`));

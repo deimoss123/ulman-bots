@@ -13,8 +13,14 @@ export interface ItemAttributes {
   // makšķerēm
   durability?: number;
 
-  lastUsed?: number; // kafijas aparāts, pētnieks (unix millis)
-  foundItemKey?: ItemKey; // priekš pētnieka, brīvgrieziens
+  // kafijas aparāts, pētnieks (unix millis)
+  lastUsed?: number;
+
+  // priekš pētnieka, brīvgrieziens
+  foundItemKey?: ItemKey;
+
+  // priekš naudas maisa
+  latiCollected?: number;
 }
 
 export interface SpecialItemInProfile {
