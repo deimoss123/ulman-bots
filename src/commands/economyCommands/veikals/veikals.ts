@@ -52,8 +52,8 @@ export const veikals: Command = {
       };
     });
 
-    const midnight = new Date().setHours(24, 0, 0, 0);
-    const timeUntilMidnight = midnight - Date.now();
+    const resetTime = new Date().setHours(20, 0, 0, 0);
+    const timeUntilReset = resetTime - Date.now();
 
     const interactionReply = await i.reply(
       embedTemplate({
@@ -61,8 +61,8 @@ export const veikals: Command = {
         title: 'Veikals',
         description:
           'Nopirkt preci: `/pirkt <nosaukums> <daudzums>\n`' +
-          `Atlaides mainās katru dienu plkst. <t:${Math.floor(midnight / 1000)}:t> ` +
-          `(pēc ${millisToReadableTime(timeUntilMidnight)})`,
+          `Atlaides mainās katru dienu plkst. <t:${Math.floor(resetTime / 1000)}:t> ` +
+          `(pēc ${millisToReadableTime(timeUntilReset)})`,
         color: this.color,
         fields,
         components: veikalsComponents(shopItems, user),

@@ -8,6 +8,7 @@ import createDiscounts from './items/discounts/createDiscounts';
 import autocompleteHandler from './commands/autocompleteHandler';
 import chalk from 'chalk';
 import setBotPresence from './utils/setBotPresence';
+import createTirgus from './items/tirgus/createTirgus';
 
 process.env.TZ = 'Europe/Riga';
 dotenv.config();
@@ -19,6 +20,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once('ready', () => {
   createDiscounts();
+  createTirgus();
   setBotPresence(client);
   setupCronJobs(client);
   mongo().then(() => console.log('Connected to MongoDB'));

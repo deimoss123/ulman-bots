@@ -1,12 +1,14 @@
-import { ActivityType, Client, PresenceUpdateStatus } from 'discord.js';
+import { Client } from 'discord.js';
 import cron from 'node-cron';
 import setDiscounts from '../items/discounts/setDiscounts';
+import setTirgus from '../items/tirgus/setTirgus';
 import setBotPresence from './setBotPresence';
 
 export default function setupCronJobs(client: Client) {
-  // katru dienu plkst 00:00
-  cron.schedule('0 0 * * *', () => {
+  // katru dienu plkst 20:00
+  cron.schedule('0 20 * * *', () => {
     setDiscounts();
+    setTirgus();
   });
 
   // katru stundu
