@@ -14,7 +14,7 @@ import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import getItemPrice from '../../../items/helpers/getItemPrice';
 import millisToReadableTime from '../../../embeds/helpers/millisToReadableTime';
 
-export const veikals: Command = {
+const veikals: Command = {
   title: 'Veikals',
   description: 'Atvērt veikalu',
   color: commandColors.veikals,

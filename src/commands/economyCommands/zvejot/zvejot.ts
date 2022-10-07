@@ -36,7 +36,7 @@ export function calcRepairCost(itemKey: ItemKey, usesLeft: number) {
 
 export const ZVEJOT_MIN_LEVEL = 0;
 
-export const zvejot: Command = {
+const zvejot: Command = {
   title: 'Zvejot',
   description: 'Copēt zivis',
   color: commandColors.zvejot,
@@ -325,3 +325,5 @@ export const zvejot: Command = {
     );
   },
 };
+
+export default zvejot;
