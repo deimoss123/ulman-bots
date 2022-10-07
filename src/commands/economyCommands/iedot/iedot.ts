@@ -21,7 +21,7 @@ export function cantPayTaxEmbed(itemToGive: Item, amountToGive: number, totalTax
   return ephemeralReply(
     `Tev nepietiek naudas lai samaksātu iedošanas nodokli (${itemString(itemToGive, amountToGive)})\n` +
       `Nodoklis ko maksāt - **${latiString(totalTax)}** ` +
-      `(${user.giveTax * 100}% no mantu kopējās vērtības)\n` +
+      `(${Math.floor(user.giveTax * 100)}% no mantu kopējās vērtības)\n` +
       `Tev ir ${latiString(user.lati)}`
   );
 }
@@ -75,11 +75,8 @@ const iedot: Command = {
     const itemToGive = itemList[itemToGiveKey];
     if (!itemToGive) return i.reply(wrongKeyEmbed);
 
-    const user = await findUser(userId, guildId);
-    if (!user) return i.reply(errorEmbed);
-
-    const targetUser = await findUser(target.id, guildId);
-    if (!targetUser) return i.reply(errorEmbed);
+    const [user, targetUser] = await Promise.all([findUser(userId, guildId), findUser(target.id, guildId)]);
+    if (!user || !targetUser) return i.reply(errorEmbed);
 
     const { items, specialItems, status } = user;
     const hasJuridisks = status.juridisks > Date.now();
@@ -116,13 +113,14 @@ const iedot: Command = {
       return i.reply(noInvSpaceEmbed(targetUser, itemToGive, amountToGive));
     }
 
-    // murgs, 4 datubāzes saucieni :/
     if (!hasJuridisks) {
-      await addLati(userId, guildId, -totalTax);
-      await addLati(i.client.user!.id, guildId, totalTax);
+      await Promise.all([addLati(userId, guildId, -totalTax), addLati(i.client.user!.id, guildId, totalTax)]);
     }
-    await addItems(userId, guildId, { [itemToGiveKey]: -amountToGive });
-    const targetUserAfter = await addItems(target.id, guildId, { [itemToGiveKey]: amountToGive });
+
+    const [targetUserAfter] = await Promise.all([
+      addItems(target.id, guildId, { [itemToGiveKey]: amountToGive }),
+      addItems(userId, guildId, { [itemToGiveKey]: -amountToGive }),
+    ]);
 
     if (!targetUserAfter) return i.reply(errorEmbed);
 
@@ -133,9 +131,11 @@ const iedot: Command = {
         i,
         content: `<@${target.id}>`,
         description:
-          `Tu iedevi <@${target.id}> ${itemString(itemToGive, amountToGive, true)}\n` +
-          `Nodoklis: **${latiString(totalTax)}** ` +
-          (hasJuridisks ? '(juridiska persona)' : `(${user.giveTax * 100}% no iedoto mantu kopējās vērtības)`),
+          `Nodoklis: ${latiString(totalTax, false, true)} ` +
+          (hasJuridisks
+            ? '(juridiska persona)'
+            : `(${Math.floor(user.giveTax * 100)}% no iedoto mantu kopējās vērtības)`) +
+          `\n<@${target.id}> tu iedevi: ${itemString(itemToGive, amountToGive, true)}`,
         color: this.color,
         fields: [
           {

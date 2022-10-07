@@ -53,14 +53,17 @@ function makeEmbedAfter(
     color: commandColors.iedot,
     content: `<@${targetUser.userId}>`,
     description:
-      `**Nodoklis:** ${hasJuridisks ? '0 lati (juridiska persona)' : latiString(taxLati)}\n` +
+      `Nodoklis: ${hasJuridisks ? '**0** lati (juridiska persona)' : `${latiString(taxLati, false, true)}`}\n` +
       `<@${targetUser.userId}> tu iedevi:`,
     fields: [
       ...itemsToGive.map(item => ({
         name: itemString(itemObj, null, true, item.attributes.customName),
         value:
-          `Vērtība: ${latiString(itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value)}\n` +
-          displayAttributes(item),
+          `Vērtība: ${latiString(
+            itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value,
+            false,
+            true
+          )}\n` + displayAttributes(item),
         inline: false,
       })),
     ],
@@ -191,8 +194,7 @@ export default async function iedotRunSpecial(
     }
 
     if (!hasJuridisks) {
-      await addLati(userId, guildId, -totalTax);
-      await addLati(i.client.user!.id, guildId, totalTax);
+      await Promise.all([addLati(userId, guildId, -totalTax), addLati(i.client.user!.id, guildId, totalTax)]);
     }
 
     const userAfter = await iedotSpecialQuery(i, targetUser, guildId, itemsInInv);
