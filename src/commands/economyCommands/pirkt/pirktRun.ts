@@ -42,7 +42,7 @@ export default async function pirktRun(
   if (totalCost > user.lati) {
     return i.reply(
       ephemeralReply(
-        `Tev nepietiek naudas lai nopirktu ${itemString(itemToBuy, amountToBuy, true)}\n` +
+        `Tev nepietiek naudas lai nopirktu **${itemString(itemToBuy, amountToBuy, true)}**\n` +
           `Cena: ${latiString(totalCost)}\n` +
           `Tev ir ${latiString(user.lati)}`
       )
@@ -54,7 +54,7 @@ export default async function pirktRun(
   if (freeSlots < amountToBuy) {
     return i.reply(
       ephemeralReply(
-        `Tev nepietiek vietas inventārā lai nopirktu ${itemString(itemToBuy, amountToBuy, true)}\n` +
+        `Tev nepietiek vietas inventārā lai nopirktu **${itemString(itemToBuy, amountToBuy, true)}**\n` +
           `Tev ir **${freeSlots}** brīvas vietas`
       )
     );
@@ -81,7 +81,8 @@ export default async function pirktRun(
     return i.reply(
       embedTemplate({
         i,
-        description: `Tu nopirki **${itemString(itemToBuy, amountToBuy, true)}** ` + `par ${totalCost} latiem`,
+        title: 'Tu nopirki',
+        description: `**${itemString(itemToBuy, amountToBuy, true)}** ` + `par ${totalCost} latiem`,
         color: embedColor,
         fields: [
           {
@@ -111,7 +112,8 @@ export default async function pirktRun(
 
   const replyMessage = embedTemplate({
     i,
-    description: `Tu nopirki **${itemString(itemToBuy, amountToBuy, true)}** ` + `par ${totalCost} latiem`,
+    title: 'Tu nopirki',
+    description: `**${itemString(itemToBuy, amountToBuy, true)}** ` + `par ${totalCost} latiem`,
     color: embedColor,
     fields: [
       {
