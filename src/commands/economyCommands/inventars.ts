@@ -24,24 +24,25 @@ import Item from '../../interfaces/Item';
 import { displayAttributes } from '../../embeds/helpers/displayAttributes';
 import buttonHandler from '../../embeds/buttonHandler';
 import pardotRun from './pardot/pardotRun';
+import iconEmojis from '../../embeds/iconEmojis';
 
-type ItemType = 'not_usable' | 'usable' | 'special' | 'not_sellable';
-const itemTypes: Record<ItemType, { text: string; emoji?: string }> = {
+export type ItemType = 'not_usable' | 'usable' | 'special' | 'not_sellable';
+export const itemTypes: Record<ItemType, { text: string; emoji?: string }> = {
   not_sellable: {
     text: 'nepārdodama un neiedodama manta',
     emoji: '<:check3:1017598453032943636>',
   },
   special: {
-    text: 'īpaša manta ar atribūtiem',
+    text: 'īpaša izmantojama manta ar atribūtiem',
     emoji: '<:check2:1017601966555267132>',
   },
   usable: {
-    text: 'izmantojams',
-    emoji: '<:check1:1017600596213235723>',
+    text: 'izmantojama manta',
+    emoji: iconEmojis.checkmark,
   },
   not_usable: {
-    text: 'neizmantojams',
-    emoji: '<:cross:1017600096143151164>',
+    text: 'neizmantojama manta',
+    emoji: iconEmojis.cross,
   },
 };
 

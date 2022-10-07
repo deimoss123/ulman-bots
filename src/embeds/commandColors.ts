@@ -12,6 +12,7 @@ const commandColors = {
   stradat: 0x5b1919,
   zvejot: 0x4260f5,
   top: 0xf5e042,
+  info: 0x03fc9d,
 };
 
 export default commandColors;

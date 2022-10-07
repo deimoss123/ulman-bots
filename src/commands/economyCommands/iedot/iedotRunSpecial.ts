@@ -167,7 +167,6 @@ export default async function iedotRunSpecial(
   const itemObj = itemList[itemKey];
   let selectedItems: SpecialItemInProfile[] = [];
 
-  // TODO: kad pievienotas mantas ar mainīgu vērtību (makšķeres) šo pārrēķināt
   let totalTax: number;
 
   if (itemsInInv.length === 1) {
