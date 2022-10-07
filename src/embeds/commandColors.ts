@@ -13,6 +13,7 @@ const commandColors = {
   zvejot: 0x4260f5,
   top: 0xf5e042,
   info: 0x03fc9d,
+  zagt: 0xe07e51,
 };
 
 export default commandColors;

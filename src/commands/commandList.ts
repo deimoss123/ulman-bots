@@ -19,6 +19,7 @@ import { zvejot } from './economyCommands/zvejot/zvejot';
 import _clearCache from './devCommands/_clearCache';
 import top from './economyCommands/top/top';
 import info from './economyCommands/info/info';
+import zagt from './economyCommands/zagt';
 
 // komandu objektu saraksts
 export const commandList: Command[] = [
@@ -38,6 +39,7 @@ export const commandList: Command[] = [
   zvejot,
   top,
   info,
+  zagt,
 ];
 
 export const devCommandList: Command[] = [_addLati, _addItem, _addXP, _clearCache];

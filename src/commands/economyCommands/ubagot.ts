@@ -65,6 +65,7 @@ const ubagot: Command = {
     const earnedLati = Math.floor(Math.random() * (LATI_MAX - LATI_MIN)) + LATI_MIN;
     const xpToAdd = Math.round(Math.random() * (XP_MAX - XP_MIN)) + XP_MIN;
 
+    // TODO: promise.all
     await addLati(userId, guildId, earnedLati);
     await addTimeCooldown(userId, guildId, this.data.name);
     await addDailyCooldown(userId, guildId, 'ubagot');
