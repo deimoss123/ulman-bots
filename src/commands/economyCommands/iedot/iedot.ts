@@ -16,6 +16,7 @@ import addLati from '../../../economy/addLati';
 import iedotRunSpecial, { noInvSpaceEmbed } from './iedotRunSpecial';
 import Item from '../../../interfaces/Item';
 import UserProfile from '../../../interfaces/UserProfile';
+import setStats from '../../../economy/setStats';
 
 export function cantPayTaxEmbed(itemToGive: Item, amountToGive: number, totalTax: number, user: UserProfile) {
   return ephemeralReply(
@@ -59,7 +60,7 @@ const iedot: Command = {
   async run(i: ChatInputCommandInteraction) {
     const target = i.options.getUser('lietotājs')!;
     const itemToGiveKey = i.options.getString('nosaukums')!;
-    const amountToGive = i.options.getInteger('daudzums') ?? 1;
+    let amountToGive = i.options.getInteger('daudzums') ?? 1;
 
     const userId = i.user.id;
     const guildId = i.guildId!;
@@ -95,12 +96,7 @@ const iedot: Command = {
     }
 
     if (itemInInv.amount < amountToGive) {
-      return i.reply(
-        ephemeralReply(
-          `Tu nevari iedot ${itemString(itemToGive, amountToGive, true)}\n` +
-            `Tev inventārā ir tikai ${itemString(itemToGive, itemInInv.amount)}`
-        )
-      );
+      amountToGive = itemInInv.amount;
     }
 
     const totalTax = hasJuridisks ? 0 : Math.floor(itemToGive.value * amountToGive * user.giveTax) || 1;
@@ -113,15 +109,18 @@ const iedot: Command = {
       return i.reply(noInvSpaceEmbed(targetUser, itemToGive, amountToGive));
     }
 
-    if (!hasJuridisks) {
-      await Promise.all([addLati(userId, guildId, -totalTax), addLati(i.client.user!.id, guildId, totalTax)]);
-    }
-
-    const [targetUserAfter] = await Promise.all([
+    const promises = [
       addItems(target.id, guildId, { [itemToGiveKey]: amountToGive }),
       addItems(userId, guildId, { [itemToGiveKey]: -amountToGive }),
-    ]);
+      setStats(target.id, guildId, { itemsReceived: amountToGive }),
+      setStats(userId, guildId, { itemsGiven: amountToGive, taxPaid: totalTax }),
+    ];
 
+    if (!hasJuridisks) {
+      promises.push(addLati(userId, guildId, -totalTax), addLati(i.client.user!.id, guildId, totalTax));
+    }
+
+    const [targetUserAfter] = await Promise.all(promises);
     if (!targetUserAfter) return i.reply(errorEmbed);
 
     const targetUserItem = targetUserAfter.items.find(({ name }) => name === itemToGiveKey)!;

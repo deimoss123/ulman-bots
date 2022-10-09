@@ -21,6 +21,7 @@ import izmantotRun from '../izmantot/izmantotRun';
 import getItemPrice from '../../../items/helpers/getItemPrice';
 import { PIRKT_PARDOT_NODOKLIS } from '../pardot/pardot';
 import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems';
+import setStats from '../../../economy/setStats';
 
 export default async function pirktRun(
   i: CommandInteraction | ButtonInteraction,
@@ -67,10 +68,13 @@ export default async function pirktRun(
     }
   }
 
+  const tax = Math.floor(totalCost * PIRKT_PARDOT_NODOKLIS);
+
   const [userAfter] = await Promise.all([
     addItems(userId, guildId, { [itemToBuyKey]: amountToBuy }),
-    addLati(i.client.user!.id, guildId, Math.floor(totalCost * PIRKT_PARDOT_NODOKLIS)),
+    addLati(i.client.user!.id, guildId, tax),
     addLati(userId, guildId, -totalCost),
+    setStats(userId, guildId, { spentShop: totalCost, taxPaid: tax }),
   ]);
 
   if (!userAfter) return i.reply(errorEmbed);

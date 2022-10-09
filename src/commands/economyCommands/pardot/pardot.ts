@@ -9,6 +9,7 @@ import pardotRun, { pardotEmbed } from './pardotRun';
 import addItems from '../../../economy/addItems';
 import addLati from '../../../economy/addLati';
 import ephemeralReply from '../../../embeds/ephemeralReply';
+import setStats from '../../../economy/setStats';
 
 export const PIRKT_PARDOT_NODOKLIS = 0.05;
 
@@ -81,11 +82,16 @@ const pardot: Command = {
       const soldItemsValue = item.value * amount;
       const itemsToSell = [{ name: key, amount, item }];
 
-      await addItems(userId, guildId, { [key]: -amount });
-      await addLati(userId, guildId, soldItemsValue);
-      await addLati(i.client.user!.id, guildId, Math.floor(soldItemsValue * PIRKT_PARDOT_NODOKLIS));
+      const taxPaid = Math.floor(soldItemsValue * PIRKT_PARDOT_NODOKLIS);
 
-      await i.reply(pardotEmbed(i, user, itemsToSell, soldItemsValue));
+      await Promise.all([
+        addItems(userId, guildId, { [key]: -amount }),
+        addLati(userId, guildId, soldItemsValue),
+        addLati(i.client.user!.id, guildId, taxPaid),
+        setStats(userId, guildId, { soldShop: soldItemsValue, taxPaid }),
+      ]);
+
+      i.reply(pardotEmbed(i, user, itemsToSell, soldItemsValue));
     }
   },
 };

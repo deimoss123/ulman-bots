@@ -9,6 +9,7 @@ import {
 import addLati from '../../../economy/addLati';
 import findUser from '../../../economy/findUser';
 import removeItemsById from '../../../economy/removeItemsById';
+import setStats from '../../../economy/setStats';
 import buttonHandler from '../../../embeds/buttonHandler';
 import embedTemplate from '../../../embeds/embedTemplate';
 import ephemeralReply from '../../../embeds/ephemeralReply';
@@ -94,9 +95,16 @@ export default async function pardotRunSpecial(
   if (itemsInInv.length === 1) {
     const soldValue = itemObj.customValue ? itemObj.customValue(itemsInInv[0].attributes) : itemObj.value;
 
-    await removeItemsById(userId, guildId, [itemsInInv[0]._id!]);
-    await addLati(i.client.user!.id, guildId, Math.floor(soldValue * PIRKT_PARDOT_NODOKLIS));
-    const user = await addLati(userId, guildId, soldValue);
+    const taxPaid = Math.floor(soldValue * PIRKT_PARDOT_NODOKLIS);
+
+    await Promise.all([
+      addLati(i.client.user!.id, guildId, taxPaid),
+      addLati(userId, guildId, soldValue),
+      removeItemsById(userId, guildId, [itemsInInv[0]._id!]),
+      setStats(userId, guildId, { soldShop: soldValue, taxPaid }),
+    ]);
+
+    const user = await findUser(userId, guildId);
     if (!user) return i.reply(errorEmbed);
 
     return i.reply(makeEmbed(i, user, itemsInInv, soldValue, embedColor));
@@ -155,9 +163,16 @@ export default async function pardotRunSpecial(
           }
         }
 
-        await removeItemsById(userId, guildId, selectedIds);
-        await addLati(i.client.user!.id, guildId, Math.floor(soldValue * PIRKT_PARDOT_NODOKLIS));
-        const userAfter = await addLati(userId, guildId, soldValue);
+        const taxPaid = Math.floor(soldValue * PIRKT_PARDOT_NODOKLIS);
+
+        await Promise.all([
+          removeItemsById(userId, guildId, selectedIds),
+          addLati(i.client.user!.id, guildId, taxPaid),
+          addLati(userId, guildId, soldValue),
+          setStats(userId, guildId, { soldShop: soldValue, taxPaid }),
+        ]);
+
+        const userAfter = await findUser(userId, guildId);
         if (!userAfter) return { error: true };
 
         return {

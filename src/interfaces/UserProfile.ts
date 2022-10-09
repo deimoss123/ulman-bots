@@ -64,10 +64,16 @@ export interface UserStats {
   spentShop: number;
   soldShop: number;
   taxPaid: number;
+
   paidLati: number;
   receivedLati: number;
+
+  itemsGiven: number;
+  itemsReceived: number;
+
   stolenLati: number;
   lostStealingLati: number;
+  stolenFromBanka: number;
 
   caughtFishCount: number;
   timeSpentFishing: number;
@@ -116,6 +122,8 @@ interface UserProfile {
   fishing: UserFishing;
 
   tirgus: UserTirgus;
+
+  statistika: UserStats;
 }
 
 export default UserProfile;

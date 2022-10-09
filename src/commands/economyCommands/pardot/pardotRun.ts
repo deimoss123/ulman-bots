@@ -9,6 +9,7 @@ import {
 import addItems from '../../../economy/addItems';
 import addLati from '../../../economy/addLati';
 import findUser from '../../../economy/findUser';
+import setStats from '../../../economy/setStats';
 import setUser from '../../../economy/setUser';
 import buttonHandler from '../../../embeds/buttonHandler';
 import commandColors from '../../../embeds/commandColors';
@@ -110,9 +111,12 @@ export default async function pardotRun(
     const itemsToSellObj: Record<ItemKey, number> = {};
     for (const { name, amount } of itemsToSell) itemsToSellObj[name] = -amount;
 
+    const taxPaid = Math.floor(soldItemsValue * PIRKT_PARDOT_NODOKLIS);
+
     await Promise.all([
       addLati(userId, guildId, soldItemsValue),
-      addLati(i.client.user!.id, guildId, Math.floor(soldItemsValue * PIRKT_PARDOT_NODOKLIS)),
+      addLati(i.client.user!.id, guildId, taxPaid),
+      setStats(userId, guildId, { soldShop: soldItemsValue, taxPaid }),
     ]);
 
     await addItems(userId, guildId, itemsToSellObj);
@@ -166,9 +170,12 @@ export default async function pardotRun(
           return p + (item.customValue ? item.customValue(attributes!) : item.value * (amount || 1));
         }, 0);
 
+        const tax = Math.floor(soldItemsValue * PIRKT_PARDOT_NODOKLIS);
+
         await Promise.all([
-          addLati(i.client.user!.id, guildId, Math.floor(soldItemsValue * PIRKT_PARDOT_NODOKLIS)),
+          addLati(i.client.user!.id, guildId, tax),
           setUser(userId, guildId, { lati: lati + soldItemsValue, items: [], specialItems: [] }),
+          setStats(userId, guildId, { soldShop: soldItemsValue, taxPaid: tax }),
         ]);
 
         return {

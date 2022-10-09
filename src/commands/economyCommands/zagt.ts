@@ -3,6 +3,7 @@ import addLati from '../../economy/addLati';
 import addTimeCooldown from '../../economy/addTimeCooldown';
 import editItemAttribute from '../../economy/editItemAttribute';
 import findUser from '../../economy/findUser';
+import setStats from '../../economy/setStats';
 import commandColors from '../../embeds/commandColors';
 import embedTemplate from '../../embeds/embedTemplate';
 import ephemeralReply from '../../embeds/ephemeralReply';
@@ -78,6 +79,7 @@ const zagt: Command = {
         editItemAttribute(i.user.id, guildId, maiss._id!, { latiCollected: stolenAmount }),
         addLati(i.client.user!.id, guildId, -stolenAmount),
         addTimeCooldown(i.user.id, guildId, 'zagt'),
+        setStats(i.user.id, guildId, { stolenFromBanka: stolenAmount }),
       ]);
       if (!userAfter || !bankaUser) return i.reply(errorEmbed);
 
@@ -136,11 +138,14 @@ const zagt: Command = {
     const stealChance = hasLaupitajs ? NAZIS_STEAL_CHANCE : BASE_STEAL_CHANCE;
     const didSteal = Math.random() < stealChance;
 
-    const [userAfter, targetUserAfter] = await Promise.all([
+    const promises = [
       addLati(i.user.id, guildId, stolenAmount * (didSteal ? 1 : -1)),
       addLati(target.id, guildId, stolenAmount * (didSteal ? -1 : 1)),
       addTimeCooldown(i.user.id, guildId, 'zagt'),
-    ]);
+      setStats(i.user.id, guildId, didSteal ? { stolenLati: stolenAmount } : { lostStealingLati: stolenAmount }),
+    ];
+
+    const [userAfter, targetUserAfter] = await Promise.all(promises);
     if (!userAfter || !targetUserAfter) return i.reply(errorEmbed);
 
     const text = didSteal

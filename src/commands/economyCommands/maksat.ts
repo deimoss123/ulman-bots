@@ -7,6 +7,7 @@ import errorEmbed from '../../embeds/errorEmbed';
 import addLati from '../../economy/addLati';
 import ephemeralReply from '../../embeds/ephemeralReply';
 import commandColors from '../../embeds/commandColors';
+import setStats from '../../economy/setStats';
 
 const maksat: Command = {
   title: 'Maksāt',
@@ -69,15 +70,18 @@ const maksat: Command = {
       );
     }
 
-    if (!hasJuridisks) {
-      await addLati(i.client.user!.id, guildId, totalTax);
-    }
-    const targetUser = await addLati(target.id, guildId, latiToAdd);
-    const resUser = await addLati(userId, guildId, -totalToPay);
+    const promises = [
+      addLati(target.id, guildId, latiToAdd),
+      addLati(userId, guildId, -totalToPay),
+      setStats(target.id, guildId, { receivedLati: latiToAdd }),
+      setStats(userId, guildId, { paidLati: latiToAdd, taxPaid: totalTax }),
+    ];
+    if (!hasJuridisks) promises.push(addLati(i.client.user!.id, guildId, totalTax));
 
+    const [targetUser, resUser] = await Promise.all(promises);
     if (!targetUser || !resUser) return i.reply(errorEmbed);
 
-    await i.reply(
+    i.reply(
       embedTemplate({
         i,
         content: `<@${target.id}>`,

@@ -7,7 +7,7 @@ const ReqStringIndex = {
   index: true,
 };
 
-const NumberDefaulZero = {
+const NumZero = {
   type: Number,
   default: 0,
 };
@@ -30,9 +30,9 @@ export const dailyCooldownDefault = {
 const userSchema = new Schema<UserProfile>({
   userId: ReqStringIndex,
   guildId: ReqStringIndex,
-  lati: NumberDefaulZero,
-  xp: NumberDefaulZero, // pāri palikušais xp
-  level: NumberDefaulZero,
+  lati: NumZero,
+  xp: NumZero, // pāri palikušais xp
+  level: NumZero,
   jobPosition: {
     type: String,
     default: null,
@@ -121,7 +121,7 @@ const userSchema = new Schema<UserProfile>({
       type: String,
       default: null,
     },
-    usesLeft: NumberDefaulZero,
+    usesLeft: NumZero,
     lastCaughtFish: {
       type: {
         time: Number,
@@ -153,6 +153,37 @@ const userSchema = new Schema<UserProfile>({
       type: [String],
       default: [],
     },
+  },
+
+  statistika: {
+    spentShop: NumZero,
+    soldShop: NumZero,
+    taxPaid: NumZero,
+
+    paidLati: NumZero,
+    receivedLati: NumZero,
+
+    itemsGiven: NumZero,
+    itemsReceived: NumZero,
+
+    stolenLati: NumZero,
+    lostStealingLati: NumZero,
+    stolenFromBanka: NumZero,
+
+    caughtFishCount: NumZero,
+    timeSpentFishing: NumZero,
+
+    fenkaBiggestWin: NumZero,
+    fenkaBiggestBet: NumZero,
+    fenkaSpent: NumZero,
+    fenkaWon: NumZero,
+    fenkaSpinCount: NumZero,
+
+    rulBiggestWin: NumZero,
+    rulBiggestBet: NumZero,
+    rulSpent: NumZero,
+    rulWon: NumZero,
+    rulSpinCount: NumZero,
   },
 });
 
