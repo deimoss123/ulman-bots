@@ -59,7 +59,6 @@ const tirgus: Command = {
     description: 'Apskatīt šodienas tirgus preces',
   },
   async run(i) {
-    console.log(Object.values(itemList).filter(i => i.categories.includes(ItemCategory.TIRGUS)).length);
     const userId = i.user.id;
     const guildId = i.guildId!;
 
