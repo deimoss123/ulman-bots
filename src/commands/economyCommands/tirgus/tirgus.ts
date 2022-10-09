@@ -9,7 +9,7 @@ import errorEmbed from '../../../embeds/errorEmbed';
 import tirgusEmbed from './tirgusEmbed';
 import UserProfile from '../../../interfaces/UserProfile';
 import Item from '../../../interfaces/Item';
-import itemList, { ItemCategory, ItemKey } from '../../../items/itemList';
+import itemList, { ItemKey } from '../../../items/itemList';
 import tirgusComponents from './tirgusComponents';
 import { ComponentType } from 'discord.js';
 import ephemeralReply from '../../../embeds/ephemeralReply';
