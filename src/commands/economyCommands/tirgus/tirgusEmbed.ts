@@ -1,0 +1,68 @@
+import { ChatInputCommandInteraction } from 'discord.js';
+import commandColors from '../../../embeds/commandColors';
+import embedTemplate from '../../../embeds/embedTemplate';
+import itemString from '../../../embeds/helpers/itemString';
+import millisToReadableTime from '../../../embeds/helpers/millisToReadableTime';
+import iconEmojis from '../../../embeds/iconEmojis';
+import Item from '../../../interfaces/Item';
+import UserProfile from '../../../interfaces/UserProfile';
+import itemList from '../../../items/itemList';
+import { TirgusListings } from '../../../items/tirgus/generateTirgus';
+import { calcReqItems } from './tirgus';
+
+function mapPrice(itemObj: Item, user: UserProfile): string {
+  const { items: reqItemsInv } = calcReqItems(user, itemObj);
+  const reqLati = itemObj.tirgusPrice!.lati;
+
+  const maxHasLen = `${Object.values(reqItemsInv).reduce((p, a) => (a > p ? a : p), 0)}`.length;
+  const maxReqLen = `${Object.values(itemObj.tirgusPrice!.items).reduce((p, a) => (a > p ? a : p), 0)}`.length;
+
+  return (
+    (reqLati
+      ? `${user.lati >= reqLati ? iconEmojis.checkmark : iconEmojis.cross} \` ${user.lati}/${reqLati} \` lati\n`
+      : '') +
+    Object.entries(reqItemsInv)
+      .map(([key, amount]) => {
+        const reqAmount = itemObj.tirgusPrice!.items[key];
+
+        return (
+          `${amount >= reqAmount ? iconEmojis.checkmark : iconEmojis.cross} ` +
+          `\` ${' '.repeat(maxHasLen - `${amount}`.length)}${amount}/` +
+          `${reqAmount}${' '.repeat(maxReqLen - `${reqAmount}`.length)} \` ${itemString(itemList[key])}`
+        );
+      })
+      .join('\n')
+  );
+}
+
+export default function tirgusEmbed(
+  i: ChatInputCommandInteraction,
+  listings: TirgusListings,
+  user: UserProfile,
+  itemsBought: TirgusListings
+) {
+  const resetTime = new Date().setHours(24, 0, 0, 0);
+  const timeUntilReset = resetTime - Date.now();
+
+  return embedTemplate({
+    i,
+    color: commandColors.veikals,
+    title: 'Tirgus',
+    description:
+      '\n' +
+      `Tirgus preces mainās katru dienu plkst. \n` +
+      `<t:${Math.floor(resetTime / 1000)}:t> (pēc ${millisToReadableTime(timeUntilReset)})`,
+    fields: listings.map((key, index) => {
+      const itemObj = itemList[key];
+      return {
+        name: itemString(itemObj),
+        value:
+          `Pieejams: ${itemsBought.includes(key) ? iconEmojis.cross : iconEmojis.checkmark}\n` +
+          '**Cena:**\n' +
+          mapPrice(itemObj, user) +
+          (index !== listings.length - 1 ? `\n__${'\u2800'.repeat(20)}__` : ''),
+        inline: false,
+      };
+    }),
+  }).embeds;
+}

@@ -93,6 +93,7 @@ const info: Command = {
         color: this.color,
         title: `Info: ${itemString(itemObj)}`,
         description: 'Īss apraksts par mantu :^)',
+        thumbnail: itemObj.imgLink,
         fields,
       })
     );

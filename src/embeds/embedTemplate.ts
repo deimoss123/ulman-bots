@@ -19,6 +19,7 @@ interface EmbedTemplateOptions {
   description?: string;
   fields?: EmbedField[];
   color?: any;
+  thumbnail?: string;
   components?: (
     | JSONEncodable<APIActionRowComponent<APIMessageActionRowComponent>>
     | ActionRowData<MessageActionRowComponentData | MessageActionRowComponentBuilder>
@@ -26,9 +27,7 @@ interface EmbedTemplateOptions {
   )[];
 }
 
-export default function embedTemplate(
-  options: EmbedTemplateOptions
-): InteractionReplyOptions & { fetchReply: true } {
+export default function embedTemplate(options: EmbedTemplateOptions): InteractionReplyOptions & { fetchReply: true } {
   return {
     content: options.content,
     embeds: [
@@ -45,6 +44,7 @@ export default function embedTemplate(
           icon_url: 'https://i.postimg.cc/Hnp1BG37/ulmanis-footer1.png',
           text: `Versija: 4.0.0\u2800|\u2800Veidotājs: Deimoss#1984`,
         },
+        thumbnail: options.thumbnail ? { url: options.thumbnail } : undefined,
       },
     ],
     components: options.components ?? [],

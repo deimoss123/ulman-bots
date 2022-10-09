@@ -143,6 +143,17 @@ const userSchema = new Schema<UserProfile>({
       default: null,
     },
   },
+
+  tirgus: {
+    lastDayUsed: {
+      type: String,
+      default: new Date().toLocaleDateString('en-GB'), // "1/1/1970"
+    },
+    itemsBought: {
+      type: [String],
+      default: [],
+    },
+  },
 });
 
 export default model('User', userSchema);

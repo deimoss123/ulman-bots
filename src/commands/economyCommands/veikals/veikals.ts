@@ -52,7 +52,7 @@ const veikals: Command = {
       };
     });
 
-    const resetTime = new Date().setHours(20, 0, 0, 0);
+    const resetTime = new Date().setHours(24, 0, 0, 0);
     const timeUntilReset = resetTime - Date.now();
 
     const interactionReply = await i.reply(

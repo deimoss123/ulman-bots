@@ -35,6 +35,9 @@ interface Item {
   // emoji priekš mantas, piem. <:virve:922501450544857098>
   emoji: APIMessageComponentEmoji | null;
 
+  // bildes links
+  imgLink?: string;
+
   // kategorijas - veikals, zivis utt
   categories: categories;
 

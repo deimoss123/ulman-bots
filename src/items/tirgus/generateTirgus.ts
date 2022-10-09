@@ -1,6 +1,6 @@
 import itemList, { ItemCategory, ItemKey } from '../itemList';
 
-type TirgusListings = ItemKey[];
+export type TirgusListings = ItemKey[];
 
 const TIRGUS_COUNT = 3;
 

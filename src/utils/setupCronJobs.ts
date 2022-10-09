@@ -5,8 +5,8 @@ import setTirgus from '../items/tirgus/setTirgus';
 import setBotPresence from './setBotPresence';
 
 export default function setupCronJobs(client: Client) {
-  // katru dienu plkst 20:00
-  cron.schedule('0 20 * * *', () => {
+  // katru dienu plkst 00:00
+  cron.schedule('0 0 * * *', () => {
     setDiscounts();
     setTirgus();
   });
