@@ -100,10 +100,7 @@ export default async function buttonHandler(
 
   collector.on('end', async () => {
     // izdzēš izbeigto interaction no interactionCache
-    console.log(interactionCache);
     interactionCache.get(cacheId)?.delete(interactionName);
-
-    console.log(interactionCache);
 
     if (refetchMessage) {
       currentMessage = await interaction.fetchReply();
