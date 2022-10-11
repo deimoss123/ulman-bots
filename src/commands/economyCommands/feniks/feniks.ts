@@ -1,15 +1,13 @@
 import { ApplicationCommandOptionType, CommandInteraction, EmbedField } from 'discord.js';
-import findUser from '../../../economy/findUser';
 import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
-import ephemeralReply from '../../../embeds/ephemeralReply';
 import errorEmbed from '../../../embeds/errorEmbed';
-import latiString from '../../../embeds/helpers/latiString';
 import Command from '../../../interfaces/Command';
+import { KazinoLikme } from '../rulete/rulete';
 import feniksLaimesti from './feniksLaimesti';
 import feniksRun from './feniksRun';
 
-const MIN_LIKME = 20;
+export const FENIKS_MIN_LIKME = 20;
 
 function infoEmbed(i: CommandInteraction) {
   const fields: EmbedField[] = [];
@@ -54,7 +52,7 @@ const feniks: Command = {
             description: 'Ar cik lielu likmi griezt aparātu',
             type: ApplicationCommandOptionType.Integer,
             required: true,
-            minValue: MIN_LIKME,
+            minValue: FENIKS_MIN_LIKME,
           },
         ],
       },
@@ -81,33 +79,12 @@ const feniks: Command = {
       return i.reply(infoEmbed(i));
     }
 
-    const userId = i.user.id;
-    const guildId = i.guildId!;
+    const likme: KazinoLikme =
+      subCommandName === 'likme' ? i.options.getInteger('likme_lati')! : (subCommandName as 'virve' | 'viss');
 
-    const user = await findUser(userId, guildId);
-    if (!user) return i.reply(errorEmbed);
+    if (likme < FENIKS_MIN_LIKME) return i.reply(errorEmbed);
 
-    const { lati } = user;
-    if (lati < MIN_LIKME) {
-      return i.reply(ephemeralReply(`Tev vajag vismaz **${latiString(MIN_LIKME, true)}** lai grieztu aparātu`));
-    }
-
-    let likme = 0;
-
-    if (subCommandName === 'virve') likme = Math.floor(Math.random() * (lati - MIN_LIKME)) + MIN_LIKME;
-    else if (subCommandName === 'viss') likme = lati;
-    else if (subCommandName === 'likme') likme = i.options.getInteger('likme_lati')!;
-
-    if (likme < MIN_LIKME) return i.reply(errorEmbed);
-    if (likme > lati) {
-      return i.reply(
-        ephemeralReply(
-          `Tu nevari griezt aparātu ar likmi **${latiString(likme)}**\n` + `Tev ir **${latiString(lati)}**`
-        )
-      );
-    }
-
-    await feniksRun(i, likme);
+    feniksRun(i, likme);
   },
 };
 

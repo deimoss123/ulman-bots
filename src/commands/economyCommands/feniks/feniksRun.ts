@@ -1,160 +1,142 @@
-import { ButtonInteraction, CommandInteraction, Message } from 'discord.js';
+import { ButtonInteraction, CommandInteraction, ComponentType } from 'discord.js';
+import addItems from '../../../economy/addItems';
 import addLati from '../../../economy/addLati';
 import findUser from '../../../economy/findUser';
+import buttonHandler from '../../../embeds/buttonHandler';
 import commandColors from '../../../embeds/commandColors';
-import embedTemplate from '../../../embeds/embedTemplate';
 import ephemeralReply from '../../../embeds/ephemeralReply';
+import errorEmbed from '../../../embeds/errorEmbed';
+import itemString from '../../../embeds/helpers/itemString';
 import latiString from '../../../embeds/helpers/latiString';
-import chance from '../../../items/helpers/chance';
-import feniksLaimesti from './feniksLaimesti';
+import smallEmbed from '../../../embeds/smallEmbed';
+import itemList from '../../../items/itemList';
+import interactionCache from '../../../utils/interactionCache';
+import { KazinoLikme } from '../rulete/rulete';
+import calcSpin from './calcSpin';
+import { FENIKS_MIN_LIKME } from './feniks';
+import feniksComponents from './feniksComponents';
+import feniksEmbed from './feniksEmbed';
 
-const spinEmoji = {
-  id: '917087131128700988',
-  name: 'fenka1',
-};
-
-const EMOJI_COUNT = 5;
-
-function shuffleArray<T>(arr: T[]): T[] {
-  const array = [...arr];
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
-function makeEmbed(
-  i: CommandInteraction | ButtonInteraction,
-  likme: number,
-  isFree: boolean,
-  spinRes?: CalcSpinRes,
-  wonLati?: number
-) {
-  let title = 'Griežas...';
-  let emojiRow = Array(EMOJI_COUNT).fill(`<a:${spinEmoji.name}:${spinEmoji.id}>`).join('');
-
-  if (spinRes && wonLati !== undefined) {
-    const { emojiGroups, totalMultiplier } = spinRes;
-
-    if (!totalMultiplier) title = 'Šodien nepaveicās, tu neko nelaimēji';
-    else title = `Tu laimēji ${latiString(wonLati, true)} | ${totalMultiplier}x`;
-
-    const emojiArr: string[] = [];
-
-    for (const { name, count } of emojiGroups) {
-      emojiArr.push(...Array(count).fill(feniksLaimesti[name].emoji));
-    }
-
-    emojiRow = emojiArr.join('');
-  }
-
-  return [
-    embedTemplate({
-      i,
-      title,
-      color: commandColors.feniks,
-      description:
-        `**>>**\u2800${emojiRow}\u2800**<<**\n\n` +
-        `**Likme:** ${latiString(likme)} ${isFree ? '**(brīvgrieziens)**' : ''}`,
-    }).embeds![0],
-  ];
-}
-
-interface CalcSpinRes {
-  emojiGroups: {
-    name: string;
-    count: number;
-    isWinner: boolean;
-  }[];
-  totalMultiplier: number;
-}
-
-function calcSpin(): CalcSpinRes {
-  const res: Record<string, number> = {};
-  let emojiGroups: CalcSpinRes['emojiGroups'] = [];
-  let totalMultiplier = 0;
-
-  for (let i = 0; i < EMOJI_COUNT; i++) {
-    const { key } = chance(feniksLaimesti);
-    res[key] = res[key] ? res[key] + 1 : 1;
-  }
-
-  for (const [name, count] of Object.entries(res)) {
-    const { multipliers } = feniksLaimesti[name];
-    if (multipliers?.[count]) {
-      totalMultiplier += multipliers[count];
-      emojiGroups.push({ name, count, isWinner: true });
-    } else {
-      emojiGroups.push(...Array(count).fill({ name, count: 1, isWinner: false }));
-    }
-  }
-
-  emojiGroups = shuffleArray(emojiGroups);
-  totalMultiplier = Math.floor(totalMultiplier * 100) / 100;
-
-  // console.log('-'.repeat(50));
-  // console.log('res', res);
-  // console.log('total multiplier', totalMultiplier);
-  // console.log('emojiGroups', emojiGroups);
-  // console.log('-'.repeat(50));
-
-  return {
-    emojiGroups,
-    totalMultiplier,
-  };
-}
-
-function testSpins(count: number) {
-  console.log('Testē griezienus...');
-
-  let totalMultiplierSum = 0;
-  for (let i = 0; i < count; i++) {
-    totalMultiplierSum += calcSpin().totalMultiplier;
-  }
-
-  console.log(`Skaits: ${count}, vidējais reizinātajs - ${totalMultiplierSum / count}`);
-}
+const DEFAULT_EMOJI_COUNT = 5;
 
 export default async function feniksRun(
   i: CommandInteraction | ButtonInteraction,
-  likme: number,
-  isFree = false
-): Promise<any> {
+  likme: KazinoLikme,
+  isFree = false,
+  freeSpinName?: string
+) {
   const userId = i.user.id;
   const guildId = i.guildId!;
 
-  const user = await findUser(userId, guildId);
+  let user = await findUser(userId, guildId);
   if (!user) return;
 
-  if (!isFree && likme > user.lati) {
+  const { lati } = user;
+
+  if (!isFree && lati < FENIKS_MIN_LIKME) {
     return i.reply(
       ephemeralReply(
-        `Tu nevari griezt aparātu ar likmi **${latiString(likme)}**\n` + `Tev ir **${latiString(user.lati)}**`
+        `Tev vajag vismaz ${latiString(FENIKS_MIN_LIKME, true, true)} lai grieztu aparātu\n` +
+          `Tev ir ${latiString(lati, false, true)}`
       )
     );
   }
 
-  const msgSpinning = await i.reply({
-    content: '\u200B',
-    embeds: makeEmbed(i, likme, isFree),
-    components: [],
-    fetchReply: true,
-  });
+  if (!isFree && typeof likme === 'number' && lati < likme) {
+    return i.reply(
+      ephemeralReply(
+        `Tu nepietiek naudas lai griezt aparātu ar likmi ${latiString(likme, false, true)}\n` +
+          `Tev ir ${latiString(lati, false, true)}`
+      )
+    );
+  }
+
+  const likmeLati =
+    typeof likme === 'number'
+      ? likme
+      : likme === 'virve'
+      ? Math.floor(Math.random() * (lati - FENIKS_MIN_LIKME) + FENIKS_MIN_LIKME)
+      : lati;
+
+  const spinRes = calcSpin(DEFAULT_EMOJI_COUNT);
+  const latiWon = Math.floor(likmeLati * spinRes.totalMultiplier);
+
+  if (isFree) {
+    user = await addItems(userId, guildId, { [freeSpinName!]: -1 });
+    if (!user) return i.reply(errorEmbed);
+  }
+
+  const [msg] = await Promise.all([
+    i.reply({
+      content: '\u200B',
+      embeds: feniksEmbed(i, likme, likmeLati, DEFAULT_EMOJI_COUNT, isFree),
+      components: feniksComponents(likme, user, isFree, true),
+      fetchReply: true,
+    }),
+    addLati(userId, guildId, latiWon - (isFree ? 0 : likmeLati)),
+  ]);
+
+  const userAfter = await findUser(userId, guildId);
+  if (!userAfter) {
+    return i.editReply({
+      embeds: smallEmbed(errorEmbed.content!, commandColors.feniks).embeds,
+      components: [],
+    });
+  }
 
   // testSpins(1_000_000);
 
-  const spinRes = calcSpin();
-  const latiWon = Math.floor(likme * spinRes.totalMultiplier);
+  buttonHandler(
+    i,
+    'feniks',
+    msg,
+    async int => {
+      if (int.componentType !== ComponentType.Button) return;
+      const { customId } = int;
+      if (customId === 'feniks_spin_again') {
+        return {
+          end: true,
+          after: async () => {
+            feniksRun(int, likme, false);
+          },
+        };
+      }
+      if (customId.startsWith('freespin_')) {
+        const user = await findUser(userId, guildId);
+        if (!user) return { error: true };
 
-  const msg = (await new Promise(res => {
-    setTimeout(async () => {
-      const userAfter = await addLati(userId, guildId, latiWon - (isFree ? 0 : likme));
-      res(
-        await msgSpinning.edit({
-          embeds: makeEmbed(i, likme, isFree, spinRes, latiWon),
-        })
-      );
-    }, 1500);
-  })) as Message;
+        const itemName = customId.split('_')[1];
+        const itemObj = itemList[itemName];
+
+        const itemInInv = user.items.find(item => item.name === itemName);
+        if (!itemInInv || itemInInv.amount < 1) {
+          int.reply(ephemeralReply(`Tavā inventārā nav **${itemString(itemObj)}**`));
+          return { end: true };
+        }
+
+        const freeSpinLikme = itemName.split('brivgriez')[1];
+        if (!freeSpinLikme) return { error: true };
+
+        return {
+          end: true,
+          after: async () => {
+            feniksRun(int, +freeSpinLikme, true, itemName);
+          },
+        };
+      }
+    },
+    60000,
+    true,
+    true
+  );
+
+  setTimeout(async () => {
+    // guh
+    const a = interactionCache.get(`${userId}-${guildId}`)!.get('feniks')!;
+    interactionCache.get(`${userId}-${guildId}`)?.set('feniks', { ...a, isInteractionActive: false });
+    i.editReply({
+      embeds: feniksEmbed(i, likme, likmeLati, DEFAULT_EMOJI_COUNT, isFree, spinRes, latiWon),
+      components: feniksComponents(likme, userAfter, isFree),
+    });
+  }, 1500);
 }

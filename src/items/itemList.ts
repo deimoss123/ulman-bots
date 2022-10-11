@@ -13,6 +13,7 @@ import juridiska_zivs from './usableItems/juridiska_zivs';
 import maksekeresData from '../commands/economyCommands/zvejot/makskeresData';
 import makskere, { makskereCustomValue } from './usableItems/makskere';
 import naudas_maiss from './usableItems/naudas_maiss';
+import brivgrieziens from './usableItems/brivgrieziens';
 
 export type ItemKey = string;
 
@@ -544,8 +545,9 @@ const itemList: Record<ItemKey, Item> = {
     isVirsiesuDzimte: true,
     emoji: null,
     categories: [ItemCategory.BRIVGRIEZIENS],
-    value: 1,
+    value: 2,
     removedOnUse: false,
+    use: brivgrieziens(10),
   },
   brivgriez25: {
     nameNomVsk: '25 latu brīvgrieziens',
@@ -555,8 +557,9 @@ const itemList: Record<ItemKey, Item> = {
     isVirsiesuDzimte: true,
     emoji: null,
     categories: [ItemCategory.BRIVGRIEZIENS],
-    value: 1,
+    value: 5,
     removedOnUse: false,
+    use: brivgrieziens(25),
   },
   brivgriez50: {
     nameNomVsk: '50 latu brīvgrieziens',
@@ -566,8 +569,9 @@ const itemList: Record<ItemKey, Item> = {
     isVirsiesuDzimte: true,
     emoji: null,
     categories: [ItemCategory.BRIVGRIEZIENS],
-    value: 1,
+    value: 10,
     removedOnUse: false,
+    use: brivgrieziens(50),
   },
   brivgriez100: {
     nameNomVsk: '100 latu brīvgrieziens',
@@ -577,8 +581,9 @@ const itemList: Record<ItemKey, Item> = {
     isVirsiesuDzimte: true,
     emoji: null,
     categories: [ItemCategory.BRIVGRIEZIENS],
-    value: 1,
+    value: 20,
     removedOnUse: false,
+    use: brivgrieziens(100),
   },
 };
 
