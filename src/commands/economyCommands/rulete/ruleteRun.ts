@@ -5,7 +5,6 @@ import {
   ButtonStyle,
   ChatInputCommandInteraction,
   ComponentType,
-  Message,
 } from 'discord.js';
 import addLati from '../../../economy/addLati';
 import findUser from '../../../economy/findUser';
