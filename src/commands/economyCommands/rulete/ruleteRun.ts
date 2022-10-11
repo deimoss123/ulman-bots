@@ -15,6 +15,7 @@ import embedTemplate from '../../../embeds/embedTemplate';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import errorEmbed from '../../../embeds/errorEmbed';
 import latiString from '../../../embeds/helpers/latiString';
+import interactionCache from '../../../utils/interactionCache';
 import generateRulete, { GenerateRuleteRes, RulColors } from './generateRulete';
 import { RuleteLikme } from './rulete';
 import { RulPosition, rulPositions } from './ruleteData';
@@ -138,7 +139,7 @@ export default async function ruleteRun(
   const rulRes = generateRulete(position);
   const latiToAdd = (rulRes.multiplier - 1) * likmeLati;
 
-  const [userAfter] = await Promise.all([
+  const [userAfter, msg] = await Promise.all([
     addLati(userId, guildId, latiToAdd),
     i.reply({
       content: '\u200B',
@@ -147,17 +148,6 @@ export default async function ruleteRun(
       fetchReply: true,
     }),
   ]);
-
-  const msg = await new Promise<Message>(res => {
-    setTimeout(async () => {
-      res(
-        await i.editReply({
-          embeds: ruleteEmbed(i, position, likme, likmeLati, rulRes, false),
-          components: rulComponents(position, likme, userAfter?.lati),
-        })
-      );
-    }, 1500);
-  });
 
   buttonHandler(
     i,
@@ -173,6 +163,18 @@ export default async function ruleteRun(
         };
       }
     },
-    15000
+    15000,
+    true,
+    true
   );
+
+  setTimeout(() => {
+    // guh
+    const a = interactionCache.get(`${userId}-${guildId}`)!.get('rulete')!;
+    interactionCache.get(`${userId}-${guildId}`)?.set('rulete', { ...a, isInteractionActive: false });
+    i.editReply({
+      embeds: ruleteEmbed(i, position, likme, likmeLati, rulRes, false),
+      components: rulComponents(position, likme, userAfter?.lati),
+    });
+  }, 1500);
 }
