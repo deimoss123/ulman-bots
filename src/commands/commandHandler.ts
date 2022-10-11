@@ -28,8 +28,14 @@ export default async function commandHandler(i: ChatInputCommandInteraction) {
 
   if (command) {
     // pārbauda iekš interaction cache vai komanda nav aktīva
-    if (interactionCache.get(`${userId}-${guildId}`)?.get(command.data.name)?.isInteractionActive) {
-      return i.reply(ephemeralReply('Šī komanda jau ir aktīva'));
+    const cachedCommand = interactionCache.get(`${userId}-${guildId}`)?.get(command.data.name);
+    if (cachedCommand?.isInteractionActive) {
+      const { channelId, messageId } = cachedCommand.collector;
+      return i.reply(
+        ephemeralReply(
+          `Šī komanda jau ir **[aktīva](https://discord.com/channels/${guildId}/${channelId}/${messageId})**`
+        )
+      );
     }
 
     const user = await findUser(userId, guildId);
