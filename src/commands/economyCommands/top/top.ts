@@ -10,8 +10,7 @@ import sortData from './sortData';
 export const TOP_LIMIT = 10;
 
 const top: Command = {
-  title: 'Top',
-  description: 'Apskatīt severa lietotāja topu',
+  description: 'Apskatīt severa lietotāja topu', // TODO: apraksts
   color: commandColors.top,
   data: topData,
   async run(i) {

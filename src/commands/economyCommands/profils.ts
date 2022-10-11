@@ -18,8 +18,13 @@ export const statusList: Record<UserStatusName, string> = {
 };
 
 const profils: Command = {
-  title: 'Profils',
-  description: 'Apskatīties savu vai kāda lietotāja profilu',
+  description:
+    'Apskatīties savu vai kāda lietotāja profilu\n' +
+    'Profilā ir iespējams redzēt:\n' +
+    '- Darba profesiju\n' +
+    '- Maksāšanas un iedošanas nodokli\n' +
+    '- Līmeni un UlmaņPunktus\n' +
+    '- Statusus',
   color: commandColors.profils,
   data: {
     name: 'profils',

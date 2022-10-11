@@ -2,7 +2,7 @@ import itemList, { ItemCategory, ItemKey } from '../itemList';
 
 export type TirgusListings = ItemKey[];
 
-const TIRGUS_COUNT = 3;
+export const TIRGUS_COUNT = 3;
 
 export default function generateTirgus() {
   const tirgusItems: TirgusListings = Object.entries(itemList)

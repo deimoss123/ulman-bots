@@ -9,17 +9,18 @@ import itemList from '../../../items/itemList';
 import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
 
 const izmantot: Command = {
-  title: 'Izmantot',
-  description: 'Izmantot kādu lietu no inventāra',
+  description:
+    'Izmantot kādu (izmantojamu) mantu no inventāra\n\n' +
+    'Ja vēlies uzzināt ko dara kāda noteikta manta izmanto komandu `/info`',
   color: commandColors.izmantot,
   autocomplete: izmantotAutocomplete,
   data: {
     name: 'izmantot',
-    description: 'Izmantot kādu lietu no inventāra',
+    description: 'Izmantot kādu mantu no inventāra',
     options: [
       {
         name: 'nosaukums',
-        description: 'Lieta ko izmantot',
+        description: 'Manta ko izmantot',
         type: ApplicationCommandOptionType.String,
         autocomplete: true,
         required: true,
@@ -35,8 +36,7 @@ const izmantot: Command = {
     if (!itemToUse.use) {
       return i.reply(
         ephemeralReply(
-          `**${itemString(itemToUse)}** nav ` +
-            (itemToUse.isVirsiesuDzimte ? 'izmantojams' : 'izmantojama')
+          `**${itemString(itemToUse)}** nav ` + (itemToUse.isVirsiesuDzimte ? 'izmantojams' : 'izmantojama')
         )
       );
     }

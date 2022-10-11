@@ -5,8 +5,7 @@ import errorEmbed from '../../../embeds/errorEmbed';
 import Command from '../../../interfaces/Command';
 
 const statistika: Command = {
-  title: 'Statistika',
-  description: 'statistika',
+  description: 'statistika', //TODO: apraksts priekš /palidziba
   color: commandColors.top,
   data: {
     name: 'statistika',

@@ -6,7 +6,7 @@ import { UsableItemFunc } from '../../interfaces/Item';
 import itemList from '../itemList';
 import { INCREASE_CAP_1 } from './mugursoma';
 
-const INCREASE_CAP_2 = 200;
+export const INCREASE_CAP_2 = 200;
 const INCREASE_AMOUNT = 10;
 
 const divaina_mugursoma: UsableItemFunc = async (userId, guildId) => {
@@ -37,8 +37,7 @@ const divaina_mugursoma: UsableItemFunc = async (userId, guildId) => {
 
   return {
     text:
-      `Inventāra maksimālā ietilpība palielināta ` +
-      `no **${user.itemCap}** uz **${user.itemCap + INCREASE_AMOUNT}**`,
+      `Inventāra maksimālā ietilpība palielināta ` + `no **${user.itemCap}** uz **${user.itemCap + INCREASE_AMOUNT}**`,
   };
 };
 

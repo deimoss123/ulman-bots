@@ -9,8 +9,10 @@ import pirktAutocomplete from './pirktAutocomplete';
 import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
 
 const pirkt: Command = {
-  title: 'Pirkt',
-  description: 'Pirkt preci no veikala',
+  description:
+    'Nopirkt kādu preci no veikalā pieejamām precēm\n' +
+    'Preces iespējams nopirkt arī caur veikalu (komanda `/veikals`)\n\n' +
+    'Ja neievadīsi preces daudzumu komandā, tad tiks nopirkta 1 prece',
   color: commandColors.pirkt,
   data: {
     name: 'pirkt',
@@ -42,9 +44,7 @@ const pirkt: Command = {
     if (!itemToBuy.categories.includes(ItemCategory.VEIKALS)) {
       return i.reply(
         ephemeralReply(
-          `**${itemString(itemToBuy)}** nav ` +
-            (itemToBuy.isVirsiesuDzimte ? 'nopērkams' : 'nopērkama') +
-            ' veikalā'
+          `**${itemString(itemToBuy)}** nav ` + (itemToBuy.isVirsiesuDzimte ? 'nopērkams' : 'nopērkama') + ' veikalā'
         )
       );
     }

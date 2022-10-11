@@ -1,14 +1,7 @@
-import {
-  AutocompleteInteraction,
-  ChatInputApplicationCommandData,
-  ChatInputCommandInteraction,
-} from 'discord.js';
+import { AutocompleteInteraction, ChatInputApplicationCommandData, ChatInputCommandInteraction } from 'discord.js';
 
 // interfeiss priekš bota komandu objektiem
 interface Command {
-  // nosaukums priekš /palīdzība
-  title: string;
-
   // apraksts priekš /palīdzība
   description: string;
 

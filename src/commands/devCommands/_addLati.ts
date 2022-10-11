@@ -7,7 +7,6 @@ import errorEmbed from '../../embeds/errorEmbed';
 import addLati from '../../economy/addLati';
 
 const _addLati: Command = {
-  title: 'AddLati',
   description: 'Pievienot latus',
   color: 0xffffff,
   data: {

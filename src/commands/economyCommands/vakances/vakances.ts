@@ -44,8 +44,10 @@ export const JobPositions: Record<string, JobPosData> = {
 };
 
 const vakances: Command = {
-  title: 'Vakances',
-  description: 'Apskatīties pieejamās darba vakances',
+  description:
+    'Apskatīt visas pieejamās darbu pozīcijas\n' +
+    'Darba pozīcija ietekmē strādāšanu (komanda `/stradat`)\n' +
+    'Pozīciju var nomainīt jebkurā brīdī',
   color: commandColors.vakances,
   data: {
     name: 'vakances',
@@ -69,9 +71,7 @@ const vakances: Command = {
         color: this.color,
         description: `Pašreizējā profesija: **${
           jobPosition
-            ? `<:${jobPosition}:${JobPositions[jobPosition]!.emojiId}> ${
-                JobPositions[jobPosition]!.name
-              }`
+            ? `<:${jobPosition}:${JobPositions[jobPosition]!.emojiId}> ${JobPositions[jobPosition]!.name}`
             : 'Bezdarbnieks'
         }**`,
         fields: Object.entries(JobPositions).map(([key, vakance]) => ({

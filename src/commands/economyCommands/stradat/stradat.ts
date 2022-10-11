@@ -1,11 +1,4 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  ChatInputCommandInteraction,
-  EmbedBuilder,
-  Message,
-} from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Message } from 'discord.js';
 import findUser from '../../../economy/findUser';
 import buttonHandler from '../../../embeds/buttonHandler';
 import commandColors from '../../../embeds/commandColors';
@@ -29,6 +22,8 @@ import addTimeCooldown from '../../../economy/addTimeCooldown';
 import addDailyCooldown from '../../../economy/addDailyCooldown';
 import UserProfile from '../../../interfaces/UserProfile';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
+import midNightStr from '../../../embeds/helpers/midnightStr';
+import millisToReadableTime from '../../../embeds/helpers/millisToReadableTime';
 
 const darbiRun: Record<string, StradatInteractions> = { setnieks, veikala_darbinieks };
 
@@ -37,6 +32,8 @@ const STRADAT_XP_MAX = 4;
 
 const MAX_DAILY = 6;
 const MAX_EXTRA_DAILY = 3;
+
+const STRADAT_COOLDOWN = 1_800_000; // 30 min
 
 function embedTitle({ jobPosition, dailyCooldowns }: UserProfile) {
   return (
@@ -47,15 +44,24 @@ function embedTitle({ jobPosition, dailyCooldowns }: UserProfile) {
 }
 
 const stradat: Command = {
-  title: 'Strādāt',
-  description: 'Strādāt darbā un pelnīt naudu',
+  description:
+    'Strādāt sevis izvēlētajā darbā un pelnīt naudu\n\n' +
+    'Darba pozīciju var izvēlēties ar komandu `/vakances`\n' +
+    'Lietotājiem no sākuma būs pieejama tikai 1 darba pozīcija, taču var atbloķēt citas sasniedzot noteiktus līmeņus\n' +
+    'Pašreizējo darba pozīciju un līmeni var redzet ar komandu `/profils`\n\n' +
+    `Katrs var strādāt **${MAX_DAILY}** reizes dienā (resetojas plkst. ${midNightStr()}), ` +
+    `bet ir iespējams iegūt papildus ${MAX_EXTRA_DAILY} strādāšanas reizes dienā\n` +
+    `Lai strādātu papildus reizes inventārā ir nepieciešama **${itemString(itemList.kafija)}**, ` +
+    `kas par katru papildus reizi tiks iztērēta\n\n` +
+    `Strādāt var ik **${millisToReadableTime(STRADAT_COOLDOWN)}**\n` +
+    `Katra strādāšanas reize dod **${STRADAT_XP_MIN}** - **${STRADAT_XP_MAX}** UlmaņPunktus`,
   color: commandColors.stradat,
-  cooldown: 1_800_000, // 30 min
+  cooldown: STRADAT_COOLDOWN,
   data: {
     name: 'stradat',
     description: 'Strādāt darbā un pelnīt naudu',
   },
-  async run(i: ChatInputCommandInteraction) {
+  async run(i) {
     const userId = i.user.id;
     const guildId = i.guildId!;
 

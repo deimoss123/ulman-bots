@@ -8,12 +8,11 @@ import userString from '../../embeds/helpers/userString';
 import commandColors from '../../embeds/commandColors';
 
 const maks: Command = {
-  title: 'Maks',
-  description: 'Apskatīties savu vai kāda lietotāja maku',
+  description: 'Apskatīties savu vai kāda lietotāja maku (latu daudzumu)',
   color: commandColors.maks,
   data: {
     name: 'maks',
-    description: 'Apskatīties maku',
+    description: 'Apskatīties savu vai kāda lietotāja maku (latu daudzumu)',
     options: [
       {
         name: 'lietotājs',

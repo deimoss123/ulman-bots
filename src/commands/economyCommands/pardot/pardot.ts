@@ -18,8 +18,15 @@ export function emptyInvEmbed() {
 }
 
 const pardot: Command = {
-  title: 'Pārdot',
-  description: 'Pārdot mantu no sava inventāra',
+  description:
+    'Pārdot kādu noteiktu mantu, nelietojamās mantas, vai visas mantas no sava inventāra\n' +
+    'Cenšoties pārdot visas mantas ar komandu `/pardot visas`, tiks parādīts apstiprināšanas dialogs, lai netīšām nepārdotu visu\n' +
+    'Visas un nelietojamās mantas ir iespējams pārdot arī caur inventāru (komanda `/inv`)\n\n' +
+    '__**Par mantu daudzumu:**__\n' +
+    'Mantu daudzums nav jāievada ja vēlies pārdot tikai 1 mantu\n' +
+    'Ja daudzums ko pārdot būs ievadīts lielāks nekā tas ir tavā inventārā, tad tiks iedotas visas noteiktās mantas\n' +
+    '**Piemērs:** tev ir 14 virves, tu ievadi 99 daudzumu, tiks pārdotas 14 virves\n\n' +
+    'Atribūtu mantām pārdošanas daudzums nav jāievada, jo tām ir atsevišķs dialogs lai izvēletos kuras tieši tu vēlies pārdot',
   color: commandColors.pardot,
   data: {
     name: 'pardot',

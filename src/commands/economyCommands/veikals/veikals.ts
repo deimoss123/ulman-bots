@@ -1,5 +1,5 @@
 import Command from '../../../interfaces/Command';
-import { ButtonStyle, CommandInteraction, ComponentType, Message } from 'discord.js';
+import { ButtonStyle, ComponentType, Message } from 'discord.js';
 import itemList, { ItemCategory } from '../../../items/itemList';
 import embedTemplate from '../../../embeds/embedTemplate';
 import latiString from '../../../embeds/helpers/latiString';
@@ -13,16 +13,18 @@ import errorEmbed from '../../../embeds/errorEmbed';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import getItemPrice from '../../../items/helpers/getItemPrice';
 import millisToReadableTime from '../../../embeds/helpers/millisToReadableTime';
+import midNightStr from '../../../embeds/helpers/midnightStr';
 
 const veikals: Command = {
-  title: 'Veikals',
-  description: 'Atvērt veikalu',
+  description:
+    'Apskatīt visas preces, kas nopērkamas veikalā\n' +
+    `Veikalā dažām precēm vienmēr būs atlaides, kas mainās katru dienu plkst. ${midNightStr()}`,
   color: commandColors.veikals,
   data: {
     name: 'veikals',
-    description: 'Atvērt veikalu',
+    description: 'Apskatīt veikalā nopērkamās preces',
   },
-  async run(i: CommandInteraction) {
+  async run(i) {
     const userId = i.user.id;
     const guildId = i.guildId!;
 

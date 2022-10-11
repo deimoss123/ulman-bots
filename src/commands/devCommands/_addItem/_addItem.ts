@@ -8,7 +8,6 @@ import itemList from '../../../items/itemList';
 import _addItemAutocomplete from './_addItemAutocomplete';
 
 const _addItem: Command = {
-  title: 'AddItem',
   description: 'Pievienot mantu inventārā',
   color: 0xffffff,
   data: {

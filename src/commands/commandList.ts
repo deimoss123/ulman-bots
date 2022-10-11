@@ -22,6 +22,7 @@ import info from './economyCommands/info/info';
 import zagt from './economyCommands/zagt';
 import tirgus from './economyCommands/tirgus/tirgus';
 import statistika from './economyCommands/statistika/statistika';
+import palidziba from './economyCommands/palidziba/palidziba';
 
 // komandu objektu saraksts
 export const commandList: Command[] = [
@@ -44,6 +45,7 @@ export const commandList: Command[] = [
   zagt,
   tirgus,
   statistika,
+  palidziba,
 ];
 
 export const devCommandList: Command[] = [_addLati, _addItem, _addXP, _clearCache];

@@ -13,8 +13,7 @@ import maksekeresData from '../zvejot/makskeresData';
 import infoAutocomplete from './infoAutocomplete';
 
 const info: Command = {
-  title: 'Info',
-  description: 'Iegūt informāciju par kādu mantu',
+  description: 'Iegūt detalizētu informāciju par kādu mantu - vērtība, cena, tirgus cena, makšķeres informācija, utt.',
   color: commandColors.info,
   data: {
     name: 'info',

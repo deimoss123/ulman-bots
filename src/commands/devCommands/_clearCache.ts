@@ -1,8 +1,7 @@
 import Command from '../../interfaces/Command';
-import userCache, { clearCache } from '../../utils/userCache';
+import { clearCache } from '../../utils/userCache';
 
 const _clearCache: Command = {
-  title: 'ClearCache',
   description: 'Iztīrīt ulmaņbota cache',
   color: 0xffffff,
   data: {

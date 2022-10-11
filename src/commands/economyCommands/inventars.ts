@@ -25,6 +25,8 @@ import { displayAttributes } from '../../embeds/helpers/displayAttributes';
 import buttonHandler from '../../embeds/buttonHandler';
 import pardotRun from './pardot/pardotRun';
 import iconEmojis from '../../embeds/iconEmojis';
+import { INCREASE_CAP_1 } from '../../items/usableItems/mugursoma';
+import { INCREASE_CAP_2 } from '../../items/usableItems/divaina_mugursoma';
 
 export type ItemType = 'not_usable' | 'usable' | 'special' | 'not_sellable';
 export const itemTypes: Record<ItemType, { text: string; emoji?: string }> = {
@@ -224,12 +226,19 @@ function invComponents(
 }
 
 const inventars: Command = {
-  title: 'Inventārs',
-  description: 'Apskatīt savu vai kāda lietotāja inventāru',
+  description:
+    'Apskatīt savu, vai cita lietotāja inventāru\n' +
+    'Inventārā tiek glabātas visas lietotāja mantas\n' +
+    'Caur inventāru ir iespējams arī pārdot nelietojamās vai visas mantas\n\n' +
+    'Katra lietotāja inventāram ir mantu limits - **50**\n' +
+    `Inventāra limitu ir iespējams palielināt ar šīm mantām: \n` +
+    `- ${itemString(itemList.mugursoma)} (līdz ${INCREASE_CAP_1})\n` +
+    `- ${itemString(itemList.divaina_mugursoma)} (līdz ${INCREASE_CAP_2})\n\n` +
+    'Katra manta aizņem vienādu vietu inventārā - **1** (vienu)',
   color: commandColors.inventars,
   data: {
     name: 'inv',
-    description: 'Apskatīt inventāru',
+    description: 'Apskatīt savu, vai cita lietotāja inventāru',
     options: [
       {
         name: 'lietotājs',
@@ -238,7 +247,7 @@ const inventars: Command = {
       },
     ],
   },
-  async run(i: ChatInputCommandInteraction) {
+  async run(i) {
     const target = i.options.getUser('lietotājs') || i.user;
 
     const targetUser = await findUser(target.id, i.guildId!);

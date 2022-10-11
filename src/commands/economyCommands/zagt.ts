@@ -11,6 +11,7 @@ import errorEmbed from '../../embeds/errorEmbed';
 import { displayAttributes } from '../../embeds/helpers/displayAttributes';
 import itemString from '../../embeds/helpers/itemString';
 import latiString from '../../embeds/helpers/latiString';
+import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
 import iconEmojis from '../../embeds/iconEmojis';
 import Command from '../../interfaces/Command';
 import itemList from '../../items/itemList';
@@ -25,14 +26,29 @@ const NAZIS_STEAL_CHANCE = 0.6;
 const MIN_BANKA_STEAL = 800;
 const MAX_BANKA_STEAL = 1500;
 
+const ZAGT_COOLDOWN = 900_000; //15 min
+
 const zagt: Command = {
-  title: 'Zagt',
-  description: 'Apzagt kādu',
+  description:
+    '__**Zagšana no lietotāja**__\n' +
+    `Zogot no kāda cita tiek izvēlēta nozagtās naudas summa, kas tiek aprēķināta nejauši\n` +
+    `Gan tev, gan lietotājam no kā zodz ir jābūt vismaz **${ZAGT_MIN_LATI}** latiem\n` +
+    `Maksimālais latu daudzums ko iespējams nozagt ir **${ZAGT_MAX_LATI}** lati\n\n` +
+    `Iespēja nozagt ir ${Math.floor(BASE_STEAL_CHANCE * 100)}% un ` +
+    `${Math.floor(NAZIS_STEAL_CHANCE * 100)}% ar "${statusList.laupitajs}" statusu\n` +
+    'Ja tev nepaveicās un neizdodas nozagt, tad izrēķinātā nozagtā summa tiks atņemta no tava maka un pievienota lietotājam kuru centies apzagt\n\n' +
+    `Zagt nav iespējams, ja tev, vai lietotājam kuru centies apzagt ir "${statusList.aizsargats}" statuss (neattiecas uz bankas apzagšanu)\n\n` +
+    '__**Zagšana no Valsts Bankas (UlmaņBota)**__\n' +
+    `Lai apzagtu banku, tai ir jābūt vismaz **${MIN_BANKA_STEAL}** latiem, ` +
+    `kā arī tavā inventārā ir jābūt **${itemString(itemList.naudas_maiss)}** (tukšs)\n` +
+    `No bankas maksimāli var nozagt **${MAX_BANKA_STEAL}** latus\n` +
+    `No bankas nozagtā nauda tiks pievienota tukšajam naudas maisam inventārā\n\n` +
+    `Zagšanas komandu var izmantot ik \`${millisToReadableTime(ZAGT_COOLDOWN)}\``,
   color: commandColors.zagt,
-  cooldown: 900_000, // 15 min
+  cooldown: ZAGT_COOLDOWN,
   data: {
     name: 'zagt',
-    description: 'Apzagt kādu',
+    description: 'Zagt no kāda lietotāja, vai Valsts Bankas (UlmaņBota)',
     options: [
       {
         name: 'lietotājs',

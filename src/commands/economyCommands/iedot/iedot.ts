@@ -28,8 +28,17 @@ export function cantPayTaxEmbed(itemToGive: Item, amountToGive: number, totalTax
 }
 
 const iedot: Command = {
-  title: 'Iedot',
-  description: 'Iedot citam lietotājam kādu lietu',
+  description:
+    'Iedot kādam lietotājam kādu no savām mantām (vai vairākas)\n\n' +
+    '__**Par nodokli:**__\n' +
+    'Lai dotu mantas ir jāmaksā nodoklis - **15%** no dodamo mantu vērtības\n' +
+    'Sasniedzot noteiktu līmeņus iedošanas nodoklis samazināsies\n' +
+    'Savu pašreizējo nodokli var apskatīt ar komandu `/profils`\n\n' +
+    '__**Par mantu daudzumu:**__\n' +
+    'Mantu daudzums nav jāievada ja vēlies iedot tikai 1 mantu\n' +
+    'Ja daudzums ko dot būs ievadīts lielāks nekā tas ir tavā inventārā, tad tiks iedotas visas noteiktās mantas\n' +
+    '**Piemērs:** tev ir 14 virves, tu ievadi 99 daudzumu, tiks iedotas 14 virves\n\n' +
+    'Atribūtu mantām iedošanas daudzums nav jāievada, jo tām ir atsevišķs dialogs lai izvēletos kuras tieši tu vēlies iedot',
   color: commandColors.iedot,
   data: {
     name: 'iedot',

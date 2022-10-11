@@ -6,7 +6,6 @@ import addXp from '../../economy/addXp';
 import latiString from '../../embeds/helpers/latiString';
 
 const _addXP: Command = {
-  title: 'AddXP',
   description: 'Pievienot UlmaņPunktus',
   color: 0xffffff,
   data: {

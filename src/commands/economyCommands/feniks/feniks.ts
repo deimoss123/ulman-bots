@@ -31,8 +31,13 @@ function infoEmbed(i: CommandInteraction) {
 }
 
 const feniks: Command = {
-  title: 'Feniks',
-  description: 'Griezt aparātu (slotus)',
+  description:
+    'Visiecienītākais veids kā iztērēt visu savu naudu\n\n' +
+    'Griez ar noteiktu likmi, vai arī izmanto komandu `/feniks virve` lai grieztu ar nenoteiktu likmi (ļauj liktenim izlemt)\n' +
+    'Informāciju par reizinātājiem var uzzināt ar komandu `/feniks laimesti_info`\n\n' +
+    '_UlmaņBota veidotājs nav atbildīgs par jebkāda veida azarspēļu atkarības izraisīšanu, ' +
+    'kā arī neatbalsta azartspēļu spēlēšanu ar īstu naudu_\n\n' +
+    '**Griez atbildīgi!**',
   color: 0x36393f,
   data: {
     name: 'feniks',

@@ -10,12 +10,15 @@ import commandColors from '../../embeds/commandColors';
 import setStats from '../../economy/setStats';
 
 const maksat: Command = {
-  title: 'Maksāt',
-  description: 'Pārskaitīt citam lietotājam naudu',
+  description:
+    'Pārskaitīt citam lietotājam latus\n' +
+    `Maksājot naudu citam lietotājam ir arī jāmaksā nodoklis - **10%**\n` +
+    'Maksāšanas nodokli ir iespējams samazināt sasniedzot noteiktus līmeņus\n' +
+    'Savu maksāšanas nodokli var apskatīt ar komandu `/profils`',
   color: commandColors.maksat,
   data: {
     name: 'maksat',
-    description: 'Pārskaitīt citam lietotājam naudu',
+    description: 'Pārskaitīt citam lietotājam latus',
     options: [
       {
         name: 'lietotājs',

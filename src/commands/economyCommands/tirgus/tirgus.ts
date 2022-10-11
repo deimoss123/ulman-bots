@@ -2,14 +2,14 @@ import commandColors from '../../../embeds/commandColors';
 import Command from '../../../interfaces/Command';
 import { getTirgusFilePath } from '../../../items/tirgus/createTirgus';
 import * as fs from 'fs';
-import { TirgusListings } from '../../../items/tirgus/generateTirgus';
+import { TirgusListings, TIRGUS_COUNT } from '../../../items/tirgus/generateTirgus';
 import buttonHandler from '../../../embeds/buttonHandler';
 import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
 import tirgusEmbed from './tirgusEmbed';
 import UserProfile from '../../../interfaces/UserProfile';
 import Item from '../../../interfaces/Item';
-import itemList, { ItemKey } from '../../../items/itemList';
+import itemList, { ItemCategory, ItemKey } from '../../../items/itemList';
 import tirgusComponents from './tirgusComponents';
 import { ComponentType } from 'discord.js';
 import ephemeralReply from '../../../embeds/ephemeralReply';
@@ -20,6 +20,7 @@ import smallEmbed from '../../../embeds/smallEmbed';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems';
 import setTirgus from '../../../economy/setTirgus';
+import midNightStr from '../../../embeds/helpers/midnightStr';
 
 export function calcReqItems({ items, lati }: UserProfile, itemObj: Item) {
   const tirgusPrice = itemObj.tirgusPrice!;
@@ -51,8 +52,16 @@ function getBoughtItems({ tirgus }: UserProfile) {
 }
 
 const tirgus: Command = {
-  title: 'Tirgus',
-  description: 'Apskatīt tirgu',
+  description:
+    'Tirgū var nopirkt īpašas mantas, kas nav pieejamas nekur citur (ar retiem izņēmumiem)\n\n' +
+    'Atšķirībā no veikala, tirgus preces ir nopērkamas par citām mantām (dažām mantām cenā ir arī lati)\n' +
+    'Katrs lietotājs var nopirkt katru no tirgus mantām tikai **VIENU** reizi noteiktā dienā\n' +
+    `Katru dienu (plkst. ${midNightStr()}) nejauši tiek izvēlētas **${TIRGUS_COUNT}** mantas kas būs nopērkamas tirgū\n\n` +
+    '**Visas tirgū pieejamās mantas:**\n>>> ' +
+    Object.values(itemList)
+      .filter(i => i.categories.includes(ItemCategory.TIRGUS))
+      .map(i => itemString(i))
+      .join('\n'),
   color: commandColors.veikals,
   data: {
     name: 'tirgus',

@@ -37,8 +37,15 @@ export function calcRepairCost(itemKey: ItemKey, usesLeft: number) {
 export const ZVEJOT_MIN_LEVEL = 0;
 
 const zvejot: Command = {
-  title: 'Zvejot',
-  description: 'Copēt zivis',
+  description:
+    'Copēt zivis DižLatvijas ūdeņos\n\n' +
+    'Lai zvejotu tev ir nepieciešama makšķere, kad esi ieguvis makšķeri izvēlies to ar `/zvejot` komandu un sāc zvejot\n' +
+    'Zvejošana notiek automātiski, līdz brīdim kad makšķerei beigsies izturība, vai arī zvejošanas inventārs ir pilns\n' +
+    'Zvejošanas ietilpība ir **10**, bet to var palielināt sasniedzot noteiktus līmeņus\n' +
+    'Katra nozvejotā manta dod **1** UlmaņPunktu\n\n' +
+    'Par katru makšķeri var apskatīt zvejošanas informāciju ar komandu `/info`\n' +
+    'Makšķeres ir atribūtu mantas - katrai makšķerei ir izturības atribūts kas ietekmē tās vērtību\n' +
+    'Dažas makšķeres ir iespējams salabot par latiem vai nu tās izmantojot ar `/izmantot` komandu, vai arī caur `/zvejot`, kad tā ir izvēlēta zvejošanai',
   color: commandColors.zvejot,
   data: {
     name: 'zvejot',
@@ -66,7 +73,7 @@ const zvejot: Command = {
     const user = await syncFishing(userId, guildId);
     if (!user) return i.reply(errorEmbed);
 
-    const interactionReply = await i.reply({
+    const msg = await i.reply({
       content: '\u200B',
       embeds: zvejotEmbed(i, user),
       components: zvejotComponents(user, selectedFishingRod),
@@ -76,7 +83,7 @@ const zvejot: Command = {
     await buttonHandler(
       i,
       'zvejot',
-      interactionReply,
+      msg,
       async interaction => {
         switch (interaction.customId) {
           case 'select_fishing_rod': {

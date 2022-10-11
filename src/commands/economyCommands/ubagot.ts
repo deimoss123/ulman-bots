@@ -37,8 +37,7 @@ function ubagotEmbed(
 }
 
 const ubagot: Command = {
-  title: 'Ubagot',
-  description: 'Ubagot uz ielas',
+  description: 'Ubagot uz ielas', // TODO: apraksts
   color: commandColors.stradat,
   cooldown: 1_200_000, // 20 min
   data: {
