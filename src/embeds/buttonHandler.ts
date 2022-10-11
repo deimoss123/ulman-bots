@@ -28,31 +28,33 @@ export default async function buttonHandler(
   interactionMsg: Message,
   callback: (buttonInteraction: ButtonInteraction | SelectMenuInteraction) => Promise<CallbackReturn | void>,
   time = 30000,
-  isActive = false
+  isActive = false,
+  refetchMessage = false
 ): Promise<void> {
   const collector = interactionMsg.createMessageComponentCollector({ time });
   let currentMessage = interactionMsg;
   const userId = interaction.user.id;
+  const cacheId = `${userId}-${interaction.guildId!}`;
 
   // pārbauda vai lietotājs ir interactionCache objektā, ja nav tad tiek pievienots kā {}
-  if (!interactionCache.get(userId)) {
-    interactionCache.set(userId, new Map<string, InteractionInCache>());
+  if (!interactionCache.get(cacheId)) {
+    interactionCache.set(cacheId, new Map<string, InteractionInCache>());
   }
 
   // ja interaction ar eksistējošu nosaukumu eksistē tad tā tiek apstādināta
-  if (interactionCache.get(userId)?.get(interactionName)) {
-    interactionCache.get(userId)?.get(interactionName)?.collector.stop();
+  if (interactionCache.get(cacheId)?.get(interactionName)) {
+    interactionCache.get(cacheId)?.get(interactionName)?.collector.stop();
   }
 
   // pievieno interactionCache objektam pašreizējo interaction
-  interactionCache.get(userId)!.set(interactionName, {
+  interactionCache.get(cacheId)!.set(interactionName, {
     collector,
     isInteractionActive: isActive,
   });
 
   collector.on('collect', async componentInteraction => {
     if (componentInteraction.user.id !== interaction.user.id) {
-      await componentInteraction.reply({
+      componentInteraction.reply({
         content: 'Nav pieklājīgi spaidīt svešu cilvēku pogas :^)',
         ephemeral: true,
       });
@@ -63,20 +65,20 @@ export default async function buttonHandler(
 
     const res = await callback(componentInteraction as ButtonInteraction | SelectMenuInteraction);
     if (!res) {
-      await componentInteraction.deferUpdate().catch(_ => _);
+      componentInteraction.deferUpdate().catch(_ => _);
       return;
     }
 
     if (res?.doNothing) return;
 
     if (res.error) {
-      await componentInteraction.reply(errorEmbed);
+      componentInteraction.reply(errorEmbed);
       return;
     }
 
     if (res?.setInactive) {
-      const userInteraction = interactionCache.get(userId)!.get(interactionName)!;
-      interactionCache.get(userId)!.set(interactionName, { ...userInteraction, isInteractionActive: false });
+      const userInteraction = interactionCache.get(cacheId)!.get(interactionName)!;
+      interactionCache.get(cacheId)!.set(interactionName, { ...userInteraction, isInteractionActive: false });
     }
 
     // neliela šizofrēnija
@@ -93,12 +95,19 @@ export default async function buttonHandler(
 
     if (res?.end) collector.stop();
 
-    await res.after?.();
+    res.after?.();
   });
 
   collector.on('end', async () => {
     // izdzēš izbeigto interaction no interactionCache
-    interactionCache.get(userId)?.delete(interactionName);
+    console.log(interactionCache);
+    interactionCache.get(cacheId)?.delete(interactionName);
+
+    console.log(interactionCache);
+
+    if (refetchMessage) {
+      currentMessage = await interaction.fetchReply();
+    }
 
     // pārbauda ziņai ir pogas
     if (!currentMessage?.components || !currentMessage.components.length) return;

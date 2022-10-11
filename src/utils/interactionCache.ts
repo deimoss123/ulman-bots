@@ -34,7 +34,7 @@ export interface InteractionInCache {
 }
 
 const interactionCache = new Map<
-  string, // userId
+  string, // userId-guildId
   Map<
     string, // interaction nosaukums (veikals, izmantot_velreiz, fenikss, ...)
     InteractionInCache
