@@ -6,7 +6,17 @@ import ruleteRun from './ruleteRun';
 export type RuleteLikme = 'viss' | 'virve' | number;
 
 const rulete: Command = {
-  description: 'rulete', // TODO
+  description:
+    'Otrs iecienītākais veids kā iztērēt visu savu naudu\n\n' +
+    'Ja ruletes komandai izvēlēsies `pozīcija`, tad tev būs jāizvēlas viena no pozīcijām uz kā likt likmi, pozīcijām reizinātājs ir **2x**\n' +
+    'Ja izvēlēsies `skaitlis`, tad tev būs jāizvēlās skaitlis no **0** līdz **36** uz kā likt likmi, skaitļiem reizinātājs ir **35x**\n\n' +
+    'Ruletei, tāpat kā feniksam ir 3 iespējamie likmju veidi:\n' +
+    '- **virve** (griezt nejauši izvēlētu naudas summu)\n' +
+    '- **viss** (griezt visu savu naudu)\n' +
+    '- **likme** (griezt sevis izvēlētu likmi)\n\n' +
+    '_UlmaņBota veidotājs nav atbildīgs par jebkāda veida azarspēļu atkarības izraisīšanu, ' +
+    'kā arī neatbalsta azartspēļu spēlēšanu ar īstu naudu_\n\n' +
+    '**Griez atbildīgi!**',
   color: commandColors.rulete,
   data: ruleteData,
   async run(i) {
