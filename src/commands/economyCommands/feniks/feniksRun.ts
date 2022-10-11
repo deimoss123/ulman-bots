@@ -1,6 +1,7 @@
 import { ButtonInteraction, CommandInteraction, Message } from 'discord.js';
 import addLati from '../../../economy/addLati';
 import findUser from '../../../economy/findUser';
+import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import latiString from '../../../embeds/helpers/latiString';
@@ -52,7 +53,7 @@ function makeEmbed(
     embedTemplate({
       i,
       title,
-      color: 0x2e3035,
+      color: commandColors.feniks,
       description:
         `**>>**\u2800${emojiRow}\u2800**<<**\n\n` +
         `**Likme:** ${latiString(likme)} ${isFree ? '**(brīvgrieziens)**' : ''}`,

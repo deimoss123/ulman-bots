@@ -1,5 +1,6 @@
 import { ApplicationCommandOptionType, CommandInteraction, EmbedField } from 'discord.js';
 import findUser from '../../../economy/findUser';
+import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import errorEmbed from '../../../embeds/errorEmbed';
@@ -38,7 +39,7 @@ const feniks: Command = {
     '_UlmaņBota veidotājs nav atbildīgs par jebkāda veida azarspēļu atkarības izraisīšanu, ' +
     'kā arī neatbalsta azartspēļu spēlēšanu ar īstu naudu_\n\n' +
     '**Griez atbildīgi!**',
-  color: 0x36393f,
+  color: commandColors.feniks,
   data: {
     name: 'feniks',
     description: 'Griezt aparātu (slotus)',

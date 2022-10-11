@@ -14,6 +14,8 @@ const commandColors = {
   top: 0xf5e042,
   info: 0x03fc9d,
   zagt: 0xe07e51,
+  feniks: 0x2f3136,
+  rulete: 0x2f3136,
 };
 
 export default commandColors;
