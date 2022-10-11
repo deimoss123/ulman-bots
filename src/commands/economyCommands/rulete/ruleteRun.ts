@@ -17,7 +17,7 @@ import errorEmbed from '../../../embeds/errorEmbed';
 import latiString from '../../../embeds/helpers/latiString';
 import interactionCache from '../../../utils/interactionCache';
 import generateRulete, { GenerateRuleteRes, RulColors } from './generateRulete';
-import { RuleteLikme } from './rulete';
+import { KazinoLikme } from './rulete';
 import { RulPosition, rulPositions } from './ruleteData';
 import ruleteEmojis from './ruleteEmojis';
 
@@ -38,7 +38,7 @@ const RULETE_MIN_LIKME = 20;
 function ruleteEmbed(
   i: ChatInputCommandInteraction | ButtonInteraction,
   position: RulPosition | number,
-  likme: RuleteLikme,
+  likme: KazinoLikme,
   likmeLati: number,
   { num, color, didWin, multiplier }: GenerateRuleteRes,
   spinning = false
@@ -80,7 +80,7 @@ function ruleteEmbed(
   }).embeds;
 }
 
-function rulComponents(position: RulPosition | number, likme: RuleteLikme, lati: number | undefined, spinning = false) {
+function rulComponents(position: RulPosition | number, likme: KazinoLikme, lati: number | undefined, spinning = false) {
   const canSpinAgain = lati === undefined ? true : typeof likme === 'number' ? lati >= likme : lati >= RULETE_MIN_LIKME;
 
   return [
@@ -101,7 +101,7 @@ function rulComponents(position: RulPosition | number, likme: RuleteLikme, lati:
 export default async function ruleteRun(
   i: ChatInputCommandInteraction | ButtonInteraction,
   position: RulPosition | number,
-  likme: RuleteLikme
+  likme: KazinoLikme
 ) {
   const userId = i.user.id;
   const guildId = i.guildId!;

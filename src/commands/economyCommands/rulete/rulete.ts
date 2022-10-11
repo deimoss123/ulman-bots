@@ -3,7 +3,7 @@ import Command from '../../../interfaces/Command';
 import ruleteData, { RulPosition } from './ruleteData';
 import ruleteRun from './ruleteRun';
 
-export type RuleteLikme = 'viss' | 'virve' | number;
+export type KazinoLikme = 'viss' | 'virve' | number;
 
 const rulete: Command = {
   description:
@@ -27,7 +27,7 @@ const rulete: Command = {
         : i.options.getInteger('skaitlis')!;
 
     const subCommand = i.options.getSubcommand()!;
-    const likme: RuleteLikme =
+    const likme: KazinoLikme =
       subCommand === 'likme' ? i.options.getInteger('likme_lati')! : (subCommand as 'viss' | 'virve');
 
     ruleteRun(i, position, likme);
