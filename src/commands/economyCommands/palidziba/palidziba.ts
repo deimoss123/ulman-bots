@@ -1,8 +1,9 @@
 import { ApplicationCommandOptionType } from 'discord.js';
-import embedTemplate from '../../../embeds/embedTemplate';
+import embedTemplate, { ULMANBOTA_VERSIJA } from '../../../embeds/embedTemplate';
 import errorEmbed from '../../../embeds/errorEmbed';
 import Command from '../../../interfaces/Command';
 import { commandList } from '../../commandList';
+import updatesList from './updatesList';
 
 export function getPalidzibaChoices() {
   return commandList
@@ -37,6 +38,11 @@ const palidziba: Command = {
           },
         ],
       },
+      {
+        name: 'jaunumi',
+        description: 'Kas jauns UlmaņBota atjauninājumos',
+        type: ApplicationCommandOptionType.Subcommand,
+      },
     ],
   },
   async run(i) {
@@ -54,6 +60,23 @@ const palidziba: Command = {
             color: this.color,
             title: `Palīdzība - /${cmdName}`,
             description: cmd.description,
+          })
+        );
+      }
+      case 'jaunumi': {
+        return i.reply(
+          embedTemplate({
+            i,
+            color: this.color,
+            title: 'Palīdzība - jaunumi',
+            fields: [
+              {
+                name: `Versija: ${ULMANBOTA_VERSIJA}, datums: ${updatesList[ULMANBOTA_VERSIJA].date}`,
+                value: updatesList[ULMANBOTA_VERSIJA].description,
+                inline: false,
+              },
+              ...updatesList[ULMANBOTA_VERSIJA].fields,
+            ],
           })
         );
       }
