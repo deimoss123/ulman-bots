@@ -101,11 +101,16 @@ function calcCaughtFish(
   };
 }
 
+function shiftTime(futureFishList: FishObj[], shiftTime: number): FishObj[] {
+  return futureFishList.map(obj => ({ ...obj, time: obj.time - shiftTime }));
+}
+
 export default async function syncFishing(
   userId: string,
   guildId: string,
   generateNewFish = false,
-  overrideOldFish = false
+  overrideOldFish = false,
+  shiftTimeMillis?: number
 ): Promise<UserProfile | void> {
   const user = await findUser(userId, guildId);
   if (!user || user.level < ZVEJOT_MIN_LEVEL) return;
@@ -120,6 +125,10 @@ export default async function syncFishing(
 
   if (generateNewFish) {
     futureFishList = generateFish(fishing, currentTime, overrideOldFish);
+  }
+
+  if (shiftTimeMillis && futureFishList) {
+    futureFishList = shiftTime(futureFishList, shiftTimeMillis);
   }
 
   // newFishList.forEach(fish => console.log(fish, new Date(fish.time).toLocaleString()));

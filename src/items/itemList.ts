@@ -14,6 +14,7 @@ import maksekeresData from '../commands/economyCommands/zvejot/makskeresData';
 import makskere, { makskereCustomValue } from './usableItems/makskere';
 import naudas_maiss from './usableItems/naudas_maiss';
 import brivgrieziens from './usableItems/brivgrieziens';
+import smilsu_pulkstenis from './usableItems/smilsu_pulkstenis';
 
 export type ItemKey = string;
 
@@ -591,6 +592,7 @@ const itemList: Record<ItemKey, Item> = {
     categories: [ItemCategory.OTHER],
     value: 100,
     removedOnUse: false,
+    use: smilsu_pulkstenis,
   },
 
   // -- brīvgriezieni --
