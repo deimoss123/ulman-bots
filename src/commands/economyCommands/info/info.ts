@@ -45,7 +45,7 @@ const info: Command = {
         value:
           (itemObj.customValue ? '⚠️ šīs mantas vērtība var \nmainīties atkarībā no atribūtiem\n' : '') +
           '\u200B\n' +
-          `**Mantas tips:**\n${itemTypes[itemType].emoji} - ${itemTypes[itemType].text}\n\n`,
+          `**Mantas tips:**\n${itemTypes[itemType].emoji} - ${itemTypes[itemType].text}`,
         inline: true,
       },
     ];
@@ -53,14 +53,14 @@ const info: Command = {
     if (itemObj.categories.includes(ItemCategory.VEIKALS)) {
       const { price, discount } = getItemPrice(itemKey);
 
-      fields[0].value += `**Veikala cena:**\n ${latiString(price)}`;
+      fields[0].value += `\n\n**Veikala cena:**\n ${latiString(price)}`;
       if (discount) {
         fields[0].value +=
           ` (ar **${Math.floor(discount * 100)}%** atlaidi)\n` + `Bez atlaides: ${latiString(itemObj.value * 2)}`;
       }
     } else if (itemObj.categories.includes(ItemCategory.TIRGUS)) {
       fields[0].value +=
-        `**Tirgus cena:**\n` +
+        `\n\n**Tirgus cena:**\n` +
         (itemObj.tirgusPrice!.lati ? `${latiString(itemObj.tirgusPrice!.lati)} un\n` : '') +
         `${Object.entries(itemObj.tirgusPrice!.items)
           .map(([key, amount]) => `> ${itemString(itemList[key], amount)}`)
