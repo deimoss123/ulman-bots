@@ -16,6 +16,7 @@ import ephemeralReply from '../../embeds/ephemeralReply';
 import errorEmbed from '../../embeds/errorEmbed';
 import itemString from '../../embeds/helpers/itemString';
 import xpAddedEmbed from '../../embeds/helpers/xpAddedEmbed';
+import iconEmojis from '../../embeds/iconEmojis';
 import { UsableItemFunc } from '../../interfaces/Item';
 import { ItemInProfile } from '../../interfaces/UserProfile';
 import itemList, { ItemKey } from '../itemList';
@@ -45,7 +46,7 @@ function makeEmbed(i: CommandInteraction | ButtonInteraction, reqItemsInv: Recor
         value: Object.entries(reqItemsInv)
           .map(([key, amount]) => {
             return (
-              `${amount ? '✅' : '❌'} ` +
+              `${amount >= requiredItems[key] ? iconEmojis.checkmark : iconEmojis.cross} ` +
               `\` ${' '.repeat(maxLength - `${amount}`.length)}${amount}/${requiredItems[key]} \` ` +
               itemString(itemList[key])
             );
@@ -62,10 +63,10 @@ function calcReqItems(items: ItemInProfile[]) {
   const reqItemsInv: Record<ItemKey, number> = {};
   let hasAll = true;
 
-  for (const [key] of Object.entries(requiredItems)) {
-    const amount = items.find(i => i.name === key)?.amount ?? 0;
-    reqItemsInv[key] = amount;
-    if (!amount) hasAll = false;
+  for (const [key, amount] of Object.entries(requiredItems)) {
+    const amountInInv = items.find(i => i.name === key)?.amount ?? 0;
+    reqItemsInv[key] = amountInInv;
+    if (amountInInv < amount) hasAll = false;
   }
 
   return {
