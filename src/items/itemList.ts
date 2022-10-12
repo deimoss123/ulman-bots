@@ -16,6 +16,7 @@ import naudas_maiss from './usableItems/naudas_maiss';
 import brivgrieziens from './usableItems/brivgrieziens';
 import smilsu_pulkstenis from './usableItems/smilsu_pulkstenis';
 import nazis from './usableItems/nazis';
+import zemenu_rasens from './usableItems/zemenu_rasens';
 
 export type ItemKey = string;
 
@@ -116,7 +117,7 @@ const itemList: Record<ItemKey, Item> = {
     value: 75,
     allowDiscount: true,
     removedOnUse: true,
-    // use() {},
+    use: zemenu_rasens,
   },
   divainais_burkans: {
     nameNomVsk: 'dīvainais burkāns',
