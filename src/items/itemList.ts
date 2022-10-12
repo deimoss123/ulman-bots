@@ -15,6 +15,7 @@ import makskere, { makskereCustomValue } from './usableItems/makskere';
 import naudas_maiss from './usableItems/naudas_maiss';
 import brivgrieziens from './usableItems/brivgrieziens';
 import smilsu_pulkstenis from './usableItems/smilsu_pulkstenis';
+import nazis from './usableItems/nazis';
 
 export type ItemKey = string;
 
@@ -81,7 +82,7 @@ const itemList: Record<ItemKey, Item> = {
     value: 125,
     removedOnUse: true,
     allowDiscount: true,
-    // use() {},
+    use: nazis,
   },
   virve: {
     nameNomVsk: 'virve',
