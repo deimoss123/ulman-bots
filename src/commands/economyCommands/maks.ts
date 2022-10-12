@@ -21,7 +21,7 @@ const maks: Command = {
       },
     ],
   },
-  async run(i: ChatInputCommandInteraction) {
+  async run(i) {
     const target = i.options.getUser('lietotājs') ?? i.user;
 
     const user = await findUser(target.id, i.guildId!);
