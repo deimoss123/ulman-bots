@@ -3,7 +3,7 @@ import addStatus from '../../economy/addStatus';
 import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
 import { UsableItemFunc } from '../../interfaces/Item';
 
-const NAZIS_STATUS_TIME = 3_600_000; // 1h
+export const NAZIS_STATUS_TIME = 3_600_000; // 1h
 
 const nazis: UsableItemFunc = async (userId, guildId) => {
   const user = await addStatus(userId, guildId, { laupitajs: NAZIS_STATUS_TIME });

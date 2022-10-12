@@ -6,7 +6,7 @@ import addItems from '../../economy/addItems';
 import { UsableItemFunc } from '../../interfaces/Item';
 
 export const INCREASE_CAP_1 = 100;
-const INCREASE_AMOUNT = 5;
+export const INV_INCREASE_AMOUNT_1 = 5;
 
 const mugursoma: UsableItemFunc = async (userId, guildId) => {
   const user = await findUser(userId, guildId);
@@ -25,12 +25,12 @@ const mugursoma: UsableItemFunc = async (userId, guildId) => {
   }
 
   await addItems(userId, guildId, { mugursoma: -1 });
-  await increaseInvCap(userId, guildId, INCREASE_AMOUNT);
+  await increaseInvCap(userId, guildId, INV_INCREASE_AMOUNT_1);
 
   return {
     text:
       `Inventāra maksimālā ietilpība palielināta ` +
-      `no **${user.itemCap}** uz **${user.itemCap + INCREASE_AMOUNT}**`,
+      `no **${user.itemCap}** uz **${user.itemCap + INV_INCREASE_AMOUNT_1}**`,
   };
 };
 

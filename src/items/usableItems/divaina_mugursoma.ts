@@ -7,7 +7,7 @@ import itemList from '../itemList';
 import { INCREASE_CAP_1 } from './mugursoma';
 
 export const INCREASE_CAP_2 = 200;
-const INCREASE_AMOUNT = 10;
+export const INV_NCREASE_AMOUNT_2 = 10;
 
 const divaina_mugursoma: UsableItemFunc = async (userId, guildId) => {
   const user = await findUser(userId, guildId);
@@ -33,11 +33,12 @@ const divaina_mugursoma: UsableItemFunc = async (userId, guildId) => {
   }
 
   await addItems(userId, guildId, { divaina_mugursoma: -1 });
-  await increaseInvCap(userId, guildId, INCREASE_AMOUNT);
+  await increaseInvCap(userId, guildId, INV_NCREASE_AMOUNT_2);
 
   return {
     text:
-      `Inventāra maksimālā ietilpība palielināta ` + `no **${user.itemCap}** uz **${user.itemCap + INCREASE_AMOUNT}**`,
+      `Inventāra maksimālā ietilpība palielināta ` +
+      `no **${user.itemCap}** uz **${user.itemCap + INV_NCREASE_AMOUNT_2}**`,
   };
 };
 

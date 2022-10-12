@@ -91,7 +91,7 @@ const info: Command = {
         i,
         color: this.color,
         title: `Info: ${itemString(itemObj)}`,
-        description: 'Īss apraksts par mantu :^)',
+        description: itemObj.info ?? 'UlmaņBota veidotājs ir aizmirsis pievienot aprakstu šai mantai dritvai kociņ',
         thumbnail: itemObj.imgLink || undefined,
         fields,
       })

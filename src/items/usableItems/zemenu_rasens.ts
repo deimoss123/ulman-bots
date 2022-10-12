@@ -3,7 +3,7 @@ import addStatus from '../../economy/addStatus';
 import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
 import { UsableItemFunc } from '../../interfaces/Item';
 
-const RASENS_STATUS_TIME = 10_800_000; // 3h
+export const RASENS_STATUS_TIME = 10_800_000; // 3h
 
 const zemenu_rasens: UsableItemFunc = async (userId, guildId) => {
   const user = await addStatus(userId, guildId, { aizsargats: RASENS_STATUS_TIME });

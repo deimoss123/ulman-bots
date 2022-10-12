@@ -26,7 +26,7 @@ const smilsu_pulkstenis: UsableItemFunc = async (userId, guildId) => {
   }
 
   return {
-    text: `Zvejošanas laiks maģiski tika pārbīdīts uz priekšu pa \`${millisToReadableTime(ZVEJA_SHIFT_TIME)}\``,
+    text: `Zvejošanas laiks maģiski tika pārbīdīts uz priekšu par \`${millisToReadableTime(ZVEJA_SHIFT_TIME)}\``,
   };
 };
 

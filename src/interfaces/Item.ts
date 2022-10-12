@@ -17,6 +17,9 @@ export type UsableItemFunc = (
 ) => Promise<UsableItemReturn>;
 
 interface Item {
+  // īss apraksts par mantu
+  info?: string;
+
   // nominatīvs vienskaitlis
   nameNomVsk: string;
 

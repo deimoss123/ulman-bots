@@ -20,6 +20,12 @@ import { UsableItemFunc } from '../../interfaces/Item';
 import { ItemInProfile } from '../../interfaces/UserProfile';
 import itemList, { ItemKey } from '../itemList';
 
+const VELO_XP = 10;
+
+export const veloInfo =
+  'Šī ir viena no 4 nepieciešajām detaļām lai sataisītu **Velosipēdu**\n' +
+  `Velosipēda sataisīšana pievienos tavam inventāram velospēdu, kā arī tu iegūsi **${VELO_XP}** UlmaņPunktus`;
+
 const requiredItems: Record<ItemKey, number> = {
   velo_ramis: 1,
   velo_ritenis: 2,
@@ -79,8 +85,6 @@ function makeComponents(hasAll: boolean) {
     ),
   ];
 }
-
-const VELO_XP = 10;
 
 const velo: UsableItemFunc = async (userId, guildId) => {
   return {
