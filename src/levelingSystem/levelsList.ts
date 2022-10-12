@@ -29,19 +29,19 @@ export const MAX_LEVEL_REWARD_PER_XP = 5;
 const levelsList: Record<number, LevelMilestone> = {
   1: {
     xp: 20,
-    reward: { item: { brivgriez10: 5 } },
+    reward: { item: { brivgriez10: 4, brivgriez25: 1 } },
   },
   2: {
     xp: 30,
-    reward: { lati: 60 },
+    reward: { lati: 70, item: { kafija: 1 } },
   },
   3: {
     xp: 30,
-    reward: { item: { virve: 7 } },
+    reward: { item: { virve: 7, metalluznis: 3 } },
   },
   4: {
     xp: 30,
-    reward: { lati: 90 },
+    reward: { lati: 90, item: { kafija: 1 } },
   },
   5: {
     xp: 30,
@@ -53,11 +53,11 @@ const levelsList: Record<number, LevelMilestone> = {
   },
   6: {
     xp: 50,
-    reward: { lati: 120 },
+    reward: { lati: 120, item: { smilsu_pulkstenis: 1 } },
   },
   7: {
     xp: 50,
-    reward: { lati: 140 },
+    reward: { lati: 140, item: { metalluznis: 3 } },
   },
   8: {
     xp: 50,
@@ -86,7 +86,7 @@ const levelsList: Record<number, LevelMilestone> = {
   },
   12: {
     xp: 75,
-    reward: { item: { brivgriez50: 3 } },
+    reward: { item: { brivgriez25: 2, brivgriez50: 3 } },
   },
   13: {
     xp: 75,
@@ -110,7 +110,7 @@ const levelsList: Record<number, LevelMilestone> = {
   },
   17: {
     xp: 100,
-    reward: { item: { zemenu_rasens: 1, nazis: 2 } },
+    reward: { item: { zemenu_rasens: 1, nazis: 1 } },
   },
   18: {
     xp: 100,
@@ -118,7 +118,7 @@ const levelsList: Record<number, LevelMilestone> = {
   },
   19: {
     xp: 100,
-    reward: { lati: 350 },
+    reward: { lati: 350, item: { kafija: 2, metalluznis: 3 } },
   },
   20: {
     xp: 100,
@@ -132,7 +132,7 @@ const levelsList: Record<number, LevelMilestone> = {
   },
   21: {
     xp: 150,
-    reward: { lati: 400 },
+    reward: { lati: 400, item: { smilsu_pulkstenis: 1 } },
   },
   22: {
     xp: 150,
@@ -149,6 +149,7 @@ const levelsList: Record<number, LevelMilestone> = {
   25: {
     xp: 150,
     reward: {
+      item: { smilsu_pulkstenis: 2 },
       taxDiscount: {
         payTax: 0.07,
         giveTax: 0.11,
@@ -162,19 +163,20 @@ const levelsList: Record<number, LevelMilestone> = {
   },
   27: {
     xp: 200,
-    reward: {},
+    reward: { item: { divaina_zivs: 1, juridiska_zivs: 1 } },
   },
   28: {
     xp: 200,
-    reward: {},
+    reward: { lati: 700 },
   },
   29: {
     xp: 200,
-    reward: {},
+    reward: { lati: 700, item: { loto_makskere: 1 } },
   },
   30: {
     xp: 200,
     reward: {
+      item: { dizmakskere: 1 },
       taxDiscount: {
         payTax: 0.06,
         giveTax: 0.1,
@@ -184,19 +186,19 @@ const levelsList: Record<number, LevelMilestone> = {
   },
   31: {
     xp: 300,
-    reward: {},
+    reward: { lati: 1000, item: { kafijas_aparats: 1 } },
   },
   32: {
     xp: 300,
-    reward: {},
+    reward: { lati: 1200, item: { petnieks: 1 } },
   },
   33: {
     xp: 300,
-    reward: {},
+    reward: { lati: 1200, item: { dizmakskere: 1 } },
   },
   34: {
     xp: 300,
-    reward: {},
+    reward: { lati: 1600 },
   },
   35: {
     xp: 300,
@@ -210,25 +212,25 @@ const levelsList: Record<number, LevelMilestone> = {
   },
   36: {
     xp: 400,
-    reward: {},
+    reward: { lati: 2000, item: { naudas_maiss: 1 } },
   },
   37: {
     xp: 400,
-    reward: {},
+    reward: { lati: 2000, item: { naudas_maiss: 2 } },
   },
   38: {
     xp: 400,
-    reward: {},
+    reward: { lati: 3000, item: { kafijas_aparats: 1 } },
   },
   39: {
     xp: 400,
-    reward: {},
+    reward: { lati: 4000 },
   },
   40: {
     xp: 500,
     reward: {
-      lati: 10000,
-      item: {}, // kkas īpašs
+      lati: 5000,
+      item: { divainais_burkans: 1 },
       taxDiscount: {
         payTax: 0.02,
         giveTax: 0.04,
