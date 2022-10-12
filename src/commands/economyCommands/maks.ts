@@ -1,5 +1,5 @@
 import Command from '../../interfaces/Command';
-import { ApplicationCommandOptionType, ChatInputCommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord.js';
 import findUser from '../../economy/findUser';
 import embedTemplate from '../../embeds/embedTemplate';
 import errorEmbed from '../../embeds/errorEmbed';
