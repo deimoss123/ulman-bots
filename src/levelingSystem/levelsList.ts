@@ -9,6 +9,7 @@ export interface LevelReward {
   lati?: number;
   item?: Record<ItemKey, number>;
   taxDiscount?: TaxDiscount;
+  fishingInvIncrease?: number;
 }
 
 export interface LevelMilestone {
@@ -44,7 +45,11 @@ const levelsList: Record<number, LevelMilestone> = {
   },
   5: {
     xp: 30,
-    reward: { item: { koka_makskere: 1 }, taxDiscount: { giveTax: 0.14 } },
+    reward: {
+      item: { koka_makskere: 1 },
+      taxDiscount: { giveTax: 0.14 },
+      fishingInvIncrease: 8,
+    },
   },
   6: {
     xp: 50,
@@ -72,6 +77,7 @@ const levelsList: Record<number, LevelMilestone> = {
         giveTax: 0.13,
         payTax: 0.09,
       },
+      fishingInvIncrease: 10,
     },
   },
   11: {
@@ -92,7 +98,11 @@ const levelsList: Record<number, LevelMilestone> = {
   },
   15: {
     xp: 75,
-    reward: { item: { dizloto: 1 }, taxDiscount: { giveTax: 0.12 } },
+    reward: {
+      item: { dizloto: 1 },
+      taxDiscount: { giveTax: 0.12 },
+      fishingInvIncrease: 12,
+    },
   },
   16: {
     xp: 100,
@@ -117,6 +127,7 @@ const levelsList: Record<number, LevelMilestone> = {
       taxDiscount: {
         payTax: 0.08,
       },
+      fishingInvIncrease: 14,
     },
   },
   21: {
@@ -142,6 +153,7 @@ const levelsList: Record<number, LevelMilestone> = {
         payTax: 0.07,
         giveTax: 0.11,
       },
+      fishingInvIncrease: 16,
     },
   },
   26: {
@@ -167,6 +179,7 @@ const levelsList: Record<number, LevelMilestone> = {
         payTax: 0.06,
         giveTax: 0.1,
       },
+      fishingInvIncrease: 18,
     },
   },
   31: {
@@ -192,6 +205,7 @@ const levelsList: Record<number, LevelMilestone> = {
         payTax: 0.04,
         giveTax: 0.08,
       },
+      fishingInvIncrease: 20,
     },
   },
   36: {

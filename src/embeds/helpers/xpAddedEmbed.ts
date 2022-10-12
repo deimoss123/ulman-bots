@@ -6,7 +6,7 @@ import itemString from './itemString';
 import latiString from './latiString';
 
 const DEFAULT_COLOR = 0x2e3035;
-const LEVEL_INCREASE_COLOR = 0xff0000;
+const LEVEL_INCREASE_COLOR = 0xbb4ae8;
 const MAX_LEVEL_COLOR = 0xffffff;
 
 // prefixText piemērs - "Par zvejošanu tu saņēmi" ...
@@ -43,6 +43,9 @@ export default function xpAddedEmbed(leveledUser: AddXpReturn, xpToAdd: number, 
         if (payTax) taxArr.push(`maksāšanai (**${Math.floor(payTax * 100)}%**)`);
         if (giveTax) taxArr.push(`iedošanai (**${Math.floor(giveTax * 100)}%**)`);
         rewardsArr.push('Nodokļu atvieglojumu ' + taxArr.join(' un '));
+      }
+      if (levelReward.fishingInvIncrease) {
+        rewardsArr.push(`Zvejošanas inventārs palielināts uz **${levelReward.fishingInvIncrease}**`);
       }
     }
 

@@ -108,6 +108,9 @@ export default async function addXp(userId: string, guildId: string, xpToAdd: nu
           if (payTax) user.payTax = payTax;
           if (giveTax) user.giveTax = giveTax;
         }
+        if (reward.fishingInvIncrease) {
+          user.fishing.maxCapacity = reward.fishingInvIncrease;
+        }
       }
     }
 

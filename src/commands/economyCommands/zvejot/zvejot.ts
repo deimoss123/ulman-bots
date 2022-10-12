@@ -41,7 +41,7 @@ const zvejot: Command = {
     'Copēt zivis DižLatvijas ūdeņos\n\n' +
     'Lai zvejotu tev ir nepieciešama makšķere, kad esi ieguvis makšķeri izvēlies to ar `/zvejot` komandu un sāc zvejot\n' +
     'Zvejošana notiek automātiski, līdz brīdim kad makšķerei beigsies izturība, vai arī zvejošanas inventārs ir pilns\n' +
-    'Zvejošanas ietilpība ir **10**, bet to var palielināt sasniedzot noteiktus līmeņus\n' +
+    'Zvejošanas ietilpība ir **6**, bet to var palielināt sasniedzot noteiktus līmeņus\n' +
     'Katra nozvejotā manta dod **1** UlmaņPunktu\n\n' +
     'Par katru makšķeri var apskatīt zvejošanas informāciju ar komandu `/info`\n' +
     'Makšķeres ir atribūtu mantas - katrai makšķerei ir izturības atribūts kas ietekmē tās vērtību\n' +

@@ -115,7 +115,7 @@ const userSchema = new Schema<UserProfile>({
   fishing: {
     maxCapacity: {
       type: Number,
-      default: 10,
+      default: 6,
     },
     selectedRod: {
       type: String,
