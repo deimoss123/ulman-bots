@@ -13,7 +13,9 @@ import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import errorEmbed from '../../../embeds/errorEmbed';
+import itemString from '../../../embeds/helpers/itemString';
 import latiString from '../../../embeds/helpers/latiString';
+import itemList from '../../../items/itemList';
 import interactionCache from '../../../utils/interactionCache';
 import generateRulete, { GenerateRuleteRes, RulColors } from './generateRulete';
 import { KazinoLikme } from './rulete';
@@ -108,7 +110,7 @@ export default async function ruleteRun(
   const user = await findUser(userId, guildId);
   if (!user) return i.reply(errorEmbed);
 
-  const { lati } = user;
+  const { lati, items } = user;
 
   if (lati < RULETE_MIN_LIKME) {
     return i.reply(
@@ -126,6 +128,19 @@ export default async function ruleteRun(
           `Tev ir ${latiString(lati, false, true)}`
       )
     );
+  }
+
+  if (likme === 'virve') {
+    const hasVirve = items.find(item => item.name === 'virve');
+    if (!hasVirve) {
+      return i.reply(
+        ephemeralReply(
+          `Lai grieztu ruleti ar likmi \`virve\`, tev inventārā ir jābūt **${itemString(
+            itemList.virve
+          )}** (nopērkama veikalā)`
+        )
+      );
+    }
   }
 
   const likmeLati =
@@ -162,7 +177,7 @@ export default async function ruleteRun(
         };
       }
     },
-    15000,
+    20000,
     true,
     true
   );

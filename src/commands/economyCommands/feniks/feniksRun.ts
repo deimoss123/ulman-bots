@@ -31,24 +31,39 @@ export default async function feniksRun(
   let user = await findUser(userId, guildId);
   if (!user) return;
 
-  const { lati } = user;
+  const { lati, items } = user;
 
-  if (!isFree && lati < FENIKS_MIN_LIKME) {
-    return i.reply(
-      ephemeralReply(
-        `Tev vajag vismaz ${latiString(FENIKS_MIN_LIKME, true, true)} lai grieztu aparātu\n` +
-          `Tev ir ${latiString(lati, false, true)}`
-      )
-    );
-  }
+  if (!isFree) {
+    if (lati < FENIKS_MIN_LIKME) {
+      return i.reply(
+        ephemeralReply(
+          `Tev vajag vismaz ${latiString(FENIKS_MIN_LIKME, true, true)} lai grieztu aparātu\n` +
+            `Tev ir ${latiString(lati, false, true)}`
+        )
+      );
+    }
 
-  if (!isFree && typeof likme === 'number' && lati < likme) {
-    return i.reply(
-      ephemeralReply(
-        `Tu nepietiek naudas lai griezt aparātu ar likmi ${latiString(likme, false, true)}\n` +
-          `Tev ir ${latiString(lati, false, true)}`
-      )
-    );
+    if (typeof likme === 'number' && lati < likme) {
+      return i.reply(
+        ephemeralReply(
+          `Tu nepietiek naudas lai griezt aparātu ar likmi ${latiString(likme, false, true)}\n` +
+            `Tev ir ${latiString(lati, false, true)}`
+        )
+      );
+    }
+
+    if (likme === 'virve') {
+      const hasVirve = items.find(item => item.name === 'virve');
+      if (!hasVirve) {
+        return i.reply(
+          ephemeralReply(
+            `Lai grieztu aparātu ar likmi \`virve\`, tev inventārā ir jābūt **${itemString(
+              itemList.virve
+            )}** (nopērkama veikalā)`
+          )
+        );
+      }
+    }
   }
 
   const likmeLati =
@@ -125,7 +140,7 @@ export default async function feniksRun(
         };
       }
     },
-    60000,
+    20000,
     true,
     true
   );
