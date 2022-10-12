@@ -36,7 +36,7 @@ interface Item {
   emoji: APIMessageComponentEmoji | null;
 
   // bildes links
-  imgLink?: string;
+  imgLink: string | null;
 
   // kategorijas - veikals, zivis utt
   categories: categories;

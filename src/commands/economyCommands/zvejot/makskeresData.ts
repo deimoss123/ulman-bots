@@ -36,8 +36,8 @@ const maksekeresData: Record<
       divaina_zivs: { chance: 0.1, cost: 2 },
 
       juridiska_zivs: { chance: 0.05, cost: 3 },
-      loto_zivs: { chance: 0.03, cost: 3 },
-      pulkstens_zivs: { chance: 0.01, cost: 3 },
+      // loto_zivs: { chance: 0.03, cost: 3 },
+      smilsu_pulkstenis: { chance: 0.01, cost: 3 },
     },
   },
   divaina_makskere: {
@@ -57,8 +57,8 @@ const maksekeresData: Record<
       divaina_zivs: { chance: 0.1, cost: 2 },
 
       juridiska_zivs: { chance: 0.1, cost: 3 },
-      loto_zivs: { chance: 0.05, cost: 3 },
-      pulkstens_zivs: { chance: 0.02, cost: 3 },
+      // loto_zivs: { chance: 0.05, cost: 3 },
+      smilsu_pulkstenis: { chance: 0.02, cost: 3 },
       brivgriez100: { chance: 0.01, cost: 3 },
     },
   },
@@ -75,7 +75,7 @@ const maksekeresData: Record<
       dizloto: { chance: 0.15, cost: 2 },
 
       brivgriez100: { chance: 0.1, cost: 3 },
-      loto_zivs: { chance: 0.1, cost: 3 },
+      // loto_zivs: { chance: 0.1, cost: 3 },
 
       petnieks: { chance: 0.005, cost: 5 },
     },
@@ -103,6 +103,10 @@ const maksekeresData: Record<
       divaina_mugursoma: { chance: '*', cost: 1 },
       kafijas_aparats: { chance: '*', cost: 1 },
       petnieks: { chance: '*', cost: 1 },
+      loto_makskere: { chance: '*', cost: 1 },
+      luznu_makskere: { chance: '*', cost: 1 },
+      naudas_maiss: { chance: '*', cost: 1 },
+      divainais_burkans: { chance: 0.05, cost: 1 },
     },
   },
 };
