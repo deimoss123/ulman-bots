@@ -27,6 +27,8 @@ interface EmbedTemplateOptions {
   )[];
 }
 
+export const ULMANBOTA_VERSIJA = '4.0';
+
 export default function embedTemplate(options: EmbedTemplateOptions): InteractionReplyOptions & { fetchReply: true } {
   return {
     content: options.content,
@@ -42,7 +44,7 @@ export default function embedTemplate(options: EmbedTemplateOptions): Interactio
         },
         footer: {
           icon_url: 'https://i.postimg.cc/Hnp1BG37/ulmanis-footer1.png',
-          text: `Versija: 4.0.0\u2800|\u2800Veidotājs: Deimoss#1984`,
+          text: `Versija: ${ULMANBOTA_VERSIJA}\u2800|\u2800Veidotājs: Deimoss#1984`,
         },
         thumbnail: options.thumbnail ? { url: options.thumbnail } : undefined,
       },
