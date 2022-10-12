@@ -22,6 +22,8 @@ const XP_MAX = 2;
 const LATI_MIN = 5;
 const LATI_MAX = 10;
 
+const UBAGOT_COOLDOWN = 900_000; // 15 min
+
 function ubagotEmbed(
   i: ChatInputCommandInteraction,
   dailyCooldowns: DailyCooldowns,
@@ -39,7 +41,7 @@ function ubagotEmbed(
 const ubagot: Command = {
   description: 'Ubagot uz ielas', // TODO: apraksts
   color: commandColors.stradat,
-  cooldown: 1_200_000, // 20 min
+  cooldown: UBAGOT_COOLDOWN,
   data: {
     name: 'ubagot',
     description: 'Ubagot uz ielas',

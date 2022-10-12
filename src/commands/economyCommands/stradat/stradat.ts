@@ -33,7 +33,7 @@ const STRADAT_XP_MAX = 4;
 const MAX_DAILY = 6;
 const MAX_EXTRA_DAILY = 3;
 
-const STRADAT_COOLDOWN = 1_800_000; // 30 min
+const STRADAT_COOLDOWN = 1_500_000; // 25 min
 
 function embedTitle({ jobPosition, dailyCooldowns }: UserProfile) {
   return (
