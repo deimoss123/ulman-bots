@@ -37,5 +37,5 @@ export default function feniksComponents(
     );
   }
 
-  return [new ActionRowBuilder<ButtonBuilder>().addComponents(buttons)];
+  return buttons.length ? [new ActionRowBuilder<ButtonBuilder>().addComponents(buttons)] : [];
 }
