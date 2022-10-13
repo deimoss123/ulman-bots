@@ -19,6 +19,7 @@ import nazis, { NAZIS_STATUS_TIME } from './usableItems/nazis';
 import zemenu_rasens, { RASENS_STATUS_TIME } from './usableItems/zemenu_rasens';
 import { statusList } from '../commands/economyCommands/profils';
 import millisToReadableTime from '../embeds/helpers/millisToReadableTime';
+import piena_spainis from './usableItems/piena_spainis';
 
 export type ItemKey = string;
 
@@ -231,6 +232,24 @@ const itemList: Record<ItemKey, Item> = {
     removedOnUse: false,
     use: mugursoma,
   },
+  piena_spainis: {
+    info: 'Izdzerot (izmantojot) šo gardo piena spaini tev tiks noņemti visi statusi',
+    nameNomVsk: 'piena spainis',
+    nameNomDsk: 'piena spaiņi',
+    nameAkuVsk: 'piena spaini',
+    nameAkuDsk: 'piena spaiņus',
+    isVirsiesuDzimte: true,
+    emoji: {
+      id: '1030251381350748201',
+      name: 'piena_spainis',
+    },
+    imgLink: 'https://i.postimg.cc/D0B8X05s/piena-spainis.png',
+    categories: [ItemCategory.VEIKALS],
+    value: 25,
+    allowDiscount: true,
+    removedOnUse: false,
+    use: piena_spainis,
+  },
 
   // -- tirgus --
   divaina_mugursoma: {
@@ -424,7 +443,7 @@ const itemList: Record<ItemKey, Item> = {
     nameAkuDsk: 'metāllūžņus',
     isVirsiesuDzimte: true,
     emoji: {
-      id: '1029732945788932137',
+      id: '1030251422614306946',
       name: 'metalluznis',
     },
     imgLink: 'https://i.postimg.cc/B6KgnnCY/metalluznis.png',
