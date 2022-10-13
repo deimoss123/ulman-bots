@@ -86,7 +86,7 @@ export default async function pirktRun(
       embedTemplate({
         i,
         title: 'Tu nopirki',
-        description: `**${itemString(itemToBuy, amountToBuy, true)}** ` + `par ${totalCost} latiem`,
+        description: `**${itemString(itemToBuy, amountToBuy, true)}** par ${totalCost} latiem`,
         color: embedColor,
         fields: [
           {
@@ -96,7 +96,7 @@ export default async function pirktRun(
           },
           {
             name: 'Tev tagad ir',
-            value: itemString(itemList[itemToBuyKey], resSpecialItems.length),
+            value: itemString(itemToBuy, resSpecialItems.length),
             inline: true,
           },
         ],

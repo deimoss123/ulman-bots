@@ -15,7 +15,6 @@ import buttonHandler from '../../../embeds/buttonHandler';
 import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
 import ephemeralReply from '../../../embeds/ephemeralReply';
-import errorEmbed from '../../../embeds/errorEmbed';
 import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import itemString, { itemStringCustom } from '../../../embeds/helpers/itemString';
 import latiString from '../../../embeds/helpers/latiString';
@@ -204,8 +203,7 @@ export default async function iedotRunSpecial(
       promises.push(addLati(userId, guildId, -totalTax), addLati(i.client.user!.id, guildId, totalTax));
     }
 
-    const [userAfter] = await Promise.all(promises);
-    if (!userAfter) return i.reply(errorEmbed);
+    await Promise.all(promises);
 
     return i.reply(makeEmbedAfter(i, totalTax, targetUser, itemsInInv, hasJuridisks, itemObj));
   }
@@ -298,8 +296,7 @@ export default async function iedotRunSpecial(
           promises.push(addLati(userId, guildId, -totalTax), addLati(i.client.user!.id, guildId, totalTax));
         }
 
-        const [userAfter] = await Promise.all(promises);
-        if (!userAfter) return { error: true };
+        await Promise.all(promises);
 
         return {
           end: true,

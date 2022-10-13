@@ -148,7 +148,7 @@ const stradat: Command = {
 
     const customIds = darbsRun.options.map(o => o.customId);
 
-    await buttonHandler(
+    buttonHandler(
       i,
       'stradat',
       interactionReply,
@@ -168,15 +168,17 @@ const stradat: Command = {
 
           let rewardText = 'Tu neko nenopelnīji';
           const { reward } = choiceResult;
+          const promises: Promise<any>[] = [];
+
           if (reward) {
             rewardText = 'Tu nopelnīji ';
             if (reward.lati) {
               const latiToAdd = Math.round(Math.random() * (reward.lati[1] - reward.lati[0]) + reward.lati[0]);
-              await addLati(userId, guildId, latiToAdd);
+              promises.push(addLati(userId, guildId, latiToAdd));
               rewardText += `**${latiString(latiToAdd, true)}** `;
             }
             if (reward.items) {
-              await addItems(userId, guildId, reward.items);
+              promises.push(addItems(userId, guildId, reward.items));
               rewardText += Object.entries(reward.items)
                 .map(([key, amount]) => itemString(itemList[key], amount, true))
                 .join(' ');
@@ -186,18 +188,22 @@ const stradat: Command = {
           const xpToAdd = Math.round(Math.random() * (STRADAT_XP_MAX - STRADAT_XP_MIN)) + STRADAT_XP_MIN;
 
           // nav labs 3 datubāzes saucieni
-          await addTimeCooldown(userId, guildId, this.data.name);
-          await addDailyCooldown(userId, guildId, 'stradat', isExtraUse);
+          const [leveledUser] = await Promise.all([
+            addXp(userId, guildId, xpToAdd),
+            addTimeCooldown(userId, guildId, this.data.name),
+            addDailyCooldown(userId, guildId, 'stradat', isExtraUse),
+            ...promises,
+          ]);
 
-          const leveledUser = await addXp(userId, guildId, xpToAdd);
-          if (!leveledUser) return;
+          const userAfter = await findUser(userId, guildId);
+          if (!leveledUser || !userAfter) return { error: true };
 
           return {
-            setInactive: true,
+            end: true,
             edit: {
               embeds: [
                 embed
-                  .setTitle(embedTitle(leveledUser.user))
+                  .setTitle(embedTitle(userAfter))
                   .setDescription(
                     `${embed.data.description}\n` +
                       `> Izvēle: \`${choice.label}\`\n` +

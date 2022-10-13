@@ -129,7 +129,9 @@ const iedot: Command = {
       promises.push(addLati(userId, guildId, -totalTax), addLati(i.client.user!.id, guildId, totalTax));
     }
 
-    const [targetUserAfter] = await Promise.all(promises);
+    await Promise.all(promises);
+
+    const targetUserAfter = await findUser(target.id, guildId);
     if (!targetUserAfter) return i.reply(errorEmbed);
 
     const targetUserItem = targetUserAfter.items.find(({ name }) => name === itemToGiveKey)!;

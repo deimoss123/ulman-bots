@@ -153,7 +153,7 @@ function invEmbed(
             ''
           ) +
           '\u2800'
-        : 'Tev nav nevienas mantas (diezgan bēdīgi)\nIzmanto komandu `/ulmaņbots`',
+        : 'Tev nav nevienas mantas (diezgan bēdīgi)\nIzmanto komandu `/palidziba`',
     color: commandColors.inventars,
     fields: fieldsToShow,
   }).embeds;

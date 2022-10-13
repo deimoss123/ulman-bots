@@ -29,7 +29,7 @@ export const MAX_LEVEL_REWARD_PER_XP = 5;
 const levelsList: Record<number, LevelMilestone> = {
   1: {
     xp: 20,
-    reward: { item: { brivgriez10: 4, brivgriez25: 1 } },
+    reward: { item: { brivgriez25: 3 } },
   },
   2: {
     xp: 30,
