@@ -8,10 +8,10 @@ interface StatsListEntry {
 }
 
 const giveDisplayValue: StatsListEntry['displayValue'] = n => `${n} manta${n % 10 === 1 && n % 100 !== 11 ? '' : 's'}`;
-const spinCountDisplayValue: StatsListEntry['displayValue'] = n =>
+export const spinCountDisplayValue: StatsListEntry['displayValue'] = n =>
   `${n} griezien${n % 10 === 1 && n % 100 !== 11 ? 's' : 'i'}`;
 
-type StatsList = Record<StatsTypes, { entries: Partial<Record<keyof UserStats, StatsListEntry>> }>;
+type StatsList = Record<StatsTypes, { emoji?: string; entries: Partial<Record<keyof UserStats, StatsListEntry>> }>;
 
 const statsList: StatsList = {
   veikals: {

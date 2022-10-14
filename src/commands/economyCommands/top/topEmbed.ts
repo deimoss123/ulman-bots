@@ -1,14 +1,16 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
+import StatsProfile from '../../../interfaces/StatsProfile';
 import UserProfile from '../../../interfaces/UserProfile';
-import { SortDataEntry } from './sortData';
+import { SortDataProfileEntry } from './sortData';
 import { TOP_LIMIT } from './top';
 
-export default function topEmbed(
-  sortedUsers: UserProfile[],
+export default function topEmbed<T extends UserProfile | StatsProfile>(
   i: ChatInputCommandInteraction,
-  { title, displayValue, totalReduceFunc, partOfTotal, topDescription }: SortDataEntry
+  title: string,
+  sortedUsers: T[],
+  { displayValue, totalReduceFunc, partOfTotal, topDescription }: SortDataProfileEntry<T>
 ) {
   const total = totalReduceFunc && sortedUsers.reduce(totalReduceFunc, 0);
 
@@ -38,7 +40,7 @@ export default function topEmbed(
     i,
     description: total ? topDescription!(total) : undefined,
     color: commandColors.top,
-    title: `${title} tops`,
+    title: `Servera tops | ${title}`,
     fields,
   });
 }

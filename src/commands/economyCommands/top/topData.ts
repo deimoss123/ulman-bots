@@ -11,7 +11,7 @@ const topData: ChatInputApplicationCommandData = {
       type: ApplicationCommandOptionType.String,
       choices: [
         {
-          name: 'Latu daudzums makā',
+          name: 'Maks',
           value: 'maks',
         },
         {
@@ -25,6 +25,22 @@ const topData: ChatInputApplicationCommandData = {
         {
           name: 'Līmenis',
           value: 'level',
+        },
+        {
+          name: 'Feniks - iztērēts',
+          value: 'fenkaSpent',
+        },
+        {
+          name: 'Feniks - griezienu skaits',
+          value: 'fenkaSpinCount',
+        },
+        {
+          name: 'Rulete - iztērēts',
+          value: 'rulSpent',
+        },
+        {
+          name: 'Rulete - griezienu skaits',
+          value: 'rulSpinCount',
         },
       ],
     },

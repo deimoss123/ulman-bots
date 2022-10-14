@@ -3,20 +3,20 @@ import { ProjectionType } from 'mongoose';
 import { getInvValue } from '../inventars';
 import latiString from '../../../embeds/helpers/latiString';
 import levelsList, { MAX_LEVEL } from '../../../levelingSystem/levelsList';
+import StatsProfile from '../../../interfaces/StatsProfile';
+import { spinCountDisplayValue } from '../statistika/statsList';
 
-export interface SortDataEntry {
-  title: string;
-  projection: ProjectionType<UserProfile>;
-  sortFunc: (a: UserProfile, b: UserProfile) => number;
-  displayValue: (user: UserProfile) => string;
-  totalReduceFunc?: (prev: number, curr: UserProfile) => number;
-  partOfTotal?: (total: number, user: UserProfile) => number;
+export interface SortDataProfileEntry<T extends UserProfile | StatsProfile> {
+  projection: ProjectionType<T>;
+  sortFunc: (a: T, b: T) => number;
+  displayValue: (user: T) => string;
+  totalReduceFunc?: (prev: number, curr: T) => number;
+  partOfTotal?: (total: number, user: T) => number;
   topDescription?: (total: number) => string;
 }
 
-const sortDataProfile: Record<string, SortDataEntry> = {
+export const sortDataProfile: Record<string, SortDataProfileEntry<UserProfile>> = {
   maks: {
-    title: 'Maku',
     projection: { lati: 1 },
     sortFunc: (a, b) => b.lati - a.lati,
     displayValue: user => latiString(user.lati),
@@ -25,7 +25,6 @@ const sortDataProfile: Record<string, SortDataEntry> = {
     topDescription: total => `Cirkulācijā ir ${latiString(total, false, true)}`,
   },
   inv: {
-    title: 'Inventāra vērtības',
     projection: { items: 1, specialItems: 1 },
     sortFunc: (a, b) => getInvValue(b) - getInvValue(a),
     displayValue: user => latiString(getInvValue(user)),
@@ -34,7 +33,6 @@ const sortDataProfile: Record<string, SortDataEntry> = {
     topDescription: total => `Visu lietotāju inventāru vērtība ir ${latiString(total, false, true)}`,
   },
   total: {
-    title: 'Kopējās vērtības',
     projection: { lati: 1, items: 1, specialItems: 1 },
     sortFunc: (a, b) => b.lati + getInvValue(b) - (a.lati + getInvValue(a)),
     displayValue: user => latiString(user.lati + getInvValue(user)),
@@ -43,7 +41,6 @@ const sortDataProfile: Record<string, SortDataEntry> = {
     topDescription: total => `Visu lietotāju kopējā vērtība ir ${latiString(total, false, true)}`,
   },
   level: {
-    title: 'Līmeņu',
     projection: { level: 1, xp: 1 },
     sortFunc: (a, b) => (a.level === b.level ? b.xp - a.xp : b.level - a.level),
     displayValue: ({ level, xp }) =>
@@ -52,4 +49,51 @@ const sortDataProfile: Record<string, SortDataEntry> = {
   },
 };
 
-export default sortDataProfile;
+function defaultSortFunc(key: keyof StatsProfile): SortDataProfileEntry<StatsProfile>['sortFunc'] {
+  return (a, b) => (b[key] as number) - (a[key] as number);
+}
+
+function defaultReduceFunc(key: keyof StatsProfile): SortDataProfileEntry<StatsProfile>['totalReduceFunc'] {
+  return (p, c) => p + (c[key] as number);
+}
+
+function defaultPartOfTotal(key: keyof StatsProfile): SortDataProfileEntry<StatsProfile>['partOfTotal'] {
+  return (total, user) => (user[key] as number) / total;
+}
+
+export const sortDataStats: Record<string, SortDataProfileEntry<StatsProfile>> = {
+  fenkaSpent: {
+    projection: { fenkaSpent: 1, fenkaSpinCount: 1 },
+    sortFunc: defaultSortFunc('fenkaSpent'),
+    displayValue: ({ fenkaSpent, fenkaSpinCount }) =>
+      `${latiString(fenkaSpent)} | ${spinCountDisplayValue(fenkaSpinCount)}`,
+    totalReduceFunc: defaultReduceFunc('fenkaSpent'),
+    partOfTotal: defaultPartOfTotal('fenkaSpent'),
+    topDescription: total => `Kopā feniksā ir nogriezti ${latiString(total, false, true)}`,
+  },
+  fenkaSpinCount: {
+    projection: { fenkaSpent: 1, fenkaSpinCount: 1 },
+    sortFunc: defaultSortFunc('fenkaSpinCount'),
+    displayValue: ({ fenkaSpent, fenkaSpinCount }) =>
+      `${spinCountDisplayValue(fenkaSpinCount)} | ${latiString(fenkaSpent)}`,
+    totalReduceFunc: defaultReduceFunc('fenkaSpinCount'),
+    partOfTotal: defaultPartOfTotal('fenkaSpinCount'),
+    topDescription: total => `Kopā fēniksā ir veikti ${spinCountDisplayValue(total)}`,
+  },
+  rulSpent: {
+    projection: { rulSpent: 1, rulSpinCount: 1 },
+    sortFunc: defaultSortFunc('rulSpent'),
+    displayValue: ({ rulSpent, rulSpinCount }) => `${latiString(rulSpent)} | ${spinCountDisplayValue(rulSpinCount)}`,
+    totalReduceFunc: defaultReduceFunc('rulSpent'),
+    partOfTotal: defaultPartOfTotal('rulSpent'),
+    topDescription: total => `Kopā ruletē ir nogriezti ${latiString(total, false, true)}`,
+  },
+  rulSpinCount: {
+    projection: { rulSpent: 1, rulSpinCount: 1 },
+    sortFunc: defaultSortFunc('rulSpinCount'),
+    displayValue: ({ rulSpent, rulSpinCount }) => `${spinCountDisplayValue(rulSpinCount)} | ${latiString(rulSpent)}`,
+    totalReduceFunc: defaultReduceFunc('rulSpinCount'),
+    partOfTotal: defaultPartOfTotal('rulSpinCount'),
+    topDescription: total => `Kopā rulētē ir veikti ${spinCountDisplayValue(total)}`,
+  },
+};
