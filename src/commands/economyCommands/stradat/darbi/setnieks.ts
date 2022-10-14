@@ -109,7 +109,7 @@ const setnieks: StradatInteractions = {
           a: {
             chance: '*',
             text: 'Tu nozagi pāris metāllūžņus un laimīgs aizbēgi prom',
-            reward: { items: { metalluznis: 3 } },
+            reward: { items: { metalluznis: 2 } },
           },
           b: {
             chance: 0.2,

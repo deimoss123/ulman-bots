@@ -50,6 +50,23 @@ const veikala_darbinieks: StradatInteractions = {
       },
     ],
   },
+  plaukti: {
+    chance: '*',
+    text: 'Tev šodien ir jākrāmē veikala plaukti',
+    options: [
+      {
+        label: 'Ielikt plauktā preces',
+        customId: 'plaukti_preces',
+        result: {
+          a: {
+            chance: '*',
+            text: 'Tu ieliki plauktā preces un saņēmi algu',
+            reward: { lati: [15, 25] },
+          },
+        },
+      },
+    ],
+  },
 };
 
 export default veikala_darbinieks;
