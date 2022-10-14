@@ -56,6 +56,8 @@ const maksekeresData: Record<
       latloto: { chance: 0.1, cost: 2 },
       divaina_zivs: { chance: 0.1, cost: 2 },
 
+      kafija: { chance: 0.05, cost: 1 },
+
       juridiska_zivs: { chance: 0.1, cost: 3 },
       // loto_zivs: { chance: 0.05, cost: 3 },
       smilsu_pulkstenis: { chance: 0.02, cost: 3 },
