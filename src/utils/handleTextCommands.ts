@@ -61,7 +61,7 @@ const oldTextCommandList: string[] = [
 
 export default function handleTextCommands(msg: Message) {
   const { content } = msg;
-  if (!content || !content.startsWith('.')) return;
+  if (!content || !content.startsWith('.') || msg.author.bot) return;
 
   const name = content
     .split(/[ ]+/)[0]
