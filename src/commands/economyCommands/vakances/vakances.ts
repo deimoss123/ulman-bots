@@ -29,18 +29,18 @@ export const JobPositions: Record<string, JobPosData> = {
     emojiId: '1009557052282118155',
     minLevel: 10,
   },
-  velo_labotajs: {
-    name: 'Velosipēdu labotājs',
-    description: 'Labot padomju laiku velosipēdus',
-    emojiId: '1009557053741748324',
-    minLevel: 20,
-  },
-  it_specialists: {
-    name: 'IT speciālists',
-    description: 'Labot printerus un grozīt aparātus',
-    emojiId: '1009557050222727260',
-    minLevel: 30,
-  },
+  // velo_labotajs: {
+  //   name: 'Velosipēdu labotājs',
+  //   description: 'Labot padomju laiku velosipēdus',
+  //   emojiId: '1009557053741748324',
+  //   minLevel: 20,
+  // },
+  // it_specialists: {
+  //   name: 'IT speciālists',
+  //   description: 'Labot printerus un grozīt aparātus',
+  //   emojiId: '1009557050222727260',
+  //   minLevel: 30,
+  // },
 };
 
 const vakances: Command = {
@@ -74,11 +74,18 @@ const vakances: Command = {
             ? `<:${jobPosition}:${JobPositions[jobPosition]!.emojiId}> ${JobPositions[jobPosition]!.name}`
             : 'Bezdarbnieks'
         }**`,
-        fields: Object.entries(JobPositions).map(([key, vakance]) => ({
-          name: `<:${key}:${vakance.emojiId}> ${vakance.name} | ${vakance.minLevel}. līmenis`,
-          value: vakance.description,
-          inline: false,
-        })),
+        fields: [
+          ...Object.entries(JobPositions).map(([key, vakance]) => ({
+            name: `<:${key}:${vakance.emojiId}> ${vakance.name} | ${vakance.minLevel}. līmenis`,
+            value: vakance.description,
+            inline: false,
+          })),
+          {
+            name: '\u200b',
+            value: '_Papildus darbi tiks pievienoti jau pavisam drīz..._',
+            inline: false,
+          },
+        ],
         components: vakancesComponents(chosenJob, level, jobPosition),
       })
     );

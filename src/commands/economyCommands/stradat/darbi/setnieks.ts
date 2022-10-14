@@ -87,7 +87,7 @@ const setnieks: StradatInteractions = {
           a: {
             chance: '*',
             text: 'Tu iespēri pa kasti, bet nekas nenotika',
-            reward: { lati: [5, 10] },
+            reward: { lati: [10, 20] },
           },
           b: {
             chance: 0.3,

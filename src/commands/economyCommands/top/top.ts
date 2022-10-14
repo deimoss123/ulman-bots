@@ -11,7 +11,7 @@ import getStatsMany from '../../../economy/stats/getStatsMany';
 export const TOP_LIMIT = 10;
 
 const top: Command = {
-  description: 'Apskatīt severa lietotāja topu', // TODO: apraksts
+  description: 'Apskatīt severa lietotāja topu',
   color: commandColors.top,
   data: topData,
   async run(i) {

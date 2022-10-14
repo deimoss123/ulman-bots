@@ -16,7 +16,7 @@ function displayPlace(index: number): string {
 }
 
 const statistika: Command = {
-  description: 'statistika', //TODO: apraksts priekš /palidziba
+  description: 'Apskatīt savu, vai kāda cita servera statistiku',
   color: commandColors.statistika,
   data: {
     name: 'statistika',

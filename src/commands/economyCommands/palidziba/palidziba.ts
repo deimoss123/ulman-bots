@@ -1,4 +1,5 @@
 import { ApplicationCommandOptionType } from 'discord.js';
+import commandColors from '../../../embeds/commandColors';
 import embedTemplate, { ULMANBOTA_VERSIJA } from '../../../embeds/embedTemplate';
 import errorEmbed from '../../../embeds/errorEmbed';
 import Command from '../../../interfaces/Command';
@@ -14,7 +15,7 @@ export function getPalidzibaChoices() {
 
 const palidziba: Command = {
   description: '???',
-  color: 0xffffff,
+  color: commandColors.info,
   data: {
     name: 'palidziba',
     description: 'Iegūt informāciju par komandām un dažādām UlmaņBota sistēmām',
