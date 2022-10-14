@@ -12,7 +12,7 @@ import smallEmbed from '../../embeds/smallEmbed';
 import Command from '../../interfaces/Command';
 
 const okddInv = '<https://discord.gg/F4s5AwYTMy>';
-const okddId = '875083366611955712'; // TODO
+const okddId = '797584379685240882';
 
 const PABALSTS_XP = 5;
 const PABALSTS_LATI = 50;
