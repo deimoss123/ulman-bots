@@ -17,10 +17,9 @@ const smilsu_pulkstenis: UsableItemFunc = async (userId, guildId) => {
     };
   }
 
-  const [userAfter] = await Promise.all([
-    syncFishing(userId, guildId, false, false, ZVEJA_SHIFT_TIME),
-    addItems(userId, guildId, { smilsu_pulkstenis: -1 }),
-  ]);
+  await addItems(userId, guildId, { smilsu_pulkstenis: -1 });
+  const userAfter = await syncFishing(userId, guildId, false, false, ZVEJA_SHIFT_TIME);
+
   if (!userAfter) {
     return { text: 'UlmaņBota kļūda' };
   }

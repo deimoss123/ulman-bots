@@ -117,8 +117,9 @@ export default async function pardotRun(
       addLati(userId, guildId, soldItemsValue),
       addLati(i.client.user!.id, guildId, taxPaid),
       setStats(userId, guildId, { soldShop: soldItemsValue, taxPaid }),
-      addItems(userId, guildId, itemsToSellObj),
     ]);
+
+    await addItems(userId, guildId, itemsToSellObj)
 
     return i.reply(pardotEmbed(i, user, itemsToSell, soldItemsValue));
   }

@@ -193,17 +193,16 @@ export default async function iedotRunSpecial(
       return i.reply(cantPayTaxEmbed(itemObj, 1, totalTax, user));
     }
 
-    const promises = [
+    await Promise.all([
       iedotSpecialQuery(i, targetUser, guildId, itemsInInv),
       setStats(targetUser.userId, guildId, { itemsReceived: 1 }),
       setStats(userId, guildId, { itemsGiven: 1, taxPaid: totalTax }),
-    ];
+    ]);
 
     if (!hasJuridisks) {
-      promises.push(addLati(userId, guildId, -totalTax), addLati(i.client.user!.id, guildId, totalTax));
+      await addLati(userId, guildId, -totalTax);
+      await addLati(i.client.user!.id, guildId, totalTax);
     }
-
-    await Promise.all(promises);
 
     return i.reply(makeEmbedAfter(i, totalTax, targetUser, itemsInInv, hasJuridisks, itemObj));
   }
@@ -286,17 +285,16 @@ export default async function iedotRunSpecial(
           }
         }
 
-        const promises = [
+        await Promise.all([
           iedotSpecialQuery(i, targetUser, guildId, selectedItems),
           setStats(targetUser.userId, guildId, { itemsReceived: selectedItems.length }),
           setStats(userId, guildId, { itemsGiven: selectedItems.length, taxPaid: totalTax }),
-        ];
+        ]);
 
         if (!hasJuridisks) {
-          promises.push(addLati(userId, guildId, -totalTax), addLati(i.client.user!.id, guildId, totalTax));
+          await addLati(userId, guildId, -totalTax)
+          await addLati(i.client.user!.id, guildId, totalTax)
         }
-
-        await Promise.all(promises);
 
         return {
           end: true,

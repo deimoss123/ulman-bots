@@ -93,12 +93,11 @@ const pardot: Command = {
 
       await Promise.all([
         addItems(userId, guildId, { [key]: -amount }),
-        addLati(userId, guildId, soldItemsValue),
         addLati(i.client.user!.id, guildId, taxPaid),
         setStats(userId, guildId, { soldShop: soldItemsValue, taxPaid }),
       ]);
 
-      i.reply(pardotEmbed(i, user, itemsToSell, soldItemsValue));
+      await addLati(userId, guildId, soldItemsValue), i.reply(pardotEmbed(i, user, itemsToSell, soldItemsValue));
     }
   },
 };

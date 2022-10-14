@@ -119,16 +119,15 @@ const ubagot: Command = {
 
     let earnedLati = 0;
 
-    const promises = [addTimeCooldown(userId, guildId, this.data.name), addDailyCooldown(userId, guildId, 'ubagot')];
+    await addTimeCooldown(userId, guildId, this.data.name);
+    await addDailyCooldown(userId, guildId, 'ubagot');
 
     if (!obj.reward) {
       earnedLati = Math.floor(Math.random() * (LATI_MAX - LATI_MIN)) + LATI_MIN;
-      promises.push(addLati(userId, guildId, earnedLati));
+      await addLati(userId, guildId, earnedLati);
     } else {
-      promises.push(addItems(userId, guildId, obj.reward));
+      await addItems(userId, guildId, obj.reward);
     }
-
-    await Promise.all(promises);
 
     const xpToAdd = Math.round(Math.random() * (XP_MAX - XP_MIN)) + XP_MIN;
 

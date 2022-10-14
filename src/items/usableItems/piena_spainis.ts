@@ -21,10 +21,8 @@ const piena_spainis: UsableItemFunc = async (userId, guildId) => {
     newStatus[key] = 0;
   }
 
-  await Promise.all([
-    setUser(userId, guildId, { status: newStatus as UserStatus }),
-    addItems(userId, guildId, { piena_spainis: -1 }),
-  ]);
+  await setUser(userId, guildId, { status: newStatus as UserStatus });
+  await addItems(userId, guildId, { piena_spainis: -1 });
 
   return {
     text: 'Tev tika noņemti visi statusi',

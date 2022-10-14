@@ -175,15 +175,15 @@ const tirgus: Command = {
           Object.entries(itemObj.tirgusPrice!.items).map(([key, amount]) => [key, -amount])
         );
 
-        const promises = [
-          addItems(userId, guildId, { ...itemsToRemove, [selectedListing]: 1 }),
-          setTirgus(userId, guildId, selectedListing),
-        ];
-        if (itemObj.tirgusPrice?.lati) promises.push(addLati(userId, guildId, -itemObj.tirgusPrice.lati));
+        await addItems(userId, guildId, { ...itemsToRemove, [selectedListing]: 1 });
+        await setTirgus(userId, guildId, selectedListing);
 
-        const res = await Promise.all(promises);
+        if (itemObj.tirgusPrice?.lati) {
+          await addLati(userId, guildId, -itemObj.tirgusPrice.lati);
+        }
+
         const userAfter = await findUser(userId, guildId);
-        if (res.includes(undefined) || !userAfter) return { error: true };
+        if (!userAfter) return { error: true };
 
         const itemsBoughtAfter = getBoughtItems(userAfter);
 

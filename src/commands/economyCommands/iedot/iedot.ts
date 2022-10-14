@@ -126,7 +126,8 @@ const iedot: Command = {
     ];
 
     if (!hasJuridisks) {
-      promises.push(addLati(userId, guildId, -totalTax), addLati(i.client.user!.id, guildId, totalTax));
+      await addLati(userId, guildId, -totalTax);
+      await addLati(i.client.user!.id, guildId, totalTax);
     }
 
     await Promise.all(promises);

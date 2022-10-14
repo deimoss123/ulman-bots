@@ -168,17 +168,16 @@ const stradat: Command = {
 
           let rewardText = 'Tu neko nenopelnīji';
           const { reward } = choiceResult;
-          const promises: Promise<any>[] = [];
 
           if (reward) {
             rewardText = 'Tu nopelnīji ';
             if (reward.lati) {
               const latiToAdd = Math.round(Math.random() * (reward.lati[1] - reward.lati[0]) + reward.lati[0]);
-              promises.push(addLati(userId, guildId, latiToAdd));
+              await addLati(userId, guildId, latiToAdd);
               rewardText += `**${latiString(latiToAdd, true)}** `;
             }
             if (reward.items) {
-              promises.push(addItems(userId, guildId, reward.items));
+              addItems(userId, guildId, reward.items);
               rewardText += Object.entries(reward.items)
                 .map(([key, amount]) => itemString(itemList[key], amount, true))
                 .join(' ');
@@ -187,12 +186,8 @@ const stradat: Command = {
 
           const xpToAdd = Math.round(Math.random() * (STRADAT_XP_MAX - STRADAT_XP_MIN)) + STRADAT_XP_MIN;
 
-          // nav labs 3 datubāzes saucieni
-          await Promise.all([
-            addTimeCooldown(userId, guildId, this.data.name),
-            addDailyCooldown(userId, guildId, 'stradat', isExtraUse),
-            ...promises,
-          ]);
+          await addTimeCooldown(userId, guildId, this.data.name);
+          await addDailyCooldown(userId, guildId, 'stradat', isExtraUse);
 
           const leveledUser = await addXp(userId, guildId, xpToAdd);
           if (!leveledUser) return { error: true };

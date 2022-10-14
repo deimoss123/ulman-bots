@@ -70,13 +70,13 @@ export default async function pirktRun(
 
   const tax = Math.floor(totalCost * PIRKT_PARDOT_NODOKLIS);
 
-  const [userAfter] = await Promise.all([
-    addItems(userId, guildId, { [itemToBuyKey]: amountToBuy }),
+  await Promise.all([
     addLati(i.client.user!.id, guildId, tax),
     addLati(userId, guildId, -totalCost),
     setStats(userId, guildId, { spentShop: totalCost, taxPaid: tax }),
   ]);
 
+  const userAfter = await addItems(userId, guildId, { [itemToBuyKey]: amountToBuy });
   if (!userAfter) return i.reply(errorEmbed);
 
   if (itemToBuy.attributes) {

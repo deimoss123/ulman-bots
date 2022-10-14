@@ -50,7 +50,9 @@ const pabalsts: Command = {
       return i.reply(ephemeralReply('Tu vari saņemt pabalstu tikai **1** (vienu) reizi dienā'));
     }
 
-    await Promise.all([addLati(userId, guildId, PABALSTS_LATI), addDailyCooldown(userId, guildId, 'pabalsts')]);
+    await addLati(userId, guildId, PABALSTS_LATI);
+    await addDailyCooldown(userId, guildId, 'pabalsts');
+
     const leveledUser = await addXp(userId, guildId, PABALSTS_XP);
     if (!leveledUser) return i.reply(errorEmbed);
 

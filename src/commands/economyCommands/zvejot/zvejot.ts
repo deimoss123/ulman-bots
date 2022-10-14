@@ -169,11 +169,9 @@ const zvejot: Command = {
               }
             }
 
-            await Promise.all([
-              setFishing(userId, guildId, { caughtFishes: null }),
-              addItems(userId, guildId, fishesToAdd),
-            ]);
-
+            await setFishing(userId, guildId, { caughtFishes: null });
+            await addItems(userId, guildId, fishesToAdd);
+            
             await syncFishing(userId, guildId, true);
 
             const leveledUser = await addXp(userId, guildId, xpToAdd);

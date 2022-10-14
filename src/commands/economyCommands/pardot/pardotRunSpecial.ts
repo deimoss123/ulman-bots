@@ -100,11 +100,10 @@ export default async function pardotRunSpecial(
     await Promise.all([
       addLati(i.client.user!.id, guildId, taxPaid),
       addLati(userId, guildId, soldValue),
-      removeItemsById(userId, guildId, [itemsInInv[0]._id!]),
       setStats(userId, guildId, { soldShop: soldValue, taxPaid }),
     ]);
 
-    const user = await findUser(userId, guildId);
+    const user = await removeItemsById(userId, guildId, [itemsInInv[0]._id!]);
     if (!user) return i.reply(errorEmbed);
 
     return i.reply(makeEmbed(i, user, itemsInInv, soldValue, embedColor));
@@ -166,13 +165,12 @@ export default async function pardotRunSpecial(
         const taxPaid = Math.floor(soldValue * PIRKT_PARDOT_NODOKLIS);
 
         await Promise.all([
-          removeItemsById(userId, guildId, selectedIds),
           addLati(i.client.user!.id, guildId, taxPaid),
           addLati(userId, guildId, soldValue),
           setStats(userId, guildId, { soldShop: soldValue, taxPaid }),
         ]);
 
-        const userAfter = await findUser(userId, guildId);
+        const userAfter = await removeItemsById(userId, guildId, selectedIds);
         if (!userAfter) return { error: true };
 
         return {

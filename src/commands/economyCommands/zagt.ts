@@ -94,10 +94,11 @@ const zagt: Command = {
       const [userAfter, bankaUser] = await Promise.all([
         editItemAttribute(i.user.id, guildId, maiss._id!, { latiCollected: stolenAmount }),
         addLati(i.client.user!.id, guildId, -stolenAmount),
-        addTimeCooldown(i.user.id, guildId, 'zagt'),
-        setStats(i.user.id, guildId, { stolenFromBanka: stolenAmount }),
       ]);
       if (!userAfter || !bankaUser) return i.reply(errorEmbed);
+
+      await addTimeCooldown(i.user.id, guildId, 'zagt');
+      await setStats(i.user.id, guildId, { stolenFromBanka: stolenAmount });
 
       return i.reply(
         embedTemplate({
@@ -157,9 +158,10 @@ const zagt: Command = {
     const promises = [
       addLati(i.user.id, guildId, stolenAmount * (didSteal ? 1 : -1)),
       addLati(target.id, guildId, stolenAmount * (didSteal ? -1 : 1)),
-      addTimeCooldown(i.user.id, guildId, 'zagt'),
       setStats(i.user.id, guildId, didSteal ? { stolenLati: stolenAmount } : { lostStealingLati: stolenAmount }),
     ];
+
+    await addTimeCooldown(i.user.id, guildId, 'zagt')
 
     const [userAfter, targetUserAfter] = await Promise.all(promises);
     if (!userAfter || !targetUserAfter) return i.reply(errorEmbed);

@@ -10,6 +10,7 @@ import errorEmbed from '../../../embeds/errorEmbed';
 import itemString from '../../../embeds/helpers/itemString';
 import latiString from '../../../embeds/helpers/latiString';
 import smallEmbed from '../../../embeds/smallEmbed';
+import UserProfile from '../../../interfaces/UserProfile';
 import itemList from '../../../items/itemList';
 import interactionCache from '../../../utils/interactionCache';
 import { KazinoLikme } from '../rulete/rulete';
@@ -104,9 +105,7 @@ export default async function feniksRun(
     );
   }
 
-  const [msg] = (await Promise.all(promises)) as [Message];
-
-  const userAfter = await findUser(userId, guildId);
+  const [msg, userAfter] = (await Promise.all(promises)) as [Message, UserProfile];
   if (!userAfter) {
     return i.editReply({
       embeds: smallEmbed(errorEmbed.content!, commandColors.feniks).embeds,
