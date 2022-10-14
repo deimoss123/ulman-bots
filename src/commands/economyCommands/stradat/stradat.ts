@@ -177,7 +177,7 @@ const stradat: Command = {
               rewardText += `**${latiString(latiToAdd, true)}** `;
             }
             if (reward.items) {
-              addItems(userId, guildId, reward.items);
+              await addItems(userId, guildId, reward.items);
               rewardText += Object.entries(reward.items)
                 .map(([key, amount]) => itemString(itemList[key], amount, true))
                 .join(' ');
