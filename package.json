@@ -8,6 +8,7 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "register": "ts-node src/registerGuildCommands.ts",
+    "register-global": "ts-node src/registerGlobalCommands.ts",
     "lint": "eslint . --ext .ts"
   },
   "keywords": [],

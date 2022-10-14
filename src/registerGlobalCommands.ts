@@ -6,10 +6,8 @@ import chalk from 'chalk';
 import { getPalidzibaChoices } from './commands/economyCommands/palidziba/palidziba';
 
 async function registerGuildCommands(client: Client) {
-  const guild = await client.guilds.fetch(process.env.DEV_SERVER_ID!);
-
-  guild.commands
-    .set(
+  client
+    .application!.commands.set(
       [...commandList, ...devCommandList].map(command => {
         if (command.data.name === 'palidziba') {
           // @ts-ignore šīzofrēnija
@@ -19,7 +17,7 @@ async function registerGuildCommands(client: Client) {
       })
     )
     .then(() => {
-      console.log(chalk.green('Guild commands registered!'));
+      console.log(chalk.green('Global commands registered!'));
       process.exit(0);
     });
 }
@@ -29,4 +27,4 @@ dotenv.config();
 if (!validateEnv()) process.exit(1);
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-client.login(process.env.BOT_TOKEN).then(async () => registerGuildCommands(client));
+client.login(process.env.BOT_TOKEN).then(() => registerGuildCommands(client));
