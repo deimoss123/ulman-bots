@@ -20,6 +20,7 @@ import zemenu_rasens, { RASENS_STATUS_TIME } from './usableItems/zemenu_rasens';
 import { statusList } from '../commands/economyCommands/profils';
 import millisToReadableTime from '../embeds/helpers/millisToReadableTime';
 import piena_spainis from './usableItems/piena_spainis';
+import divaina_zivs from './usableItems/divaina_zivs';
 
 export type ItemKey = string;
 
@@ -544,7 +545,8 @@ const itemList: Record<ItemKey, Item> = {
     imgLink: 'https://i.postimg.cc/2SfqF2Y5/divaina-zivs.gif',
     categories: [ItemCategory.ZIVIS],
     value: 50,
-    removedOnUse: false,
+    removedOnUse: true,
+    use: divaina_zivs,
   },
 
   // -- velosipēds --
