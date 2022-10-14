@@ -14,7 +14,7 @@ export interface SortDataEntry {
   topDescription?: (total: number) => string;
 }
 
-const sortData: Record<string, SortDataEntry> = {
+const sortDataProfile: Record<string, SortDataEntry> = {
   maks: {
     title: 'Maku',
     projection: { lati: 1 },
@@ -52,4 +52,4 @@ const sortData: Record<string, SortDataEntry> = {
   },
 };
 
-export default sortData;
+export default sortDataProfile;

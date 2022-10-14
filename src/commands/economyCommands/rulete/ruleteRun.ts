@@ -8,6 +8,7 @@ import {
 } from 'discord.js';
 import addLati from '../../../economy/addLati';
 import findUser from '../../../economy/findUser';
+import setStats from '../../../economy/stats/setStats';
 import buttonHandler from '../../../embeds/buttonHandler';
 import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
@@ -160,6 +161,13 @@ export default async function ruleteRun(
       embeds: ruleteEmbed(i, position, likme, likmeLati, rulRes, true),
       components: rulComponents(position, likme, lati, true),
       fetchReply: true,
+    }),
+    setStats(userId, guildId, {
+      rulBiggestBet: `=${likmeLati}`,
+      rulBiggestWin: `=${rulRes.multiplier * likmeLati}`,
+      rulSpent: likmeLati,
+      rulWon: rulRes.multiplier * likmeLati,
+      rulSpinCount: 1,
     }),
   ]);
 

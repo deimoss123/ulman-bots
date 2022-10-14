@@ -9,7 +9,7 @@ import {
 import addItems from '../../../economy/addItems';
 import addLati from '../../../economy/addLati';
 import findUser from '../../../economy/findUser';
-import setStats from '../../../economy/setStats';
+import setStats from '../../../economy/stats/setStats';
 import setUser from '../../../economy/setUser';
 import buttonHandler from '../../../embeds/buttonHandler';
 import commandColors from '../../../embeds/commandColors';

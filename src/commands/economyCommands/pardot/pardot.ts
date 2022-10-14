@@ -9,7 +9,7 @@ import pardotRun, { pardotEmbed } from './pardotRun';
 import addItems from '../../../economy/addItems';
 import addLati from '../../../economy/addLati';
 import ephemeralReply from '../../../embeds/ephemeralReply';
-import setStats from '../../../economy/setStats';
+import setStats from '../../../economy/stats/setStats';
 
 export const PIRKT_PARDOT_NODOKLIS = 0.05;
 

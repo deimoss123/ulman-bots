@@ -60,37 +60,6 @@ export interface UserFishing {
   caughtFishes: Record<ItemKey, number> | null;
 }
 
-export interface UserStats {
-  spentShop: number;
-  soldShop: number;
-  taxPaid: number;
-
-  paidLati: number;
-  receivedLati: number;
-
-  itemsGiven: number;
-  itemsReceived: number;
-
-  stolenLati: number;
-  lostStealingLati: number;
-  stolenFromBanka: number;
-
-  caughtFishCount: number;
-  timeSpentFishing: number;
-
-  fenkaBiggestWin: number;
-  fenkaBiggestBet: number;
-  fenkaSpent: number;
-  fenkaWon: number;
-  fenkaSpinCount: number;
-
-  rulBiggestWin: number;
-  rulBiggestBet: number;
-  rulSpent: number;
-  rulWon: number;
-  rulSpinCount: number;
-}
-
 interface UserTirgus {
   // "1/1/1970"
   lastDayUsed: string;
@@ -122,8 +91,6 @@ interface UserProfile {
   fishing: UserFishing;
 
   tirgus: UserTirgus;
-
-  statistika: UserStats;
 }
 
 export default UserProfile;

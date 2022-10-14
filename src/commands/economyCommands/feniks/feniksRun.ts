@@ -1,7 +1,8 @@
-import { ButtonInteraction, CommandInteraction, ComponentType } from 'discord.js';
+import { ButtonInteraction, CommandInteraction, ComponentType, Message } from 'discord.js';
 import addItems from '../../../economy/addItems';
 import addLati from '../../../economy/addLati';
 import findUser from '../../../economy/findUser';
+import setStats from '../../../economy/stats/setStats';
 import buttonHandler from '../../../embeds/buttonHandler';
 import commandColors from '../../../embeds/commandColors';
 import ephemeralReply from '../../../embeds/ephemeralReply';
@@ -81,7 +82,7 @@ export default async function feniksRun(
     if (!user) return i.reply(errorEmbed);
   }
 
-  const [msg] = await Promise.all([
+  const promises: Promise<any>[] = [
     i.reply({
       content: '\u200B',
       embeds: feniksEmbed(i, likme, likmeLati, DEFAULT_EMOJI_COUNT, isFree),
@@ -89,7 +90,21 @@ export default async function feniksRun(
       fetchReply: true,
     }),
     addLati(userId, guildId, latiWon - (isFree ? 0 : likmeLati)),
-  ]);
+  ];
+
+  if (!isFree) {
+    promises.push(
+      setStats(userId, guildId, {
+        fenkaBiggestWin: `=${latiWon}`,
+        fenkaBiggestBet: `=${likmeLati}`,
+        fenkaSpent: likmeLati,
+        fenkaWon: latiWon,
+        fenkaSpinCount: 1,
+      })
+    );
+  }
+
+  const [msg] = (await Promise.all(promises)) as [Message];
 
   const userAfter = await findUser(userId, guildId);
   if (!userAfter) {

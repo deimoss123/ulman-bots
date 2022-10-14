@@ -28,7 +28,7 @@ const rulete: Command = {
 
     const subCommand = i.options.getSubcommand()!;
     const likme: KazinoLikme =
-      subCommand === 'likme' ? i.options.getInteger('likme_lati')! : (subCommand as 'viss' | 'virve');
+      subCommand === '-' ? i.options.getInteger('likme_lati')! : (subCommand as 'viss' | 'virve');
 
     ruleteRun(i, position, likme);
   },

@@ -16,7 +16,7 @@ import addLati from '../../../economy/addLati';
 import iedotRunSpecial, { noInvSpaceEmbed } from './iedotRunSpecial';
 import Item from '../../../interfaces/Item';
 import UserProfile from '../../../interfaces/UserProfile';
-import setStats from '../../../economy/setStats';
+import setStats from '../../../economy/stats/setStats';
 
 export function cantPayTaxEmbed(itemToGive: Item, amountToGive: number, totalTax: number, user: UserProfile) {
   return ephemeralReply(

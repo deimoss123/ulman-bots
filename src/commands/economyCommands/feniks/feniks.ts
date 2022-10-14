@@ -43,7 +43,7 @@ const feniks: Command = {
     description: 'Griezt aparātu (slotus)',
     options: [
       {
-        name: 'likme',
+        name: '-',
         description: 'Griezt aparātu ar noteiktu likmi',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
@@ -80,7 +80,7 @@ const feniks: Command = {
     }
 
     const likme: KazinoLikme =
-      subCommandName === 'likme' ? i.options.getInteger('likme_lati')! : (subCommandName as 'virve' | 'viss');
+      subCommandName === '-' ? i.options.getInteger('likme_lati')! : (subCommandName as 'virve' | 'viss');
 
     if (likme < FENIKS_MIN_LIKME) return i.reply(errorEmbed);
 

@@ -70,7 +70,7 @@ const ruleteData: ChatInputApplicationCommandData = {
       type: ApplicationCommandOptionType.SubcommandGroup,
       options: [
         {
-          name: 'likme',
+          name: '-',
           description: 'Ar cik lielu likmi griezt ruleti',
           type: ApplicationCommandOptionType.Subcommand,
           options: [
@@ -104,7 +104,7 @@ const ruleteData: ChatInputApplicationCommandData = {
       type: ApplicationCommandOptionType.SubcommandGroup,
       options: [
         {
-          name: 'likme',
+          name: '-',
           description: 'Ar cik lielu likmi griezt ruleti',
           type: ApplicationCommandOptionType.Subcommand,
           options: [

@@ -21,7 +21,7 @@ import izmantotRun from '../izmantot/izmantotRun';
 import getItemPrice from '../../../items/helpers/getItemPrice';
 import { PIRKT_PARDOT_NODOKLIS } from '../pardot/pardot';
 import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems';
-import setStats from '../../../economy/setStats';
+import setStats from '../../../economy/stats/setStats';
 
 export default async function pirktRun(
   i: CommandInteraction | ButtonInteraction,

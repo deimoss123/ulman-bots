@@ -10,7 +10,7 @@ import addLati from '../../../economy/addLati';
 import addSpecialItems from '../../../economy/addSpecialItems';
 import findUser from '../../../economy/findUser';
 import removeItemsById from '../../../economy/removeItemsById';
-import setStats from '../../../economy/setStats';
+import setStats from '../../../economy/stats/setStats';
 import buttonHandler from '../../../embeds/buttonHandler';
 import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';

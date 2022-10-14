@@ -7,7 +7,7 @@ import errorEmbed from '../../embeds/errorEmbed';
 import addLati from '../../economy/addLati';
 import ephemeralReply from '../../embeds/ephemeralReply';
 import commandColors from '../../embeds/commandColors';
-import setStats from '../../economy/setStats';
+import setStats from '../../economy/stats/setStats';
 
 const maksat: Command = {
   description:

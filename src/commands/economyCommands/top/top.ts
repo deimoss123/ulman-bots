@@ -5,7 +5,7 @@ import topData from './topData';
 import errorEmbed from '../../../embeds/errorEmbed';
 import topEmbed from './topEmbed';
 import findUser from '../../../economy/findUser';
-import sortData from './sortData';
+import sortDataProfile from './sortData';
 
 export const TOP_LIMIT = 10;
 
@@ -18,7 +18,7 @@ const top: Command = {
 
     const category = i.options.getString('kategorija')!;
 
-    const sortDataObj = sortData[category];
+    const sortDataObj = sortDataProfile[category];
     if (!sortDataObj) return i.reply(errorEmbed);
 
     const { projection, sortFunc } = sortDataObj;

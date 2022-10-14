@@ -1,11 +1,9 @@
 import UserProfile from '../interfaces/UserProfile';
+import Stats from '../schemas/Stats';
 import User from '../schemas/User';
 import userCache from '../utils/userCache';
 
-export default async function findUser(
-  userId: string,
-  guildId: string
-): Promise<UserProfile | undefined> {
+export default async function findUser(userId: string, guildId: string): Promise<UserProfile | undefined> {
   try {
     if (userCache[guildId]?.[userId]) return JSON.parse(JSON.stringify(userCache[guildId][userId]));
 
@@ -17,8 +15,8 @@ export default async function findUser(
       return JSON.parse(JSON.stringify(result));
     }
 
-    const newUser = await new User({ userId, guildId });
-    newUser.save();
+    const [newUser, newStats] = await Promise.all([new User({ userId, guildId }), new Stats({ userId, guildId })]);
+    await Promise.all([newUser.save(), newStats.save()]);
 
     if (!userCache[guildId]) userCache[guildId] = {};
     userCache[guildId][userId] = newUser as UserProfile;

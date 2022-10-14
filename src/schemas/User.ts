@@ -154,37 +154,6 @@ const userSchema = new Schema<UserProfile>({
       default: [],
     },
   },
-
-  statistika: {
-    spentShop: NumZero,
-    soldShop: NumZero,
-    taxPaid: NumZero,
-
-    paidLati: NumZero,
-    receivedLati: NumZero,
-
-    itemsGiven: NumZero,
-    itemsReceived: NumZero,
-
-    stolenLati: NumZero,
-    lostStealingLati: NumZero,
-    stolenFromBanka: NumZero,
-
-    caughtFishCount: NumZero,
-    timeSpentFishing: NumZero,
-
-    fenkaBiggestWin: NumZero,
-    fenkaBiggestBet: NumZero,
-    fenkaSpent: NumZero,
-    fenkaWon: NumZero,
-    fenkaSpinCount: NumZero,
-
-    rulBiggestWin: NumZero,
-    rulBiggestBet: NumZero,
-    rulSpent: NumZero,
-    rulWon: NumZero,
-    rulSpinCount: NumZero,
-  },
 });
 
 export default model('User', userSchema);

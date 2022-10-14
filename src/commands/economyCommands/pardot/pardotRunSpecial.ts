@@ -9,7 +9,7 @@ import {
 import addLati from '../../../economy/addLati';
 import findUser from '../../../economy/findUser';
 import removeItemsById from '../../../economy/removeItemsById';
-import setStats from '../../../economy/setStats';
+import setStats from '../../../economy/stats/setStats';
 import buttonHandler from '../../../embeds/buttonHandler';
 import embedTemplate from '../../../embeds/embedTemplate';
 import ephemeralReply from '../../../embeds/ephemeralReply';
