@@ -171,7 +171,7 @@ const zvejot: Command = {
 
             await setFishing(userId, guildId, { caughtFishes: null });
             await addItems(userId, guildId, fishesToAdd);
-            
+
             await syncFishing(userId, guildId, true);
 
             const leveledUser = await addXp(userId, guildId, xpToAdd);
@@ -287,10 +287,8 @@ const zvejot: Command = {
 
             const { maxDurability } = maksekeresData[fishing.selectedRod!];
 
-            await Promise.all([
-              setFishing(userId, guildId, { usesLeft: maxDurability }),
-              addLati(userId, guildId, repairCost),
-            ]);
+            await setFishing(userId, guildId, { usesLeft: maxDurability });
+            await addLati(userId, guildId, repairCost);
 
             const userAfter = await syncFishing(userId, guildId, true);
             if (!userAfter) return { error: true };
