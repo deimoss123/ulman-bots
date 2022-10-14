@@ -1,5 +1,5 @@
 import { Client, GatewayIntentBits } from 'discord.js';
-import { commandList, devCommandList } from './commands/commandList';
+import { commandList } from './commands/commandList';
 import dotenv from 'dotenv';
 import validateEnv from './utils/validateEnv';
 import chalk from 'chalk';
@@ -8,7 +8,7 @@ import { getPalidzibaChoices } from './commands/economyCommands/palidziba/palidz
 async function registerGuildCommands(client: Client) {
   client
     .application!.commands.set(
-      [...commandList, ...devCommandList].map(command => {
+      commandList.map(command => {
         if (command.data.name === 'palidziba') {
           // @ts-ignore šīzofrēnija
           command.data.options[1].options[0].choices = getPalidzibaChoices();
