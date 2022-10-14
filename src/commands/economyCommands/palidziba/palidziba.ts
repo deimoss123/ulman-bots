@@ -21,8 +21,8 @@ const palidziba: Command = {
     description: 'Iegūt informāciju par komandām un dažādām UlmaņBota sistēmām',
     options: [
       {
-        name: 'par_ulmaņbotu',
-        description: 'Īsa pamācība kā izmantot UlmaņBotu',
+        name: 'jaunumi',
+        description: 'Kas jauns UlmaņBota atjauninājumos',
         type: ApplicationCommandOptionType.Subcommand,
       },
       {
@@ -38,11 +38,6 @@ const palidziba: Command = {
             choices: [], // ja
           },
         ],
-      },
-      {
-        name: 'jaunumi',
-        description: 'Kas jauns UlmaņBota atjauninājumos',
-        type: ApplicationCommandOptionType.Subcommand,
       },
     ],
   },
