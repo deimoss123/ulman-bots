@@ -188,22 +188,21 @@ const stradat: Command = {
           const xpToAdd = Math.round(Math.random() * (STRADAT_XP_MAX - STRADAT_XP_MIN)) + STRADAT_XP_MIN;
 
           // nav labs 3 datubāzes saucieni
-          const [leveledUser] = await Promise.all([
-            addXp(userId, guildId, xpToAdd),
+          await Promise.all([
             addTimeCooldown(userId, guildId, this.data.name),
             addDailyCooldown(userId, guildId, 'stradat', isExtraUse),
             ...promises,
           ]);
 
-          const userAfter = await findUser(userId, guildId);
-          if (!leveledUser || !userAfter) return { error: true };
+          const leveledUser = await addXp(userId, guildId, xpToAdd);
+          if (!leveledUser) return { error: true };
 
           return {
             end: true,
             edit: {
               embeds: [
                 embed
-                  .setTitle(embedTitle(userAfter))
+                  .setTitle(embedTitle(leveledUser.user))
                   .setDescription(
                     `${embed.data.description}\n` +
                       `> Izvēle: \`${choice.label}\`\n` +
