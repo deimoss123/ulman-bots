@@ -6,7 +6,7 @@ import findUser from './findUser';
 export default async function addDailyCooldown(
   userId: string,
   guildId: string,
-  commandName: 'stradat' | 'ubagot',
+  commandName: 'stradat' | 'ubagot' | 'pabalsts',
   isExtraUses = false
 ): Promise<UserProfile | void> {
   try {

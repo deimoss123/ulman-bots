@@ -25,6 +25,7 @@ export const dailyCooldownDefaultEach = {
 export const dailyCooldownDefault = {
   stradat: dailyCooldownDefaultEach,
   ubagot: dailyCooldownDefaultEach,
+  pabalsts: dailyCooldownDefaultEach,
 };
 
 const userSchema = new Schema<UserProfile>({
@@ -95,6 +96,7 @@ const userSchema = new Schema<UserProfile>({
     type: {
       stradat: DailyCooldownSchema,
       ubagot: DailyCooldownSchema,
+      pabalsts: DailyCooldownSchema,
     },
     // nav ideāli bet ok
     default: dailyCooldownDefault,

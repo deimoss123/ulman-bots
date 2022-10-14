@@ -17,6 +17,7 @@ const commandColors = {
   feniks: 0x2f3136,
   rulete: 0x2f3136,
   statistika: 0xebdf42,
+  pabalsts: 0xe63c7a,
 };
 
 export default commandColors;

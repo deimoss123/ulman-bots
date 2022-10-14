@@ -36,7 +36,7 @@ export interface TimeCooldown {
 }
 
 export type DailyCooldowns = Record<
-  'stradat' | 'ubagot',
+  'stradat' | 'ubagot' | 'pabalsts',
   {
     timesUsed: number;
     extraTimesUsed: number;
