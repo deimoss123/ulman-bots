@@ -29,10 +29,46 @@ const updatesList: Record<
         value:
           'Jauna mantu sistēma, kas atļauj īpašām mantām ar "atribūtiem" eksistēt\n' +
           'Atribūti var ietekmēt mantas funkcionalitāti to lietojot, tās izskatu, vai pat tās vērtību (piem. makšķeru izturība)\n' +
-          'Atribūtu mantas ir unikālas viena no otras, tāpēc tās tiek parādītas atsevišķi inventārā\n\n' +
-          '',
+          'Atribūtu mantas ir unikālas viena no otras, tāpēc tās tiek parādītas atsevišķi inventārā\n\n',
         inline: false,
-      }, // TODO: pabeigt
+      },
+      {
+        name: '__**Mantu iedošana (/iedot)**__',
+        value:
+          'Tagad jebkuru mantu ir iespējams iedot citiem lietotājiem (samaksājot nodokli protams)\n' +
+          'Ja mantai ir atribūti, tad to iedodot tie nekur nepazūd un paliek nemainīgi',
+        inline: false,
+      },
+      {
+        name: '__**Uzlabota /palīdzība komanda**__',
+        value:
+          'Tagad var apskatīt detalizētu aprakstu par jebkuru komandu (dažām komandām ir īss apraksts jo tās ir pašsaprotamas, piemēram, `/maks`)',
+        inline: false,
+      },
+      {
+        name: '__**/info komanda**__',
+        value: 'Par **katru** mantu tagad ir iespējams apskatīties informāciju un aprakstu',
+        inline: false,
+      },
+      {
+        name: '__**Tirgus (/tirgus)**__',
+        value:
+          'Tirgus ir veikals kur var nopirkt īpašas un retas mantas\n' +
+          'Tirgū katram lietotājam katru mantu ir iespējams tikai nopirkt vienu reizi katru dienu\n' +
+          'Tirgū pieejamās mantas mainās katru dienu pusnaktī',
+        inline: false,
+      },
+      {
+        name: '__**Citas izmaiņas**__',
+        value:
+          '- `.bomžot` komanda ir aizvietota ar `/ubagot`\n' +
+          '- `.statusi` komanda ir izņemta, statusus var redzēt ar komandu `/profils`\n' +
+          '- Vakanču sistēma strādāšanai (`/vakances`)\n' +
+          '- Lai strādātu vairs nav nepieciešams "vakcinēts" statuss, jo tāds vairs nepastāv\n' +
+          '- `/pabalsts` tagad ir pieejams tikai OkDraudziņDauni servera biedriem\n\n' +
+          '_**... ā un slīpsvītru (/) komandas protams :^)**_',
+        inline: false,
+      },
     ],
   },
 };
