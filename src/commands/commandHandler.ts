@@ -1,5 +1,5 @@
 import { commandList, devCommandList } from './commandList';
-import { ChatInputCommandInteraction, PermissionsBitField } from 'discord.js';
+import { ChannelType, ChatInputCommandInteraction, PermissionsBitField } from 'discord.js';
 import errorEmbed from '../embeds/errorEmbed';
 import interactionCache from '../utils/interactionCache';
 import ephemeralReply from '../embeds/ephemeralReply';
@@ -13,6 +13,8 @@ export default async function commandHandler(i: ChatInputCommandInteraction) {
   if (!i.guild) {
     return i.reply('UlmaņBota komandas var izmantot tikai serveros');
   }
+
+  if (i.channel?.type !== ChannelType.GuildText) return;
 
   if (
     !i.guild.members.me!.permissionsIn(i.channelId).has(PermissionsBitField.Flags.UseExternalEmojis) ||
