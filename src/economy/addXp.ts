@@ -101,7 +101,10 @@ export default async function addXp(userId: string, guildId: string, xpToAdd: nu
         if (reward.item) {
           // ideāli būtu neveikt velvienu datubāzes pieprasījumu bet addItems ir daudz loģika un šis ir vieglāk
           const res = await addItems(userId, guildId, reward.item);
-          if (res) user.items = res.items;
+          if (res) {
+            user.items = res.items;
+            user.specialItems = res.specialItems;
+          }
         }
         if (reward.taxDiscount) {
           const { payTax, giveTax } = reward.taxDiscount;
