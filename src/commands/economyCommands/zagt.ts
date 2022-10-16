@@ -161,7 +161,7 @@ const zagt: Command = {
       setStats(i.user.id, guildId, didSteal ? { stolenLati: stolenAmount } : { lostStealingLati: stolenAmount }),
     ];
 
-    await addTimeCooldown(i.user.id, guildId, 'zagt')
+    await addTimeCooldown(i.user.id, guildId, 'zagt');
 
     const [userAfter, targetUserAfter] = await Promise.all(promises);
     if (!userAfter || !targetUserAfter) return i.reply(errorEmbed);
