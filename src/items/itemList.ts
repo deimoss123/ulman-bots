@@ -534,7 +534,7 @@ const itemList: Record<ItemKey, Item> = {
     info: 'Šī zivs garšo nedaudz _dīvaini_, apēd (izmanto) to lai iegūtu vienu nejauši izvēlētu statusu',
     nameNomVsk: 'dīvainā zivs',
     nameNomDsk: 'dīvainās zivis',
-    nameAkuVsk: 'dīvano zivi',
+    nameAkuVsk: 'dīvaino zivi',
     nameAkuDsk: 'dīvainās zivis',
     isVirsiesuDzimte: false,
     emoji: {
