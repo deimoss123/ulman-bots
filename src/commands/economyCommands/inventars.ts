@@ -146,7 +146,7 @@ function invEmbed(
     description:
       items.length + specialItems.length
         ? `**${countItems(items) + specialItems.length}** mantas no **${itemCap}**\n` +
-          `Inventāra vērtība: **${latiString(totalValue)}**\n\n` +
+          `Inventāra vērtība: ${latiString(totalValue, false, true)}\n\n` +
           Object.entries(itemTypes).reduce(
             (prev, [key, { text, emoji }]) =>
               itemTypesInv.includes(key as ItemType) ? prev + `${emoji} - ${text}\n` : prev,
