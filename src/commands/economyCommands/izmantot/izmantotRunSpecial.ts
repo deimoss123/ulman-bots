@@ -3,6 +3,7 @@ import {
   ButtonBuilder,
   ButtonInteraction,
   ButtonStyle,
+  ChatInputCommandInteraction,
   CommandInteraction,
   ComponentType,
   SelectMenuBuilder,
@@ -71,7 +72,7 @@ function makeEmbed(
 }
 
 export default async function izmantotRunSpecial(
-  i: CommandInteraction | ButtonInteraction,
+  i: ChatInputCommandInteraction | ButtonInteraction,
   itemKey: ItemKey,
   itemsInInv: SpecialItemInProfile[],
   embedColor: number

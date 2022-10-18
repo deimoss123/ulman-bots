@@ -3,7 +3,6 @@ import {
   ButtonInteraction,
   ButtonStyle,
   ChatInputCommandInteraction,
-  CommandInteraction,
   ComponentType,
 } from 'discord.js';
 import findUser from '../../../economy/findUser';
