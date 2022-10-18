@@ -2,6 +2,7 @@ import {
   ActionRowBuilder,
   ButtonInteraction,
   ButtonStyle,
+  ChatInputCommandInteraction,
   CommandInteraction,
   ComponentType,
 } from 'discord.js';
@@ -18,7 +19,7 @@ import { ButtonBuilder } from '@discordjs/builders';
 import izmantotRunSpecial from './izmantotRunSpecial';
 
 export default async function izmantotRun(
-  i: CommandInteraction | ButtonInteraction,
+  i: ChatInputCommandInteraction | ButtonInteraction,
   itemToUseKey: string,
   embedColor: number
 ): Promise<any> {

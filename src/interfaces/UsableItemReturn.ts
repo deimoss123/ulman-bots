@@ -1,4 +1,4 @@
-import { ButtonInteraction, CommandInteraction, EmbedField } from 'discord.js';
+import { ButtonInteraction, ChatInputCommandInteraction, CommandInteraction, EmbedField } from 'discord.js';
 
 interface UsableItemReturn {
   text: string;
@@ -6,7 +6,7 @@ interface UsableItemReturn {
   color?: string;
   custom?: (
     // i: CommandInteraction | ButtonInteraction,
-    i: CommandInteraction | ButtonInteraction,
+    i: ChatInputCommandInteraction | ButtonInteraction,
     color: number
   ) => Promise<any>;
 }
