@@ -82,7 +82,7 @@ const stradat: Command = {
     }
 
     if (!countFreeInvSlots(user)) {
-      return i.reply(ephemeralReply('Lai strādātu tev vajag vismaz vienu brīvu inventāra slotu'));
+      return i.reply(ephemeralReply('Lai strādātu tev vajag vismaz vienu brīvu vietu inventārā'));
     }
 
     const darbsRun = chance(darbiRun[jobPosition]).obj as StradatVeids;

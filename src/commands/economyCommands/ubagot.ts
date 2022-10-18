@@ -111,7 +111,7 @@ const ubagot: Command = {
     }
 
     if (!countFreeInvSlots(user)) {
-      return i.reply(ephemeralReply('Lai ubagotu tev vajag vismaz vienu brīvu inventāra slotu'));
+      return i.reply(ephemeralReply('Lai ubagotu tev vajag vismaz vienu brīvu vietu inventārā'));
     }
 
     const res = chance(ubagotChances);
