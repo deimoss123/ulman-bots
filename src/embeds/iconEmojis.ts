@@ -5,4 +5,5 @@ export default {
   arrow_2_left: '<:arrow_2_left:1030173211586990230> ',
   arrow_1_right: '<:arrow_1_right:1030173209817006100>',
   arrow_2_right: '<:arrow_2_right:1030173212874657893>',
+  emptyEmoji: '<:tuksums:1030165403822981270>',
 };

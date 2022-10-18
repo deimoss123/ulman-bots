@@ -13,8 +13,6 @@ const spinEmoji = {
   name: 'spin',
 };
 
-const emptyEmoji = '<:tuksums:1030165403822981270>';
-
 export default function feniksEmbed(
   i: CommandInteraction | ButtonInteraction,
   likme: KazinoLikme,
@@ -24,6 +22,8 @@ export default function feniksEmbed(
   spinRes?: CalcSpinRes,
   wonLati?: number
 ) {
+  const { emptyEmoji, arrow_1_left, arrow_1_right, arrow_2_left, arrow_2_right } = iconEmojis;
+
   let title = 'Griežas...';
   let emojiRow = Array(spinCount).fill(`<a:${spinEmoji.name}:${spinEmoji.id}>`).join('');
   let multiplierRow = Array(spinCount).fill(emptyEmoji).join('');
@@ -87,9 +87,9 @@ export default function feniksEmbed(
         ? 0xff7a66
         : 0xff4230,
     description:
-      (isSpinning ? iconEmojis.arrow_1_right : iconEmojis.arrow_2_right) +
+      (isSpinning ? arrow_1_right : arrow_2_right) +
       `${emptyEmoji}${emojiRow}${emptyEmoji}` +
-      (isSpinning ? iconEmojis.arrow_1_left : iconEmojis.arrow_2_left) +
+      (isSpinning ? arrow_1_left : arrow_2_left) +
       `\n${emptyEmoji.repeat(2)}${multiplierRow}${emptyEmoji.repeat(2)}\n\n` +
       `**Likme:** ${latiString(likmeLati)} ` +
       (isFree ? '**(brīvgrieziens)**' : typeof likme !== 'number' ? `(${likme})` : ''),
