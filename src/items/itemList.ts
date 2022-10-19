@@ -22,7 +22,7 @@ import millisToReadableTime from '../embeds/helpers/millisToReadableTime';
 import piena_spainis from './usableItems/piena_spainis';
 import divaina_zivs from './usableItems/divaina_zivs';
 import loto_zivs from './usableItems/loto_zivs';
-import petniekzivs from './usableItems/petniekzivs';
+import petniekzivs, { PETNIEKZIVS_STATUS_TIME } from './usableItems/petniekzivs';
 
 export type ItemKey = string;
 
@@ -565,13 +565,21 @@ const itemList: Record<ItemKey, Item> = {
     use: divaina_zivs,
   },
   petniekzivs: {
+    info:
+      '__**Šodien paveiksies!**__\n\n' +
+      `Apēdot (izmantojot) šo zivi tu saņemsi statusu **"${statusList.veiksmigs}"** ` +
+      `uz \`${millisToReadableTime(PETNIEKZIVS_STATUS_TIME)}\`, ` +
+      `kas palielina feniksa, ruletes un loto biļešu procentus`,
     nameNomVsk: 'pētniekzivs',
     nameNomDsk: 'pētniekzivis',
     nameAkuVsk: 'pētniekzivi',
     nameAkuDsk: 'pētniekzivis',
     isVirsiesuDzimte: false,
-    emoji: null,
-    imgLink: null,
+    emoji: {
+      id: '1032281289245601822',
+      name: 'petniekzivs',
+    },
+    imgLink: 'https://i.postimg.cc/pTDhDc2f/petniekzivs.png',
     categories: [ItemCategory.ZIVIS],
     value: 40,
     removedOnUse: true,
