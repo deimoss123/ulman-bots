@@ -288,7 +288,7 @@ const zvejot: Command = {
             const { maxDurability } = maksekeresData[fishing.selectedRod!];
 
             await setFishing(userId, guildId, { usesLeft: maxDurability });
-            await addLati(userId, guildId, repairCost);
+            await addLati(userId, guildId, -repairCost);
 
             const userAfter = await syncFishing(userId, guildId, true);
             if (!userAfter) return { error: true };
