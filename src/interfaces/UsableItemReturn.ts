@@ -1,4 +1,4 @@
-import { ButtonInteraction, ChatInputCommandInteraction, CommandInteraction, EmbedField } from 'discord.js';
+import { ButtonInteraction, ChatInputCommandInteraction, EmbedField } from 'discord.js';
 
 interface UsableItemReturn {
   text: string;
