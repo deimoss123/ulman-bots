@@ -47,7 +47,7 @@ function lotoZivsEmbed(
   return embedTemplate({
     i,
     color: spinning ? commandColors.feniks : 0xf080ff,
-    title: `Izmantot ${itemString(itemList.loto_zivs, null, true)} (satur ${wonFishArr.length} zivis)`,
+    title: `Izmantot: ${itemString(itemList.loto_zivs, null, true)} (satur ${wonFishArr.length} zivis)`,
     description:
       (spinning ? arrow_1_right : arrow_2_right) +
       emptyEmoji +
