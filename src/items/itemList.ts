@@ -22,6 +22,7 @@ import millisToReadableTime from '../embeds/helpers/millisToReadableTime';
 import piena_spainis from './usableItems/piena_spainis';
 import divaina_zivs from './usableItems/divaina_zivs';
 import loto_zivs from './usableItems/loto_zivs';
+import petniekzivs from './usableItems/petniekzivs';
 
 export type ItemKey = string;
 
@@ -562,6 +563,19 @@ const itemList: Record<ItemKey, Item> = {
     value: 60,
     removedOnUse: true,
     use: divaina_zivs,
+  },
+  petniekzivs: {
+    nameNomVsk: 'pētniekzivs',
+    nameNomDsk: 'pētniekzivis',
+    nameAkuVsk: 'pētniekzivi',
+    nameAkuDsk: 'pētniekzivis',
+    isVirsiesuDzimte: false,
+    emoji: null,
+    imgLink: null,
+    categories: [ItemCategory.ZIVIS],
+    value: 40,
+    removedOnUse: true,
+    use: petniekzivs,
   },
 
   // -- velosipēds --
