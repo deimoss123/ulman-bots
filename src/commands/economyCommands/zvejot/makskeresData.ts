@@ -36,7 +36,7 @@ const maksekeresData: Record<
       divaina_zivs: { chance: 0.1, cost: 2 },
 
       juridiska_zivs: { chance: 0.05, cost: 3 },
-      // loto_zivs: { chance: 0.03, cost: 3 },
+      loto_zivs: { chance: 0.03, cost: 3 },
       smilsu_pulkstenis: { chance: 0.01, cost: 3 },
     },
   },
@@ -59,7 +59,7 @@ const maksekeresData: Record<
       kafija: { chance: 0.05, cost: 1 },
 
       juridiska_zivs: { chance: 0.1, cost: 3 },
-      // loto_zivs: { chance: 0.05, cost: 3 },
+      loto_zivs: { chance: 0.05, cost: 3 },
       smilsu_pulkstenis: { chance: 0.02, cost: 3 },
       brivgriez100: { chance: 0.01, cost: 3 },
     },
@@ -77,7 +77,7 @@ const maksekeresData: Record<
       dizloto: { chance: 0.15, cost: 2 },
 
       brivgriez100: { chance: 0.1, cost: 3 },
-      // loto_zivs: { chance: 0.1, cost: 3 },
+      loto_zivs: { chance: 0.1, cost: 3 },
 
       petnieks: { chance: 0.005, cost: 5 },
     },
