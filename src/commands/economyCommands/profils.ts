@@ -15,6 +15,7 @@ export const statusList: Record<UserStatusName, string> = {
   aizsargats: 'Aizsargāts',
   laupitajs: 'Laupītājs',
   juridisks: 'Juridiska persona',
+  veiksmigs: 'Veiksmīgs',
 };
 
 const profils: Command = {

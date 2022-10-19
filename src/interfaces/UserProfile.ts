@@ -46,7 +46,7 @@ export type DailyCooldowns = Record<
   }
 >;
 
-export type UserStatusName = 'aizsargats' | 'laupitajs' | 'juridisks';
+export type UserStatusName = 'aizsargats' | 'laupitajs' | 'juridisks' | 'veiksmigs';
 export type UserStatus = Record<UserStatusName, number>;
 
 export interface FishObj {

@@ -108,11 +108,13 @@ const userSchema = new Schema<UserProfile>({
       aizsargats: Number,
       laupitajs: Number,
       juridisks: Number,
+      veiksmigs: Number,
     },
     default: {
       aizsargats: 0,
       laupitajs: 0,
       juridisks: 0,
+      veiksmigs: 0,
     },
   },
   fishing: {

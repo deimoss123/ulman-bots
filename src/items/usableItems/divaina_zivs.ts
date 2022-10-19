@@ -5,12 +5,14 @@ import { UsableItemFunc } from '../../interfaces/Item';
 import { UserStatusName } from '../../interfaces/UserProfile';
 import { JURIDISKA_ZIVS_STATUS } from './juridiska_zivs';
 import { NAZIS_STATUS_TIME } from './nazis';
+import { PETNIEKZIVS_STATUS_TIME } from './petniekzivs';
 import { RASENS_STATUS_TIME } from './zemenu_rasens';
 
 const divainaZivsStatuses: Record<UserStatusName, number> = {
   aizsargats: RASENS_STATUS_TIME / 2,
   laupitajs: NAZIS_STATUS_TIME / 2,
   juridisks: JURIDISKA_ZIVS_STATUS / 3,
+  veiksmigs: PETNIEKZIVS_STATUS_TIME,
 };
 
 const divaina_zivs: UsableItemFunc = async (userId, guildId) => {
