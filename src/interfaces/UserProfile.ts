@@ -22,6 +22,9 @@ export interface ItemAttributes {
 
   // priekš naudas maisa
   latiCollected?: number;
+
+  // priekš loto zivs, "satur x zivis" atribūta
+  holdsFishCount?: number;
 }
 
 export interface SpecialItemInProfile {

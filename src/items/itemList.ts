@@ -21,6 +21,7 @@ import { statusList } from '../commands/economyCommands/profils';
 import millisToReadableTime from '../embeds/helpers/millisToReadableTime';
 import piena_spainis from './usableItems/piena_spainis';
 import divaina_zivs from './usableItems/divaina_zivs';
+import loto_zivs from './usableItems/loto_zivs';
 
 export type ItemKey = string;
 
@@ -498,16 +499,30 @@ const itemList: Record<ItemKey, Item> = {
     categories: [ItemCategory.ZIVIS],
     value: 20,
   },
-  // loto_zivs: {
-  //   nameNomVsk: 'loto zivs',
-  //   nameNomDsk: 'loto zivis',
-  //   nameAkuVsk: 'loto zivi',
-  //   nameAkuDsk: 'loto zivis',
-  //   isVirsiesuDzimte: false,
-  //   emoji: null,
-  //   categories: [ItemCategory.ZIVIS],
-  //   value: 50,
-  // },
+  loto_zivs: {
+    info:
+      'Uzgriez loto zivi un kā laimestu saņem... zivis\n' +
+      'Loto zivij piemīt atribūts "Satur **x** zivis", kas nosaka cik zivis no loto zivs ir iespējams laimēt',
+    nameNomVsk: 'loto zivs',
+    nameNomDsk: 'loto zivis',
+    nameAkuVsk: 'loto zivi',
+    nameAkuDsk: 'loto zivis',
+    isVirsiesuDzimte: false,
+    emoji: {
+      id: '1032050670225866762',
+      name: 'loto_zivs',
+      animated: true,
+    },
+    imgLink: 'https://i.postimg.cc/2j22b78L/loto-zivs.gif',
+    categories: [ItemCategory.ZIVIS],
+    value: 0,
+    customValue: ({ holdsFishCount }) => holdsFishCount! * 10,
+    attributes: {
+      holdsFishCount: 0,
+    },
+    removedOnUse: false,
+    use: loto_zivs,
+  },
   juridiska_zivs: {
     info:
       'Šai zivij pieder vairāki multimiljonu uzņēmumi\n\n' +

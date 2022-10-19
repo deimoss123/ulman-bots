@@ -63,6 +63,7 @@ const userSchema = new Schema<UserProfile>({
           lastUsed: Number, // unix millis
           foundItemKey: String,
           latiCollected: Number,
+          holdsFishCount: Number,
         },
       },
     ],

@@ -4,6 +4,7 @@ import UserProfile from '../interfaces/UserProfile';
 import userCache from '../utils/userCache';
 import itemList, { ItemKey } from '../items/itemList';
 import { getRandFreeSpin } from '../items/usableItems/petnieks';
+import { generateFishCount } from '../items/usableItems/loto_zivs';
 
 export default async function addItems(
   userId: string,
@@ -23,8 +24,13 @@ export default async function addItems(
 
       // pārbauda vai manta ir ar atribūtiem
       if (attributes) {
-        if ('foundItemKey' in attributes) attributes.foundItemKey = await getRandFreeSpin();
-        specialItems.push(...Array(amountToAdd).fill({ name: itemToAdd, attributes }));
+        for (let i = 0; i < amountToAdd; i++) {
+          const newAttributes = { ...attributes };
+          if ('foundItemKey' in attributes) newAttributes.foundItemKey = await getRandFreeSpin();
+          if ('holdsFishCount' in attributes) newAttributes.holdsFishCount = generateFishCount();
+
+          specialItems.push({ name: itemToAdd, attributes: newAttributes });
+        }
         continue;
       }
 
