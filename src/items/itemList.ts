@@ -402,6 +402,27 @@ const itemList: Record<ItemKey, Item> = {
     removedOnUse: false,
     use: naudas_maiss,
   },
+  kakis: {
+    nameNomVsk: 'kaķis',
+    nameNomDsk: 'kaķi',
+    nameAkuVsk: 'kaķi',
+    nameAkuDsk: 'kaķus',
+    isVirsiesuDzimte: true,
+    emoji: {
+      id: '1032294560816173136',
+      name: 'kakis',
+    },
+    imgLink: 'https://i.postimg.cc/xTyhJzcJ/kakis.png',
+    categories: [ItemCategory.TIRGUS],
+    value: 100,
+    tirgusPrice: { items: { lidaka: 3, asaris: 3, lasis: 3 } },
+    attributes: {
+      customName: '',
+      createdAt: 0,
+      fedUntil: 0,
+    },
+    removedOnUse: false,
+  },
 
   // -- atkritumi --
   kartona_kaste: {

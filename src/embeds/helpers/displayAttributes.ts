@@ -1,16 +1,18 @@
 import maksekeresData from '../../commands/economyCommands/zvejot/makskeresData';
 import { ItemAttributes, SpecialItemInProfile } from '../../interfaces/UserProfile';
-import itemList, { ItemCategory, ItemKey } from '../../items/itemList';
+import itemList, { ItemCategory } from '../../items/itemList';
 import { KAFIJAS_APARATS_COOLDOWN } from '../../items/usableItems/kafijas_aparats';
 import { PETNIEKS_COOLDOWN } from '../../items/usableItems/petnieks';
 import latiString from './latiString';
 import millisToReadableTime from './millisToReadableTime';
 
-const hiddenAttributes = ['customName', 'foundItemKey'];
+const hiddenAttributes: Partial<keyof ItemAttributes>[] = ['customName', 'foundItemKey', 'fedUntil'];
 
 export function displayAttributes(item: SpecialItemInProfile, inline = false) {
+  const currTime = Date.now();
+
   const attributesLat: Record<
-    ItemKey,
+    string,
     Partial<Record<keyof ItemAttributes, (n: number, attributes: ItemAttributes) => string>>
   > = {
     divainais_burkans: {
@@ -20,18 +22,18 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false) {
     },
     kafijas_aparats: {
       lastUsed: n =>
-        Date.now() - n >= KAFIJAS_APARATS_COOLDOWN
+        currTime - n >= KAFIJAS_APARATS_COOLDOWN
           ? `${inline ? '' : '**'}Kafija gatava!${inline ? '' : '**'}`
           : `Gatavo: ${inline ? '' : '`'}` +
-            millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - Date.now() + n) +
+            millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - currTime + n) +
             (inline ? '' : '`'),
     },
     petnieks: {
-      lastUsed: (n, attributes) =>
-        Date.now() - n >= PETNIEKS_COOLDOWN
-          ? `${inline ? '' : '**'}Nopētījis:${inline ? '' : '**'} ${itemList[attributes.foundItemKey!].nameAkuVsk}`
+      lastUsed: (n, { foundItemKey }) =>
+        currTime - n >= PETNIEKS_COOLDOWN
+          ? `${inline ? '' : '**'}Nopētījis:${inline ? '' : '**'} ${itemList[foundItemKey!].nameAkuVsk}`
           : `Pēta: ${inline ? '' : '`'}` +
-            `${millisToReadableTime(PETNIEKS_COOLDOWN - Date.now() + n)}` +
+            `${millisToReadableTime(PETNIEKS_COOLDOWN - currTime + n)}` +
             (inline ? '' : '`'),
     },
     makskeres: {
@@ -44,9 +46,14 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false) {
     loto_zivs: {
       holdsFishCount: n => `Satur ${inline ? n : `**${n}**`} zivis`,
     },
+    kakis: {
+      createdAt: (n, { fedUntil }) => `Vecums: ${millisToReadableTime(currTime - n)}`,
+    },
   };
 
-  const attributes = Object.entries(item.attributes).filter(item => !hiddenAttributes.includes(item[0]));
+  const attributes = Object.entries(item.attributes).filter(
+    item => !hiddenAttributes.includes(item[0] as keyof ItemAttributes)
+  );
 
   const textArr = attributes.map(([key, value]) => {
     let name = item.name;

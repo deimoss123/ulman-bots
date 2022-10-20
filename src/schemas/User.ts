@@ -64,6 +64,8 @@ const userSchema = new Schema<UserProfile>({
           foundItemKey: String,
           latiCollected: Number,
           holdsFishCount: Number,
+          createdAt: Number, // unix millis
+          fedUntil: Number, // unix millis
         },
       },
     ],

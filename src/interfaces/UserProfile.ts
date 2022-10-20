@@ -7,11 +7,13 @@ export interface ItemInProfile {
 }
 
 export interface ItemAttributes {
-  // dīvainā burkāna atribūti
+  // dīvainai burkāns, kodienu skaits
   timesUsed?: number;
+
+  // dīvainais burkāns un kaķis
   customName?: string;
 
-  // makšķerēm
+  // makšķerēm izturība
   durability?: number;
 
   // kafijas aparāts, pētnieks (unix millis)
@@ -25,6 +27,10 @@ export interface ItemAttributes {
 
   // priekš loto zivs, "satur x zivis" atribūta
   holdsFishCount?: number;
+
+  // kaķis (unix millis)
+  createdAt?: number;
+  fedUntil?: number;
 }
 
 export interface SpecialItemInProfile {
