@@ -22,7 +22,7 @@ import smallEmbed from '../../embeds/smallEmbed';
 import { UsableItemFunc } from '../../interfaces/Item';
 import itemList from '../itemList';
 
-export const BURKANS_CHANGE_NAME_COST = 1000;
+const BURKANS_CHANGE_NAME_COST = 250;
 
 function makeComponents(lati: number) {
   return [
