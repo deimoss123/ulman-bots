@@ -35,9 +35,9 @@ const MAX_EXTRA_DAILY = 3;
 
 const STRADAT_COOLDOWN = 1_500_000; // 25 min
 
-function embedTitle({ jobPosition, dailyCooldowns }: UserProfile) {
+function embedTitle({ dailyCooldowns }: UserProfile, jobPosition: string) {
   return (
-    `Strādāt - ${JobPositions[jobPosition!].name} | ` +
+    `Strādāt - ${JobPositions[jobPosition].name} | ` +
     `${dailyCooldowns.stradat.timesUsed}/${MAX_DAILY} | ` +
     `${dailyCooldowns.stradat.extraTimesUsed}/${MAX_EXTRA_DAILY}`
   );
@@ -97,7 +97,7 @@ const stradat: Command = {
       embedTemplate({
         i,
         color: this.color,
-        title: embedTitle(user),
+        title: embedTitle(user, jobPosition),
         description: darbsRun.text,
       }).embeds![0]
     );
@@ -126,7 +126,7 @@ const stradat: Command = {
         embedTemplate({
           i,
           color: this.color,
-          title: embedTitle(user),
+          title: embedTitle(user, jobPosition),
           description: 'Tu esi sasniedzis maksimālo strādāšanas daudzumu šodien\n',
         }).embeds![0]
       );
@@ -197,7 +197,7 @@ const stradat: Command = {
             edit: {
               embeds: [
                 embed
-                  .setTitle(embedTitle(leveledUser.user))
+                  .setTitle(embedTitle(leveledUser.user, jobPosition))
                   .setDescription(
                     `${embed.data.description}\n` +
                       `> Izvēle: \`${choice.label}\`\n` +
