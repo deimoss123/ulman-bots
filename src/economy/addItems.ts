@@ -29,7 +29,7 @@ export default async function addItems(
           if ('foundItemKey' in attributes) newAttributes.foundItemKey = await getRandFreeSpin();
           if ('holdsFishCount' in attributes) newAttributes.holdsFishCount = generateFishCount();
           if ('createdAt' in attributes) newAttributes.createdAt = Date.now();
-          if ('lastFed' in attributes) newAttributes.lastFed = Date.now();
+          // if ('lastFed' in attributes) newAttributes.lastFed = Date.now(); TODO
 
           specialItems.push({ name: itemToAdd, attributes: newAttributes });
         }
