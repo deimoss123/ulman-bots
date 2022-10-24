@@ -12,7 +12,7 @@ function mapItemsToChoices(itemInList: [string, Item]) {
   const [key, item] = itemInList;
 
   return {
-    name: `💵 [${latiString(item.value)}] ${capitalizeFirst(item.nameNomVsk)}`,
+    name: `💵${item.customValue ? '' : ` [${latiString(item.value)}]`} ${capitalizeFirst(item.nameNomVsk)}`,
     value: key,
   };
 }
