@@ -13,10 +13,15 @@ function infoEmbed(i: CommandInteraction) {
   const fields: EmbedField[] = [];
 
   for (const { multipliers, emoji } of Object.values(feniksLaimesti)) {
+    const longestNum = Object.values(multipliers).reduce((c, p) => (`${p}`.length > c ? `${p}`.length : c), 0);
+
     fields.push({
       name: '\u2800',
       value: Object.entries(multipliers)
-        .map(([n, mult]) => `**\`` + `${mult}x\`** ${emoji.repeat(Number(n))}`)
+        .map(
+          ([n, mult]) =>
+            `**\` ` + ' '.repeat(longestNum - `${mult}`.length) + `${mult}x \`** ${emoji.repeat(Number(n))}`
+        )
         .join('\n'),
       inline: true,
     });
