@@ -30,6 +30,7 @@ function infoEmbed(i: CommandInteraction) {
   return embedTemplate({
     i,
     title: 'Feniksa reizinātāji',
+    color: commandColors.feniks,
     fields,
   });
 }
