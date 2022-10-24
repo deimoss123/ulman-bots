@@ -146,17 +146,6 @@ const tirgus: Command = {
           };
         }
 
-        if (!countFreeInvSlots(newUser)) {
-          return {
-            end: true,
-            after: async () => {
-              int.reply(
-                ephemeralReply(`Tu nevari nopirkt **${itemString(itemObj, 1, true)}**, jo tev ir pilns inventārs`)
-              );
-            },
-          };
-        }
-
         if (itemObj.attributes) {
           const specialRes = checkUserSpecialItems(newUser, selectedListing);
           if (!specialRes.valid) {
