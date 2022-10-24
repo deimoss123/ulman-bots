@@ -11,7 +11,7 @@ import StatsProfile, { UserStats } from '../../../interfaces/StatsProfile';
 import { sortDataProfile } from '../top/sortData';
 import statsList, { StatsTypes } from './statsList';
 
-function displayPlace(index: number): string {
+export function displayPlace(index: number): string {
   return `\`${index + 1}#\``;
 }
 
