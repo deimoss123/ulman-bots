@@ -89,24 +89,20 @@ const divainais_burkans: UsableItemFunc = async (userId, guildId, _, specialItem
         embedTemplate({
           i,
           color,
-          fields: [
-            {
-              name: `Izmantot: ${itemString(
-                itemList[specialItem!.name]!,
-                null,
-                true,
-                specialItem!.attributes.customName
-              )}`,
-              value:
-                'Tu nokodies dīvaino burkānu, **mmmm** tas bija ļoti garšīgs\n' +
-                `Šis burkāns ir nokosts **${res.newItem.attributes.timesUsed!}** ` +
-                `reiz${timesUsed! % 10 === 1 && timesUsed! % 100 !== 11 ? 'i' : 'es'}`,
-              inline: false,
-            },
-          ],
+          title: `Izmantot: ${itemString(
+            itemList[specialItem!.name]!,
+            null,
+            true,
+            specialItem!.attributes.customName
+          )}`,
+          description:
+            'Tu nokodies dīvaino burkānu, **mmmm** tas bija ļoti garšīgs\n' +
+            `Šis burkāns ir nokosts **${res.newItem.attributes.timesUsed!}** ` +
+            `reiz${timesUsed! % 10 === 1 && timesUsed! % 100 !== 11 ? 'i' : 'es'}`,
           components: makeComponents(res.user.lati),
         })
       );
+
       await buttonHandler(
         i,
         'izmantot_burkans',

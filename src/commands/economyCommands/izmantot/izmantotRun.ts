@@ -67,14 +67,9 @@ export default async function izmantotRun(
   const replyMessage = embedTemplate({
     i,
     color: res.color || embedColor,
-    fields: [
-      {
-        name: `Izmantot: ${ItemString(itemToUse, null, true)}`,
-        value: res.text,
-        inline: false,
-      },
-      ...(resFields as any),
-    ],
+    title: `Izmantot: ${ItemString(itemToUse, null, true)}`,
+    description: res.text,
+    fields: resFields,
     components: itemsToUseLeft && itemToUse.removedOnUse ? [componentRow] : [],
   });
 

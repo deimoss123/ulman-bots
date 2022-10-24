@@ -60,14 +60,9 @@ function makeEmbed(
   return embedTemplate({
     i,
     color: embedColor,
-    fields: [
-      {
-        name: `Izmantot: ${itemString(itemObj, null, true, selectedItem.attributes?.customName)}`,
-        value: useRes.text,
-        inline: false,
-      },
-      ...(useRes.fields || []),
-    ],
+    title: `Izmantot: ${itemString(itemObj, null, true, selectedItem.attributes?.customName)}`,
+    description: useRes.text,
+    fields: useRes.fields || [],
   });
 }
 
