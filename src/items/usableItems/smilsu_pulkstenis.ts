@@ -3,7 +3,7 @@ import addItems from '../../economy/addItems';
 import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
 import { UsableItemFunc } from '../../interfaces/Item';
 
-export const ZVEJA_SHIFT_TIME = 21_600_000; // 6h
+export const ZVEJA_SHIFT_TIME = 32_400_000; // 9h
 
 const smilsu_pulkstenis: UsableItemFunc = async (userId, guildId) => {
   const user = await syncFishing(userId, guildId);

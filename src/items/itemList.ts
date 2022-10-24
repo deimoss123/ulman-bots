@@ -751,7 +751,7 @@ const itemList: Record<ItemKey, Item> = {
     },
     imgLink: 'https://i.postimg.cc/LX0YtS4d/smilsu-pulkstenis.gif',
     categories: [ItemCategory.OTHER],
-    value: 100,
+    value: 75,
     removedOnUse: false,
     use: smilsu_pulkstenis,
   },
