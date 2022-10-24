@@ -17,7 +17,6 @@ import itemString from '../../../embeds/helpers/itemString';
 import addItems from '../../../economy/addItems';
 import addLati from '../../../economy/addLati';
 import smallEmbed from '../../../embeds/smallEmbed';
-import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems';
 import setTirgus from '../../../economy/setTirgus';
 import midNightStr from '../../../embeds/helpers/midnightStr';
