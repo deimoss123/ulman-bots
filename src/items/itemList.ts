@@ -23,6 +23,7 @@ import piena_spainis from './usableItems/piena_spainis';
 import divaina_zivs from './usableItems/divaina_zivs';
 import loto_zivs from './usableItems/loto_zivs';
 import petniekzivs, { PETNIEKZIVS_STATUS_TIME } from './usableItems/petniekzivs';
+import kakis from './usableItems/kakis';
 
 export type ItemKey = string;
 
@@ -422,6 +423,7 @@ const itemList: Record<ItemKey, Item> = {
       fedUntil: 0,
     },
     removedOnUse: false,
+    use: kakis,
   },
 
   // -- atkritumi --

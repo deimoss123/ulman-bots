@@ -2,6 +2,7 @@ import maksekeresData from '../../commands/economyCommands/zvejot/makskeresData'
 import { ItemAttributes, SpecialItemInProfile } from '../../interfaces/UserProfile';
 import itemList, { ItemCategory } from '../../items/itemList';
 import { KAFIJAS_APARATS_COOLDOWN } from '../../items/usableItems/kafijas_aparats';
+import { kakisFedState } from '../../items/usableItems/kakis';
 import { PETNIEKS_COOLDOWN } from '../../items/usableItems/petnieks';
 import latiString from './latiString';
 import millisToReadableTime from './millisToReadableTime';
@@ -47,7 +48,12 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false) {
       holdsFishCount: n => `Satur ${inline ? n : `**${n}**`} zivis`,
     },
     kakis: {
-      createdAt: (n, { fedUntil }) => `Vecums: ${millisToReadableTime(currTime - n)}`,
+      createdAt: (n, { fedUntil }) =>
+        fedUntil! < currTime
+          ? `${inline ? '' : '_**'}MIRIS${inline ? '' : '**_'} ⚰️`
+          : `Vecums: ${millisToReadableTime(currTime - n)}` +
+            (inline ? ', ' : '\n') +
+            kakisFedState.find(s => fedUntil! - currTime > s.time)?.name,
     },
   };
 
