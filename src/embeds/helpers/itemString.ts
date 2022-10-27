@@ -10,11 +10,16 @@ export function makeEmojiString(emoji: APIMessageComponentEmoji) {
 export function itemStringCustom(item: Item, customName = '') {
   let name = '';
   if (customName) {
-    if (item.nameNomVsk === 'dīvainais burkāns') {
-      name = `"${customName}" burkāns`;
+    switch (item.nameNomVsk) {
+      case 'dīvainais burkāns':
+        name = `"${customName}" burkāns`;
+        break;
+      case 'kaķis':
+        name = `kaķis "${customName}"`;
+        break;
     }
   }
-  return name || capitalizeFirst(item.nameNomVsk);
+  return capitalizeFirst(name || item.nameNomVsk);
 }
 
 export default function itemString(
@@ -27,15 +32,20 @@ export default function itemString(
 
   let name = '';
   if (customName) {
-    if (item.nameNomVsk === 'dīvainais burkāns') {
-      name = akuzativs ? `"${customName}" burkānu` : `"${customName}" burkāns`;
+    switch (item.nameNomVsk) {
+      case 'dīvainais burkāns':
+        name = akuzativs ? `"${customName}" burkānu` : `"${customName}" burkāns`;
+        break;
+      case 'kaķis':
+        name = akuzativs ? `kaķi "${customName}"` : `kaķis "${customName}"`;
+        break;
     }
   }
 
   if (amount === null) {
     return akuzativs
-      ? `${emojiStr} ${name || capitalizeFirst(item.nameAkuVsk)}`
-      : `${emojiStr} ${name || capitalizeFirst(item.nameNomVsk)}`;
+      ? `${emojiStr} ${capitalizeFirst(name || item.nameAkuVsk)}`
+      : `${emojiStr} ${capitalizeFirst(name || item.nameNomVsk)}`;
   }
 
   let result: string;
@@ -48,5 +58,5 @@ export default function itemString(
     result = akuzativs ? item.nameAkuDsk : item.nameNomDsk;
   }
 
-  return `${emojiStr} ${amount} ${name || capitalizeFirst(result)}`;
+  return `${emojiStr} ${amount} ${capitalizeFirst(name || result)}`;
 }
