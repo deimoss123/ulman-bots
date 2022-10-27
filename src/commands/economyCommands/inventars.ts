@@ -263,6 +263,7 @@ const inventars: Command = {
     let currentPage = 0;
 
     const msg = await i.reply({
+      content: totalPages > 1 ? '\u200b' : undefined,
       embeds: invEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
       components: invComponents(i, targetUser, fields, currentPage, totalPages),
       fetchReply: true,
