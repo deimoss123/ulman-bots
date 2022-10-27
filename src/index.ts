@@ -10,22 +10,24 @@ import chalk from 'chalk';
 import setBotPresence from './utils/setBotPresence';
 import createTirgus from './items/tirgus/createTirgus';
 
-process.env.TZ = 'Europe/Riga';
 dotenv.config();
+process.env.TZ = 'Europe/Riga';
 
 // pārbauda vai .env failā ir ievadīti mainīgie
 if (!validateEnv()) process.exit(1);
+
+const mongoPromise = mongo();
+createDiscounts();
+createTirgus();
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds],
 });
 
 client.once('ready', async () => {
-  createDiscounts();
-  createTirgus();
   setBotPresence(client);
   setupCronJobs(client);
-  await mongo().then(() => console.log('Connected to MongoDB'));
+  await mongoPromise.then(() => console.log('Connected to MongoDB'));
 
   client.on('interactionCreate', i => {
     if (i.isChatInputCommand()) commandHandler(i);
