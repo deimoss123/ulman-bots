@@ -130,6 +130,18 @@ function components(
     ];
   }
 
+  if (catFedPercentage(fedUntil!, currTime) === '100%') {
+    return [
+      new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+          .setLabel('Kaķis ir maksimāli piebarots')
+          .setCustomId('_')
+          .setStyle(ButtonStyle.Danger)
+          .setDisabled(true)
+      ),
+    ];
+  }
+
   return [
     new ActionRowBuilder<SelectMenuBuilder>().addComponents(
       new SelectMenuBuilder()
