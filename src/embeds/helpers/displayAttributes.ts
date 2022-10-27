@@ -51,9 +51,10 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false) {
       createdAt: (n, { fedUntil }) =>
         fedUntil! < currTime
           ? `${inline ? '' : '_**'}MIRIS${inline ? '' : '**_'} ⚰️`
-          : `Vecums: ${millisToReadableTime(currTime - n)}` +
-            (inline ? ', ' : '\n') +
-            kakisFedState.find(s => fedUntil! - currTime > s.time)?.name,
+          : `Vecums: ${inline ? '' : '**'}${millisToReadableTime(currTime - n)}` +
+            (inline ? ', ' : '**\n**') +
+            kakisFedState.find(s => fedUntil! - currTime > s.time)?.name +
+            (inline ? '' : '**'),
     },
   };
 
