@@ -318,7 +318,7 @@ const itemList: Record<ItemKey, Item> = {
     imgLink: 'https://i.postimg.cc/D0JW5NmS/petnieks.png',
     categories: [ItemCategory.TIRGUS],
     value: 300,
-    tirgusPrice: { items: { brivgriez25: 6, brivgriez50: 4, brivgriez100: 2 }, lati: 500 },
+    tirgusPrice: { items: { brivgriez25: 6, brivgriez50: 4, brivgriez100: 2 }, lati: 750 },
     attributes: {
       lastUsed: 0,
       foundItemKey: '',
@@ -709,7 +709,7 @@ const itemList: Record<ItemKey, Item> = {
     },
     imgLink: 'https://i.postimg.cc/SQ6ThwyL/kafija.png',
     categories: [ItemCategory.OTHER],
-    value: 25,
+    value: 30,
     allowDiscount: true,
     removedOnUse: false,
     use: kafija,

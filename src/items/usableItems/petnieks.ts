@@ -5,13 +5,10 @@ import itemString from '../../embeds/helpers/itemString';
 import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
 import { UsableItemFunc } from '../../interfaces/Item';
 import countFreeInvSlots from '../helpers/countFreeInvSlots';
-import itemList, { ItemCategory } from '../itemList';
+import itemList, { ItemKey } from '../itemList';
 
 export async function getRandFreeSpin() {
-  const spins = Object.keys((await import('../itemList')).default).filter(item =>
-    itemList[item].categories.includes(ItemCategory.BRIVGRIEZIENS)
-  );
-
+  const spins: ItemKey[] = ['brivgriez10', 'brivgriez25', 'brivgriez50'];
   return spins[Math.floor(Math.random() * spins.length)];
 }
 
