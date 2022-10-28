@@ -1,4 +1,6 @@
 import { EmbedField } from 'discord.js';
+import itemString from '../../../embeds/helpers/itemString';
+import itemList from '../../../items/itemList';
 
 const updatesList: Record<
   string,
@@ -68,6 +70,55 @@ const updatesList: Record<
           '- `/pabalsts` tagad ir pieejams tikai OkDraudziņDauni servera biedriem\n\n' +
           '_**... ā un slīpsvītru (/) komandas protams :^)**_',
         inline: false,
+      },
+    ],
+  },
+  '4.1': {
+    date: '28.10.2022',
+    description: '\u200b',
+    fields: [
+      {
+        name: '__Jaunas mantas__',
+        value:
+          `**${itemString(itemList.loto_zivs)}**\n` +
+          'Ja jūs zinātu kā es neieredzu šīs kruķītās zivis\n' +
+          `**${itemString(itemList.kakis)}**\n` +
+          'Pūkains, stilīgs un episks (tikai neaizmirsti viņu pabarot)\n' +
+          `**${itemString(itemList.petniekzivs)}**\n` +
+          'Apēd šo zivi lai sajustos **VEIKSMĪGS** (jauns statuss)',
+        inline: false,
+      },
+      {
+        name: '__Mantu izmaiņas__',
+        value:
+          `**${itemString(itemList.petnieks)}**\n` +
+          'Tirgus cena **500** ➔ **750**\n' +
+          `❗ Pētnieks vairs nedos 100 latu brīvgriezienu\n` +
+          `**${itemString(itemList.kafija)}**\n` +
+          'Vērtība **50** ➔ **30** lati\n' +
+          `**${itemString(itemList.smilsu_pulkstenis)}**\n` +
+          'Vērtība **100** ➔ **75** lati\n' +
+          'Zvejas laika izlaišana **6h** ➔ **9h**\n' +
+          `**${itemString(itemList.divainais_burkans)}**\n` +
+          'Nosaukuma maiņas cena **1000** ➔ **250** lati\n' +
+          `**${itemString(itemList.divaina_zivs)}**\n` +
+          'Vērtība **50** ➔ **60**',
+        inline: true,
+      },
+      {
+        name: '__Makšķeru izmaiņas__',
+        value:
+          'Visām makšķerēm ir palielināta vidējā atdeve! ' +
+          'Ja tu pašlaik zvejo, ieteicams izņemt un ielikt makšķeri pa jaunu\n\n' +
+          `**${itemString(itemList.loto_makskere)}**\n` +
+          'Vērtība **1300** ➔ **500** lati\n' +
+          'Maksimālā izturība **20** ➔ **30**\n' +
+          `**${itemString(itemList.divaina_makskere)}**\n` +
+          'Vērtība **500** ➔ **450**\n' +
+          `**${itemString(itemList.luznu_makskere)}**\n` +
+          'Zvejas laiks 2.5-3h ➔ 2-2.5h\n\n' +
+          '_Makšķeres vērtība ietekmē tās salabošanas cenu_',
+        inline: true,
       },
     ],
   },
