@@ -155,15 +155,13 @@ const zagt: Command = {
     const stealChance = hasLaupitajs ? NAZIS_STEAL_CHANCE : BASE_STEAL_CHANCE;
     const didSteal = Math.random() < stealChance;
 
-    const promises = [
+    await addTimeCooldown(i.user.id, guildId, 'zagt');
+
+    const [userAfter, targetUserAfter] = await Promise.all([
       addLati(i.user.id, guildId, stolenAmount * (didSteal ? 1 : -1)),
       addLati(target.id, guildId, stolenAmount * (didSteal ? -1 : 1)),
       setStats(i.user.id, guildId, didSteal ? { stolenLati: stolenAmount } : { lostStealingLati: stolenAmount }),
-    ];
-
-    await addTimeCooldown(i.user.id, guildId, 'zagt');
-
-    const [userAfter, targetUserAfter] = await Promise.all(promises);
+    ]);
     if (!userAfter || !targetUserAfter) return i.reply(errorEmbed);
 
     const text = didSteal
