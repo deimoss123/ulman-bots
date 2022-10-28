@@ -208,7 +208,7 @@ const itemList: Record<ItemKey, Item> = {
     },
     imgLink: 'https://i.postimg.cc/bJ80z0dr/divaina-makskere.gif',
     categories: [ItemCategory.VEIKALS, ItemCategory.MAKSKERE],
-    value: 500,
+    value: 450,
     customValue: makskereCustomValue('divaina_makskere'),
     attributes: {
       durability: maksekeresData.divaina_makskere.maxDurability,
