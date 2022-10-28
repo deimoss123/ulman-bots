@@ -19,7 +19,6 @@ export async function calculateMakskeresData() {
       Object.values(fishChances).filter(({ chance }) => chance === '*').length;
 
     const table: { key: string; chance: number; value: number; valPerCost: number }[] = [];
-    let totalValue = 0;
     let avgValuePerCost = 0;
 
     for (const [fishKey, { chance: ch, cost }] of Object.entries(fishChances)) {
@@ -30,7 +29,6 @@ export async function calculateMakskeresData() {
           ? +fishKey.split('brivgriez')[1]
           : itemList[fishKey].value;
       const chance = ch === '*' ? starChance : ch;
-      totalValue += value / cost;
       avgValuePerCost += (value / cost) * chance;
 
       table.push({ key: fishKey, chance, value, valPerCost: value / cost });
