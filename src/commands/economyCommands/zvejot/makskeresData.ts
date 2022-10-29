@@ -95,6 +95,8 @@ const maksekeresData: Record<
       loto_zivs: { chance: 0.05, cost: 3 },
       smilsu_pulkstenis: { chance: 0.02, cost: 3 },
       brivgriez100: { chance: 0.01, cost: 3 },
+
+      kafija: { chance: 0, cost: 1 },
     },
   },
   loto_makskere: {
