@@ -102,7 +102,9 @@ const updatesList: Record<
           `**${itemString(itemList.divainais_burkans)}**\n` +
           'Nosaukuma maiņas cena **1000** ➔ **250** lati\n' +
           `**${itemString(itemList.divaina_zivs)}**\n` +
-          'Vērtība **50** ➔ **60**',
+          'Vērtība **50** ➔ **60**\n' +
+          `**${itemString(itemList.metalluznis)}**\n` +
+          'Tagad ir izmantojama manta (neko nedara)',
         inline: true,
       },
       {

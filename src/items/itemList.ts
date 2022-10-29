@@ -494,6 +494,8 @@ const itemList: Record<ItemKey, Item> = {
     imgLink: 'https://i.postimg.cc/B6KgnnCY/metalluznis.png',
     categories: [ItemCategory.ATKRITUMI],
     value: 10,
+    removedOnUse: false,
+    use: async () => ({ text: 'Metāllūznis ir izmantojams lai nopirktu dažas tirgus preces' }),
   },
 
   // -- zivis --
