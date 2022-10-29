@@ -30,7 +30,8 @@ const lotoFishChanceObj: Record<ItemKey, ChanceObj> = {
   lidaka: { chance: '*' },
   asaris: { chance: '*' },
   lasis: { chance: '*' },
-  juridiska_zivs: { chance: 0.2 },
+  petniekzivs: { chance: 0.15 },
+  juridiska_zivs: { chance: 0.1 },
   divaina_zivs: { chance: 0.1 },
 };
 
