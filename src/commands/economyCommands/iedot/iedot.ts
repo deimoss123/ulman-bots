@@ -17,6 +17,7 @@ import iedotRunSpecial, { noInvSpaceEmbed } from './iedotRunSpecial';
 import Item from '../../../interfaces/Item';
 import UserProfile from '../../../interfaces/UserProfile';
 import setStats from '../../../economy/stats/setStats';
+import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 
 export function cantPayTaxEmbed(itemToGive: Item, amountToGive: number, totalTax: number, user: UserProfile) {
   return ephemeralReply(
@@ -114,23 +115,20 @@ const iedot: Command = {
       return i.reply(cantPayTaxEmbed(itemToGive, amountToGive, totalTax, user));
     }
 
-    if (amountToGive > targetUser.itemCap - countItems(targetUser.items)) {
+    if (amountToGive > countFreeInvSlots(targetUser)) {
       return i.reply(noInvSpaceEmbed(targetUser, itemToGive, amountToGive));
     }
 
-    const promises = [
+    await Promise.all([
       addItems(target.id, guildId, { [itemToGiveKey]: amountToGive }),
       addItems(userId, guildId, { [itemToGiveKey]: -amountToGive }),
       setStats(target.id, guildId, { itemsReceived: amountToGive }),
       setStats(userId, guildId, { itemsGiven: amountToGive, taxPaid: totalTax }),
-    ];
+    ]);
 
     if (!hasJuridisks) {
-      await addLati(userId, guildId, -totalTax);
-      await addLati(i.client.user!.id, guildId, totalTax);
+      await Promise.all([addLati(userId, guildId, -totalTax), addLati(i.client.user!.id, guildId, totalTax)]);
     }
-
-    await Promise.all(promises);
 
     const targetUserAfter = await findUser(target.id, guildId);
     if (!targetUserAfter) return i.reply(errorEmbed);
