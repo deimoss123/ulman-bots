@@ -255,6 +255,33 @@ const itemList: Record<ItemKey, Item> = {
     removedOnUse: false,
     use: piena_spainis,
   },
+  // XD smieklīgs nosaukums
+  kaku_bariba: {
+    info: () =>
+      `Iecienītas brokastis, pusdienas un vakariņas (kaķim)\n` +
+      // @ts-ignore
+      `Ar kaķu barību var pabarot **${itemString(this.default.kakis, null, true)}**`,
+    nameNomVsk: 'kaķu barība',
+    nameNomDsk: 'kaķu barības',
+    nameAkuVsk: 'kaķu barību',
+    nameAkuDsk: 'kaķu barības',
+    isVirsiesuDzimte: false,
+    emoji: {
+      id: '1035930140242366464',
+      name: 'kaku_bariba',
+    },
+    imgLink: 'https://i.postimg.cc/8k7pbv3R/kaku-bariba.png',
+    categories: [ItemCategory.VEIKALS],
+    value: 20,
+    allowDiscount: true,
+    removedOnUse: false,
+    use: async () => ({
+      text:
+        `Tu pagaršoji kaķu barību (tā nebija garšīga)\n` +
+        // @ts-ignore
+        `Ar kaķu barību var pabarot **${itemString(this.default.kakis, null, true)}**`,
+    }),
+  },
 
   // -- tirgus --
   divaina_mugursoma: {

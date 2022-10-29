@@ -79,10 +79,12 @@ const updatesList: Record<
       {
         name: '__Jaunas mantas__',
         value:
-          `**${itemString(itemList.loto_zivs)}**\n` +
-          'Ja jūs zinātu kā es neieredzu šīs kruķītās zivis\n' +
           `**${itemString(itemList.kakis)}**\n` +
           'Pūkains, stilīgs un episks (tikai neaizmirsti viņu pabarot)\n' +
+          `**${itemString(itemList.kaku_bariba)}**\n` +
+          'Ņam\n' +
+          `**${itemString(itemList.loto_zivs)}**\n` +
+          'Ja jūs zinātu kā es neieredzu šīs kruķītās zivis\n' +
           `**${itemString(itemList.petniekzivs)}**\n` +
           'Apēd šo zivi lai sajustos **VEIKSMĪGS** (jauns statuss, kas palielina feniksa, ruletes, un loto biļešu procentus)\n\n' +
           '_Informāciju par mantām var iegūt ar komandu_ `/info`',

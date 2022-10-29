@@ -66,7 +66,9 @@ export const kakisFoodData: Record<ItemKey, { feedTimeMs: number }> = {
   lasis: {
     feedTimeMs: 86_400_000, // 24h
   },
-  // TODO: kaķu barība 48h, 40 lati veikalā
+  kaku_bariba: {
+    feedTimeMs: 129_600_000, // 36h
+  },
 };
 
 export function foodDataPercentage(key: ItemKey) {
