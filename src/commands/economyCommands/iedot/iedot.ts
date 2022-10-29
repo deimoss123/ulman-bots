@@ -6,7 +6,6 @@ import errorEmbed from '../../../embeds/errorEmbed';
 import itemString from '../../../embeds/helpers/itemString';
 import embedTemplate from '../../../embeds/embedTemplate';
 import addItems from '../../../economy/addItems';
-import countItems from '../../../items/helpers/countItems';
 import commandColors from '../../../embeds/commandColors';
 import iedotAutocomplete from './iedotAutocomplete';
 import itemList from '../../../items/itemList';
