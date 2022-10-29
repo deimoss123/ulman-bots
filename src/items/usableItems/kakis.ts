@@ -40,7 +40,7 @@ export const kakisFedState: {
     name: 'Labi paēdis 😃',
   },
   {
-    time: 86_400_00, // 24h
+    time: 86_400_000, // 24h
     name: 'Apmierināts 🙂',
   },
   {
@@ -69,7 +69,7 @@ export const kakisFoodData: Record<ItemKey, { feedTimeMs: number }> = {
   // TODO: kaķu barība 48h, 40 lati veikalā
 };
 
-function foodDataPercentage(key: ItemKey) {
+export function foodDataPercentage(key: ItemKey) {
   return `(${Math.floor((kakisFoodData[key].feedTimeMs / KAKIS_MAX_FEED) * 100)}%)`;
 }
 

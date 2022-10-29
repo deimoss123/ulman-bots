@@ -23,7 +23,8 @@ import piena_spainis from './usableItems/piena_spainis';
 import divaina_zivs from './usableItems/divaina_zivs';
 import loto_zivs from './usableItems/loto_zivs';
 import petniekzivs, { PETNIEKZIVS_STATUS_TIME } from './usableItems/petniekzivs';
-import kakis from './usableItems/kakis';
+import kakis, { foodDataPercentage, kakisFedState, kakisFoodData, KAKIS_MAX_FEED } from './usableItems/kakis';
+import itemString from '../embeds/helpers/itemString';
 
 export type ItemKey = string;
 
@@ -404,6 +405,24 @@ const itemList: Record<ItemKey, Item> = {
     use: naudas_maiss,
   },
   kakis: {
+    info: () =>
+      '**Pūkains, stilīgs un episks!**\n\n' +
+      `Kaķim ir 2 atribūti - vecums un garastāvoklis\n` +
+      `Kaķis ir jābaro citādāk tas nomirs\n\n` +
+      '__Kaķim ir 6 garastāvokļi:__ \n' +
+      kakisFedState
+        .map(({ time, name }) => `• **${name}** (${Math.floor((time / KAKIS_MAX_FEED) * 100)}%)`)
+        .join('\n') +
+      `\n\nKaķa garastāvoklis tiek mērīts procentos (100% ir **\`${millisToReadableTime(KAKIS_MAX_FEED)}\`**) ` +
+      `un ar laiku tas samazināsies, kad tiek sasniegti 0% kaķis **NOMIRS**\n\n` +
+      `Lai uzlabotu kaķa garastāvokli tas ir jābaro, to var izdarīt kaķi "izmantojot"\n\n` +
+      '__Kaķi ir iespājms pabarot ar šīm mantām:__\n' +
+      Object.entries(kakisFoodData)
+        .sort(([, a], [, b]) => b.feedTimeMs - a.feedTimeMs)
+        // @ts-ignore
+        .map(([key]) => `**${itemString(this.default[key])}** ${foodDataPercentage(key)}`)
+        .join('\n') +
+      '\n\n_**Paldies Ričardam par šo izcilo kaķa bildi (viņu sauc Sāra)**_',
     nameNomVsk: 'kaķis',
     nameNomDsk: 'kaķi',
     nameAkuVsk: 'kaķi',

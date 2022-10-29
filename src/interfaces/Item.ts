@@ -18,7 +18,7 @@ export type UsableItemFunc = (
 
 interface Item {
   // īss apraksts par mantu
-  info?: string;
+  info?: string | (() => string);
 
   // nominatīvs vienskaitlis
   nameNomVsk: string;
