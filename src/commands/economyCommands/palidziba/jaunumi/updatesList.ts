@@ -1,12 +1,12 @@
 import { EmbedField } from 'discord.js';
-import itemString from '../../../embeds/helpers/itemString';
-import itemList from '../../../items/itemList';
+import itemString from '../../../../embeds/helpers/itemString';
+import itemList from '../../../../items/itemList';
 
 const updatesList: Record<
   string,
   {
     date: string;
-    description: string;
+    description?: string;
     fields: EmbedField[];
   }
 > = {
@@ -74,8 +74,7 @@ const updatesList: Record<
     ],
   },
   '4.1': {
-    date: '28.10.2022',
-    description: '\u200b',
+    date: '29.10.2022',
     fields: [
       {
         name: '__Jaunas mantas__',
@@ -85,7 +84,8 @@ const updatesList: Record<
           `**${itemString(itemList.kakis)}**\n` +
           'Pūkains, stilīgs un episks (tikai neaizmirsti viņu pabarot)\n' +
           `**${itemString(itemList.petniekzivs)}**\n` +
-          'Apēd šo zivi lai sajustos **VEIKSMĪGS** (jauns statuss)',
+          'Apēd šo zivi lai sajustos **VEIKSMĪGS** (jauns statuss, kas palielina feniksa, ruletes, un loto biļešu procentus)\n\n' +
+          '_Informāciju par mantām var iegūt ar komandu_ `/info`',
         inline: false,
       },
       {

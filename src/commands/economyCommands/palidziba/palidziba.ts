@@ -1,10 +1,10 @@
 import { ApplicationCommandOptionType } from 'discord.js';
 import commandColors from '../../../embeds/commandColors';
-import embedTemplate, { ULMANBOTA_VERSIJA } from '../../../embeds/embedTemplate';
+import embedTemplate from '../../../embeds/embedTemplate';
 import errorEmbed from '../../../embeds/errorEmbed';
 import Command from '../../../interfaces/Command';
 import { commandList } from '../../commandList';
-import updatesList from './updatesList';
+import jaunumi from './jaunumi/jaunumi';
 
 export function getPalidzibaChoices() {
   return commandList
@@ -59,23 +59,8 @@ const palidziba: Command = {
           })
         );
       }
-      case 'jaunumi': {
-        return i.reply(
-          embedTemplate({
-            i,
-            color: this.color,
-            title: 'Palīdzība - jaunumi',
-            fields: [
-              {
-                name: `Versija: ${ULMANBOTA_VERSIJA}, datums: ${updatesList[ULMANBOTA_VERSIJA].date}`,
-                value: updatesList[ULMANBOTA_VERSIJA].description,
-                inline: false,
-              },
-              ...updatesList[ULMANBOTA_VERSIJA].fields,
-            ],
-          })
-        );
-      }
+      case 'jaunumi':
+        return jaunumi(i);
     }
   },
 };
