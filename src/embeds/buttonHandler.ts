@@ -123,7 +123,7 @@ export default async function buttonHandler(
 
         if (component.type === ComponentType.Button) {
           editedRow.addComponents(ButtonBuilder.from(component).setDisabled(true));
-        } else if (component.type === ComponentType.SelectMenu) {
+        } else if (component.type === ComponentType.StringSelect) {
           editedRow.addComponents(SelectMenuBuilder.from(component).setDisabled(true));
         }
       });

@@ -87,7 +87,7 @@ const zvejot: Command = {
       async interaction => {
         switch (interaction.customId) {
           case 'select_fishing_rod': {
-            if (interaction.componentType !== ComponentType.SelectMenu) return;
+            if (interaction.componentType !== ComponentType.StringSelect) return;
             [selectedFishingRod, selectedFishingRodId] = interaction.values[0].split(' ');
 
             const user = await findUser(userId, guildId);

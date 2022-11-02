@@ -201,7 +201,7 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => {
         async int => {
           const { customId, componentType } = int;
 
-          if (customId === 'feed_cat_select' && componentType === ComponentType.SelectMenu) {
+          if (customId === 'feed_cat_select' && componentType === ComponentType.StringSelect) {
             selectedFood = int.values[0];
 
             const user = await findUser(userId, guildId);

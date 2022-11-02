@@ -97,7 +97,7 @@ const vakances: Command = {
       async componentInteraction => {
         switch (componentInteraction.customId) {
           case 'vakances_select':
-            if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
+            if (componentInteraction.componentType !== ComponentType.StringSelect) return;
             chosenJob = componentInteraction.values[0]!;
 
             return {

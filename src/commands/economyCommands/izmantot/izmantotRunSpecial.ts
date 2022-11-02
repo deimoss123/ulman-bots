@@ -103,7 +103,7 @@ export default async function izmantotRunSpecial(
     async componentInteraction => {
       const { customId } = componentInteraction;
       if (customId === 'izmantot_special_select') {
-        if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
+        if (componentInteraction.componentType !== ComponentType.StringSelect) return;
         selectedItemId = componentInteraction.values[0]!;
         return {
           edit: {

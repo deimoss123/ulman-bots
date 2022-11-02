@@ -43,7 +43,7 @@ export default async function jaunumi(i: ChatInputCommandInteraction) {
     msg,
     async int => {
       const { customId, componentType } = int;
-      if (customId === 'jaunumi_select' && componentType === ComponentType.SelectMenu) {
+      if (customId === 'jaunumi_select' && componentType === ComponentType.StringSelect) {
         selectedVersion = int.values[0];
         return {
           edit: {

@@ -127,7 +127,7 @@ export default async function pardotRunSpecial(
     async componentInteraction => {
       const { customId } = componentInteraction;
       if (customId === 'pardot_special_select') {
-        if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
+        if (componentInteraction.componentType !== ComponentType.StringSelect) return;
         selectedIds = componentInteraction.values;
         return {
           edit: {

@@ -82,7 +82,7 @@ const veikals: Command = {
       async componentInteraction => {
         switch (componentInteraction.customId) {
           case 'veikals_prece':
-            if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
+            if (componentInteraction.componentType !== ComponentType.StringSelect) return;
             chosenItem = componentInteraction.values[0]!;
 
             return {
@@ -92,7 +92,7 @@ const veikals: Command = {
             };
 
           case 'veikals_daudzums':
-            if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
+            if (componentInteraction.componentType !== ComponentType.StringSelect) return;
             chosenAmount = parseInt(componentInteraction.values[0]!);
 
             return {

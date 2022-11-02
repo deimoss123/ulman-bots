@@ -220,7 +220,7 @@ export default async function iedotRunSpecial(
     async componentInteraction => {
       const { customId } = componentInteraction;
       if (customId === 'iedot_special_select') {
-        if (componentInteraction.componentType !== ComponentType.SelectMenu) return;
+        if (componentInteraction.componentType !== ComponentType.StringSelect) return;
         selectedItems = itemsInInv.filter(item => componentInteraction.values.includes(item._id!));
 
         const userAfterSelect = await findUser(userId, guildId);
@@ -292,8 +292,8 @@ export default async function iedotRunSpecial(
         ]);
 
         if (!hasJuridisks) {
-          await addLati(userId, guildId, -totalTax)
-          await addLati(i.client.user!.id, guildId, totalTax)
+          await addLati(userId, guildId, -totalTax);
+          await addLati(i.client.user!.id, guildId, totalTax);
         }
 
         return {

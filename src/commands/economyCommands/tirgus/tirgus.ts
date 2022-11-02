@@ -90,7 +90,7 @@ const tirgus: Command = {
 
     buttonHandler(i, 'tirgus', msg, async int => {
       if (int.customId === 'tirgus_select_menu') {
-        if (int.componentType !== ComponentType.SelectMenu) return;
+        if (int.componentType !== ComponentType.StringSelect) return;
         selectedListing = int.values[0];
 
         const newUser = await findUser(userId, guildId);
