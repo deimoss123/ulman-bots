@@ -31,7 +31,9 @@ export default async function buttonHandler(
   isActive = false,
   refetchMessage = false
 ): Promise<void> {
-  const collector = interactionMsg.createMessageComponentCollector({ time });
+  const collector = interactionMsg.createMessageComponentCollector<ComponentType.Button | ComponentType.StringSelect>({
+    time,
+  });
   let currentMessage = interactionMsg;
   const userId = interaction.user.id;
   const cacheId = `${userId}-${interaction.guildId!}`;
