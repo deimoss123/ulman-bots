@@ -1,4 +1,3 @@
-import tirgus from '../commands/economyCommands/tirgus/tirgus';
 import UserProfile from '../interfaces/UserProfile';
 import { ItemKey } from '../items/itemList';
 import User from '../schemas/User';
