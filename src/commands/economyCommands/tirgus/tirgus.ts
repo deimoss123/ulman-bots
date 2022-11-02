@@ -1,8 +1,5 @@
 import commandColors from '../../../embeds/commandColors';
 import Command from '../../../interfaces/Command';
-import { getTirgusFilePath } from '../../../items/tirgus/createTirgus';
-import * as fs from 'fs';
-import { TirgusListings, TIRGUS_COUNT } from '../../../items/tirgus/generateTirgus';
 import buttonHandler from '../../../embeds/buttonHandler';
 import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
@@ -20,6 +17,7 @@ import smallEmbed from '../../../embeds/smallEmbed';
 import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems';
 import setTirgus from '../../../economy/setTirgus';
 import midNightStr from '../../../embeds/helpers/midnightStr';
+import axios from 'axios';
 
 export function calcReqItems({ items, lati }: UserProfile, itemObj: Item) {
   const tirgusPrice = itemObj.tirgusPrice!;
@@ -39,9 +37,13 @@ export function calcReqItems({ items, lati }: UserProfile, itemObj: Item) {
   };
 }
 
-function getTirgusData() {
-  const tirgusData = fs.readFileSync(getTirgusFilePath());
-  return JSON.parse(tirgusData as any) as TirgusListings;
+async function getTirgusData(): Promise<ItemKey[] | null> {
+  try {
+    const res = await axios.get(`${process.env.API_URL}/api/get-tirgus`);
+    return res.data as ItemKey[];
+  } catch (e) {
+    return null;
+  }
 }
 
 function getBoughtItems({ tirgus }: UserProfile) {
@@ -55,7 +57,7 @@ const tirgus: Command = {
     'Tirgū var nopirkt īpašas mantas, kas nav pieejamas nekur citur (ar retiem izņēmumiem)\n\n' +
     'Atšķirībā no veikala, tirgus preces ir nopērkamas par citām mantām (dažām mantām cenā ir arī lati)\n' +
     'Katrs lietotājs var nopirkt katru no tirgus mantām tikai **VIENU** reizi noteiktā dienā\n' +
-    `Katru dienu (plkst. ${midNightStr()}) nejauši tiek izvēlētas **${TIRGUS_COUNT}** mantas kas būs nopērkamas tirgū\n\n` +
+    `Katru dienu (plkst. ${midNightStr()}) nejauši tiek izvēlētas **3** mantas kas būs nopērkamas tirgū\n\n` +
     '**Visas tirgū pieejamās mantas:**\n>>> ' +
     Object.values(itemList)
       .filter(i => i.categories.includes(ItemCategory.TIRGUS))
@@ -73,7 +75,7 @@ const tirgus: Command = {
     const user = await findUser(userId, guildId);
     if (!user) return i.reply(errorEmbed);
 
-    const tirgusListings = getTirgusData();
+    const tirgusListings = await getTirgusData();
     if (!tirgusListings) return i.reply(errorEmbed);
 
     let selectedListing: string;
@@ -94,7 +96,7 @@ const tirgus: Command = {
         const newUser = await findUser(userId, guildId);
         if (!newUser) return { error: true };
 
-        const newListings = getTirgusData();
+        const newListings = await getTirgusData();
         if (!newListings) return { error: true };
 
         const itemsBought = getBoughtItems(newUser);
@@ -115,7 +117,7 @@ const tirgus: Command = {
         const newUser = await findUser(userId, guildId);
         if (!newUser) return { error: true };
 
-        const newListings = getTirgusData();
+        const newListings = await getTirgusData();
         if (!newListings) return { error: true };
 
         const itemsBought = getBoughtItems(newUser);

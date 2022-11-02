@@ -22,6 +22,7 @@ import getItemPrice from '../../../items/helpers/getItemPrice';
 import { PIRKT_PARDOT_NODOKLIS } from '../pardot/pardot';
 import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems';
 import setStats from '../../../economy/stats/setStats';
+import getDiscounts from '../../../items/helpers/getDiscounts';
 
 export default async function pirktRun(
   i: CommandInteraction | ButtonInteraction,
@@ -38,7 +39,10 @@ export default async function pirktRun(
   const itemToBuy = itemList[itemToBuyKey];
 
   // mantu cena ir tā vērtība reiz 2
-  const totalCost = getItemPrice(itemToBuyKey).price * amountToBuy;
+  const discounts = await getDiscounts();
+  if (!discounts) return i.reply(errorEmbed);
+
+  const totalCost = getItemPrice(itemToBuyKey, discounts).price * amountToBuy;
 
   if (totalCost > user.lati) {
     return i.reply(

@@ -6,8 +6,7 @@ import millisToReadableTime from '../../../embeds/helpers/millisToReadableTime';
 import iconEmojis from '../../../embeds/iconEmojis';
 import Item from '../../../interfaces/Item';
 import UserProfile from '../../../interfaces/UserProfile';
-import itemList from '../../../items/itemList';
-import { TirgusListings } from '../../../items/tirgus/generateTirgus';
+import itemList, { ItemKey } from '../../../items/itemList';
 import { calcReqItems } from './tirgus';
 
 function mapPrice(itemObj: Item, user: UserProfile): string {
@@ -37,9 +36,9 @@ function mapPrice(itemObj: Item, user: UserProfile): string {
 
 export default function tirgusEmbed(
   i: ChatInputCommandInteraction,
-  listings: TirgusListings,
+  listings: ItemKey[],
   user: UserProfile,
-  itemsBought: TirgusListings
+  itemsBought: ItemKey[]
 ) {
   const resetTime = new Date().setHours(24, 0, 0, 0);
   const timeUntilReset = resetTime - Date.now();

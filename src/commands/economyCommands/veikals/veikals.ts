@@ -14,6 +14,7 @@ import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import getItemPrice from '../../../items/helpers/getItemPrice';
 import millisToReadableTime from '../../../embeds/helpers/millisToReadableTime';
 import midNightStr from '../../../embeds/helpers/midnightStr';
+import getDiscounts from '../../../items/helpers/getDiscounts';
 
 const veikals: Command = {
   description:
@@ -35,8 +36,11 @@ const veikals: Command = {
       .filter(obj => obj[1].categories.includes(ItemCategory.VEIKALS))
       .sort((a, b) => b[1].value - a[1].value);
 
+    const discounts = await getDiscounts();
+    if (!discounts) return i.reply(errorEmbed);
+
     const fields = shopItems.map(([key, item]) => {
-      const itemPrice = getItemPrice(key);
+      const itemPrice = getItemPrice(key, discounts);
 
       let name = itemString(item);
       if (itemPrice.discount) {
@@ -67,7 +71,7 @@ const veikals: Command = {
           `(pēc ${millisToReadableTime(timeUntilReset)})`,
         color: this.color,
         fields,
-        components: veikalsComponents(shopItems, user),
+        components: veikalsComponents(shopItems, user, discounts),
       })
     );
 
@@ -86,7 +90,7 @@ const veikals: Command = {
 
             return {
               edit: {
-                components: veikalsComponents(shopItems, user, chosenItem, chosenAmount),
+                components: veikalsComponents(shopItems, user, discounts, chosenItem, chosenAmount),
               },
             };
 
@@ -96,7 +100,7 @@ const veikals: Command = {
 
             return {
               edit: {
-                components: veikalsComponents(shopItems, user, chosenItem, chosenAmount),
+                components: veikalsComponents(shopItems, user, discounts, chosenItem, chosenAmount),
               },
             };
 
@@ -107,7 +111,7 @@ const veikals: Command = {
 
             const userBeforeBuy = await findUser(userId, guildId);
             if (userBeforeBuy) {
-              const totalCost = getItemPrice(chosenItem).price * chosenAmount;
+              const totalCost = getItemPrice(chosenItem, discounts).price * chosenAmount;
               if (userBeforeBuy.lati < totalCost || countFreeInvSlots(userBeforeBuy) < chosenAmount) {
                 buttonStyle = ButtonStyle.Danger;
               }
@@ -116,7 +120,7 @@ const veikals: Command = {
             return {
               end: true,
               edit: {
-                components: veikalsComponents(shopItems, user, chosenItem, chosenAmount, buttonStyle),
+                components: veikalsComponents(shopItems, user, discounts, chosenItem, chosenAmount, buttonStyle),
               },
               after: async () => pirktRun(componentInteraction, chosenItem, chosenAmount, commandColors.pirkt),
             };

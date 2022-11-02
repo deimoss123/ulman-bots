@@ -3,12 +3,9 @@ import dotenv from 'dotenv';
 import validateEnv from './utils/validateEnv';
 import mongo from './utils/mongo';
 import commandHandler from './commands/commandHandler';
-import setupCronJobs from './utils/setupCronJobs';
-import createDiscounts from './items/discounts/createDiscounts';
 import autocompleteHandler from './commands/autocompleteHandler';
 import chalk from 'chalk';
 import setBotPresence from './utils/setBotPresence';
-import createTirgus from './items/tirgus/createTirgus';
 
 dotenv.config();
 process.env.TZ = 'Europe/Riga';
@@ -17,8 +14,6 @@ process.env.TZ = 'Europe/Riga';
 if (!validateEnv()) process.exit(1);
 
 const mongoPromise = mongo();
-createDiscounts();
-createTirgus();
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds],
@@ -26,7 +21,8 @@ const client = new Client({
 
 client.once('ready', async () => {
   setBotPresence(client);
-  setupCronJobs(client);
+  setInterval(() => setBotPresence(client), 3_600_000);
+
   await mongoPromise.then(() => console.log('Connected to MongoDB'));
 
   client.on('interactionCreate', i => {

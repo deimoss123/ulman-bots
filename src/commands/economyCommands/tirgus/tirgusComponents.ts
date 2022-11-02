@@ -1,14 +1,13 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, SelectMenuBuilder } from 'discord.js';
 import capitalizeFirst from '../../../embeds/helpers/capitalizeFirst';
 import UserProfile from '../../../interfaces/UserProfile';
-import itemList from '../../../items/itemList';
-import { TirgusListings } from '../../../items/tirgus/generateTirgus';
+import itemList, { ItemKey } from '../../../items/itemList';
 import { calcReqItems } from './tirgus';
 
 export default function tirgusComponents(
-  listings: TirgusListings,
+  listings: ItemKey[],
   user: UserProfile,
-  boughtItems: TirgusListings,
+  boughtItems: ItemKey[],
   selectedListing?: string
 ) {
   const calcRes = selectedListing ? calcReqItems(user, itemList[selectedListing]) : null;

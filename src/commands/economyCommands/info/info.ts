@@ -1,11 +1,13 @@
 import { ApplicationCommandOptionType, EmbedField } from 'discord.js';
 import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
+import errorEmbed from '../../../embeds/errorEmbed';
 import itemString from '../../../embeds/helpers/itemString';
 import latiString from '../../../embeds/helpers/latiString';
 import iconEmojis from '../../../embeds/iconEmojis';
 import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
 import Command from '../../../interfaces/Command';
+import getDiscounts from '../../../items/helpers/getDiscounts';
 import getItemPrice from '../../../items/helpers/getItemPrice';
 import itemList, { ItemCategory } from '../../../items/itemList';
 import { ItemType, itemTypes } from '../inventars';
@@ -51,7 +53,10 @@ const info: Command = {
     ];
 
     if (itemObj.categories.includes(ItemCategory.VEIKALS)) {
-      const { price, discount } = getItemPrice(itemKey);
+      const discounts = await getDiscounts();
+      if (!discounts) return i.reply(errorEmbed);
+
+      const { price, discount } = getItemPrice(itemKey, discounts);
 
       fields[0].value += `\n\n**Veikala cena:**\n ${latiString(price)}`;
       if (discount) {

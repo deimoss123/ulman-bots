@@ -5,27 +5,27 @@ import capitalizeFirst from '../../../embeds/helpers/capitalizeFirst';
 import latiString from '../../../embeds/helpers/latiString';
 import findItemsByQuery from '../../../items/helpers/findItemsByQuery';
 import normalizeLatText from '../../../embeds/helpers/normalizeLatText';
-import Item from '../../../interfaces/Item';
+import getDiscounts from '../../../items/helpers/getDiscounts';
 
-function mapItemsToChoices(itemInList: [string, Item]) {
-  const [key, item] = itemInList;
-
-  return {
-    name: `💰 [${latiString(getItemPrice(key).price)}] ` + `${capitalizeFirst(item.nameNomVsk)}`,
-    value: key,
-  };
-}
-
-export default async function pirktAutocomplete(
-  interaction: AutocompleteInteraction
-): Promise<void> {
+export default async function pirktAutocomplete(interaction: AutocompleteInteraction): Promise<void> {
   // lietotāja ievadītais teksts
   const focusedValue = normalizeLatText(interaction.options.getFocused() as string);
 
   const allChoices = Object.entries(itemList)
-    .filter((obj) => obj[1].categories.includes(ItemCategory.VEIKALS)) // izfiltrētas veikala preces
+    .filter(obj => obj[1].categories.includes(ItemCategory.VEIKALS)) // izfiltrētas veikala preces
     .sort((a, b) => b[1].value - a[1].value); // sakārtotas pēc vērtības
 
   const queriedChoices = findItemsByQuery(focusedValue, allChoices);
-  await interaction.respond(queriedChoices.map(mapItemsToChoices)).catch((_) => _);
+
+  const discounts = await getDiscounts();
+  if (!discounts) return;
+
+  await interaction
+    .respond(
+      queriedChoices.map(([key, item]) => ({
+        name: `💰 [${latiString(getItemPrice(key, discounts).price)}] ` + `${capitalizeFirst(item.nameNomVsk)}`,
+        value: key,
+      }))
+    )
+    .catch(_ => _);
 }

@@ -11,10 +11,12 @@ import latiString from '../../../embeds/helpers/latiString';
 import UserProfile from '../../../interfaces/UserProfile';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import getItemPrice from '../../../items/helpers/getItemPrice';
+import { DiscountedItems } from '../../../items/itemList';
 
 export default function veikalsComponents(
   shopItems: [string, Item][],
   user: UserProfile,
+  discounts: DiscountedItems,
   chosenItem = '',
   chosenAmount = 1,
   buttonStyle: ButtonStyle | null = null
@@ -32,7 +34,7 @@ export default function veikalsComponents(
   let hasInvSlots = true;
 
   if (chosenItem && user) {
-    totalCost = getItemPrice(chosenItem).price * chosenAmount;
+    totalCost = getItemPrice(chosenItem, discounts).price * chosenAmount;
 
     if (totalCost > user.lati) canAfford = false;
     if (countFreeInvSlots(user) < chosenAmount) hasInvSlots = false;
@@ -79,7 +81,7 @@ export default function veikalsComponents(
         .addOptions(
           shopItems.map(([key, item]) => ({
             label: capitalizeFirst(item.nameNomVsk),
-            description: latiString(getItemPrice(key).price),
+            description: latiString(getItemPrice(key, discounts).price),
             value: key,
             emoji: item.emoji || '❓',
             default: key === chosenItem,
