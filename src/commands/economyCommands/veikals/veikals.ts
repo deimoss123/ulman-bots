@@ -29,15 +29,12 @@ const veikals: Command = {
     const userId = i.user.id;
     const guildId = i.guildId!;
 
-    const user = await findUser(userId, guildId);
-    if (!user) return i.reply(errorEmbed);
+    const [user, discounts] = await Promise.all([findUser(userId, guildId), getDiscounts()]);
+    if (!user || !discounts) return i.reply(errorEmbed);
 
     const shopItems = Object.entries(itemList)
       .filter(obj => obj[1].categories.includes(ItemCategory.VEIKALS))
       .sort((a, b) => b[1].value - a[1].value);
-
-    const discounts = await getDiscounts();
-    if (!discounts) return i.reply(errorEmbed);
 
     const fields = shopItems.map(([key, item]) => {
       const itemPrice = getItemPrice(key, discounts);

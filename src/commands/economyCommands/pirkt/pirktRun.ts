@@ -33,15 +33,10 @@ export default async function pirktRun(
   const userId = i.user.id;
   const guildId = i.guildId!;
 
-  const user = await findUser(userId, guildId);
-  if (!user) return i.reply(errorEmbed);
+  const [user, discounts] = await Promise.all([findUser(userId, guildId), getDiscounts()]);
+  if (!user || !discounts) return i.reply(errorEmbed);
 
   const itemToBuy = itemList[itemToBuyKey];
-
-  // mantu cena ir tā vērtība reiz 2
-  const discounts = await getDiscounts();
-  if (!discounts) return i.reply(errorEmbed);
-
   const totalCost = getItemPrice(itemToBuyKey, discounts).price * amountToBuy;
 
   if (totalCost > user.lati) {
