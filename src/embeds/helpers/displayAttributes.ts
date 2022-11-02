@@ -56,6 +56,9 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false) {
             kakisFedState.find(s => fedUntil! - currTime > s.time)?.name +
             (inline ? '' : '**'),
     },
+    patriota_piespraude: {
+      piespraudeNum: n => `${inline ? '' : '**'}Nr. ${n}${inline ? '' : '**'}`,
+    },
   };
 
   const attributes = Object.entries(item.attributes).filter(

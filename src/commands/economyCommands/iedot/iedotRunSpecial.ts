@@ -16,7 +16,7 @@ import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
-import itemString, { itemStringCustom } from '../../../embeds/helpers/itemString';
+import itemString, { itemStringCustom, makeEmojiString } from '../../../embeds/helpers/itemString';
 import latiString from '../../../embeds/helpers/latiString';
 import Item from '../../../interfaces/Item';
 import UserProfile, { SpecialItemInProfile } from '../../../interfaces/UserProfile';
@@ -52,18 +52,24 @@ function makeEmbedAfter(
     i,
     color: commandColors.iedot,
     content: `<@${targetUser.userId}>`,
-    description:
-      `Nodoklis: ${hasJuridisks ? '**0** lati (juridiska persona)' : `${latiString(taxLati, false, true)}`}\n` +
-      `<@${targetUser.userId}> tu iedevi:`,
+
+    description: `**Nodoklis:** ${
+      itemObj.notSellable
+        ? '0 lati **(nepārdodama manta)**'
+        : hasJuridisks
+        ? '0 lati **(juridiska persona)**'
+        : `${latiString(taxLati, false, true)}`
+    }\n<@${targetUser.userId}> tu iedevi:`,
+
     fields: [
       ...itemsToGive.map(item => ({
         name: itemString(itemObj, null, true, item.attributes.customName),
         value:
-          `Vērtība: ${latiString(
-            itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value,
-            false,
-            true
-          )}\n` + displayAttributes(item),
+          (itemObj.notSellable
+            ? ''
+            : `Vērtība: ` +
+              latiString(itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value, false, true) +
+              '\n') + displayAttributes(item),
         inline: false,
       })),
     ],
@@ -86,8 +92,10 @@ function makeEmbed(
       `Tavā inventārā ir **${itemString(itemObj, itemsInInv.length)}**\n` +
       `No saraksta izvēlies vienu vai vairākas mantas ko iedot <@${targetUserId}>\n\n` +
       `**Nodoklis:** ` +
-      (hasJuridisks
-        ? `**0 lati** (juridiska persona)`
+      (itemObj.notSellable
+        ? `0 lati **(nepārdodama manta)**`
+        : hasJuridisks
+        ? `0 lati **(${makeEmojiString(itemList.juridiska_zivs.emoji!)} juridiska persona)**`
         : `${taxLati ? latiString(taxLati) : '-'} (${Math.floor(user.giveTax * 100)}% no mantu kopējās vērtības)`),
   }).embeds!;
 }
@@ -118,7 +126,9 @@ function makeComponents(
             .map(item => ({
               label: itemStringCustom(itemObj, item.attributes?.customName),
               description:
-                `${latiString(itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value)} | ` +
+                (itemObj.notSellable
+                  ? ''
+                  : `${latiString(itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value)} | `) +
                 displayAttributes(item, true),
               value: item._id!,
               emoji: itemObj.emoji || '❓',
@@ -183,8 +193,9 @@ export default async function iedotRunSpecial(
       return i.reply(ephemeralReply(`Neizdevās iedot, jo ${checkRes.reason}`));
     }
 
-    if (hasJuridisks) totalTax = 0;
-    else {
+    if (hasJuridisks || itemObj.notSellable) {
+      totalTax = 0;
+    } else {
       const value = itemObj.customValue ? itemObj.customValue(itemsInInv[0].attributes) : itemObj.value;
       totalTax = Math.floor(value * user.giveTax);
     }
@@ -199,12 +210,12 @@ export default async function iedotRunSpecial(
       setStats(userId, guildId, { itemsGiven: 1, taxPaid: totalTax }),
     ]);
 
-    if (!hasJuridisks) {
-      await addLati(userId, guildId, -totalTax);
-      await addLati(i.client.user!.id, guildId, totalTax);
+    if (!hasJuridisks && totalTax) {
+      await Promise.all([addLati(userId, guildId, -totalTax), addLati(i.client.user!.id, guildId, totalTax)]);
     }
 
-    return i.reply(makeEmbedAfter(i, totalTax, targetUser, itemsInInv, hasJuridisks, itemObj));
+    i.reply(makeEmbedAfter(i, totalTax, targetUser, itemsInInv, hasJuridisks, itemObj));
+    return;
   }
 
   const msg = await i.reply({
@@ -217,17 +228,18 @@ export default async function iedotRunSpecial(
     i,
     'iedot',
     msg,
-    async componentInteraction => {
-      const { customId } = componentInteraction;
+    async int => {
+      const { customId } = int;
       if (customId === 'iedot_special_select') {
-        if (componentInteraction.componentType !== ComponentType.StringSelect) return;
-        selectedItems = itemsInInv.filter(item => componentInteraction.values.includes(item._id!));
+        if (int.componentType !== ComponentType.StringSelect) return;
+        selectedItems = itemsInInv.filter(item => int.values.includes(item._id!));
 
         const userAfterSelect = await findUser(userId, guildId);
         if (!userAfterSelect) return { error: true };
 
-        if (hasJuridisks) totalTax = 0;
-        else {
+        if (hasJuridisks || itemObj.notSellable) {
+          totalTax = 0;
+        } else {
           totalTax =
             Math.floor(
               (itemObj.customValue
@@ -243,7 +255,7 @@ export default async function iedotRunSpecial(
           },
         };
       } else if (customId === 'iedot_special_confirm') {
-        if (componentInteraction.componentType !== ComponentType.Button) return;
+        if (int.componentType !== ComponentType.Button) return;
         if (!selectedItems.length) return;
 
         const targetUserNew = await findUser(targetUser.userId, guildId);
@@ -251,13 +263,13 @@ export default async function iedotRunSpecial(
 
         const hasInvSpace = checkTargetInv(targetUserNew, selectedItems.length);
         if (!hasInvSpace) {
-          componentInteraction.reply(noInvSpaceEmbed(targetUserNew, itemObj, selectedItems.length));
+          int.reply(noInvSpaceEmbed(targetUserNew, itemObj, selectedItems.length));
           return { end: true };
         }
 
         const checkRes = checkUserSpecialItems(targetUserNew, itemKey, selectedItems.length);
         if (!checkRes.valid) {
-          componentInteraction.reply(ephemeralReply(`Neizdevās iedot, jo ${checkRes.reason}`));
+          int.reply(ephemeralReply(`Neizdevās iedot, jo ${checkRes.reason}`));
           return { end: true };
         }
 
@@ -267,7 +279,7 @@ export default async function iedotRunSpecial(
         if (user.lati < totalTax) {
           return {
             after: async () => {
-              await componentInteraction.reply(cantPayTaxEmbed(itemObj, selectedItems.length, totalTax, user));
+              await int.reply(cantPayTaxEmbed(itemObj, selectedItems.length, totalTax, user));
             },
           };
         }
@@ -277,7 +289,7 @@ export default async function iedotRunSpecial(
           if (!userItemIds.includes(specItem._id!)) {
             return {
               after: async () => {
-                await componentInteraction.reply(
+                await int.reply(
                   ephemeralReply('Tavs inventāra saturs ir mainījies, kāda no izvēlētām mantām nav tavā inventārā')
                 );
               },
@@ -291,9 +303,8 @@ export default async function iedotRunSpecial(
           setStats(userId, guildId, { itemsGiven: selectedItems.length, taxPaid: totalTax }),
         ]);
 
-        if (!hasJuridisks) {
-          await addLati(userId, guildId, -totalTax);
-          await addLati(i.client.user!.id, guildId, totalTax);
+        if (!hasJuridisks && totalTax) {
+          await Promise.all([addLati(userId, guildId, -totalTax), addLati(i.client.user!.id, guildId, totalTax)]);
         }
 
         return {
@@ -302,9 +313,7 @@ export default async function iedotRunSpecial(
             components: makeComponents(itemsInInv, itemObj, selectedItems, totalTax, user.lati, true),
           },
           after: async () => {
-            await componentInteraction.reply(
-              makeEmbedAfter(i, totalTax, targetUser, selectedItems, hasJuridisks, itemObj)
-            );
+            await int.reply(makeEmbedAfter(i, totalTax, targetUser, selectedItems, hasJuridisks, itemObj));
           },
         };
       }

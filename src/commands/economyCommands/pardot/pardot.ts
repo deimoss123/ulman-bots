@@ -2,7 +2,7 @@ import Command from '../../../interfaces/Command';
 import { ApplicationCommandOptionType } from 'discord.js';
 import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
-import { validateOne } from './pardotValidate';
+import pardotValidate from './pardotValidate';
 import commandColors from '../../../embeds/commandColors';
 import pardotAutocomplete from './pardotAutocomplete';
 import pardotRun, { pardotEmbed } from './pardotRun';
@@ -69,9 +69,6 @@ const pardot: Command = {
     const userId = i.user.id;
     const guildId = i.guildId!;
 
-    const user = await findUser(userId, guildId);
-    if (!user) return i.reply(errorEmbed);
-
     const subCommandName = i.options.getSubcommand();
 
     if (['neizmantojamās', 'visas'].includes(subCommandName)) {
@@ -79,10 +76,13 @@ const pardot: Command = {
     }
 
     if (subCommandName === 'pec_nosaukuma') {
+      const user = await findUser(userId, guildId);
+      if (!user) return i.reply(errorEmbed);
+
       const itemToSellId = i.options.getString('nosaukums')!;
       const amountToSell = i.options.getInteger('daudzums') ?? 1;
 
-      const validateRes = await validateOne(i, user, itemToSellId, amountToSell, this.color);
+      const validateRes = await pardotValidate(i, user, itemToSellId, amountToSell, this.color);
       if (!validateRes) return;
 
       const { key, amount, item } = validateRes;

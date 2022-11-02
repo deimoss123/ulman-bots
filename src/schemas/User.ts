@@ -66,6 +66,7 @@ const userSchema = new Schema<UserProfile>({
           holdsFishCount: Number,
           createdAt: Number, // unix millis
           fedUntil: Number, // unix millis
+          piespraudeNum: Number,
         },
       },
     ],

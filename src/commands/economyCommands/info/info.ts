@@ -39,11 +39,17 @@ const info: Command = {
       return i.reply(wrongKeyEmbed);
     }
 
-    const itemType: ItemType = itemObj.attributes ? 'special' : itemObj.use ? 'usable' : 'not_usable';
+    const itemType: ItemType = itemObj.notSellable
+      ? 'not_sellable'
+      : itemObj.attributes
+      ? 'special'
+      : itemObj.use
+      ? 'usable'
+      : 'not_usable';
 
     const fields: EmbedField[] = [
       {
-        name: `Vērtība: ${latiString(itemObj.value)}`,
+        name: `Vērtība: ${itemType === 'not_sellable' ? '??? lati' : latiString(itemObj.value)}`,
         value:
           (itemObj.customValue ? '⚠️ šīs mantas vērtība var \nmainīties atkarībā no atribūtiem\n' : '') +
           '\u200B\n' +

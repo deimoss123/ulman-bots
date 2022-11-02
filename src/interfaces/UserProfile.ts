@@ -30,6 +30,9 @@ export interface ItemAttributes {
   // kaķis (unix millis)
   createdAt?: number;
   fedUntil?: number;
+
+  // sūdīgs nosaukums, bet domāts patriotu piespraudei, numurs pēc kārtas
+  piespraudeNum?: number;
 }
 
 export interface SpecialItemInProfile {

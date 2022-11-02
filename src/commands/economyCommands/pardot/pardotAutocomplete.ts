@@ -25,18 +25,15 @@ export default async function pardotAutocomplete(interaction: AutocompleteIntera
   // lietotāja ievadītais teksts
   const focusedValue = normalizeLatText(interaction.options.getFocused() as string);
 
-  let allChoices: [string, Item][] = Object.entries(itemList).sort((a, b) => b[1].value - a[1].value);
-
   const user = await findUser(interaction.user.id, interaction.guildId!);
-  if (user) {
-    const { specialItems } = user;
-    const specialItemsList = [...new Set(specialItems.map(item => item.name))].map(key => [key, itemList[key]]) as [
-      ItemKey,
-      Item
-    ][];
+  if (!user) return;
 
-    allChoices = [...user.items.map(mapProfileItemsToItemsList), ...specialItemsList];
-  }
+  const { specialItems } = user;
+  const specialItemsList = [...new Set(specialItems.map(item => item.name))]
+    .map(key => [key, itemList[key]])
+    .filter(([, item]) => !(item as Item).notSellable) as [ItemKey, Item][];
+
+  const allChoices: [ItemKey, Item][] = [...user.items.map(mapProfileItemsToItemsList), ...specialItemsList];
 
   if (!allChoices.length) {
     await interaction.respond([{ name: 'Tev nav ko pārdot', value: 'no-items-inv' }]);

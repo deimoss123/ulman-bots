@@ -8,19 +8,19 @@ import itemList from '../../../items/itemList';
 import pardotRunSpecial from './pardotRunSpecial';
 import { emptyInvEmbed } from './pardot';
 
-interface ValidateOneReturn {
+interface PardotValidateReturn {
   key: string;
   amount: number;
   item: Item;
 }
 
-export const validateOne = async (
+const pardotValidate = async (
   i: CommandInteraction,
   user: UserProfile,
   itemToSellKey: string,
   amountToSell: number,
   embedColor: number
-): Promise<ValidateOneReturn | undefined> => {
+): Promise<PardotValidateReturn | undefined> => {
   if (itemToSellKey === 'no-items-inv') {
     await i.reply(emptyInvEmbed());
     return;
@@ -29,6 +29,11 @@ export const validateOne = async (
   const itemToSell = itemList[itemToSellKey];
   if (!itemToSell) {
     await i.reply(wrongKeyEmbed);
+    return;
+  }
+
+  if (itemToSell.notSellable) {
+    await i.reply(ephemeralReply(`**${itemString(itemToSell, null, true)}** nevar pārdot`));
     return;
   }
 
@@ -57,3 +62,5 @@ export const validateOne = async (
     item: itemToSell,
   };
 };
+
+export default pardotValidate;

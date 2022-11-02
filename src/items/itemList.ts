@@ -807,6 +807,27 @@ const itemList: Record<ItemKey, Item> = {
     removedOnUse: false,
     use: smilsu_pulkstenis,
   },
+  patriota_piespraude: {
+    nameNomVsk: 'patriotu piespraude',
+    nameNomDsk: 'patriotu piespraudes',
+    nameAkuVsk: 'patriotu piespraudi',
+    nameAkuDsk: 'patriotu piespraudes',
+    isVirsiesuDzimte: false,
+    emoji: {
+      id: '1037454453990764636',
+      name: 'piespraude',
+    },
+    imgLink: null,
+    categories: [ItemCategory.OTHER],
+    value: 0,
+
+    notSellable: true,
+    attributes: {
+      piespraudeNum: 0,
+    },
+    removedOnUse: false,
+    use: async () => ({ text: 'chau' }),
+  },
 
   // -- brīvgriezieni --
   brivgriez10: {

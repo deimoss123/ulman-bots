@@ -47,6 +47,9 @@ interface Item {
   // mantas vērtība
   value: number;
 
+  // nepārdodama manta
+  notSellable?: boolean;
+
   // speciāla vērtība, piem. makšķeres izturība ietekmē vērtību
   customValue?: (attributes: ItemAttributes) => number;
 

@@ -24,12 +24,14 @@ import Item from '../../../interfaces/Item';
 import UserProfile, { ItemAttributes } from '../../../interfaces/UserProfile';
 import itemList, { ItemKey } from '../../../items/itemList';
 import { emptyInvEmbed, PIRKT_PARDOT_NODOKLIS } from './pardot';
+import removeItemsById from '../../../economy/removeItemsById';
 
 interface ItemsToSell {
   name: string;
   amount: number | null;
   item: Item;
   attributes?: ItemAttributes;
+  _id?: string;
 }
 
 function pardotVisuComponents(selectedNo = false) {
@@ -102,7 +104,7 @@ export default async function pardotRun(
   if (type === 'neizmantojamās') {
     const unusuableItems = items.filter(item => !itemList[item.name].use);
     if (!unusuableItems.length) {
-      return i.reply(ephemeralReply('Tavā inventārā nav neizmantojumu mantu'));
+      return i.reply(ephemeralReply('Tavā inventārā nav neviena neizmantojama manta'));
     }
 
     const soldItemsValue = unusuableItems.reduce((p, c) => p + c.amount * itemList[c.name].value, 0);
@@ -119,12 +121,16 @@ export default async function pardotRun(
       setStats(userId, guildId, { soldShop: soldItemsValue, taxPaid }),
     ]);
 
-    await addItems(userId, guildId, itemsToSellObj)
+    await addItems(userId, guildId, itemsToSellObj);
 
     return i.reply(pardotEmbed(i, user, itemsToSell, soldItemsValue));
   }
 
   // visas
+  if (user.specialItems.length && !user.specialItems.find(({ name }) => !itemList[name].notSellable)) {
+    return i.reply(ephemeralReply('Tavā inventārā nav neviena pārdodama manta'));
+  }
+
   const msg = await i.reply({
     embeds: smallEmbed('Vai tiešām gribi pārdot **VISAS** savas mantas? (bīstami)', commandColors.pardot).embeds,
     components: pardotVisuComponents(),
@@ -153,18 +159,23 @@ export default async function pardotRun(
         const { lati, items, specialItems } = user;
 
         if (!items.length && !specialItems.length) {
-          return {
-            end: true,
-            after: async () => {
-              await int.reply(emptyInvEmbed());
-            },
-          };
+          int.reply(emptyInvEmbed());
+          return { end: true };
         }
 
+        const specialItemsToSell: ItemsToSell[] = specialItems
+          .map(({ name, attributes, _id }) => ({ name, amount: null, item: itemList[name], attributes, _id }))
+          .filter(({ item }) => !item.notSellable);
+
         const itemsToSell: ItemsToSell[] = [
-          ...specialItems.map(({ name, attributes }) => ({ name, amount: null, item: itemList[name], attributes })),
+          ...specialItemsToSell,
           ...items.map(({ name, amount }) => ({ name, amount, item: itemList[name] })),
         ];
+
+        if (!itemsToSell.length) {
+          int.reply(ephemeralReply('Tavā inventārā nav neviena pārdodama manta'));
+          return { end: true };
+        }
 
         const soldItemsValue = itemsToSell.reduce((p, { item, amount, attributes }) => {
           return p + (item.customValue ? item.customValue(attributes!) : item.value * (amount || 1));
@@ -174,9 +185,15 @@ export default async function pardotRun(
 
         await Promise.all([
           addLati(i.client.user!.id, guildId, tax),
-          setUser(userId, guildId, { lati: lati + soldItemsValue, items: [], specialItems: [] }),
+          setUser(userId, guildId, { lati: lati + soldItemsValue, items: [] }),
           setStats(userId, guildId, { soldShop: soldItemsValue, taxPaid: tax }),
         ]);
+
+        await removeItemsById(
+          userId,
+          guildId,
+          specialItemsToSell.map(({ _id }) => _id!)
+        );
 
         return {
           end: true,

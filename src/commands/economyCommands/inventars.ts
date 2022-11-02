@@ -29,13 +29,14 @@ import { INCREASE_CAP_1 } from '../../items/usableItems/mugursoma';
 import { INCREASE_CAP_2 } from '../../items/usableItems/divaina_mugursoma';
 
 export type ItemType = 'not_usable' | 'usable' | 'special' | 'not_sellable';
-export const itemTypes: Record<ItemType, { text: string; emoji?: string }> = {
+
+export const itemTypes: Record<ItemType, { text: string; emoji: string }> = {
   not_sellable: {
-    text: 'nepārdodama un neiedodama manta',
+    text: 'īpaša izmantojama un **nepārdodama** un manta',
     emoji: '<:check3:1017598453032943636>',
   },
   special: {
-    text: 'īpaša izmantojama manta ar atribūtiem',
+    text: 'izmantojama manta ar atribūtiem',
     emoji: '<:check2:1017601966555267132>',
   },
   usable: {
@@ -50,54 +51,47 @@ export const itemTypes: Record<ItemType, { text: string; emoji?: string }> = {
 
 function mapItems({ items, specialItems }: UserProfile) {
   const itemTypesInInv = new Set<ItemType>();
-  if (specialItems.length) itemTypesInInv.add('special');
 
   const specialItemsFields = specialItems
     .sort((a, b) => {
       const itemA = itemList[a.name];
       const itemB = itemList[b.name];
-
-      return (
-        (itemB.customValue ? itemB.customValue(b.attributes) : itemB.value) -
-        (itemA.customValue ? itemA.customValue(a.attributes) : itemA.value)
-      );
+      return itemA.notSellable === itemB.notSellable
+        ? (itemB.customValue ? itemB.customValue(b.attributes) : itemB.value) -
+            (itemA.customValue ? itemA.customValue(a.attributes) : itemA.value)
+        : itemB.notSellable
+        ? 1
+        : -1;
     })
-
     .map(specialItem => {
       const { name, attributes } = specialItem;
       const item = itemList[name] as Item;
+
+      const currentItemType: ItemType = item.notSellable ? 'not_sellable' : 'special';
+      itemTypesInInv.add(currentItemType);
 
       const value = item.customValue ? item.customValue(attributes) : item.value;
 
       return {
         name: itemString(item, null, false, attributes?.customName),
-        value: `${itemTypes.special.emoji} ${latiString(value)}\n` + displayAttributes(specialItem),
+        value:
+          `${itemTypes[currentItemType].emoji} ` +
+          `${currentItemType === 'not_sellable' ? '??? lati' : latiString(value)}\n` +
+          displayAttributes(specialItem),
         inline: true,
       };
     });
 
-  const usableItems: ItemInProfile[] = [];
-  const unusableItems: ItemInProfile[] = [];
-
-  items.forEach(item => {
-    const itemObj = itemList[item.name];
-    if (itemObj.use) usableItems.push(item);
-    else unusableItems.push(item);
+  const sortedItems: ItemInProfile[] = items.sort((a, b) => {
+    const itemA = itemList[a.name];
+    const itemB = itemList[b.name];
+    return itemB.use === itemA.use ? itemB.value - itemA.value : itemB.use ? 1 : -1;
   });
-
-  const sortedItems: ItemInProfile[] = [
-    ...usableItems.sort((a, b) => itemList[b.name].value - itemList[a.name].value),
-    ...unusableItems.sort((a, b) => itemList[b.name].value - itemList[a.name].value),
-  ];
 
   const itemFields = sortedItems.map(({ name, amount }) => {
     const item = itemList[name] as Item;
 
-    let currentItemType: ItemType;
-
-    if (item.use) currentItemType = 'usable';
-    else currentItemType = 'not_usable';
-
+    const currentItemType: ItemType = item.use ? 'usable' : 'not_usable';
     itemTypesInInv.add(currentItemType);
 
     return {
@@ -214,11 +208,18 @@ function invComponents(
   totalPages?: number,
   buttonsPressed: ('visas' | 'neizmantojamas')[] = []
 ) {
+  const { userId, items, specialItems } = targetUser;
+
   const rows: ActionRowBuilder<ButtonBuilder>[] = [];
+
   if (fields.length > INV_PAGE_SIZE) {
     rows.push(paginationRow(currentPage!, totalPages!));
   }
-  if (targetUser.userId === i.user.id && (targetUser.items.length || targetUser.specialItems.length)) {
+
+  if (
+    userId === i.user.id &&
+    (items.length || (specialItems.length && specialItems.find(({ name }) => !itemList[name].notSellable)))
+  ) {
     rows.push(sellRow(targetUser, buttonsPressed));
   }
 
