@@ -18,13 +18,13 @@ export interface ItemAttributes {
   // kafijas aparāts, pētnieks (unix millis)
   lastUsed?: number;
 
-  // priekš pētnieka, brīvgrieziens
+  // pētnieka atrastais brīvgrieziens
   foundItemKey?: ItemKey;
 
-  // priekš naudas maisa
+  // naudas maisam
   latiCollected?: number;
 
-  // priekš loto zivs, "satur x zivis" atribūta
+  // loto zivij, "satur x zivis" atribūts
   holdsFishCount?: number;
 
   // kaķis (unix millis)

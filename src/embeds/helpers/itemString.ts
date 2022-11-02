@@ -6,7 +6,7 @@ export function makeEmojiString(emoji: APIMessageComponentEmoji) {
   return `<${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}>`;
 }
 
-// item string priekš mantas ar customName atribūtu un bez emoji
+// item string mantām ar customName atribūtu un bez emoji
 export function itemStringCustom(item: Item, customName = '') {
   let name = '';
   if (customName) {

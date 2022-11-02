@@ -71,7 +71,7 @@ export default async function commandHandler(i: ChatInputCommandInteraction) {
     return i.reply(errorEmbed);
   }
 
-  // komandas testēšanai, priekš privāta servera
+  // komandas testēšanai, privātajam serverim
   command = devCommandList.find(cmd => cmd.data.name === i.commandName);
   if (command) command.run(i);
 }

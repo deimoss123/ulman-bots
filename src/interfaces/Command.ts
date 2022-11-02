@@ -1,8 +1,8 @@
 import { AutocompleteInteraction, ChatInputApplicationCommandData, ChatInputCommandInteraction } from 'discord.js';
 
-// interfeiss priekš bota komandu objektiem
+// interfeiss bota komandu objektiem
 interface Command {
-  // apraksts priekš /palīdzība
+  // palīdzības apraksts
   description: string;
 
   // krāsa embediem
@@ -11,10 +11,10 @@ interface Command {
   // milisekundes
   cooldown?: number;
 
-  // konfigurācija / komandām priekš reģistrēšanas
+  // konfigurācija / komandu reģistrēšanai
   data: ChatInputApplicationCommandData;
 
-  // funkcija priekš / komandu autocomplete apstrādāšanas
+  // funkcija / komandu autocomplete apstrādāšanai
   autocomplete?: (i: AutocompleteInteraction) => void;
 
   // komandas galvenais kods

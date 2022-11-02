@@ -37,7 +37,7 @@ const makskere: UsableItemFunc = async (userId, guildId, itemKey, specialItem) =
       const { attributes, _id } = specialItem!;
 
       const embed = new EmbedBuilder()
-        .setDescription('Makšķeres ir izmantojamas priekš zvejošanas\n' + 'Sāc zvejot ar komandu `/zvejot`')
+        .setDescription('Makšķeres ir izmantojamas zvejošanai\n' + 'Sāc zvejot ar komandu `/zvejot`')
         .setColor(commandColors.zvejot);
 
       const { maxDurability, repairable } = maksekeresData[itemKey];

@@ -14,7 +14,7 @@ const updatesList: Record<
     date: '14.10.2022',
     description:
       'Šis ir vislielākais UlmaņBota atjauninājums līdz šim, tika pārrakstīts viss bota kods no nulles, ' +
-      'tādējādi ļaujot vienkāršāk pievienot jaunas sistēmas priekš turpmākiem atjauninājumiem, kā arī padarot kodu lasāmāku!!!\n\n' +
+      'tādējādi ļaujot vienkāršāk pievienot jaunas sistēmas turpmākiem atjauninājumiem, kā arī padarot kodu lasāmāku!!!\n\n' +
       '...Labi, bet man neinteresē (nāvi IT), kas ir jauns?',
     fields: [
       {

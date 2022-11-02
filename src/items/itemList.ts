@@ -82,7 +82,7 @@ const itemList: Record<ItemKey, Item> = {
   },
   nazis: {
     info:
-      'Ja jūties viltīgs un ar vēlmi zagt, tad nazis ir priekš tevis.\n' +
+      'Ja jūties viltīgs un ar vēlmi zagt, tad nazis ir domāts tev.\n' +
       `Izmantojot nazi tu iegūsi **"${statusList.laupitajs}"** statusu uz ` +
       `\`${millisToReadableTime(NAZIS_STATUS_TIME)}\``,
     nameNomVsk: 'nazis',
@@ -334,7 +334,7 @@ const itemList: Record<ItemKey, Item> = {
   petnieks: {
     info:
       `Pētnieks vēlās kļūt par tavu labāko draugu!\n` +
-      `Viņš ir tik draudzīgs, ka priekš tevis pētīs krievu mājaslapas lai atrastu brīvgriezienus\n\n` +
+      `Viņš ir tik draudzīgs, ka pētīs krievu mājaslapas lai **tev** atrastu brīvgriezienus\n\n` +
       'Pētnieks atrod vienu brīvgriezienu ik `12h`, kuru tu vari saņemt pētnieku "izmantojot"',
     nameNomVsk: 'pētnieks',
     nameNomDsk: 'pētnieki',
@@ -358,7 +358,7 @@ const itemList: Record<ItemKey, Item> = {
   },
   loto_makskere: {
     info:
-      'Šī makšķere ir īpaši veidota tieši priekš azartspēļu atkarības cietušajiem\n' +
+      'Šī makšķere ir īpaši veidota tieši azartspēļu atkarības cietušajiem\n' +
       'Iegādājies to, ja nevari atturēties no aparāta un loto biļetēm',
     nameNomVsk: 'loto makšķere',
     nameNomDsk: 'loto makšķeres',

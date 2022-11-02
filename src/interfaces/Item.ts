@@ -35,7 +35,7 @@ interface Item {
   // vai ir vīriešu dzimtes lietvārds
   isVirsiesuDzimte: boolean;
 
-  // emoji priekš mantas, piem. <:virve:922501450544857098>
+  // emoji mantām, piem. <:virve:922501450544857098>
   emoji: APIMessageComponentEmoji | null;
 
   // bildes links
@@ -50,7 +50,7 @@ interface Item {
   // speciāla vērtība, piem. makšķeres izturība ietekmē vērtību
   customValue?: (attributes: ItemAttributes) => number;
 
-  // cena priekš tirgus
+  // cena tirgum
   tirgusPrice?: { items: Record<ItemKey, number>; lati?: number };
 
   // mantu atribūtas, piem., cik reizes lietots, cik izturība, utt.
