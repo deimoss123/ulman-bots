@@ -1,5 +1,4 @@
 import { ItemKey } from '../items/itemList';
-import { TirgusListings } from '../items/tirgus/generateTirgus';
 
 export interface ItemInProfile {
   name: ItemKey;
@@ -72,7 +71,7 @@ export interface UserFishing {
 interface UserTirgus {
   // "1/1/1970"
   lastDayUsed: string;
-  itemsBought: TirgusListings;
+  itemsBought: ItemKey[];
 }
 interface UserProfile {
   userId: string;
