@@ -84,8 +84,9 @@ const info: Command = {
 
       fields.push({
         name: 'Nocopējamās mantas:',
-        value: `>>> ${Object.keys(fishChances)
-          .map(key => itemString(itemList[key]))
+        value: `>>> ${Object.entries(fishChances)
+          .filter(([, { chance }]) => chance !== 0)
+          .map(([key]) => itemString(itemList[key]))
           .join('\n')}`,
         inline: true,
       });
