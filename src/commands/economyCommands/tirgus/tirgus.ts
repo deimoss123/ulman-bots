@@ -72,10 +72,9 @@ const tirgus: Command = {
     const userId = i.user.id;
     const guildId = i.guildId!;
 
-    const user = await findUser(userId, guildId);
-    if (!user) return i.reply(errorEmbed);
+    const [user, tirgusListings] = await Promise.all([findUser(userId, guildId), getTirgusData()]);
 
-    const tirgusListings = await getTirgusData();
+    if (!user || !tirgusListings) return i.reply(errorEmbed);
     if (!tirgusListings) return i.reply(errorEmbed);
 
     let selectedListing: string;
@@ -93,11 +92,8 @@ const tirgus: Command = {
         if (int.componentType !== ComponentType.StringSelect) return;
         selectedListing = int.values[0];
 
-        const newUser = await findUser(userId, guildId);
-        if (!newUser) return { error: true };
-
-        const newListings = await getTirgusData();
-        if (!newListings) return { error: true };
+        const [newUser, newListings] = await Promise.all([findUser(userId, guildId), getTirgusData()]);
+        if (!newUser || !newListings) return { error: true };
 
         const itemsBought = getBoughtItems(newUser);
 
@@ -114,11 +110,8 @@ const tirgus: Command = {
 
         const itemObj = itemList[selectedListing];
 
-        const newUser = await findUser(userId, guildId);
-        if (!newUser) return { error: true };
-
-        const newListings = await getTirgusData();
-        if (!newListings) return { error: true };
+        const [newUser, newListings] = await Promise.all([findUser(userId, guildId), getTirgusData()]);
+        if (!newUser || !newListings) return { error: true };
 
         const itemsBought = getBoughtItems(newUser);
         if (itemsBought.includes(selectedListing)) {
