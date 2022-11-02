@@ -2,6 +2,7 @@ import chance, { ChanceRecord } from '../items/helpers/chance';
 import UsableItemReturn from '../interfaces/UsableItemReturn';
 import addLati from '../economy/addLati';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function testLaimesti(laimesti: ChanceRecord) {
   let total = 0;
   const count = 100000;
@@ -12,11 +13,7 @@ function testLaimesti(laimesti: ChanceRecord) {
   console.log(total / count);
 }
 
-export default async function loto(
-  userId: string,
-  guildId: string,
-  laimesti: ChanceRecord
-): Promise<UsableItemReturn> {
+export default async function loto(userId: string, guildId: string, laimesti: ChanceRecord): Promise<UsableItemReturn> {
   const res = chance(laimesti);
 
   // testLaimesti(laimesti)
