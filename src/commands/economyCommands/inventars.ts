@@ -19,7 +19,7 @@ import countItems from '../../items/helpers/countItems';
 import commandColors from '../../embeds/commandColors';
 import itemString from '../../embeds/helpers/itemString';
 import ephemeralReply from '../../embeds/ephemeralReply';
-import UserProfile, { ItemInProfile } from '../../interfaces/UserProfile';
+import UserProfile, { ItemInProfile, SpecialItemInProfile } from '../../interfaces/UserProfile';
 import Item from '../../interfaces/Item';
 import { displayAttributes } from '../../embeds/helpers/displayAttributes';
 import buttonHandler from '../../embeds/buttonHandler';
@@ -120,6 +120,11 @@ export function getInvValue({ items, specialItems }: UserProfile) {
 
 const INV_PAGE_SIZE = 12;
 
+function mantaVaiMantas(items: ItemInProfile[], specialItems: SpecialItemInProfile[]) {
+  const count = countItems(items) + specialItems.length;
+  return count % 10 === 1 && count % 100 !== 11 ? 'manta' : 'mantas';
+}
+
 function invEmbed(
   i: ChatInputCommandInteraction,
   target: User,
@@ -139,7 +144,7 @@ function invEmbed(
     title: targetUser.userId === i.user.id ? 'Tavs inventārs' : `${userString(target)} inventārs`,
     description:
       items.length + specialItems.length
-        ? `**${countItems(items) + specialItems.length}** mantas no **${itemCap}**\n` +
+        ? `**${countItems(items) + specialItems.length}** ${mantaVaiMantas(items, specialItems)} no **${itemCap}**\n` +
           `Inventāra vērtība: ${latiString(totalValue, false, true)}\n\n` +
           Object.entries(itemTypes).reduce(
             (prev, [key, { text, emoji }]) =>
