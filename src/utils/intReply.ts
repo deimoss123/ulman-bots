@@ -4,20 +4,27 @@ import {
   InteractionReplyOptions,
   InteractionResponse,
   Message,
+  ModalSubmitInteraction,
   SelectMenuInteraction,
 } from 'discord.js';
 
+type InteractionTypes =
+  | ChatInputCommandInteraction
+  | ButtonInteraction
+  | SelectMenuInteraction
+  | ModalSubmitInteraction;
+
 function intReply(
-  interaction: ChatInputCommandInteraction | ButtonInteraction | SelectMenuInteraction,
+  interaction: InteractionTypes,
   options: InteractionReplyOptions & { fetchReply: true }
 ): Promise<Message | null>;
 function intReply(
-  interaction: ChatInputCommandInteraction | ButtonInteraction | SelectMenuInteraction,
+  interaction: InteractionTypes,
   options: InteractionReplyOptions | string
 ): Promise<InteractionResponse | null>;
 
 async function intReply(
-  interaction: ChatInputCommandInteraction | ButtonInteraction | SelectMenuInteraction,
+  interaction: InteractionTypes,
   options: (InteractionReplyOptions & { fetchReply: true }) | InteractionReplyOptions | string
 ): Promise<InteractionResponse | Message | null> {
   try {
