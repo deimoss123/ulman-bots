@@ -91,7 +91,7 @@ const iedot: Command = {
     const { items, specialItems, status } = user;
     const hasJuridisks = status.juridisks > Date.now();
 
-    if (itemToGive.attributes) {
+    if ('attributes' in itemToGive) {
       const specialItemInv = specialItems.filter(({ name }) => name === itemToGiveKey);
       if (!specialItemInv.length) {
         return i.reply(ephemeralReply(`Tavā inventārā nav ${itemString(itemToGive)}`));

@@ -2,6 +2,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, SelectMenuBuilder } from 
 import capitalizeFirst from '../../../embeds/helpers/capitalizeFirst';
 import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import latiString from '../../../embeds/helpers/latiString';
+import { AttributeItem } from '../../../interfaces/Item';
 import UserProfile from '../../../interfaces/UserProfile';
 import itemList, { ItemCategory } from '../../../items/itemList';
 import maksekeresData from './makskeresData';
@@ -60,7 +61,11 @@ export default function zvejotComponents(
           .addOptions(
             rodsInInv
               .slice(0, 25)
-              .sort((a, b) => itemList[b.name].customValue!(b.attributes) - itemList[a.name].customValue!(a.attributes))
+              .sort((a, b) => {
+                const itemA = itemList[a.name] as AttributeItem;
+                const itemB = itemList[b.name] as AttributeItem;
+                return itemB.customValue!(b.attributes) - itemA.customValue!(a.attributes);
+              })
               .map(item => ({
                 label: capitalizeFirst(itemList[item.name].nameNomVsk),
                 value: `${item.name} ${item._id}`,

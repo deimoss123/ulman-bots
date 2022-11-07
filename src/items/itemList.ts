@@ -1,4 +1,12 @@
-import Item from '../interfaces/Item';
+import Item, {
+  AttributeItem,
+  BaseItem,
+  item,
+  NotSellableItem,
+  ShopItem,
+  TirgusItem,
+  UsableItem,
+} from '../interfaces/Item';
 import virve from './usableItems/virve';
 import divainais_burkans from './usableItems/divainais_burkans';
 import mugursoma, { INCREASE_CAP_1, INV_INCREASE_AMOUNT_1 } from './usableItems/mugursoma';
@@ -40,9 +48,9 @@ export enum ItemCategory {
   OTHER,
 }
 
-const itemList: Record<ItemKey, Item> = {
+const itemList: { [key: ItemKey]: Item } = {
   // -- veikals --
-  koka_makskere: {
+  koka_makskere: item<AttributeItem & ShopItem>({
     info: 'Izcila maksķere iesācēju zvejotājiem - lēta un vienmēr pieejama.',
     nameNomVsk: 'koka makšķere',
     nameNomDsk: 'koka makšķeres',
@@ -62,8 +70,8 @@ const itemList: Record<ItemKey, Item> = {
     },
     allowDiscount: true,
     use: makskere,
-  },
-  latloto: {
+  }),
+  latloto: item<UsableItem & ShopItem>({
     info: 'Lētākā loterijas biļete kas nopērkama veikalā,\npārbaudi savu veiksmi jau šodien!',
     nameNomVsk: 'latloto biļete',
     nameNomDsk: 'latloto biļetes',
@@ -79,8 +87,8 @@ const itemList: Record<ItemKey, Item> = {
     value: 50,
     removedOnUse: true,
     use: latloto,
-  },
-  nazis: {
+  }),
+  nazis: item<UsableItem & ShopItem>({
     info:
       'Ja jūties viltīgs un ar vēlmi zagt, tad nazis ir domāts tev.\n' +
       `Izmantojot nazi tu iegūsi **"${statusList.laupitajs}"** statusu uz ` +
@@ -100,8 +108,8 @@ const itemList: Record<ItemKey, Item> = {
     removedOnUse: true,
     allowDiscount: true,
     use: nazis,
-  },
-  virve: {
+  }),
+  virve: item<UsableItem & ShopItem>({
     info: 'Nopērc virvi, ja vienkārši vairs nevari izturēt...\nVirvi izmantot nav ieteicams.',
     nameNomVsk: 'virve',
     nameNomDsk: 'virves',
@@ -118,8 +126,8 @@ const itemList: Record<ItemKey, Item> = {
     allowDiscount: true,
     removedOnUse: true,
     use: virve,
-  },
-  zemenu_rasens: {
+  }),
+  zemenu_rasens: item<UsableItem & ShopItem>({
     info:
       'Ja tev riebjas nolādētie zagļi kas visu laiku no tevis zog, izdzer zemeņu Rasēnu\n' +
       'Izdzerot (izmantojot) rasenu tu iegūsi ' +
@@ -139,8 +147,8 @@ const itemList: Record<ItemKey, Item> = {
     allowDiscount: true,
     removedOnUse: true,
     use: zemenu_rasens,
-  },
-  divainais_burkans: {
+  }),
+  divainais_burkans: item<AttributeItem & ShopItem>({
     info:
       'Šis burkāns ir ne tikai dīvains, bet arī garšīgs!\n' +
       'Burkānam piemīt atrībuts, kas uzskaita cik reizes tas ir bijis nokosts (izmantots)\n\n' +
@@ -174,8 +182,8 @@ const itemList: Record<ItemKey, Item> = {
     },
     allowDiscount: true,
     use: divainais_burkans,
-  },
-  dizloto: {
+  }),
+  dizloto: item<UsableItem & ShopItem>({
     info:
       'Ja tev ir apnicis skrāpēt Latloto biļetes un vēlies palielināt savas likmes, ' +
       'tad pārbaudi savu veiksmi ar Dižloto jau šodien!\n',
@@ -194,8 +202,8 @@ const itemList: Record<ItemKey, Item> = {
     value: 250,
     removedOnUse: true,
     use: dizloto,
-  },
-  divaina_makskere: {
+  }),
+  divaina_makskere: item<AttributeItem & ShopItem>({
     info:
       'Koka makšķere ir pārāk lēna?\nTā pārāk bieži lūzt?\nNenes pietiekami lielu pelņu?\n' +
       'Tad ir laiks investēt dīvainajā maksķerē!!!',
@@ -218,8 +226,8 @@ const itemList: Record<ItemKey, Item> = {
     },
     allowDiscount: true,
     use: makskere,
-  },
-  mugursoma: {
+  }),
+  mugursoma: item<UsableItem & ShopItem>({
     info:
       'Inventārs pilns, ||bikses pilnas,|| ko tagad darīt?\n' +
       `Mugursoma palielinās tava inventāra ietilpību par **${INV_INCREASE_AMOUNT_1}** (līdz **${INCREASE_CAP_1}** vietām)`,
@@ -238,8 +246,8 @@ const itemList: Record<ItemKey, Item> = {
     allowDiscount: true,
     removedOnUse: false,
     use: mugursoma,
-  },
-  piena_spainis: {
+  }),
+  piena_spainis: item<UsableItem & ShopItem>({
     info: 'Izdzerot (izmantojot) šo gardo piena spaini tev tiks noņemti visi statusi',
     nameNomVsk: 'piena spainis',
     nameNomDsk: 'piena spaiņi',
@@ -256,9 +264,9 @@ const itemList: Record<ItemKey, Item> = {
     allowDiscount: true,
     removedOnUse: false,
     use: piena_spainis,
-  },
+  }),
   // XD smieklīgs nosaukums
-  kaku_bariba: {
+  kaku_bariba: item<UsableItem & ShopItem>({
     info: () =>
       `Iecienītas brokastis, pusdienas un vakariņas (kaķim)\n` +
       // @ts-ignore
@@ -277,16 +285,16 @@ const itemList: Record<ItemKey, Item> = {
     value: 20,
     allowDiscount: true,
     removedOnUse: false,
-    use: async () => ({
+    use: () => ({
       text:
         `Tu pagaršoji kaķu barību (tā nebija garšīga)\n` +
         // @ts-ignore
         `Ar kaķu barību var pabarot **${itemString(this.default.kakis, null, true)}**`,
     }),
-  },
+  }),
 
   // -- tirgus --
-  divaina_mugursoma: {
+  divaina_mugursoma: item<UsableItem & TirgusItem>({
     info:
       `Tu esi izmantojis parastās mugursomas un sasniedzis ${INCREASE_CAP_1} vietas inventārā\n` +
       `Ar dīvaino mugursomu tu vari palielināt inventāra iepilpību par **${INV_NCREASE_AMOUNT_2}** (līdz **${INCREASE_CAP_2}** vietām)`,
@@ -304,11 +312,10 @@ const itemList: Record<ItemKey, Item> = {
     categories: [ItemCategory.TIRGUS],
     tirgusPrice: { items: { mugursoma: 3 } },
     value: 500,
-    allowDiscount: true,
     removedOnUse: false,
     use: divaina_mugursoma,
-  },
-  kafijas_aparats: {
+  }),
+  kafijas_aparats: item<AttributeItem & TirgusItem>({
     info:
       `Kafijas aparāts ik \`24h\` uztaisīs kafiju, kuru var iegūt kafijas aparātu izmantojot\n\n` +
       '_Nevienam vēljoprojām nav zināms kā šis kafijas aparāts ir spējīgs bezgalīgi taisīt kafiju bez pupiņām, vai ūdens, vai ... elektrības_',
@@ -328,10 +335,9 @@ const itemList: Record<ItemKey, Item> = {
     attributes: {
       lastUsed: 0,
     },
-    removedOnUse: false,
     use: kafijas_aparats,
-  },
-  petnieks: {
+  }),
+  petnieks: item<AttributeItem & TirgusItem>({
     info:
       `Pētnieks vēlās kļūt par tavu labāko draugu!\n` +
       `Viņš ir tik draudzīgs, ka pētīs krievu mājaslapas lai **tev** atrastu brīvgriezienus\n\n` +
@@ -353,10 +359,9 @@ const itemList: Record<ItemKey, Item> = {
       lastUsed: 0,
       foundItemKey: '',
     },
-    removedOnUse: false,
     use: petnieks,
-  },
-  loto_makskere: {
+  }),
+  loto_makskere: item<AttributeItem & TirgusItem>({
     info:
       'Šī makšķere ir īpaši veidota tieši azartspēļu atkarības cietušajiem\n' +
       'Iegādājies to, ja nevari atturēties no aparāta un loto biļetēm',
@@ -378,10 +383,9 @@ const itemList: Record<ItemKey, Item> = {
     attributes: {
       durability: maksekeresData.loto_makskere.maxDurability,
     },
-    removedOnUse: false,
     use: makskere,
-  },
-  luznu_makskere: {
+  }),
+  luznu_makskere: item<AttributeItem & TirgusItem>({
     info:
       'Ja mīlēsi metāllūžņus, tie visnotaļ mīlēs arī tevi!\n' +
       'Par cik šī makšķere knapi turās kopā, to nav iespējams salabot',
@@ -402,10 +406,9 @@ const itemList: Record<ItemKey, Item> = {
     attributes: {
       durability: maksekeresData.luznu_makskere.maxDurability,
     },
-    removedOnUse: false,
     use: makskere,
-  },
-  naudas_maiss: {
+  }),
+  naudas_maiss: item<AttributeItem & TirgusItem>({
     info:
       'Kļūt par bankas zagli ir viegli, bet kur liksi nolaupīto naudu?\n\n' +
       'Naudas maiss glabā no Valsts Bankas (UlmaņBota) nozagto naudu, ' +
@@ -430,10 +433,9 @@ const itemList: Record<ItemKey, Item> = {
     attributes: {
       latiCollected: 0,
     },
-    removedOnUse: false,
     use: naudas_maiss,
-  },
-  kakis: {
+  }),
+  kakis: item<AttributeItem & TirgusItem>({
     info: () =>
       '**Pūkains, stilīgs un episks!**\n\n' +
       `Kaķim ir 2 atribūti - vecums un garastāvoklis\n` +
@@ -470,12 +472,11 @@ const itemList: Record<ItemKey, Item> = {
       createdAt: 0,
       fedUntil: 0,
     },
-    removedOnUse: false,
     use: kakis,
-  },
+  }),
 
   // -- atkritumi --
-  kartona_kaste: {
+  kartona_kaste: item<BaseItem>({
     info: 'Kāds šeit iekšā ir dzīvojis...',
     nameNomVsk: 'kartona kaste',
     nameNomDsk: 'kartona kastes',
@@ -489,8 +490,8 @@ const itemList: Record<ItemKey, Item> = {
     imgLink: 'https://www.ulmanbots.lv/images/items/kartona-kaste.png',
     categories: [ItemCategory.ATKRITUMI],
     value: 15,
-  },
-  pudele: {
+  }),
+  pudele: item<BaseItem>({
     info:
       'Šī tik tiešām ir skaista pudele kuru varētu nodot depozīta sistēmā!\n' +
       'Cik žēl, ka taromāts šajā UlmaņBota versijā neeksistē... :^)',
@@ -506,8 +507,8 @@ const itemList: Record<ItemKey, Item> = {
     imgLink: 'https://www.ulmanbots.lv/images/items/pudele.png',
     categories: [ItemCategory.ATKRITUMI],
     value: 10,
-  },
-  metalluznis: {
+  }),
+  metalluznis: item<UsableItem>({
     info:
       'Vai tu esi redzējis skaistāku metāla gabalu par šo?!?!??!!\n\n' +
       'Metāllūžņi ir iekļauti dažās tirgus preču cenās, apdomā vai tik tiešām vēlies tos pārdot',
@@ -525,10 +526,10 @@ const itemList: Record<ItemKey, Item> = {
     value: 10,
     removedOnUse: false,
     use: async () => ({ text: 'Metāllūznis ir izmantojams lai nopirktu dažas tirgus preces' }),
-  },
+  }),
 
   // -- zivis --
-  lidaka: {
+  lidaka: item<BaseItem>({
     info: 'Uz šo zivi skatīties nav ieteicams kamēr esi darbā...',
     nameNomVsk: 'līdaka',
     nameNomDsk: 'līdakas',
@@ -542,8 +543,8 @@ const itemList: Record<ItemKey, Item> = {
     imgLink: 'https://www.ulmanbots.lv/images/items/lidaka.png',
     categories: [ItemCategory.ZIVIS],
     value: 10,
-  },
-  asaris: {
+  }),
+  asaris: item<BaseItem>({
     info: 'Šī zivs novedīs tevi līdz asarām',
     nameNomVsk: 'asaris',
     nameNomDsk: 'asari',
@@ -557,8 +558,8 @@ const itemList: Record<ItemKey, Item> = {
     imgLink: 'https://www.ulmanbots.lv/images/items/asaris.png',
     categories: [ItemCategory.ZIVIS],
     value: 15,
-  },
-  lasis: {
+  }),
+  lasis: item<BaseItem>({
     info: 'Tu labprāt šo zivi apēstu, bet nejaukais Discord čatbots tev to neļauj darīt',
     nameNomVsk: 'lasis',
     nameNomDsk: 'laši',
@@ -572,8 +573,8 @@ const itemList: Record<ItemKey, Item> = {
     imgLink: 'https://www.ulmanbots.lv/images/items/lasis.png',
     categories: [ItemCategory.ZIVIS],
     value: 20,
-  },
-  loto_zivs: {
+  }),
+  loto_zivs: item<AttributeItem>({
     info:
       'Uzgriez loto zivi un kā laimestu saņem... zivis\n' +
       'Loto zivij piemīt atribūts "Satur **x** zivis", kas nosaka cik zivis no loto zivs ir iespējams laimēt',
@@ -594,10 +595,9 @@ const itemList: Record<ItemKey, Item> = {
     attributes: {
       holdsFishCount: 0,
     },
-    removedOnUse: false,
     use: loto_zivs,
-  },
-  juridiska_zivs: {
+  }),
+  juridiska_zivs: item<UsableItem>({
     info:
       'Šai zivij pieder vairāki multimiljonu uzņēmumi\n\n' +
       `Apēdot (izmantojot) juridisko zivi tu iegūsi ` +
@@ -618,8 +618,8 @@ const itemList: Record<ItemKey, Item> = {
     value: 50,
     removedOnUse: true,
     use: juridiska_zivs,
-  },
-  divaina_zivs: {
+  }),
+  divaina_zivs: item<UsableItem>({
     info: 'Šī zivs garšo nedaudz _dīvaini_, apēd (izmanto) to lai iegūtu vienu nejauši izvēlētu statusu',
     nameNomVsk: 'dīvainā zivs',
     nameNomDsk: 'dīvainās zivis',
@@ -636,8 +636,8 @@ const itemList: Record<ItemKey, Item> = {
     value: 60,
     removedOnUse: true,
     use: divaina_zivs,
-  },
-  petniekzivs: {
+  }),
+  petniekzivs: item<UsableItem>({
     info:
       '__**Šodien paveiksies!**__\n\n' +
       `Apēdot (izmantojot) šo zivi tu saņemsi statusu **"${statusList.veiksmigs}"** ` +
@@ -657,10 +657,10 @@ const itemList: Record<ItemKey, Item> = {
     value: 40,
     removedOnUse: true,
     use: petniekzivs,
-  },
+  }),
 
   // -- velosipēds --
-  velosipeds: {
+  velosipeds: item<BaseItem>({
     info:
       'Šis velosipēds nav braucošā stāvoklī, bet vismaz tu to vari pārdot!\n\n' +
       'Velosipēdu var iegūt to sataisot ar velosipēda detaļām (rāmis, riteņi, ķēde un stūre)',
@@ -676,8 +676,8 @@ const itemList: Record<ItemKey, Item> = {
     imgLink: 'https://www.ulmanbots.lv/images/items/velosipeds.png',
     categories: [ItemCategory.OTHER],
     value: 250,
-  },
-  velo_ramis: {
+  }),
+  velo_ramis: item<UsableItem>({
     info: veloInfo,
     nameNomVsk: 'velosipēda rāmis',
     nameNomDsk: 'velosipēda rāmji',
@@ -691,9 +691,10 @@ const itemList: Record<ItemKey, Item> = {
     imgLink: 'https://www.ulmanbots.lv/images/items/velo-ramis.png',
     categories: [ItemCategory.OTHER],
     value: 10,
+    removedOnUse: false,
     use: velo,
-  },
-  velo_ritenis: {
+  }),
+  velo_ritenis: item<UsableItem>({
     info: veloInfo,
     nameNomVsk: 'velosipēda ritenis',
     nameNomDsk: 'velosipēda riteņi',
@@ -707,9 +708,10 @@ const itemList: Record<ItemKey, Item> = {
     imgLink: 'https://www.ulmanbots.lv/images/items/velo-ritenis.png',
     categories: [ItemCategory.OTHER],
     value: 10,
+    removedOnUse: false,
     use: velo,
-  },
-  velo_kede: {
+  }),
+  velo_kede: item<UsableItem>({
     info: veloInfo,
     nameNomVsk: 'velosipēda ķēde',
     nameNomDsk: 'velosipēda ķēdes',
@@ -723,9 +725,10 @@ const itemList: Record<ItemKey, Item> = {
     imgLink: 'https://www.ulmanbots.lv/images/items/velo-kede.png',
     categories: [ItemCategory.OTHER],
     value: 10,
+    removedOnUse: false,
     use: velo,
-  },
-  velo_sture: {
+  }),
+  velo_sture: item<UsableItem>({
     info: veloInfo,
     nameNomVsk: 'velosipēda stūre',
     nameNomDsk: 'velosipēda stūres',
@@ -739,11 +742,12 @@ const itemList: Record<ItemKey, Item> = {
     imgLink: 'https://www.ulmanbots.lv/images/items/velo-sture.png',
     categories: [ItemCategory.OTHER],
     value: 10,
+    removedOnUse: false,
     use: velo,
-  },
+  }),
 
   // -- citas mantas --
-  kafija: {
+  kafija: item<UsableItem>({
     info:
       `Strādāt ir grūti ja esi noguris, izdzer kafiju!\n\n` +
       'Kafija ir izmantojama, kad tev noteiktā dienā ir beigušās strādāšanas reizes\n' +
@@ -760,11 +764,10 @@ const itemList: Record<ItemKey, Item> = {
     imgLink: 'https://www.ulmanbots.lv/images/items/kafija.png',
     categories: [ItemCategory.OTHER],
     value: 30,
-    allowDiscount: true,
     removedOnUse: false,
     use: kafija,
-  },
-  dizmakskere: {
+  }),
+  dizmakskere: item<AttributeItem>({
     info:
       'UlmaņBota veidotājs rakstot šo aprakstu aizmirsa kāpēc dižmakšķere eksistē...\n\n' +
       'Dižmakšķere var nocopēt tikai un vienīgi vērtīgas mantas, tajā skaitā visas mantas kas nopērkamas tirgū\n',
@@ -786,8 +789,8 @@ const itemList: Record<ItemKey, Item> = {
       durability: maksekeresData.dizmakskere.maxDurability,
     },
     use: makskere,
-  },
-  smilsu_pulkstenis: {
+  }),
+  smilsu_pulkstenis: item<UsableItem>({
     info:
       'Izmantojot smilšu pulksteni zvejošanas laiks maģiski tiks pārbīdīts uz priekšu ' +
       `par \`${millisToReadableTime(ZVEJA_SHIFT_TIME)}\``,
@@ -806,8 +809,8 @@ const itemList: Record<ItemKey, Item> = {
     value: 75,
     removedOnUse: false,
     use: smilsu_pulkstenis,
-  },
-  patriota_piespraude: {
+  }),
+  patriota_piespraude: item<NotSellableItem>({
     nameNomVsk: 'patriotu piespraude',
     nameNomDsk: 'patriotu piespraudes',
     nameAkuVsk: 'patriotu piespraudi',
@@ -820,17 +823,15 @@ const itemList: Record<ItemKey, Item> = {
     imgLink: null,
     categories: [ItemCategory.OTHER],
     value: 0,
-
     notSellable: true,
     attributes: {
       piespraudeNum: 0,
     },
-    removedOnUse: false,
-    use: async () => ({ text: 'chau' }),
-  },
+    use: () => ({ text: 'chau' }),
+  }),
 
   // -- brīvgriezieni --
-  brivgriez10: {
+  brivgriez10: item<UsableItem>({
     info: brivgriezInfo,
     nameNomVsk: '10 latu brīvgrieziens',
     nameNomDsk: '10 latu brīvgriezieni',
@@ -846,8 +847,8 @@ const itemList: Record<ItemKey, Item> = {
     value: 2,
     removedOnUse: false,
     use: brivgrieziens(10),
-  },
-  brivgriez25: {
+  }),
+  brivgriez25: item<UsableItem>({
     info: brivgriezInfo,
     nameNomVsk: '25 latu brīvgrieziens',
     nameNomDsk: '25 latu brīvgriezieni',
@@ -863,8 +864,8 @@ const itemList: Record<ItemKey, Item> = {
     value: 5,
     removedOnUse: false,
     use: brivgrieziens(25),
-  },
-  brivgriez50: {
+  }),
+  brivgriez50: item<UsableItem>({
     info: brivgriezInfo,
     nameNomVsk: '50 latu brīvgrieziens',
     nameNomDsk: '50 latu brīvgriezieni',
@@ -880,8 +881,8 @@ const itemList: Record<ItemKey, Item> = {
     value: 10,
     removedOnUse: false,
     use: brivgrieziens(50),
-  },
-  brivgriez100: {
+  }),
+  brivgriez100: item<UsableItem>({
     info: brivgriezInfo,
     nameNomVsk: '100 latu brīvgrieziens',
     nameNomDsk: '100 latu brīvgriezieni',
@@ -897,7 +898,7 @@ const itemList: Record<ItemKey, Item> = {
     value: 20,
     removedOnUse: false,
     use: brivgrieziens(100),
-  },
+  }),
 };
 
 export default itemList;

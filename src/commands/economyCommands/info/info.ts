@@ -7,6 +7,7 @@ import latiString from '../../../embeds/helpers/latiString';
 import iconEmojis from '../../../embeds/iconEmojis';
 import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
 import Command from '../../../interfaces/Command';
+import Item, { TirgusItem } from '../../../interfaces/Item';
 import getDiscounts from '../../../items/helpers/getDiscounts';
 import getItemPrice from '../../../items/helpers/getItemPrice';
 import itemList, { ItemCategory } from '../../../items/itemList';
@@ -39,19 +40,20 @@ const info: Command = {
       return i.reply(wrongKeyEmbed);
     }
 
-    const itemType: ItemType = itemObj.notSellable
-      ? 'not_sellable'
-      : itemObj.attributes
-      ? 'special'
-      : itemObj.use
-      ? 'usable'
-      : 'not_usable';
+    const itemType: ItemType =
+      'notSellable' in itemObj
+        ? 'not_sellable'
+        : 'attributes' in itemObj
+        ? 'special'
+        : 'use' in itemObj
+        ? 'usable'
+        : 'not_usable';
 
     const fields: EmbedField[] = [
       {
         name: `Vērtība: ${itemType === 'not_sellable' ? '??? lati' : latiString(itemObj.value)}`,
         value:
-          (itemObj.customValue ? '⚠️ šīs mantas vērtība var \nmainīties atkarībā no atribūtiem\n' : '') +
+          ('customValue' in itemObj ? '⚠️ šīs mantas vērtība var \nmainīties atkarībā no atribūtiem\n' : '') +
           '\u200B\n' +
           `**Mantas tips:**\n${itemTypes[itemType].emoji} - ${itemTypes[itemType].text}`,
         inline: true,
@@ -70,10 +72,12 @@ const info: Command = {
           ` (ar **${Math.floor(discount * 100)}%** atlaidi)\n` + `Bez atlaides: ${latiString(itemObj.value * 2)}`;
       }
     } else if (itemObj.categories.includes(ItemCategory.TIRGUS)) {
+      const tirgusPrice = (itemObj as Item & TirgusItem).tirgusPrice;
+
       fields[0].value +=
         `\n\n**Tirgus cena:**\n` +
-        (itemObj.tirgusPrice!.lati ? `${latiString(itemObj.tirgusPrice!.lati)} un\n` : '') +
-        `${Object.entries(itemObj.tirgusPrice!.items)
+        (tirgusPrice.lati ? `${latiString(tirgusPrice.lati)} un\n` : '') +
+        `${Object.entries(tirgusPrice.items)
           .map(([key, amount]) => `> ${itemString(itemList[key], amount)}`)
           .join('\n')}`;
     }

@@ -4,17 +4,19 @@ import embedTemplate from '../../../embeds/embedTemplate';
 import itemString from '../../../embeds/helpers/itemString';
 import millisToReadableTime from '../../../embeds/helpers/millisToReadableTime';
 import iconEmojis from '../../../embeds/iconEmojis';
-import Item from '../../../interfaces/Item';
+import Item, { TirgusItem } from '../../../interfaces/Item';
 import UserProfile from '../../../interfaces/UserProfile';
 import itemList, { ItemKey } from '../../../items/itemList';
 import { calcReqItems } from './tirgus';
 
 function mapPrice(itemObj: Item, user: UserProfile): string {
+  const tirgusPrice = (itemObj as Item & TirgusItem).tirgusPrice;
+
   const { items: reqItemsInv } = calcReqItems(user, itemObj);
-  const reqLati = itemObj.tirgusPrice!.lati;
+  const reqLati = tirgusPrice.lati;
 
   const maxHasLen = `${Object.values(reqItemsInv).reduce((p, a) => (a > p ? a : p), 0)}`.length;
-  const maxReqLen = `${Object.values(itemObj.tirgusPrice!.items).reduce((p, a) => (a > p ? a : p), 0)}`.length;
+  const maxReqLen = `${Object.values(tirgusPrice.items).reduce((p, a) => (a > p ? a : p), 0)}`.length;
 
   return (
     (reqLati
@@ -22,7 +24,7 @@ function mapPrice(itemObj: Item, user: UserProfile): string {
       : '') +
     Object.entries(reqItemsInv)
       .map(([key, amount]) => {
-        const reqAmount = itemObj.tirgusPrice!.items[key];
+        const reqAmount = tirgusPrice.items[key];
 
         return (
           `${amount >= reqAmount ? iconEmojis.checkmark : iconEmojis.cross} ` +

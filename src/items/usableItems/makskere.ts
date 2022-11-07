@@ -12,10 +12,10 @@ import { displayAttributes } from '../../embeds/helpers/displayAttributes';
 import itemString from '../../embeds/helpers/itemString';
 import latiString from '../../embeds/helpers/latiString';
 import smallEmbed from '../../embeds/smallEmbed';
-import Item, { UsableItemFunc } from '../../interfaces/Item';
+import { AttributeItem, UsableItemFunc } from '../../interfaces/Item';
 import itemList from '../itemList';
 
-export function makskereCustomValue(itemKey: string): Item['customValue'] {
+export function makskereCustomValue(itemKey: string): AttributeItem['customValue'] {
   return ({ durability }) => {
     const { value } = itemList[itemKey];
     const { maxDurability } = maksekeresData[itemKey];

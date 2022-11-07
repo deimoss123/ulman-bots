@@ -158,7 +158,7 @@ const zvejot: Command = {
               };
             }
 
-            const specialItemsToAdd = Object.entries(fishesToAdd).filter(([name]) => itemList[name].attributes);
+            const specialItemsToAdd = Object.entries(fishesToAdd).filter(([name]) => 'attributes' in itemList[name]);
             if (specialItemsToAdd.length) {
               for (const [name, amount] of specialItemsToAdd) {
                 const checkRes = checkUserSpecialItems(user, name, amount);

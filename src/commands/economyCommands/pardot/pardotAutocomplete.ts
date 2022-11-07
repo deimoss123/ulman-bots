@@ -12,7 +12,9 @@ function mapItemsToChoices(itemInList: [string, Item]) {
   const [key, item] = itemInList;
 
   return {
-    name: `💵${item.customValue ? '' : ` [${latiString(item.value)}]`} ${capitalizeFirst(item.nameNomVsk)}`,
+    name:
+      `💵${'customValue' in item && item.customValue ? '' : ` [${latiString(item.value)}]`} ` +
+      capitalizeFirst(item.nameNomVsk),
     value: key,
   };
 }
@@ -31,7 +33,7 @@ export default async function pardotAutocomplete(interaction: AutocompleteIntera
   const { specialItems } = user;
   const specialItemsList = [...new Set(specialItems.map(item => item.name))]
     .map(key => [key, itemList[key]])
-    .filter(([, item]) => !(item as Item).notSellable) as [ItemKey, Item][];
+    .filter(([, item]) => !('notSellable' in (item as Item))) as [ItemKey, Item][];
 
   const allChoices: [ItemKey, Item][] = [...user.items.map(mapProfileItemsToItemsList), ...specialItemsList];
 

@@ -1,12 +1,13 @@
 import Command from '../../../interfaces/Command';
 import commandColors from '../../../embeds/commandColors';
-import { ApplicationCommandOptionType, ChatInputCommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord.js';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import itemString from '../../../embeds/helpers/itemString';
 import izmantotRun from './izmantotRun';
 import izmantotAutocomplete from './izmantotAutocomplete';
 import itemList from '../../../items/itemList';
 import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
+import { UsableItem } from '../../../interfaces/Item';
 
 const izmantot: Command = {
   description:
@@ -27,10 +28,10 @@ const izmantot: Command = {
       },
     ],
   },
-  async run(i: ChatInputCommandInteraction) {
+  async run(i) {
     const itemToUseKey = i.options.getString('nosaukums')!;
 
-    const itemToUse = itemList[itemToUseKey];
+    const itemToUse = itemList[itemToUseKey] as UsableItem;
     if (!itemToUse) return i.reply(wrongKeyEmbed);
 
     if (!itemToUse.use) {

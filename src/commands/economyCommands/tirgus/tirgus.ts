@@ -5,7 +5,7 @@ import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
 import tirgusEmbed from './tirgusEmbed';
 import UserProfile from '../../../interfaces/UserProfile';
-import Item from '../../../interfaces/Item';
+import Item, { TirgusItem } from '../../../interfaces/Item';
 import itemList, { ItemCategory, ItemKey } from '../../../items/itemList';
 import tirgusComponents from './tirgusComponents';
 import { ComponentType } from 'discord.js';
@@ -20,7 +20,8 @@ import midNightStr from '../../../embeds/helpers/midnightStr';
 import axios from 'axios';
 
 export function calcReqItems({ items, lati }: UserProfile, itemObj: Item) {
-  const tirgusPrice = itemObj.tirgusPrice!;
+  const tirgusPrice = (itemObj as Item & TirgusItem).tirgusPrice;
+
   let hasAll = true;
   if (tirgusPrice.lati && lati < tirgusPrice.lati) hasAll = false;
 
@@ -140,7 +141,7 @@ const tirgus: Command = {
           };
         }
 
-        if (itemObj.attributes) {
+        if ('attributes' in itemObj) {
           const specialRes = checkUserSpecialItems(newUser, selectedListing);
           if (!specialRes.valid) {
             return {
@@ -154,15 +155,17 @@ const tirgus: Command = {
           }
         }
 
+        const tirgusPrice = (itemObj as Item & TirgusItem).tirgusPrice;
+
         const itemsToRemove = Object.fromEntries(
-          Object.entries(itemObj.tirgusPrice!.items).map(([key, amount]) => [key, -amount])
+          Object.entries(tirgusPrice.items).map(([key, amount]) => [key, -amount])
         );
 
         await addItems(userId, guildId, { ...itemsToRemove, [selectedListing]: 1 });
         await setTirgus(userId, guildId, selectedListing);
 
-        if (itemObj.tirgusPrice?.lati) {
-          await addLati(userId, guildId, -itemObj.tirgusPrice.lati);
+        if (tirgusPrice?.lati) {
+          await addLati(userId, guildId, -tirgusPrice.lati);
         }
 
         const userAfter = await findUser(userId, guildId);

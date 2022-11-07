@@ -20,10 +20,11 @@ export default async function addItems(
     for (const [itemToAdd, amountToAdd] of Object.entries(itemsToAdd)) {
       if (amountToAdd === 0) continue;
 
-      const { attributes } = itemList[itemToAdd];
+      const itemObj = itemList[itemToAdd];
 
       // pārbauda vai manta ir ar atribūtiem
-      if (attributes) {
+      if ('attributes' in itemObj) {
+        const attributes = itemObj.attributes;
         for (let i = 0; i < amountToAdd; i++) {
           const newAttributes = { ...attributes };
           if ('foundItemKey' in attributes) newAttributes.foundItemKey = await getRandFreeSpin();

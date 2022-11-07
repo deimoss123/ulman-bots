@@ -54,7 +54,7 @@ function makeEmbedAfter(
     content: `<@${targetUser.userId}>`,
 
     description: `**Nodoklis:** ${
-      itemObj.notSellable
+      'notSellable' in itemObj
         ? '0 lati **(nepārdodama manta)**'
         : hasJuridisks
         ? '0 lati **(juridiska persona)**'
@@ -65,10 +65,14 @@ function makeEmbedAfter(
       ...itemsToGive.map(item => ({
         name: itemString(itemObj, null, true, item.attributes.customName),
         value:
-          (itemObj.notSellable
+          ('notSellable' in itemObj
             ? ''
             : `Vērtība: ` +
-              latiString(itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value, false, true) +
+              latiString(
+                'customValue' in itemObj && itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value,
+                false,
+                true
+              ) +
               '\n') + displayAttributes(item),
         inline: false,
       })),
@@ -92,7 +96,7 @@ function makeEmbed(
       `Tavā inventārā ir **${itemString(itemObj, itemsInInv.length)}**\n` +
       `No saraksta izvēlies vienu vai vairākas mantas ko iedot <@${targetUserId}>\n\n` +
       `**Nodoklis:** ` +
-      (itemObj.notSellable
+      ('notSellable' in itemObj
         ? `0 lati **(nepārdodama manta)**`
         : hasJuridisks
         ? `0 lati **(${makeEmojiString(itemList.juridiska_zivs.emoji!)} juridiska persona)**`
@@ -121,15 +125,20 @@ function makeComponents(
           itemsInInv
             .slice(0, 25)
             .sort((a, b) =>
-              itemObj.customValue ? itemObj.customValue(b.attributes) - itemObj.customValue(a.attributes) : 0
+              'customValue' in itemObj && itemObj.customValue
+                ? itemObj.customValue(b.attributes) - itemObj.customValue(a.attributes)
+                : 0
             )
             .map(item => ({
               label: itemStringCustom(itemObj, item.attributes?.customName),
               description:
-                (itemObj.notSellable
+                ('notSellable' in itemObj
                   ? ''
-                  : `${latiString(itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value)} | `) +
-                displayAttributes(item, true),
+                  : `${latiString(
+                      'customValue' in itemObj && itemObj.customValue
+                        ? itemObj.customValue(item.attributes)
+                        : itemObj.value
+                    )} | `) + displayAttributes(item, true),
               value: item._id!,
               emoji: itemObj.emoji || '❓',
               default: !!selectedIds.length && selectedIds!.includes(item._id!),
@@ -193,10 +202,11 @@ export default async function iedotRunSpecial(
       return i.reply(ephemeralReply(`Neizdevās iedot, jo ${checkRes.reason}`));
     }
 
-    if (hasJuridisks || itemObj.notSellable) {
+    if (hasJuridisks || 'notSellable' in itemObj) {
       totalTax = 0;
     } else {
-      const value = itemObj.customValue ? itemObj.customValue(itemsInInv[0].attributes) : itemObj.value;
+      const value =
+        'customValue' in itemObj && itemObj.customValue ? itemObj.customValue(itemsInInv[0].attributes) : itemObj.value;
       totalTax = Math.floor(value * user.giveTax);
     }
 
@@ -237,12 +247,12 @@ export default async function iedotRunSpecial(
         const userAfterSelect = await findUser(userId, guildId);
         if (!userAfterSelect) return { error: true };
 
-        if (hasJuridisks || itemObj.notSellable) {
+        if (hasJuridisks || 'notSellable' in itemObj) {
           totalTax = 0;
         } else {
           totalTax =
             Math.floor(
-              (itemObj.customValue
+              ('customValue' in itemObj && itemObj.customValue
                 ? selectedItems.reduce((prev, item) => prev + itemObj.customValue!(item.attributes), 0)
                 : itemObj.value * selectedItems.length) * userAfterSelect.giveTax
             ) || 1;

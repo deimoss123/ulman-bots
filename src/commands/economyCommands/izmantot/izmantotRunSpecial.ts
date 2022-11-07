@@ -14,12 +14,12 @@ import embedTemplate from '../../../embeds/embedTemplate';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import itemString, { itemStringCustom } from '../../../embeds/helpers/itemString';
-import Item from '../../../interfaces/Item';
+import Item, { AttributeItem, NotSellableItem } from '../../../interfaces/Item';
 import UsableItemReturn from '../../../interfaces/UsableItemReturn';
 import { SpecialItemInProfile } from '../../../interfaces/UserProfile';
 import itemList, { ItemKey } from '../../../items/itemList';
 
-function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: Item, selectedId?: string) {
+function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: AttributeItem, selectedId?: string) {
   return [
     new ActionRowBuilder<SelectMenuBuilder>().addComponents(
       new SelectMenuBuilder()
@@ -75,12 +75,12 @@ export default async function izmantotRunSpecial(
   const userId = i.user.id;
   const guildId = i.guildId!;
 
-  const itemObj = itemList[itemKey];
+  const itemObj = itemList[itemKey] as AttributeItem | NotSellableItem;
   let selectedItemId = '';
 
   if (itemsInInv.length === 1) {
     const selectedItem = itemsInInv[0];
-    const useRes = await itemObj.use!(userId, guildId, itemKey, selectedItem);
+    const useRes = await itemObj.use(userId, guildId, itemKey, selectedItem);
     if (useRes.custom) return useRes.custom(i, embedColor);
     return i.reply(makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
   }

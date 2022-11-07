@@ -20,13 +20,11 @@ function mapProfileItemsToItemsList(item: ItemInProfile): [string, Item] {
   return [item.name, itemList[item.name]];
 }
 
-function filterByUsable(item: [string, Item]) {
-  return !!item[1].use;
+function filterByUsable([, item]: [string, Item]) {
+  return 'use' in item;
 }
 
-export default async function izmantotAutocomplete(
-  interaction: AutocompleteInteraction
-): Promise<void> {
+export default async function izmantotAutocomplete(interaction: AutocompleteInteraction): Promise<void> {
   // lietotāja ievadītais teksts
   const focusedValue = normalizeLatText(interaction.options.getFocused() as string);
 
@@ -35,14 +33,12 @@ export default async function izmantotAutocomplete(
   const user = await findUser(interaction.user.id, interaction.guildId!);
   if (user) {
     const { specialItems } = user;
-    const specialItemsList = [...new Set(specialItems.map(item => item.name))].map(key => [
-      key,
-      itemList[key],
-    ]) as [ItemKey, Item][];
+    const specialItemsList = [...new Set(specialItems.map(item => item.name))].map(key => [key, itemList[key]]) as [
+      ItemKey,
+      Item
+    ][];
 
-    allChoices = [...user.items.map(mapProfileItemsToItemsList), ...specialItemsList].filter(
-      filterByUsable
-    );
+    allChoices = [...user.items.map(mapProfileItemsToItemsList), ...specialItemsList].filter(filterByUsable);
   }
 
   if (!allChoices.length) {

@@ -20,7 +20,7 @@ import commandColors from '../../embeds/commandColors';
 import itemString from '../../embeds/helpers/itemString';
 import ephemeralReply from '../../embeds/ephemeralReply';
 import UserProfile, { ItemInProfile, SpecialItemInProfile } from '../../interfaces/UserProfile';
-import Item from '../../interfaces/Item';
+import Item, { AttributeItem, NotSellableItem } from '../../interfaces/Item';
 import { displayAttributes } from '../../embeds/helpers/displayAttributes';
 import buttonHandler from '../../embeds/buttonHandler';
 import pardotRun from './pardot/pardotRun';
@@ -54,20 +54,20 @@ function mapItems({ items, specialItems }: UserProfile) {
 
   const specialItemsFields = specialItems
     .sort((a, b) => {
-      const itemA = itemList[a.name];
-      const itemB = itemList[b.name];
-      return itemA.notSellable === itemB.notSellable
+      const itemA = itemList[a.name] as AttributeItem | NotSellableItem;
+      const itemB = itemList[b.name] as AttributeItem | NotSellableItem;
+      return 'notSellable' in itemA === 'notSellable' in itemB
         ? (itemB.customValue ? itemB.customValue(b.attributes) : itemB.value) -
             (itemA.customValue ? itemA.customValue(a.attributes) : itemA.value)
-        : itemB.notSellable
+        : 'notSellable' in itemB
         ? 1
         : -1;
     })
     .map(specialItem => {
       const { name, attributes } = specialItem;
-      const item = itemList[name] as Item;
+      const item = itemList[name] as AttributeItem | NotSellableItem;
 
-      const currentItemType: ItemType = item.notSellable ? 'not_sellable' : 'special';
+      const currentItemType: ItemType = 'notSellable' in item && item.notSellable ? 'not_sellable' : 'special';
       itemTypesInInv.add(currentItemType);
 
       const value = item.customValue ? item.customValue(attributes) : item.value;
@@ -85,13 +85,13 @@ function mapItems({ items, specialItems }: UserProfile) {
   const sortedItems: ItemInProfile[] = items.sort((a, b) => {
     const itemA = itemList[a.name];
     const itemB = itemList[b.name];
-    return itemB.use === itemA.use ? itemB.value - itemA.value : itemB.use ? 1 : -1;
+    return 'use' in itemB === 'use' in itemA ? itemB.value - itemA.value : 'use' in itemB ? 1 : -1;
   });
 
   const itemFields = sortedItems.map(({ name, amount }) => {
     const item = itemList[name] as Item;
 
-    const currentItemType: ItemType = item.use ? 'usable' : 'not_usable';
+    const currentItemType: ItemType = 'use' in item ? 'usable' : 'not_usable';
     itemTypesInInv.add(currentItemType);
 
     return {
@@ -113,7 +113,8 @@ export function getInvValue({ items, specialItems }: UserProfile) {
       return prev + itemList[name]!.value * amount;
     }, 0) +
     specialItems.reduce((prev, { name, attributes }) => {
-      return prev + (itemList[name].customValue ? itemList[name].customValue!(attributes) : itemList[name].value);
+      const itemObj = itemList[name] as AttributeItem;
+      return prev + (itemObj.customValue ? itemObj.customValue!(attributes) : itemObj.value);
     }, 0)
   );
 }
@@ -187,7 +188,7 @@ function sellRow({ items }: UserProfile, buttonsPressed: ('visas' | 'neizmantoja
       .setDisabled(buttonsPressed.includes('visas'))
   );
 
-  const hasUnusableItems = items.find(item => !itemList[item.name].use);
+  const hasUnusableItems = items.find(item => !('use' in itemList[item.name]));
   if (hasUnusableItems) {
     row.addComponents(
       new ButtonBuilder()
@@ -223,7 +224,7 @@ function invComponents(
 
   if (
     userId === i.user.id &&
-    (items.length || (specialItems.length && specialItems.find(({ name }) => !itemList[name].notSellable)))
+    (items.length || (specialItems.length && specialItems.find(({ name }) => !('notSellable' in itemList[name]))))
   ) {
     rows.push(sellRow(targetUser, buttonsPressed));
   }

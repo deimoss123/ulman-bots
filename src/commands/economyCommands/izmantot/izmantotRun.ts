@@ -16,6 +16,7 @@ import itemList from '../../../items/itemList';
 import buttonHandler from '../../../embeds/buttonHandler';
 import { ButtonBuilder } from '@discordjs/builders';
 import izmantotRunSpecial from './izmantotRunSpecial';
+import { UsableItem } from '../../../interfaces/Item';
 
 export default async function izmantotRun(
   i: ChatInputCommandInteraction | ButtonInteraction,
@@ -31,7 +32,7 @@ export default async function izmantotRun(
   const { items, specialItems } = user;
   const itemToUse = itemList[itemToUseKey];
 
-  if (itemToUse.attributes) {
+  if ('attributes' in itemToUse) {
     const specialItemsInInv = specialItems.filter(({ name }) => name === itemToUseKey);
     if (!specialItemsInInv.length) {
       return i.reply(ephemeralReply(`Tavā inventārā nav **${itemString(itemToUse)}**`));
@@ -44,14 +45,14 @@ export default async function izmantotRun(
     return i.reply(ephemeralReply(`Tavā inventārā nav **${itemString(itemToUse)}**`));
   }
 
-  if (itemToUse.removedOnUse) {
+  if ('removedOnUse' in itemToUse) {
     const resUser = await addItems(userId, guildId, { [itemToUseKey]: -1 });
     if (!resUser) return i.reply(errorEmbed);
   }
 
   const itemsToUseLeft = itemInInv.amount - 1;
 
-  const res = await itemToUse.use!(userId, guildId, itemToUseKey);
+  const res = await (itemToUse as UsableItem).use(userId, guildId, itemToUseKey);
   if (res.custom) return res.custom(i, embedColor);
 
   const resFields = res.fields || [];
@@ -70,12 +71,12 @@ export default async function izmantotRun(
     title: `Izmantot: ${ItemString(itemToUse, null, true)}`,
     description: res.text,
     fields: resFields,
-    components: itemsToUseLeft && itemToUse.removedOnUse ? [componentRow] : [],
+    components: itemsToUseLeft && 'removedOnUse' in itemToUse && itemToUse.removedOnUse ? [componentRow] : [],
   });
 
   const interactionReply = await i.reply(replyMessage);
 
-  if (!itemsToUseLeft || !itemToUse.removedOnUse) return;
+  if (!itemsToUseLeft || ('removedOnUse' in itemToUse && !itemToUse.removedOnUse)) return;
 
   await buttonHandler(
     i,

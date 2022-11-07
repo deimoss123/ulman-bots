@@ -60,7 +60,7 @@ export default async function pirktRun(
     );
   }
 
-  if (itemToBuy.attributes) {
+  if ('attributes' in itemToBuy) {
     const checkRes = checkUserSpecialItems(user, itemToBuyKey, amountToBuy);
     if (!checkRes.valid) {
       return i.reply(ephemeralReply(`Neizdevās nopirkt, jo ${checkRes.reason}`));
@@ -78,7 +78,7 @@ export default async function pirktRun(
   const userAfter = await addItems(userId, guildId, { [itemToBuyKey]: amountToBuy });
   if (!userAfter) return i.reply(errorEmbed);
 
-  if (itemToBuy.attributes) {
+  if ('attributes' in itemToBuy) {
     const resSpecialItems = userAfter.specialItems.filter(item => item.name === itemToBuyKey);
 
     return i.reply(
@@ -130,12 +130,12 @@ export default async function pirktRun(
         inline: true,
       },
     ],
-    components: itemToBuy.use ? [componentRow] : [],
+    components: 'use' in itemToBuy ? [componentRow] : [],
   });
 
   const interactionReply = await i.reply(replyMessage);
 
-  if (!itemToBuy.use) return;
+  if (!('use' in itemToBuy)) return;
 
   await buttonHandler(
     i,

@@ -34,13 +34,16 @@ function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: Item, selec
           itemsInInv
             .slice(0, 25)
             .sort((a, b) =>
-              itemObj.customValue ? itemObj.customValue(b.attributes) - itemObj.customValue(a.attributes) : 0
+              'customValue' in itemObj && itemObj.customValue
+                ? itemObj.customValue(b.attributes) - itemObj.customValue(a.attributes)
+                : 0
             )
             .map(item => ({
               label: itemStringCustom(itemObj, item.attributes?.customName),
               description:
-                `${latiString(itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value)} | ` +
-                displayAttributes(item, true),
+                `${latiString(
+                  'customValue' in itemObj && itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value
+                )} | ` + displayAttributes(item, true),
               value: item._id!,
               emoji: itemObj.emoji || '❓',
               default: !!selectedIds.length && selectedIds!.includes(item._id!),
@@ -93,7 +96,8 @@ export default async function pardotRunSpecial(
   let selectedIds: string[] = [];
 
   if (itemsInInv.length === 1) {
-    const soldValue = itemObj.customValue ? itemObj.customValue(itemsInInv[0].attributes) : itemObj.value;
+    const soldValue =
+      'customValue' in itemObj && itemObj.customValue ? itemObj.customValue(itemsInInv[0].attributes) : itemObj.value;
 
     const taxPaid = Math.floor(soldValue * PIRKT_PARDOT_NODOKLIS);
 
@@ -138,7 +142,9 @@ export default async function pardotRunSpecial(
         if (componentInteraction.componentType !== ComponentType.Button) return;
         const selectedItems = itemsInInv.filter(item => selectedIds.includes(item._id!));
         const soldValue = selectedItems.reduce((p, { attributes }) => {
-          return p + (itemObj.customValue ? itemObj.customValue(attributes) : itemObj.value);
+          return (
+            p + ('customValue' in itemObj && itemObj.customValue ? itemObj.customValue(attributes) : itemObj.value)
+          );
         }, 0);
 
         if (!selectedItems.length) return;

@@ -102,7 +102,7 @@ export default async function pardotRun(
   }
 
   if (type === 'neizmantojamās') {
-    const unusuableItems = items.filter(item => !itemList[item.name].use);
+    const unusuableItems = items.filter(item => !('use' in itemList[item.name]));
     if (!unusuableItems.length) {
       return i.reply(ephemeralReply('Tavā inventārā nav neviena neizmantojama manta'));
     }
@@ -127,7 +127,7 @@ export default async function pardotRun(
   }
 
   // visas
-  if (user.specialItems.length && !user.specialItems.find(({ name }) => !itemList[name].notSellable)) {
+  if (user.specialItems.length && !user.specialItems.find(({ name }) => !('notSellable' in itemList[name]))) {
     return i.reply(ephemeralReply('Tavā inventārā nav neviena pārdodama manta'));
   }
 
@@ -165,7 +165,7 @@ export default async function pardotRun(
 
         const specialItemsToSell: ItemsToSell[] = specialItems
           .map(({ name, attributes, _id }) => ({ name, amount: null, item: itemList[name], attributes, _id }))
-          .filter(({ item }) => !item.notSellable);
+          .filter(({ item }) => !('notSellable' in item));
 
         const itemsToSell: ItemsToSell[] = [
           ...specialItemsToSell,
@@ -178,7 +178,9 @@ export default async function pardotRun(
         }
 
         const soldItemsValue = itemsToSell.reduce((p, { item, amount, attributes }) => {
-          return p + (item.customValue ? item.customValue(attributes!) : item.value * (amount || 1));
+          return (
+            p + ('customValue' in item && item.customValue ? item.customValue(attributes!) : item.value * (amount || 1))
+          );
         }, 0);
 
         const tax = Math.floor(soldItemsValue * PIRKT_PARDOT_NODOKLIS);

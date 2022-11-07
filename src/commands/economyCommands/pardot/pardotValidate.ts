@@ -32,14 +32,14 @@ const pardotValidate = async (
     return;
   }
 
-  if (itemToSell.notSellable) {
+  if ('notSellable' in itemToSell) {
     await i.reply(ephemeralReply(`**${itemString(itemToSell, null, true)}** nevar pārdot`));
     return;
   }
 
   const { items, specialItems } = user;
 
-  if (itemToSell.attributes) {
+  if ('attributes' in itemToSell) {
     const specialItemsInv = specialItems.filter(item => item.name === itemToSellKey);
     if (!specialItemsInv.length) {
       await i.reply(ephemeralReply(`Tavā inventārā nav **${itemString(itemToSell)}**`));
