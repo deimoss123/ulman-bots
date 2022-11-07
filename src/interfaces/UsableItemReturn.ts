@@ -8,7 +8,7 @@ type UsableItemReturn =
     }
   | {
       custom: (
-        // i: CommandInteraction | ButtonInteraction,
+        // i: ChatInputCommandInteraction | ButtonInteraction,
         i: ChatInputCommandInteraction | ButtonInteraction,
         color: number
       ) => any;

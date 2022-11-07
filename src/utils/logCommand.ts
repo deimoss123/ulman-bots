@@ -1,7 +1,7 @@
-import { CommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction } from 'discord.js';
 import chalk from 'chalk';
 
-export default function logCommand(i: CommandInteraction) {
+export default function logCommand(i: ChatInputCommandInteraction) {
   console.log(
     [
       new Date().toLocaleString('en-GB'),

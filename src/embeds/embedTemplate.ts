@@ -3,7 +3,7 @@ import {
   APIActionRowComponent,
   APIMessageActionRowComponent,
   ButtonInteraction,
-  CommandInteraction,
+  ChatInputCommandInteraction,
   EmbedField,
   GuildMember,
   InteractionReplyOptions,
@@ -14,7 +14,7 @@ import {
 import updatesList from '../commands/economyCommands/palidziba/jaunumi/updatesList';
 
 interface EmbedTemplateOptions {
-  i: CommandInteraction | ButtonInteraction;
+  i: ChatInputCommandInteraction | ButtonInteraction;
   content?: string;
   title?: string;
   description?: string;

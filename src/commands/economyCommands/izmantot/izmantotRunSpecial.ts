@@ -4,7 +4,6 @@ import {
   ButtonInteraction,
   ButtonStyle,
   ChatInputCommandInteraction,
-  CommandInteraction,
   ComponentType,
   SelectMenuBuilder,
 } from 'discord.js';
@@ -52,7 +51,7 @@ function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: AttributeIt
 }
 
 function makeEmbed(
-  i: CommandInteraction | ButtonInteraction,
+  i: ChatInputCommandInteraction | ButtonInteraction,
   itemObj: Item,
   selectedItem: SpecialItemInProfile,
   useRes: Extract<UsableItemReturn, { text: string }>,

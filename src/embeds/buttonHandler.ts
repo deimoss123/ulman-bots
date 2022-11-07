@@ -2,7 +2,7 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonInteraction,
-  CommandInteraction,
+  ChatInputCommandInteraction,
   ComponentType,
   InteractionUpdateOptions,
   Message,
@@ -23,7 +23,7 @@ export interface CallbackReturn {
 }
 
 export default async function buttonHandler(
-  interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction,
+  interaction: ChatInputCommandInteraction | ButtonInteraction | SelectMenuInteraction,
   interactionName: string,
   interactionMsg: Message,
   callback: (buttonInteraction: ButtonInteraction | SelectMenuInteraction) => Promise<CallbackReturn | void>,

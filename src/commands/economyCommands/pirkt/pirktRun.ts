@@ -3,7 +3,7 @@ import {
   ButtonBuilder,
   ButtonInteraction,
   ButtonStyle,
-  CommandInteraction,
+  ChatInputCommandInteraction,
   ComponentType,
 } from 'discord.js';
 import findUser from '../../../economy/findUser';
@@ -25,7 +25,7 @@ import setStats from '../../../economy/stats/setStats';
 import getDiscounts from '../../../items/helpers/getDiscounts';
 
 export default async function pirktRun(
-  i: CommandInteraction | ButtonInteraction,
+  i: ChatInputCommandInteraction | ButtonInteraction,
   itemToBuyKey: string,
   amountToBuy: number,
   embedColor: number

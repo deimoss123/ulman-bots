@@ -3,7 +3,7 @@ import {
   ButtonBuilder,
   ButtonInteraction,
   ButtonStyle,
-  CommandInteraction,
+  ChatInputCommandInteraction,
   ComponentType,
   EmbedBuilder,
 } from 'discord.js';
@@ -34,7 +34,11 @@ const requiredItems: Record<ItemKey, number> = {
   velo_sture: 1,
 };
 
-function makeEmbed(i: CommandInteraction | ButtonInteraction, reqItemsInv: Record<ItemKey, number>, color: number) {
+function makeEmbed(
+  i: ChatInputCommandInteraction | ButtonInteraction,
+  reqItemsInv: Record<ItemKey, number>,
+  color: number
+) {
   const maxLength = Math.max(...Object.values(reqItemsInv)).toString().length;
 
   return embedTemplate({

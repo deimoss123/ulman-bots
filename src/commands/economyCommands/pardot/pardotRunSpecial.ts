@@ -2,7 +2,7 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
-  CommandInteraction,
+  ChatInputCommandInteraction,
   ComponentType,
   SelectMenuBuilder,
 } from 'discord.js';
@@ -61,7 +61,7 @@ function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: Item, selec
 }
 
 function makeEmbed(
-  i: CommandInteraction,
+  i: ChatInputCommandInteraction,
   user: UserProfile,
   soldItems: SpecialItemInProfile[],
   soldValue: number,
@@ -84,7 +84,7 @@ function makeEmbed(
 }
 
 export default async function pardotRunSpecial(
-  i: CommandInteraction,
+  i: ChatInputCommandInteraction,
   itemKey: ItemKey,
   itemsInInv: SpecialItemInProfile[],
   embedColor: number

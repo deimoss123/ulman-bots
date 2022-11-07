@@ -2,7 +2,7 @@ import UserProfile from '../../../interfaces/UserProfile';
 import Item from '../../../interfaces/Item';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import itemString from '../../../embeds/helpers/itemString';
-import { CommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction } from 'discord.js';
 import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
 import itemList from '../../../items/itemList';
 import pardotRunSpecial from './pardotRunSpecial';
@@ -15,7 +15,7 @@ interface PardotValidateReturn {
 }
 
 const pardotValidate = async (
-  i: CommandInteraction,
+  i: ChatInputCommandInteraction,
   user: UserProfile,
   itemToSellKey: string,
   amountToSell: number,

@@ -1,4 +1,4 @@
-import { ButtonInteraction, CommandInteraction, ComponentType, Message } from 'discord.js';
+import { ButtonInteraction, ChatInputCommandInteraction, ComponentType, Message } from 'discord.js';
 import addItems from '../../../economy/addItems';
 import addLati from '../../../economy/addLati';
 import findUser from '../../../economy/findUser';
@@ -22,7 +22,7 @@ import feniksEmbed from './feniksEmbed';
 const DEFAULT_EMOJI_COUNT = 5;
 
 export default async function feniksRun(
-  i: CommandInteraction | ButtonInteraction,
+  i: ChatInputCommandInteraction | ButtonInteraction,
   likme: KazinoLikme,
   isFree = false,
   freeSpinName?: string

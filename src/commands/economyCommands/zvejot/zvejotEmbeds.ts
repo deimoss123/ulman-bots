@@ -1,4 +1,4 @@
-import { bold, CommandInteraction, time, underscore } from 'discord.js';
+import { bold, ChatInputCommandInteraction, time, underscore } from 'discord.js';
 import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
 import itemString from '../../../embeds/helpers/itemString';
@@ -40,7 +40,7 @@ function tipsString({ selectedRod, usesLeft, caughtFishes, maxCapacity }: UserFi
   return arr.length ? arr.map(a => `- ${a}\n`).join('') + '\u200B' : '';
 }
 
-export function zvejotEmbed(i: CommandInteraction, { fishing }: UserProfile) {
+export function zvejotEmbed(i: ChatInputCommandInteraction, { fishing }: UserProfile) {
   const { selectedRod, usesLeft, caughtFishes, lastCaughtFish, futureFishList, maxCapacity } = fishing;
   const fields = [
     {

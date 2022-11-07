@@ -2,7 +2,7 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
-  CommandInteraction,
+  ChatInputCommandInteraction,
   ComponentType,
   SelectMenuBuilder,
 } from 'discord.js';
@@ -26,7 +26,7 @@ import itemList, { ItemKey } from '../../../items/itemList';
 import { cantPayTaxEmbed } from './iedot';
 
 async function iedotSpecialQuery(
-  i: CommandInteraction,
+  i: ChatInputCommandInteraction,
   targetUser: UserProfile,
   guildId: string,
   selectedItems: SpecialItemInProfile[]
@@ -41,7 +41,7 @@ async function iedotSpecialQuery(
 }
 
 function makeEmbedAfter(
-  i: CommandInteraction,
+  i: ChatInputCommandInteraction,
   taxLati: number,
   targetUser: UserProfile,
   itemsToGive: SpecialItemInProfile[],
@@ -81,7 +81,7 @@ function makeEmbedAfter(
 }
 
 function makeEmbed(
-  i: CommandInteraction,
+  i: ChatInputCommandInteraction,
   itemsInInv: SpecialItemInProfile[],
   itemObj: Item,
   targetUserId: string,
@@ -176,7 +176,7 @@ export function noInvSpaceEmbed(targetUser: UserProfile, itemToGive: Item, amoun
 }
 
 export default async function iedotRunSpecial(
-  i: CommandInteraction,
+  i: ChatInputCommandInteraction,
   user: UserProfile,
   targetUser: UserProfile,
   itemKey: ItemKey,

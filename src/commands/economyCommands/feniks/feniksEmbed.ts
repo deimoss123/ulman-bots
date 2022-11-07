@@ -1,4 +1,4 @@
-import { ButtonInteraction, CommandInteraction } from 'discord.js';
+import { ButtonInteraction, ChatInputCommandInteraction } from 'discord.js';
 import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
 import latiString from '../../../embeds/helpers/latiString';
@@ -14,7 +14,7 @@ const spinEmoji = {
 };
 
 export default function feniksEmbed(
-  i: CommandInteraction | ButtonInteraction,
+  i: ChatInputCommandInteraction | ButtonInteraction,
   likme: KazinoLikme,
   likmeLati: number,
   spinCount: number,
