@@ -13,6 +13,7 @@ import itemString from '../../embeds/helpers/itemString';
 import latiString from '../../embeds/helpers/latiString';
 import smallEmbed from '../../embeds/smallEmbed';
 import { AttributeItem, UsableItemFunc } from '../../interfaces/Item';
+import intReply from '../../utils/intReply';
 import itemList from '../itemList';
 
 export function makskereCustomValue(itemKey: string): AttributeItem['customValue'] {
@@ -42,7 +43,7 @@ const makskere: UsableItemFunc = async (userId, guildId, itemKey, specialItem) =
       const { maxDurability, repairable } = maksekeresData[itemKey];
 
       if (attributes.durability! >= maxDurability) {
-        return i.reply({
+        return intReply(i, {
           embeds: [
             embed.setDescription(
               (embed.data.description +=
@@ -68,9 +69,10 @@ const makskere: UsableItemFunc = async (userId, guildId, itemKey, specialItem) =
           .setEmoji(itemObj.emoji || '❓')
       );
 
-      const msg = await i.reply({ embeds: [embed], components: [row], fetchReply: true });
+      const msg = await intReply(i, { embeds: [embed], components: [row], fetchReply: true });
+      if (!msg) return;
 
-      await buttonHandler(i, 'izmantot', msg, async int => {
+      buttonHandler(i, 'izmantot', msg, async int => {
         if (int.customId !== 'fix-fishing-rod-use-cmd' || int.componentType !== ComponentType.Button) return;
         if (!repairable) return;
 
@@ -80,7 +82,8 @@ const makskere: UsableItemFunc = async (userId, guildId, itemKey, specialItem) =
         const { lati, specialItems } = user;
 
         if (lati < repairCost) {
-          int.reply(
+          intReply(
+            int,
             ephemeralReply(
               `Tev nepietiek nauda lai salabotu makšķeri - ${latiString(repairCost, false, true)}\n` +
                 `Tev ir ${latiString(lati, false, true)}`
@@ -90,7 +93,7 @@ const makskere: UsableItemFunc = async (userId, guildId, itemKey, specialItem) =
         }
 
         if (!specialItems.find(item => item._id === _id)) {
-          int.reply(ephemeralReply('Inventāra saturs ir mainījies, šī makšķere vairs nav tavā inventārā'));
+          intReply(int, ephemeralReply('Inventāra saturs ir mainījies, šī makšķere vairs nav tavā inventārā'));
           return { end: true };
         }
 
@@ -98,7 +101,8 @@ const makskere: UsableItemFunc = async (userId, guildId, itemKey, specialItem) =
         const userAfter = await editItemAttribute(userId, guildId, _id!, { durability: maxDurability });
         if (!userAfter) return;
 
-        int.reply(
+        intReply(
+          int,
           smallEmbed(
             `Tu salaboji ${bold(itemString(itemObj, null, true))} - ${latiString(repairCost)}\n` +
               displayAttributes(userAfter.newItem),

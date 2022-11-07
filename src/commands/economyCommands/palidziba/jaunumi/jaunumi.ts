@@ -2,6 +2,7 @@ import { ActionRowBuilder, ChatInputCommandInteraction, ComponentType, SelectMen
 import buttonHandler from '../../../../embeds/buttonHandler';
 import commandColors from '../../../../embeds/commandColors';
 import embedTemplate, { ULMANBOTA_VERSIJA } from '../../../../embeds/embedTemplate';
+import intReply from '../../../../utils/intReply';
 import updatesList from './updatesList';
 
 function embed(i: ChatInputCommandInteraction, selectedVersion: string) {
@@ -31,11 +32,13 @@ function components(selectedVersion: string) {
 export default async function jaunumi(i: ChatInputCommandInteraction) {
   let selectedVersion = ULMANBOTA_VERSIJA;
 
-  const msg = await i.reply({
+  const msg = await intReply(i, {
     embeds: embed(i, selectedVersion),
     components: components(selectedVersion),
     fetchReply: true,
   });
+
+  if (!msg) return;
 
   buttonHandler(
     i,

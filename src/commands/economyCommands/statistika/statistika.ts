@@ -8,6 +8,7 @@ import ephemeralReply from '../../../embeds/ephemeralReply';
 import errorEmbed from '../../../embeds/errorEmbed';
 import Command from '../../../interfaces/Command';
 import StatsProfile, { UserStats } from '../../../interfaces/StatsProfile';
+import intReply from '../../../utils/intReply';
 import { sortDataProfile } from '../top/sortData';
 import statsList, { StatsTypes } from './statsList';
 
@@ -66,15 +67,15 @@ const statistika: Command = {
     const target = i.options.getUser('lietotājs') ?? i.user;
 
     if (target.id === i.client.user.id) {
-      return i.reply(ephemeralReply('Tu nevari apskatīt UlmaņBota statistiku (viņš neizmanto komandas)'));
+      return intReply(i, ephemeralReply('Tu nevari apskatīt UlmaņBota statistiku (viņš neizmanto komandas)'));
     }
 
-    const defer = i.deferReply();
+    const defer = i.deferReply().catch(_ => _);
 
     const user = await findUser(target.id, guildId);
     if (!user) {
       await defer;
-      return i.editReply(errorEmbed);
+      return i.editReply(errorEmbed).catch(_ => _);
     }
 
     const chosenCategory = i.options.getString('kategorija');
@@ -86,7 +87,7 @@ const statistika: Command = {
       const allUsers = await getAllUsers(i.client.user.id, guildId, projection);
       if (!allUsers) {
         await defer;
-        return i.editReply(errorEmbed);
+        return i.editReply(errorEmbed).catch(_ => _);
       }
 
       const names = { maks: 'Maks', inv: 'Inventāra vērtība', total: 'Kopējā vērtība', level: 'Līmenis' };
@@ -108,13 +109,13 @@ const statistika: Command = {
       const allUserStats = await getStatsMany(i.client.user.id, guildId, projection);
       if (!allUserStats) {
         await defer;
-        return i.editReply(errorEmbed);
+        return i.editReply(errorEmbed).catch(_ => _);
       }
 
       const userStats = allUserStats.find(u => u.userId === target.id);
       if (!userStats) {
         await defer;
-        return i.editReply(errorEmbed);
+        return i.editReply(errorEmbed).catch(_ => _);
       }
 
       Object.entries(entries).forEach(([key, { name, displayValue }]) => {

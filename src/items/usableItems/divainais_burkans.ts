@@ -20,6 +20,7 @@ import itemString from '../../embeds/helpers/itemString';
 import latiString from '../../embeds/helpers/latiString';
 import smallEmbed from '../../embeds/smallEmbed';
 import { UsableItemFunc } from '../../interfaces/Item';
+import intReply from '../../utils/intReply';
 import itemList from '../itemList';
 
 const BURKANS_CHANGE_NAME_COST = 250;
@@ -38,10 +39,11 @@ function makeComponents(lati: number) {
 
 async function handleModal(i: ModalSubmitInteraction) {
   const user = await findUser(i.user.id, i.guildId!);
-  if (!user) return i.reply(errorEmbed);
+  if (!user) return intReply(i, errorEmbed);
 
   if (user.lati < BURKANS_CHANGE_NAME_COST) {
-    return i.reply(
+    return intReply(
+      i,
       ephemeralReply('Tev nepietiek naudas lai nomainītu burkāna nosaukumu\n' + `Tev ir ${latiString(user.lati)}`)
     );
   }
@@ -50,20 +52,21 @@ async function handleModal(i: ModalSubmitInteraction) {
   const newName = i.fields.getTextInputValue('burkans_modal_input').trim();
 
   const burkansPrev = user.specialItems.find(item => item._id === burkansId);
-  if (!burkansPrev) return i.reply(errorEmbed);
+  if (!burkansPrev) return intReply(i, errorEmbed);
 
   if (newName === burkansPrev.attributes.customName) {
-    return i.reply(ephemeralReply('Jaunajam burkāna vārdam ir jāatšķiras no vecā'));
+    return intReply(i, ephemeralReply('Jaunajam burkāna vārdam ir jāatšķiras no vecā'));
   }
 
   const res = await editItemAttribute(i.user.id, i.guildId!, burkansId, {
     ...burkansPrev.attributes,
     customName: newName,
   });
-  if (!res) return i.reply(errorEmbed);
+  if (!res) return intReply(i, errorEmbed);
   await addLati(i.user.id, i.guildId!, -BURKANS_CHANGE_NAME_COST);
 
-  await i.reply(
+  intReply(
+    i,
     smallEmbed(
       'Burkāna nosakums veiksmīgi nomainīts\n' +
         `No: ${itemString(itemList.divainais_burkans, null, false, burkansPrev.attributes.customName)}\n` +
@@ -80,11 +83,12 @@ const divainais_burkans: UsableItemFunc = async (userId, guildId, _, specialItem
         ...specialItem!.attributes,
         timesUsed: specialItem!.attributes.timesUsed! + 1,
       });
-      if (!res) return i.reply(errorEmbed);
+      if (!res) return intReply(i, errorEmbed);
 
       const { timesUsed } = res.newItem.attributes;
 
-      const msg = await i.reply(
+      const msg = await intReply(
+        i,
         embedTemplate({
           i,
           color,
@@ -102,6 +106,8 @@ const divainais_burkans: UsableItemFunc = async (userId, guildId, _, specialItem
         })
       );
 
+      if (!msg) return;
+
       buttonHandler(
         i,
         'izmantot_burkans',
@@ -115,7 +121,8 @@ const divainais_burkans: UsableItemFunc = async (userId, guildId, _, specialItem
             if (!user) return { error: true };
 
             if (user.lati < BURKANS_CHANGE_NAME_COST) {
-              i.reply(
+              intReply(
+                int,
                 ephemeralReply(
                   'Tev nepietiek naudas lai nomainītu burkāna nosaukumu\n' + `Tev ir ${latiString(user.lati)}`
                 )

@@ -10,6 +10,7 @@ import ephemeralReply from '../../embeds/ephemeralReply';
 import { JobPositions } from './vakances/vakances';
 import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
 import { UserStatusName } from '../../interfaces/UserProfile';
+import intReply from '../../utils/intReply';
 
 export const statusList: Record<UserStatusName, string> = {
   aizsargats: 'Aizsargāts',
@@ -42,10 +43,10 @@ const profils: Command = {
     const target = i.options.getUser('lietotājs') ?? i.user;
 
     const user = await findUser(target.id, i.guildId!);
-    if (!user) return i.reply(errorEmbed);
+    if (!user) return intReply(i, errorEmbed);
 
     if (target.id === i.guild?.members?.me?.id) {
-      return i.reply(ephemeralReply('Tu nevari apskatīt Valsts Bankas profilu'));
+      return intReply(i, ephemeralReply('Tu nevari apskatīt Valsts Bankas profilu'));
     }
 
     const { level, xp, jobPosition, payTax, giveTax, status } = user;
@@ -79,7 +80,8 @@ const profils: Command = {
       giveTaxText = `~~${Math.floor(giveTax * 100)}%~~ **0%**`;
     }
 
-    await i.reply(
+    intReply(
+      i,
       embedTemplate({
         i,
         color: this.color,

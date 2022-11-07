@@ -23,6 +23,7 @@ import { PIRKT_PARDOT_NODOKLIS } from '../pardot/pardot';
 import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems';
 import setStats from '../../../economy/stats/setStats';
 import getDiscounts from '../../../items/helpers/getDiscounts';
+import intReply from '../../../utils/intReply';
 
 export default async function pirktRun(
   i: ChatInputCommandInteraction | ButtonInteraction,
@@ -34,13 +35,14 @@ export default async function pirktRun(
   const guildId = i.guildId!;
 
   const [user, discounts] = await Promise.all([findUser(userId, guildId), getDiscounts()]);
-  if (!user || !discounts) return i.reply(errorEmbed);
+  if (!user || !discounts) return intReply(i, errorEmbed);
 
   const itemToBuy = itemList[itemToBuyKey];
   const totalCost = getItemPrice(itemToBuyKey, discounts).price * amountToBuy;
 
   if (totalCost > user.lati) {
-    return i.reply(
+    return intReply(
+      i,
       ephemeralReply(
         `Tev nepietiek naudas lai nopirktu **${itemString(itemToBuy, amountToBuy, true)}**\n` +
           `Cena: ${latiString(totalCost)}\n` +
@@ -52,7 +54,8 @@ export default async function pirktRun(
   const freeSlots = countFreeInvSlots(user);
 
   if (freeSlots < amountToBuy) {
-    return i.reply(
+    return intReply(
+      i,
       ephemeralReply(
         `Tev nepietiek vietas inventārā lai nopirktu **${itemString(itemToBuy, amountToBuy, true)}**\n` +
           `Tev ir **${freeSlots}** brīvas vietas`
@@ -63,7 +66,7 @@ export default async function pirktRun(
   if ('attributes' in itemToBuy) {
     const checkRes = checkUserSpecialItems(user, itemToBuyKey, amountToBuy);
     if (!checkRes.valid) {
-      return i.reply(ephemeralReply(`Neizdevās nopirkt, jo ${checkRes.reason}`));
+      return intReply(i, ephemeralReply(`Neizdevās nopirkt, jo ${checkRes.reason}`));
     }
   }
 
@@ -76,12 +79,13 @@ export default async function pirktRun(
   ]);
 
   const userAfter = await addItems(userId, guildId, { [itemToBuyKey]: amountToBuy });
-  if (!userAfter) return i.reply(errorEmbed);
+  if (!userAfter) return intReply(i, errorEmbed);
 
   if ('attributes' in itemToBuy) {
     const resSpecialItems = userAfter.specialItems.filter(item => item.name === itemToBuyKey);
 
-    return i.reply(
+    return intReply(
+      i,
       embedTemplate({
         i,
         title: 'Tu nopirki',
@@ -133,11 +137,11 @@ export default async function pirktRun(
     components: 'use' in itemToBuy ? [componentRow] : [],
   });
 
-  const msg = await i.reply(replyMessage);
+  const msg = await intReply(i, replyMessage);
 
-  if (!('use' in itemToBuy)) return;
+  if (!msg || !('use' in itemToBuy)) return;
 
-  await buttonHandler(
+  buttonHandler(
     i,
     'pirkt',
     msg,

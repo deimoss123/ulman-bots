@@ -7,6 +7,7 @@ import commandColors from '../../../embeds/commandColors';
 import pirktRun from './pirktRun';
 import pirktAutocomplete from './pirktAutocomplete';
 import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
+import intReply from '../../../utils/intReply';
 
 const pirkt: Command = {
   description:
@@ -39,10 +40,11 @@ const pirkt: Command = {
     const amount = i.options.getInteger('daudzums') ?? 1;
 
     const itemToBuy = itemList[itemToBuyKey];
-    if (!itemToBuy) return i.reply(wrongKeyEmbed);
+    if (!itemToBuy) return intReply(i, wrongKeyEmbed);
 
     if (!itemToBuy.categories.includes(ItemCategory.VEIKALS)) {
-      return i.reply(
+      return intReply(
+        i,
         ephemeralReply(
           `**${itemString(itemToBuy)}** nav ` + (itemToBuy.isVirsiesuDzimte ? 'nopērkams' : 'nopērkama') + ' veikalā'
         )

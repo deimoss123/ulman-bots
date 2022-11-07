@@ -23,6 +23,7 @@ import UserProfile, { SpecialItemInProfile } from '../../../interfaces/UserProfi
 import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import itemList, { ItemKey } from '../../../items/itemList';
+import intReply from '../../../utils/intReply';
 import { cantPayTaxEmbed } from './iedot';
 
 async function iedotSpecialQuery(
@@ -194,12 +195,12 @@ export default async function iedotRunSpecial(
   if (itemsInInv.length === 1) {
     const hasInvSpace = checkTargetInv(targetUser, 1);
     if (!hasInvSpace) {
-      return i.reply(noInvSpaceEmbed(targetUser, itemObj, 1));
+      return intReply(i, noInvSpaceEmbed(targetUser, itemObj, 1));
     }
 
     const checkRes = checkUserSpecialItems(targetUser, itemKey);
     if (!checkRes.valid) {
-      return i.reply(ephemeralReply(`Neizdevās iedot, jo ${checkRes.reason}`));
+      return intReply(i, ephemeralReply(`Neizdevās iedot, jo ${checkRes.reason}`));
     }
 
     if (hasJuridisks || 'notSellable' in itemObj) {
@@ -211,7 +212,7 @@ export default async function iedotRunSpecial(
     }
 
     if (user.lati < totalTax) {
-      return i.reply(cantPayTaxEmbed(itemObj, 1, totalTax, user));
+      return intReply(i, cantPayTaxEmbed(itemObj, 1, totalTax, user));
     }
 
     await Promise.all([
@@ -224,15 +225,16 @@ export default async function iedotRunSpecial(
       await Promise.all([addLati(userId, guildId, -totalTax), addLati(i.client.user!.id, guildId, totalTax)]);
     }
 
-    i.reply(makeEmbedAfter(i, totalTax, targetUser, itemsInInv, hasJuridisks, itemObj));
+    intReply(i, makeEmbedAfter(i, totalTax, targetUser, itemsInInv, hasJuridisks, itemObj));
     return;
   }
 
-  const msg = await i.reply({
+  const msg = await intReply(i, {
     embeds: makeEmbed(i, itemsInInv, itemObj, targetUser.userId, user, hasJuridisks),
     components: makeComponents(itemsInInv, itemObj, selectedItems),
     fetchReply: true,
   });
+  if (!msg) return;
 
   await buttonHandler(
     i,
@@ -273,13 +275,13 @@ export default async function iedotRunSpecial(
 
         const hasInvSpace = checkTargetInv(targetUserNew, selectedItems.length);
         if (!hasInvSpace) {
-          int.reply(noInvSpaceEmbed(targetUserNew, itemObj, selectedItems.length));
+          intReply(int, noInvSpaceEmbed(targetUserNew, itemObj, selectedItems.length));
           return { end: true };
         }
 
         const checkRes = checkUserSpecialItems(targetUserNew, itemKey, selectedItems.length);
         if (!checkRes.valid) {
-          int.reply(ephemeralReply(`Neizdevās iedot, jo ${checkRes.reason}`));
+          intReply(int, ephemeralReply(`Neizdevās iedot, jo ${checkRes.reason}`));
           return { end: true };
         }
 
@@ -289,7 +291,7 @@ export default async function iedotRunSpecial(
         if (user.lati < totalTax) {
           return {
             after: () => {
-              int.reply(cantPayTaxEmbed(itemObj, selectedItems.length, totalTax, user));
+              intReply(int, cantPayTaxEmbed(itemObj, selectedItems.length, totalTax, user));
             },
           };
         }
@@ -299,7 +301,8 @@ export default async function iedotRunSpecial(
           if (!userItemIds.includes(specItem._id!)) {
             return {
               after: () => {
-                int.reply(
+                intReply(
+                  int,
                   ephemeralReply('Tavs inventāra saturs ir mainījies, kāda no izvēlētām mantām nav tavā inventārā')
                 );
               },
@@ -323,7 +326,7 @@ export default async function iedotRunSpecial(
             components: makeComponents(itemsInInv, itemObj, selectedItems, totalTax, user.lati, true),
           },
           after: () => {
-            int.reply(makeEmbedAfter(i, totalTax, targetUser, selectedItems, hasJuridisks, itemObj));
+            intReply(int, makeEmbedAfter(i, totalTax, targetUser, selectedItems, hasJuridisks, itemObj));
           },
         };
       }

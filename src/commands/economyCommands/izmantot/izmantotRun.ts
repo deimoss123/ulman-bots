@@ -17,6 +17,7 @@ import buttonHandler from '../../../embeds/buttonHandler';
 import { ButtonBuilder } from '@discordjs/builders';
 import izmantotRunSpecial from './izmantotRunSpecial';
 import { UsableItem } from '../../../interfaces/Item';
+import intReply from '../../../utils/intReply';
 
 export default async function izmantotRun(
   i: ChatInputCommandInteraction | ButtonInteraction,
@@ -27,7 +28,7 @@ export default async function izmantotRun(
   const guildId = i.guildId!;
 
   const user = await findUser(userId, guildId);
-  if (!user) return i.reply(errorEmbed);
+  if (!user) return intReply(i, errorEmbed);
 
   const { items, specialItems } = user;
   const itemToUse = itemList[itemToUseKey];
@@ -35,26 +36,26 @@ export default async function izmantotRun(
   if ('attributes' in itemToUse) {
     const specialItemsInInv = specialItems.filter(({ name }) => name === itemToUseKey);
     if (!specialItemsInInv.length) {
-      return i.reply(ephemeralReply(`Tavā inventārā nav **${itemString(itemToUse)}**`));
+      return intReply(i, ephemeralReply(`Tavā inventārā nav **${itemString(itemToUse)}**`));
     }
     return izmantotRunSpecial(i, itemToUseKey, specialItemsInInv, embedColor);
   }
 
   const itemInInv = items.find(({ name }) => name === itemToUseKey);
   if (!itemInInv) {
-    return i.reply(ephemeralReply(`Tavā inventārā nav **${itemString(itemToUse)}**`));
+    return intReply(i, ephemeralReply(`Tavā inventārā nav **${itemString(itemToUse)}**`));
   }
 
   if ('removedOnUse' in itemToUse) {
     const resUser = await addItems(userId, guildId, { [itemToUseKey]: -1 });
-    if (!resUser) return i.reply(errorEmbed);
+    if (!resUser) return intReply(i, errorEmbed);
   }
 
   const itemsToUseLeft = itemInInv.amount - 1;
 
   const res = await (itemToUse as UsableItem).use(userId, guildId, itemToUseKey);
 
-  if ('error' in res) return i.reply(errorEmbed);
+  if ('error' in res) return intReply(i, errorEmbed);
   if ('custom' in res) return res.custom(i, embedColor);
 
   const resFields = res.fields || [];
@@ -76,11 +77,11 @@ export default async function izmantotRun(
     components: itemsToUseLeft && 'removedOnUse' in itemToUse && itemToUse.removedOnUse ? [componentRow] : [],
   });
 
-  const msg = await i.reply(replyMessage);
+  const msg = await intReply(i, replyMessage);
 
-  if (!itemsToUseLeft || ('removedOnUse' in itemToUse && !itemToUse.removedOnUse)) return;
+  if (!msg || !itemsToUseLeft || ('removedOnUse' in itemToUse && !itemToUse.removedOnUse)) return;
 
-  await buttonHandler(
+  buttonHandler(
     i,
     'izmantot',
     msg,

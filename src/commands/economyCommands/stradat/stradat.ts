@@ -24,6 +24,7 @@ import UserProfile from '../../../interfaces/UserProfile';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import midNightStr from '../../../embeds/helpers/midnightStr';
 import millisToReadableTime from '../../../embeds/helpers/millisToReadableTime';
+import intReply from '../../../utils/intReply';
 
 const darbiRun: Record<string, StradatInteractions> = { setnieks, veikala_darbinieks };
 
@@ -66,23 +67,24 @@ const stradat: Command = {
     const guildId = i.guildId!;
 
     const user = await findUser(userId, guildId);
-    if (!user) return i.reply(errorEmbed);
+    if (!user) return intReply(i, errorEmbed);
 
     const { jobPosition, dailyCooldowns, items } = user;
     let isExtraUse = false;
 
     if (!jobPosition) {
-      return i.reply(
+      return intReply(
+        i,
         ephemeralReply('Lai strādātu tev ir nepieciešama profesija, to var izvēlēties ar komandu `/vakances`')
       );
     }
 
     if (dailyCooldowns.stradat.extraTimesUsed >= MAX_EXTRA_DAILY) {
-      return i.reply(ephemeralReply('Tu esi sasniedzis gan parasto, gan papildus **šodienas** strādāšanas limitu'));
+      return intReply(i, ephemeralReply('Tu esi sasniedzis gan parasto, gan papildus **šodienas** strādāšanas limitu'));
     }
 
     if (!countFreeInvSlots(user)) {
-      return i.reply(ephemeralReply('Lai strādātu tev vajag vismaz vienu brīvu vietu inventārā'));
+      return intReply(i, ephemeralReply('Lai strādātu tev vajag vismaz vienu brīvu vietu inventārā'));
     }
 
     const darbsRun = chance(darbiRun[jobPosition]).obj as StradatVeids;
@@ -102,11 +104,12 @@ const stradat: Command = {
       }).embeds![0]
     );
 
-    let interactionReply: Message;
+    let interactionReply: Message | null;
 
     if (dailyCooldowns.stradat.timesUsed >= MAX_DAILY) {
       if (!items.find(item => item.name === 'kafija')) {
-        return i.reply(
+        return intReply(
+          i,
           ephemeralReply(
             'Tu esi sasniedzis maksimālo strādāšanas daudzumu šodien\n' +
               `Lai strādātu vēlreiz tev ir nepieciešama ${itemString(itemList.kafija)}`
@@ -131,20 +134,22 @@ const stradat: Command = {
         }).embeds![0]
       );
 
-      interactionReply = await i.reply({
+      interactionReply = await intReply(i, {
         content: '\u200b',
         embeds: [stradatVelreizEmbed],
         components: [stradatVelreizRow],
         fetchReply: true,
       });
     } else {
-      interactionReply = await i.reply({
+      interactionReply = await intReply(i, {
         content: '\u200b',
         embeds: [embed],
         components: [btnRow],
         fetchReply: true,
       });
     }
+
+    if (!interactionReply) return;
 
     const customIds = darbsRun.options.map(o => o.customId);
 

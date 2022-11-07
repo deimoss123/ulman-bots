@@ -21,6 +21,7 @@ import itemString from '../../embeds/helpers/itemString';
 import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
 import { UsableItemFunc } from '../../interfaces/Item';
 import UserProfile, { ItemAttributes } from '../../interfaces/UserProfile';
+import intReply from '../../utils/intReply';
 import itemList, { ItemKey } from '../itemList';
 
 export const kakisFedState: {
@@ -178,22 +179,22 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => {
       let currTime = Date.now();
 
       const user = await findUser(userId, guildId);
-      if (!user) return i.reply(errorEmbed);
+      if (!user) return intReply(i, errorEmbed);
 
       const row = components(user, specialItem!.attributes, currTime);
 
-      const msg = await i.reply({
+      const msg = await intReply(i, {
         content: specialItem!.attributes.fedUntil! < currTime ? undefined : '\u200b',
         embeds: embed(i, specialItem!.attributes, currTime),
         components: row,
         fetchReply: true,
       });
 
-      if (!row.length) return;
+      if (!msg || !row.length) return;
 
       let selectedFood = '';
 
-      await buttonHandler(
+      buttonHandler(
         i,
         'izmantot',
         msg,
@@ -208,7 +209,7 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => {
 
             const cat = user.specialItems.find(({ _id }) => _id === specialItem?._id);
             if (!cat) {
-              int.reply(ephemeralReply('Tavā inventārā vairs nav šis kaķis'));
+              intReply(int, ephemeralReply('Tavā inventārā vairs nav šis kaķis'));
               return { end: true };
             }
 
@@ -234,13 +235,13 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => {
 
             const hasFood = user.items.find(({ name }) => name === selectedFood);
             if (!hasFood) {
-              int.reply(ephemeralReply(`Tavā inventārā nav **${itemString(itemList[selectedFood])}**`));
+              intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString(itemList[selectedFood])}**`));
               return { end: true };
             }
 
             const catInInv = user.specialItems.find(({ _id }) => _id === specialItem?._id);
             if (!catInInv) {
-              int.reply(ephemeralReply(`Šis kaķis vairs nav tavā inventārā`));
+              intReply(int, ephemeralReply(`Šis kaķis vairs nav tavā inventārā`));
               return { end: true };
             }
 
@@ -251,7 +252,7 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => {
                   components: components(user, specialItem!.attributes, currTime),
                 },
                 after: () => {
-                  int.reply('Tu nevari pabarot šo kaķi, jo tas tikko nomira :(');
+                  intReply(int, 'Tu nevari pabarot šo kaķi, jo tas tikko nomira :(');
                 },
               };
             }
@@ -278,7 +279,7 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => {
                 components: components(userAfter, newItem.attributes, currTime),
               },
               after: () => {
-                int.reply(`Tu pabaroji kaķi`);
+                intReply(int, `Tu pabaroji kaķi`);
               },
             };
           }

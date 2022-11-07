@@ -5,6 +5,7 @@ import latiString from '../../embeds/helpers/latiString';
 import findUser from '../../economy/findUser';
 import errorEmbed from '../../embeds/errorEmbed';
 import addLati from '../../economy/addLati';
+import intReply from '../../utils/intReply';
 
 const _addLati: Command = {
   description: 'Pievienot latus',
@@ -33,11 +34,13 @@ const _addLati: Command = {
 
     const targetUser = await findUser(target.id, i.guildId!);
     if (!targetUser) {
-      await i.reply(errorEmbed);
-      return;
+      return intReply(i, errorEmbed);
     }
 
-    await i.reply(
+    await addLati(target.id, i.guildId!, latiToAdd);
+
+    intReply(
+      i,
       embedTemplate({
         i,
         description:
@@ -46,8 +49,6 @@ const _addLati: Command = {
         color: this.color,
       })
     );
-
-    await addLati(target.id, i.guildId!, latiToAdd);
   },
 };
 

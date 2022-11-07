@@ -10,6 +10,7 @@ import addItems from '../../../economy/addItems';
 import addLati from '../../../economy/addLati';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import setStats from '../../../economy/stats/setStats';
+import intReply from '../../../utils/intReply';
 
 export const PIRKT_PARDOT_NODOKLIS = 0.05;
 
@@ -77,7 +78,7 @@ const pardot: Command = {
 
     if (subCommandName === 'pec_nosaukuma') {
       const user = await findUser(userId, guildId);
-      if (!user) return i.reply(errorEmbed);
+      if (!user) return intReply(i, errorEmbed);
 
       const itemToSellId = i.options.getString('nosaukums')!;
       const amountToSell = i.options.getInteger('daudzums') ?? 1;
@@ -97,7 +98,9 @@ const pardot: Command = {
         setStats(userId, guildId, { soldShop: soldItemsValue, taxPaid }),
       ]);
 
-      await addLati(userId, guildId, soldItemsValue), i.reply(pardotEmbed(i, user, itemsToSell, soldItemsValue));
+      await addLati(userId, guildId, soldItemsValue);
+
+      intReply(i, pardotEmbed(i, user, itemsToSell, soldItemsValue));
     }
   },
 };

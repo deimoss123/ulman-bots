@@ -18,6 +18,7 @@ import Item, { AttributeItem, NotSellableItem } from '../../../interfaces/Item';
 import UsableItemReturn from '../../../interfaces/UsableItemReturn';
 import { SpecialItemInProfile } from '../../../interfaces/UserProfile';
 import itemList, { ItemKey } from '../../../items/itemList';
+import intReply from '../../../utils/intReply';
 
 function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: AttributeItem, selectedId?: string) {
   return [
@@ -81,12 +82,13 @@ export default async function izmantotRunSpecial(
   if (itemsInInv.length === 1) {
     const selectedItem = itemsInInv[0];
     const useRes = await itemObj.use(userId, guildId, itemKey, selectedItem);
-    if ('error' in useRes) return i.reply(errorEmbed);
+    if ('error' in useRes) return intReply(i, errorEmbed);
     if ('custom' in useRes) return useRes.custom(i, embedColor);
-    return i.reply(makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
+    return intReply(i, makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
   }
 
-  const msg = await i.reply(
+  const msg = await intReply(
+    i,
     embedTemplate({
       i,
       color: embedColor,
@@ -97,7 +99,9 @@ export default async function izmantotRunSpecial(
     })
   );
 
-  await buttonHandler(
+  if (!msg) return;
+
+  buttonHandler(
     i,
     'izmantot',
     msg,
@@ -121,7 +125,7 @@ export default async function izmantotRunSpecial(
         if (!selectedItem) {
           return {
             after: () => {
-              int.reply(ephemeralReply('Tavs inventāra saturs ir mainījies, šī manta nav tavā inventārā'));
+              intReply(int, ephemeralReply('Tavs inventāra saturs ir mainījies, šī manta nav tavā inventārā'));
             },
           };
         }
@@ -131,10 +135,10 @@ export default async function izmantotRunSpecial(
         return {
           end: true,
           after: () => {
-            if ('error' in useRes) return int.reply(errorEmbed);
+            if ('error' in useRes) return intReply(int, errorEmbed);
             if ('custom' in useRes) return useRes.custom(int, embedColor);
 
-            int.reply(makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
+            intReply(int, makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
           },
         };
       }

@@ -18,6 +18,7 @@ import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems'
 import setTirgus from '../../../economy/setTirgus';
 import midNightStr from '../../../embeds/helpers/midnightStr';
 import axios from 'axios';
+import intReply from '../../../utils/intReply';
 
 export function calcReqItems({ items, lati }: UserProfile, itemObj: Item) {
   const tirgusPrice = (itemObj as Item & TirgusItem).tirgusPrice;
@@ -75,18 +76,20 @@ const tirgus: Command = {
 
     const [user, tirgusListings] = await Promise.all([findUser(userId, guildId), getTirgusData()]);
 
-    if (!user || !tirgusListings) return i.reply(errorEmbed);
-    if (!tirgusListings) return i.reply(errorEmbed);
+    if (!user || !tirgusListings) return intReply(i, errorEmbed);
+    if (!tirgusListings) return intReply(i, errorEmbed);
 
     let selectedListing: string;
     const itemsBought = getBoughtItems(user);
 
-    const msg = await i.reply({
+    const msg = await intReply(i, {
       content: '\u200B',
       embeds: tirgusEmbed(i, tirgusListings, user, itemsBought),
       components: tirgusComponents(tirgusListings, user, itemsBought),
       fetchReply: true,
     });
+
+    if (!msg) return;
 
     buttonHandler(i, 'tirgus', msg, async int => {
       if (int.customId === 'tirgus_select_menu') {
@@ -116,7 +119,8 @@ const tirgus: Command = {
 
         const itemsBought = getBoughtItems(newUser);
         if (itemsBought.includes(selectedListing)) {
-          int.reply(
+          intReply(
+            int,
             ephemeralReply(`Tu nevari nopirkt **${itemString(itemObj, null, true)}**, jo tu jau šodien to esi nopircis`)
           );
           return { doNothing: true };
@@ -126,7 +130,7 @@ const tirgus: Command = {
           return {
             end: true,
             after: () => {
-              int.reply('Kļūda: šī manta vairs nepārdodas tirgū');
+              intReply(int, 'Kļūda: šī manta vairs nepārdodas tirgū');
             },
           };
         }
@@ -136,7 +140,7 @@ const tirgus: Command = {
           return {
             end: true,
             after: () => {
-              int.reply(ephemeralReply(`Tu nevari atļauties nopirkt **${itemString(itemObj, 1, true)}**`));
+              intReply(int, ephemeralReply(`Tu nevari atļauties nopirkt **${itemString(itemObj, 1, true)}**`));
             },
           };
         }
@@ -147,7 +151,8 @@ const tirgus: Command = {
             return {
               end: true,
               after: () => {
-                int.reply(
+                intReply(
+                  int,
                   ephemeralReply(`Tu nevari nopirkt **${itemString(itemObj, 1, true)}**, jo ${specialRes.reason}`)
                 );
               },
@@ -179,7 +184,7 @@ const tirgus: Command = {
             components: tirgusComponents(newListings, userAfter, itemsBought),
           },
           after: () => {
-            int.reply(smallEmbed(`Tu nopirki **${itemString(itemObj, 1, true)}**`, this.color));
+            intReply(int, smallEmbed(`Tu nopirki **${itemString(itemObj, 1, true)}**`, this.color));
           },
         };
       }

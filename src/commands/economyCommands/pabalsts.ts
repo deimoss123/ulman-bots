@@ -10,6 +10,7 @@ import latiString from '../../embeds/helpers/latiString';
 import xpAddedEmbed from '../../embeds/helpers/xpAddedEmbed';
 import smallEmbed from '../../embeds/smallEmbed';
 import Command from '../../interfaces/Command';
+import intReply from '../../utils/intReply';
 
 const okddInv = '<https://discord.gg/F4s5AwYTMy>';
 const okddId = '797584379685240882';
@@ -32,7 +33,8 @@ const pabalsts: Command = {
     const guildId = i.guildId!;
 
     if (guildId !== okddId) {
-      return i.reply(
+      return intReply(
+        i,
         smallEmbed(
           `Ikdienas pabalstu var saņemt tikai servera "OkDraudziņDauni" biedri\n` +
             `Ja vēlies pievienoties aktīvākajam UlmaņBota serverim, kā arī saņemt pabalstu, spied šeit: ${okddInv}`,
@@ -42,21 +44,21 @@ const pabalsts: Command = {
     }
 
     const user = await findUser(userId, guildId);
-    if (!user) return i.reply(errorEmbed);
+    if (!user) return intReply(i, errorEmbed);
 
     const { dailyCooldowns } = user;
 
     if (dailyCooldowns.pabalsts.timesUsed >= 1) {
-      return i.reply(ephemeralReply('Tu vari saņemt pabalstu tikai **1** (vienu) reizi dienā'));
+      return intReply(i, ephemeralReply('Tu vari saņemt pabalstu tikai **1** (vienu) reizi dienā'));
     }
 
     await addLati(userId, guildId, PABALSTS_LATI);
     await addDailyCooldown(userId, guildId, 'pabalsts');
 
     const leveledUser = await addXp(userId, guildId, PABALSTS_XP);
-    if (!leveledUser) return i.reply(errorEmbed);
+    if (!leveledUser) return intReply(i, errorEmbed);
 
-    i.reply({
+    intReply(i, {
       embeds: [
         embedTemplate({
           i,

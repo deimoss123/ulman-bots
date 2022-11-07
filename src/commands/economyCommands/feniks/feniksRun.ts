@@ -13,6 +13,7 @@ import smallEmbed from '../../../embeds/smallEmbed';
 import UserProfile from '../../../interfaces/UserProfile';
 import itemList from '../../../items/itemList';
 import interactionCache from '../../../utils/interactionCache';
+import intReply from '../../../utils/intReply';
 import { KazinoLikme } from '../rulete/rulete';
 import calcSpin from './calcSpin';
 import { FENIKS_MIN_LIKME } from './feniks';
@@ -37,7 +38,8 @@ export default async function feniksRun(
 
   if (!isFree) {
     if (lati < FENIKS_MIN_LIKME) {
-      return i.reply(
+      return intReply(
+        i,
         ephemeralReply(
           `Tev vajag vismaz ${latiString(FENIKS_MIN_LIKME, true, true)} lai grieztu aparātu\n` +
             `Tev ir ${latiString(lati, false, true)}`
@@ -46,7 +48,8 @@ export default async function feniksRun(
     }
 
     if (typeof likme === 'number' && lati < likme) {
-      return i.reply(
+      return intReply(
+        i,
         ephemeralReply(
           `Tu nepietiek naudas lai griezt aparātu ar likmi ${latiString(likme, false, true)}\n` +
             `Tev ir ${latiString(lati, false, true)}`
@@ -57,7 +60,8 @@ export default async function feniksRun(
     if (likme === 'virve') {
       const hasVirve = items.find(item => item.name === 'virve');
       if (!hasVirve) {
-        return i.reply(
+        return intReply(
+          i,
           ephemeralReply(
             `Lai grieztu aparātu ar likmi \`virve\`, tev inventārā ir jābūt **${itemString(
               itemList.virve
@@ -80,11 +84,11 @@ export default async function feniksRun(
 
   if (isFree) {
     user = await addItems(userId, guildId, { [freeSpinName!]: -1 });
-    if (!user) return i.reply(errorEmbed);
+    if (!user) return intReply(i, errorEmbed);
   }
 
   const promises: Promise<any>[] = [
-    i.reply({
+    intReply(i, {
       content: '\u200B',
       embeds: feniksEmbed(i, likme, likmeLati, DEFAULT_EMOJI_COUNT, isFree),
       components: feniksComponents(likme, user, isFree, true),
@@ -107,10 +111,12 @@ export default async function feniksRun(
 
   const [msg, userAfter] = (await Promise.all(promises)) as [Message, UserProfile];
   if (!userAfter) {
-    return i.editReply({
-      embeds: smallEmbed(errorEmbed.content!, commandColors.feniks).embeds,
-      components: [],
-    });
+    return i
+      .editReply({
+        embeds: smallEmbed(errorEmbed.content!, commandColors.feniks).embeds,
+        components: [],
+      })
+      .catch(_ => _);
   }
 
   // testSpins(1_000_000);
@@ -137,7 +143,7 @@ export default async function feniksRun(
 
         const itemInInv = user.items.find(item => item.name === itemName);
         if (!itemInInv || itemInInv.amount < 1) {
-          int.reply(ephemeralReply(`Tavā inventārā nav **${itemString(itemObj)}**`));
+          intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString(itemObj)}**`));
           return { end: true };
         }
 
@@ -162,6 +168,6 @@ export default async function feniksRun(
     i.editReply({
       embeds: feniksEmbed(i, likme, likmeLati, DEFAULT_EMOJI_COUNT, isFree, spinRes, latiWon),
       components: feniksComponents(likme, userAfter, isFree),
-    });
+    }).catch(_ => _);
   }, 1500);
 }

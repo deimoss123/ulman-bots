@@ -7,6 +7,7 @@ import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
 import itemList from '../../../items/itemList';
 import pardotRunSpecial from './pardotRunSpecial';
 import { emptyInvEmbed } from './pardot';
+import intReply from '../../../utils/intReply';
 
 interface PardotValidateReturn {
   key: string;
@@ -22,18 +23,18 @@ const pardotValidate = async (
   embedColor: number
 ): Promise<PardotValidateReturn | undefined> => {
   if (itemToSellKey === 'no-items-inv') {
-    await i.reply(emptyInvEmbed());
+    await intReply(i, emptyInvEmbed());
     return;
   }
 
   const itemToSell = itemList[itemToSellKey];
   if (!itemToSell) {
-    await i.reply(wrongKeyEmbed);
+    await intReply(i, wrongKeyEmbed);
     return;
   }
 
   if ('notSellable' in itemToSell) {
-    await i.reply(ephemeralReply(`**${itemString(itemToSell, null, true)}** nevar pārdot`));
+    await intReply(i, ephemeralReply(`**${itemString(itemToSell, null, true)}** nevar pārdot`));
     return;
   }
 
@@ -42,7 +43,7 @@ const pardotValidate = async (
   if ('attributes' in itemToSell) {
     const specialItemsInv = specialItems.filter(item => item.name === itemToSellKey);
     if (!specialItemsInv.length) {
-      await i.reply(ephemeralReply(`Tavā inventārā nav **${itemString(itemToSell)}**`));
+      await intReply(i, ephemeralReply(`Tavā inventārā nav **${itemString(itemToSell)}**`));
       return;
     }
 
@@ -52,7 +53,7 @@ const pardotValidate = async (
 
   const itemInInv = items.find(({ name }) => name === itemToSellKey);
   if (!itemInInv) {
-    await i.reply(ephemeralReply(`Tavā inventārā nav **${itemString(itemToSell)}**`));
+    await intReply(i, ephemeralReply(`Tavā inventārā nav **${itemString(itemToSell)}**`));
     return;
   }
 

@@ -17,6 +17,7 @@ import Item from '../../../interfaces/Item';
 import UserProfile from '../../../interfaces/UserProfile';
 import setStats from '../../../economy/stats/setStats';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
+import intReply from '../../../utils/intReply';
 
 export function cantPayTaxEmbed(itemToGive: Item, amountToGive: number, totalTax: number, user: UserProfile) {
   return ephemeralReply(
@@ -75,18 +76,18 @@ const iedot: Command = {
     const guildId = i.guildId!;
 
     if (target.id === userId) {
-      return i.reply(ephemeralReply('Tu nevari iedot sev'));
+      return intReply(i, ephemeralReply('Tu nevari iedot sev'));
     }
 
     if (target.id === i.client.user?.id) {
-      return i.reply(ephemeralReply('Tu nevari iedot Valsts bankai'));
+      return intReply(i, ephemeralReply('Tu nevari iedot Valsts bankai'));
     }
 
     const itemToGive = itemList[itemToGiveKey];
-    if (!itemToGive) return i.reply(wrongKeyEmbed);
+    if (!itemToGive) return intReply(i, wrongKeyEmbed);
 
     const [user, targetUser] = await Promise.all([findUser(userId, guildId), findUser(target.id, guildId)]);
-    if (!user || !targetUser) return i.reply(errorEmbed);
+    if (!user || !targetUser) return intReply(i, errorEmbed);
 
     const { items, specialItems, status } = user;
     const hasJuridisks = status.juridisks > Date.now();
@@ -94,14 +95,14 @@ const iedot: Command = {
     if ('attributes' in itemToGive) {
       const specialItemInv = specialItems.filter(({ name }) => name === itemToGiveKey);
       if (!specialItemInv.length) {
-        return i.reply(ephemeralReply(`Tavā inventārā nav ${itemString(itemToGive)}`));
+        return intReply(i, ephemeralReply(`Tavā inventārā nav ${itemString(itemToGive)}`));
       }
       return iedotRunSpecial(i, user, targetUser, itemToGiveKey, specialItemInv, hasJuridisks);
     }
 
     const itemInInv = items.find(({ name }) => name === itemToGiveKey);
     if (!itemInInv) {
-      return i.reply(ephemeralReply(`Tavā inventārā nav ${itemString(itemToGive)}`));
+      return intReply(i, ephemeralReply(`Tavā inventārā nav ${itemString(itemToGive)}`));
     }
 
     if (itemInInv.amount < amountToGive) {
@@ -111,11 +112,11 @@ const iedot: Command = {
     const totalTax = hasJuridisks ? 0 : Math.floor(itemToGive.value * amountToGive * user.giveTax) || 1;
 
     if (user.lati < totalTax) {
-      return i.reply(cantPayTaxEmbed(itemToGive, amountToGive, totalTax, user));
+      return intReply(i, cantPayTaxEmbed(itemToGive, amountToGive, totalTax, user));
     }
 
     if (amountToGive > countFreeInvSlots(targetUser)) {
-      return i.reply(noInvSpaceEmbed(targetUser, itemToGive, amountToGive));
+      return intReply(i, noInvSpaceEmbed(targetUser, itemToGive, amountToGive));
     }
 
     await Promise.all([
@@ -130,11 +131,12 @@ const iedot: Command = {
     }
 
     const targetUserAfter = await findUser(target.id, guildId);
-    if (!targetUserAfter) return i.reply(errorEmbed);
+    if (!targetUserAfter) return intReply(i, errorEmbed);
 
     const targetUserItem = targetUserAfter.items.find(({ name }) => name === itemToGiveKey)!;
 
-    await i.reply(
+    intReply(
+      i,
       embedTemplate({
         i,
         content: `<@${target.id}>`,

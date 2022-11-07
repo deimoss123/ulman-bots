@@ -18,6 +18,7 @@ import { DailyCooldowns } from '../../interfaces/UserProfile';
 import chance, { ChanceValue } from '../../items/helpers/chance';
 import countFreeInvSlots from '../../items/helpers/countFreeInvSlots';
 import itemList, { ItemKey } from '../../items/itemList';
+import intReply from '../../utils/intReply';
 
 interface UbagotRes {
   chance: ChanceValue;
@@ -102,16 +103,16 @@ const ubagot: Command = {
     const guildId = i.guildId!;
 
     const user = await findUser(userId, guildId);
-    if (!user) return i.reply(errorEmbed);
+    if (!user) return intReply(i, errorEmbed);
 
     const { dailyCooldowns } = user;
 
     if (dailyCooldowns.ubagot.timesUsed >= MAX_DAILY) {
-      return i.reply(ephemeralReply('Tu esi sasniedzis maksimālo ubagošanas daudzumu šodien'));
+      return intReply(i, ephemeralReply('Tu esi sasniedzis maksimālo ubagošanas daudzumu šodien'));
     }
 
     if (!countFreeInvSlots(user)) {
-      return i.reply(ephemeralReply('Lai ubagotu tev vajag vismaz vienu brīvu vietu inventārā'));
+      return intReply(i, ephemeralReply('Lai ubagotu tev vajag vismaz vienu brīvu vietu inventārā'));
     }
 
     const res = chance(ubagotChances);
@@ -132,9 +133,9 @@ const ubagot: Command = {
     const xpToAdd = Math.round(Math.random() * (XP_MAX - XP_MIN)) + XP_MIN;
 
     const leveledUser = await addXp(userId, guildId, xpToAdd);
-    if (!leveledUser) return i.reply(errorEmbed);
+    if (!leveledUser) return intReply(i, errorEmbed);
 
-    i.reply({
+    intReply(i, {
       embeds: [
         ubagotEmbed(i, leveledUser.user.dailyCooldowns, obj, earnedLati),
         xpAddedEmbed(leveledUser, xpToAdd, 'Par ubagošanu tu saņēmi'),

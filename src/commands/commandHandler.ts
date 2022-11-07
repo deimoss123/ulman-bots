@@ -8,10 +8,11 @@ import findUser from '../economy/findUser';
 import millisToReadableTime from '../embeds/helpers/millisToReadableTime';
 import resetDailyCooldown from '../economy/resetDailyCooldown';
 import smallEmbed from '../embeds/smallEmbed';
+import intReply from '../utils/intReply';
 
 export default async function commandHandler(i: ChatInputCommandInteraction) {
   if (!i.guild) {
-    return i.reply('UlmaņBota komandas var izmantot tikai serveros');
+    return intReply(i, 'UlmaņBota komandas var izmantot tikai serveros');
   }
 
   if (i.channel?.type !== ChannelType.GuildText) return;
@@ -20,7 +21,7 @@ export default async function commandHandler(i: ChatInputCommandInteraction) {
     !i.guild.members.me!.permissionsIn(i.channelId).has(PermissionsBitField.Flags.UseExternalEmojis) ||
     !i.guild.roles.everyone.permissionsIn(i.channelId).has(PermissionsBitField.Flags.UseExternalEmojis)
   ) {
-    return i.reply(smallEmbed('UlmaņBotam šajā kanālā trūkst atļauja **"Use External Emojis"**', 0xffffff));
+    return intReply(i, smallEmbed('UlmaņBotam šajā kanālā trūkst atļauja **"Use External Emojis"**', 0xffffff));
   }
 
   const userId = i.user.id;
@@ -33,7 +34,8 @@ export default async function commandHandler(i: ChatInputCommandInteraction) {
     const cachedCommand = interactionCache.get(`${userId}-${guildId}`)?.get(command.data.name);
     if (cachedCommand?.isInteractionActive) {
       const { channelId, messageId } = cachedCommand.collector;
-      return i.reply(
+      return intReply(
+        i,
         ephemeralReply(
           `Šī komanda jau ir **[aktīva](https://discord.com/channels/${guildId}/${channelId}/${messageId})**`
         )
@@ -41,7 +43,7 @@ export default async function commandHandler(i: ChatInputCommandInteraction) {
     }
 
     const user = await findUser(userId, guildId);
-    if (!user) return i.reply(errorEmbed);
+    if (!user) return intReply(i, errorEmbed);
 
     if (command.cooldown) {
       const currentCooldown = user.timeCooldowns.find(c => c.name === command?.data.name);
@@ -49,7 +51,8 @@ export default async function commandHandler(i: ChatInputCommandInteraction) {
       if (currentCooldown) {
         const timePassed = Date.now() - currentCooldown.lastUsed;
         if (timePassed < command.cooldown)
-          return i.reply(
+          return intReply(
+            i,
             ephemeralReply(
               `Komandu **/${command.data.name}** tu varēsi izmantot pēc\n` +
                 `\`\`\`${millisToReadableTime(command.cooldown - timePassed)}\`\`\``
@@ -68,7 +71,7 @@ export default async function commandHandler(i: ChatInputCommandInteraction) {
 
   // ja testa komandas KAUT KĀDĀ veidā nokļūst mirstīgu cilvēku rokās, šis neļaus tām strādāt
   if (userId !== process.env.DEV_ID) {
-    return i.reply(errorEmbed);
+    return intReply(i, errorEmbed);
   }
 
   // komandas testēšanai, privātajam serverim

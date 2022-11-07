@@ -18,6 +18,7 @@ import itemString from '../../../embeds/helpers/itemString';
 import latiString from '../../../embeds/helpers/latiString';
 import itemList from '../../../items/itemList';
 import interactionCache from '../../../utils/interactionCache';
+import intReply from '../../../utils/intReply';
 import generateRulete, { GenerateRuleteRes, RulColors } from './generateRulete';
 import { KazinoLikme } from './rulete';
 import { RulPosition, rulPositions } from './ruleteData';
@@ -109,12 +110,13 @@ export default async function ruleteRun(
   const guildId = i.guildId!;
 
   const user = await findUser(userId, guildId);
-  if (!user) return i.reply(errorEmbed);
+  if (!user) return intReply(i, errorEmbed);
 
   const { lati, items } = user;
 
   if (lati < RULETE_MIN_LIKME) {
-    return i.reply(
+    return intReply(
+      i,
       ephemeralReply(
         `Tev vajag vismaz ${latiString(RULETE_MIN_LIKME, true, true)} lai grieztu ruleti\n` +
           `Tev ir ${latiString(lati, false, true)}`
@@ -123,7 +125,8 @@ export default async function ruleteRun(
   }
 
   if (typeof likme === 'number' && lati < likme) {
-    return i.reply(
+    return intReply(
+      i,
       ephemeralReply(
         `Tu nepietiek naudas lai griezt ruleti ar likmi ${latiString(likme, false, true)}\n` +
           `Tev ir ${latiString(lati, false, true)}`
@@ -134,7 +137,8 @@ export default async function ruleteRun(
   if (likme === 'virve') {
     const hasVirve = items.find(item => item.name === 'virve');
     if (!hasVirve) {
-      return i.reply(
+      return intReply(
+        i,
         ephemeralReply(
           `Lai grieztu ruleti ar likmi \`virve\`, tev inventārā ir jābūt **${itemString(
             itemList.virve
@@ -156,7 +160,7 @@ export default async function ruleteRun(
 
   const [userAfter, msg] = await Promise.all([
     addLati(userId, guildId, latiToAdd),
-    i.reply({
+    intReply(i, {
       content: '\u200B',
       embeds: ruleteEmbed(i, position, likme, likmeLati, rulRes, true),
       components: rulComponents(position, likme, lati, true),
@@ -170,6 +174,8 @@ export default async function ruleteRun(
       rulSpinCount: 1,
     }),
   ]);
+
+  if (!userAfter || !msg) return;
 
   buttonHandler(
     i,
@@ -197,6 +203,6 @@ export default async function ruleteRun(
     i.editReply({
       embeds: ruleteEmbed(i, position, likme, likmeLati, rulRes, false),
       components: rulComponents(position, likme, userAfter?.lati),
-    });
+    }).catch(_ => _);
   }, 1500);
 }

@@ -19,6 +19,7 @@ import Command from '../../../interfaces/Command';
 import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import itemList, { ItemKey } from '../../../items/itemList';
+import intReply from '../../../utils/intReply';
 import maksekeresData from './makskeresData';
 import syncFishing from './syncFishing';
 import zvejotComponents from './zvejotComponents';
@@ -59,10 +60,11 @@ const zvejot: Command = {
     let selectedFishingRodId = '';
 
     const userCheckLevel = await findUser(userId, guildId);
-    if (!userCheckLevel) return i.reply(errorEmbed);
+    if (!userCheckLevel) return intReply(i, errorEmbed);
 
     if (userCheckLevel.level < ZVEJOT_MIN_LEVEL) {
-      return i.reply(
+      return intReply(
+        i,
         ephemeralReply(
           `Lai zvejotu tev ir nepieciešams **${ZVEJOT_MIN_LEVEL}**. līmenis\n` +
             'Savu līmeni var apskatīt ar komandu `/profils`'
@@ -71,16 +73,18 @@ const zvejot: Command = {
     }
 
     const user = await syncFishing(userId, guildId);
-    if (!user) return i.reply(errorEmbed);
+    if (!user) return intReply(i, errorEmbed);
 
-    const msg = await i.reply({
+    const msg = await intReply(i, {
       content: '\u200B',
       embeds: zvejotEmbed(i, user),
       components: zvejotComponents(user, selectedFishingRod),
       fetchReply: true,
     });
 
-    await buttonHandler(
+    if (!msg) return;
+
+    buttonHandler(
       i,
       'zvejot',
       msg,
@@ -108,7 +112,7 @@ const zvejot: Command = {
             const rod = user.specialItems.find(item => item._id === selectedFishingRodId);
 
             if (!rod) {
-              int.reply(ephemeralReply('Hmmm, šī maksķere ir maģiski pazudusi no tava inventāra'));
+              intReply(int, ephemeralReply('Hmmm, šī maksķere ir maģiski pazudusi no tava inventāra'));
               return { end: true };
             }
 
@@ -148,7 +152,8 @@ const zvejot: Command = {
                   components: zvejotComponents(user),
                 },
                 after: () => {
-                  int.reply(
+                  intReply(
+                    int,
                     ephemeralReply(
                       `Tev nav vietas inventārā lai savāktu **${fishCount}** mantas no copes\n` +
                         `Tev ir **${freeSlots}** brīvas vietas`
@@ -163,7 +168,7 @@ const zvejot: Command = {
               for (const [name, amount] of specialItemsToAdd) {
                 const checkRes = checkUserSpecialItems(user, name, amount);
                 if (!checkRes.valid) {
-                  int.reply(ephemeralReply(`Tu nevari savāk zveju, jo ${checkRes.reason}`));
+                  intReply(int, ephemeralReply(`Tu nevari savāk zveju, jo ${checkRes.reason}`));
                   return { end: true };
                 }
               }
@@ -183,7 +188,7 @@ const zvejot: Command = {
                 components: zvejotComponents(leveledUser.user),
               },
               after: () => {
-                int.reply({
+                intReply(int, {
                   embeds: [
                     new EmbedBuilder().setColor(this.color).setFields({
                       name: 'Tu savāci copi:',
@@ -209,13 +214,13 @@ const zvejot: Command = {
             if (!selectedRod) return { error: true };
 
             if (!countFreeInvSlots(user)) {
-              int.reply(ephemeralReply('Tu nevari noņemt maksķeri, jo tev inventārā nav vietas'));
+              intReply(int, ephemeralReply('Tu nevari noņemt maksķeri, jo tev inventārā nav vietas'));
               return { end: true };
             }
 
             const checkRes = checkUserSpecialItems(user, selectedRod);
             if (!checkRes.valid) {
-              int.reply(ephemeralReply(`Tu nevari noņemt makšķeri, jo ${checkRes.reason}`));
+              intReply(int, ephemeralReply(`Tu nevari noņemt makšķeri, jo ${checkRes.reason}`));
               return { end: true };
             }
 
@@ -237,7 +242,7 @@ const zvejot: Command = {
                 components: zvejotComponents(userAfter, selectedFishingRodId),
               },
               after: () => {
-                int.reply({
+                intReply(int, {
                   embeds: [
                     new EmbedBuilder()
                       .setDescription('Tev inventāram tikai pievienota:')
@@ -259,7 +264,7 @@ const zvejot: Command = {
             const selectedRod = user.fishing.selectedRod;
 
             if (!maksekeresData[selectedRod].repairable) {
-              int.reply(ephemeralReply(`${itemString(itemList[selectedRod])} nav salabojama`));
+              intReply(int, ephemeralReply(`${itemString(itemList[selectedRod])} nav salabojama`));
               return { doNothing: true };
             }
 
@@ -275,7 +280,8 @@ const zvejot: Command = {
                   components: zvejotComponents(user),
                 },
                 after: () => {
-                  int.reply(
+                  intReply(
+                    int,
                     ephemeralReply(
                       `Tev nepietiek nauda lai salabotu makšķeri - ${latiString(repairCost, false, true)}\n` +
                         `Tev ir ${latiString(lati, false, true)}`
@@ -299,7 +305,8 @@ const zvejot: Command = {
                 components: zvejotComponents(userAfter),
               },
               after: () => {
-                int.reply(
+                intReply(
+                  int,
                   smallEmbed(
                     `Tu salaboji ${bold(itemString(itemList[fishing.selectedRod!], null, true))} - ` +
                       latiString(repairCost),

@@ -27,6 +27,7 @@ import pardotRun from './pardot/pardotRun';
 import iconEmojis from '../../embeds/iconEmojis';
 import { INCREASE_CAP_1 } from '../../items/usableItems/mugursoma';
 import { INCREASE_CAP_2 } from '../../items/usableItems/divaina_mugursoma';
+import intReply from '../../utils/intReply';
 
 export type ItemType = 'not_usable' | 'usable' | 'special' | 'not_sellable';
 
@@ -258,10 +259,10 @@ const inventars: Command = {
     const target = i.options.getUser('lietotājs') || i.user;
 
     const targetUser = await findUser(target.id, i.guildId!);
-    if (!targetUser) return i.reply(errorEmbed);
+    if (!targetUser) return intReply(i, errorEmbed);
 
     if (target.id === i.client.user?.id) {
-      return i.reply(ephemeralReply('Tu nevari apskatīt Valsts Bankas inventāru'));
+      return intReply(i, ephemeralReply('Tu nevari apskatīt Valsts Bankas inventāru'));
     }
 
     const { fields, itemTypesInv } = mapItems(targetUser);
@@ -269,12 +270,13 @@ const inventars: Command = {
     const totalPages = Math.ceil(fields.length / INV_PAGE_SIZE);
     let currentPage = 0;
 
-    const msg = await i.reply({
+    const msg = await intReply(i, {
       content: totalPages > 1 ? '\u200b' : undefined,
       embeds: invEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
       components: invComponents(i, targetUser, fields, currentPage, totalPages),
       fetchReply: true,
     });
+    if (!msg) return;
 
     const buttonsPressed: ('visas' | 'neizmantojamas')[] = [];
 

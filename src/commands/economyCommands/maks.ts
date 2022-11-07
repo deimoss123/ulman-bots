@@ -6,6 +6,7 @@ import errorEmbed from '../../embeds/errorEmbed';
 import latiString from '../../embeds/helpers/latiString';
 import userString from '../../embeds/helpers/userString';
 import commandColors from '../../embeds/commandColors';
+import intReply from '../../utils/intReply';
 
 const maks: Command = {
   description: 'Apskatīties savu vai kāda lietotāja maku (latu daudzumu)',
@@ -25,13 +26,14 @@ const maks: Command = {
     const target = i.options.getUser('lietotājs') ?? i.user;
 
     const user = await findUser(target.id, i.guildId!);
-    if (!user) return i.reply(errorEmbed);
+    if (!user) return intReply(i, errorEmbed);
 
     let targetText = 'Tev';
     if (target.id === i.client.user?.id) targetText = 'Valsts bankai';
     else if (target.id !== i.user.id) targetText = `${userString(target)}`;
 
-    await i.reply(
+    intReply(
+      i,
       embedTemplate({
         i,
         title: 'Maks',

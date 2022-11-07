@@ -19,6 +19,7 @@ import xpAddedEmbed from '../../embeds/helpers/xpAddedEmbed';
 import iconEmojis from '../../embeds/iconEmojis';
 import { UsableItemFunc } from '../../interfaces/Item';
 import { ItemInProfile } from '../../interfaces/UserProfile';
+import intReply from '../../utils/intReply';
 import itemList, { ItemKey } from '../itemList';
 
 const VELO_XP = 10;
@@ -95,17 +96,19 @@ const velo: UsableItemFunc = async (userId, guildId) => {
   return {
     custom: async (i, color) => {
       const user = await findUser(userId, guildId);
-      if (!user) return i.reply(errorEmbed);
+      if (!user) return intReply(i, errorEmbed);
 
       const reqItemsInv = calcReqItems(user.items);
 
-      const msg = await i.reply({
+      const msg = await intReply(i, {
         embeds: makeEmbed(i, reqItemsInv.items, color),
         components: makeComponents(reqItemsInv.hasAll),
         fetchReply: true,
       });
 
-      await buttonHandler(
+      if (!msg) return;
+
+      buttonHandler(
         i,
         'izmantot_velo',
         msg,
@@ -119,7 +122,7 @@ const velo: UsableItemFunc = async (userId, guildId) => {
 
             const { hasAll } = calcReqItems(user.items);
             if (!hasAll) {
-              int.reply(ephemeralReply('Tev nav nepieciešamās detaļas, inventāra saturs ir mainījies'));
+              intReply(int, ephemeralReply('Tev nav nepieciešamās detaļas, inventāra saturs ir mainījies'));
               return { end: true };
             }
 
@@ -142,7 +145,7 @@ const velo: UsableItemFunc = async (userId, guildId) => {
                 components: makeComponents(hasAll2),
               },
               after: () => {
-                int.reply({
+                intReply(int, {
                   embeds: [
                     new EmbedBuilder()
                       .setDescription(

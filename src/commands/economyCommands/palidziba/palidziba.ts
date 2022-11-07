@@ -3,6 +3,7 @@ import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
 import errorEmbed from '../../../embeds/errorEmbed';
 import Command from '../../../interfaces/Command';
+import intReply from '../../../utils/intReply';
 import { commandList } from '../../commandList';
 import jaunumi from './jaunumi/jaunumi';
 
@@ -48,9 +49,10 @@ const palidziba: Command = {
       case 'komanda': {
         const cmdName = i.options.getString('nosaukums');
         const cmd = commandList.find(c => c.data.name === cmdName);
-        if (!cmd) return i.reply(errorEmbed);
+        if (!cmd) return intReply(i, errorEmbed);
 
-        return i.reply(
+        return intReply(
+          i,
           embedTemplate({
             i,
             color: this.color,

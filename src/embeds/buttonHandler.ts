@@ -11,6 +11,7 @@ import {
   SelectMenuInteraction,
 } from 'discord.js';
 import interactionCache, { InteractionInCache } from '../utils/interactionCache';
+import intReply from '../utils/intReply';
 import errorEmbed from './errorEmbed';
 
 export interface CallbackReturn {
@@ -56,7 +57,7 @@ export default async function buttonHandler(
 
   collector.on('collect', async componentInteraction => {
     if (componentInteraction.user.id !== interaction.user.id) {
-      componentInteraction.reply({
+      intReply(componentInteraction, {
         content: 'Nav pieklājīgi spaidīt svešu cilvēku pogas :^)',
         ephemeral: true,
       });
@@ -74,7 +75,7 @@ export default async function buttonHandler(
     if (res?.doNothing) return;
 
     if (res.error) {
-      componentInteraction.reply(errorEmbed);
+      intReply(componentInteraction, errorEmbed);
       return;
     }
 
@@ -86,12 +87,16 @@ export default async function buttonHandler(
     // neliela šizofrēnija
     if (res?.edit) {
       if (res?.after) {
-        currentMessage = await interaction.editReply(res.edit as MessagePayload);
+        const editRes = await interaction.editReply(res.edit as MessagePayload).catch(() => null);
+        if (editRes) currentMessage = editRes;
       } else {
-        currentMessage = await componentInteraction.update({
-          ...(res.edit as InteractionUpdateOptions),
-          fetchReply: true,
-        });
+        const updateRes = await componentInteraction
+          .update({
+            ...(res.edit as InteractionUpdateOptions),
+            fetchReply: true,
+          })
+          .catch(() => null);
+        if (updateRes) currentMessage = updateRes;
       }
     }
 

@@ -8,6 +8,7 @@ import vakancesComponents from './vakancesComponents';
 import buttonHandler from '../../../embeds/buttonHandler';
 import setJobPosition from '../../../economy/setJobPosition';
 import smallEmbed from '../../../embeds/smallEmbed';
+import intReply from '../../../utils/intReply';
 
 interface JobPosData {
   name: string;
@@ -58,13 +59,14 @@ const vakances: Command = {
     const guildId = i.guildId!;
 
     const user = await findUser(userId, guildId);
-    if (!user) return i.reply(errorEmbed);
+    if (!user) return intReply(i, errorEmbed);
 
     const { jobPosition, level } = user;
 
     let chosenJob = '';
 
-    const msg = await i.reply(
+    const msg = await intReply(
+      i,
       embedTemplate({
         i,
         title: 'Vakances',
@@ -90,7 +92,9 @@ const vakances: Command = {
       })
     );
 
-    await buttonHandler(
+    if (!msg) return;
+
+    buttonHandler(
       i,
       'vakances',
       msg,
@@ -116,7 +120,8 @@ const vakances: Command = {
               after: async () => {
                 await Promise.all([
                   setJobPosition(userId, guildId, chosenJob),
-                  int.reply(
+                  intReply(
+                    int,
                     smallEmbed(
                       `Tu nomainīji profesiju uz ` +
                         `<:${chosenJob}:${JobPositions[chosenJob]!.emojiId}> ` +

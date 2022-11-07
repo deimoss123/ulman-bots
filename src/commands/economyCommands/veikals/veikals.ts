@@ -15,6 +15,7 @@ import getItemPrice from '../../../items/helpers/getItemPrice';
 import millisToReadableTime from '../../../embeds/helpers/millisToReadableTime';
 import midNightStr from '../../../embeds/helpers/midnightStr';
 import getDiscounts from '../../../items/helpers/getDiscounts';
+import intReply from '../../../utils/intReply';
 
 const veikals: Command = {
   description:
@@ -30,7 +31,7 @@ const veikals: Command = {
     const guildId = i.guildId!;
 
     const [user, discounts] = await Promise.all([findUser(userId, guildId), getDiscounts()]);
-    if (!user || !discounts) return i.reply(errorEmbed);
+    if (!user || !discounts) return intReply(i, errorEmbed);
 
     const shopItems = Object.entries(itemList)
       .filter(obj => obj[1].categories.includes(ItemCategory.VEIKALS))
@@ -58,7 +59,8 @@ const veikals: Command = {
     const resetTime = new Date().setHours(24, 0, 0, 0);
     const timeUntilReset = resetTime - Date.now();
 
-    const msg = await i.reply(
+    const msg = await intReply(
+      i,
       embedTemplate({
         i,
         title: 'Veikals',
@@ -71,6 +73,7 @@ const veikals: Command = {
         components: veikalsComponents(shopItems, user, discounts),
       })
     );
+    if (!msg) return;
 
     let chosenItem = '';
     let chosenAmount = 1;

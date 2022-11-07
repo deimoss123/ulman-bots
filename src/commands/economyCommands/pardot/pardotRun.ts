@@ -25,6 +25,7 @@ import UserProfile, { ItemAttributes } from '../../../interfaces/UserProfile';
 import itemList, { ItemKey } from '../../../items/itemList';
 import { emptyInvEmbed, PIRKT_PARDOT_NODOKLIS } from './pardot';
 import removeItemsById from '../../../economy/removeItemsById';
+import intReply from '../../../utils/intReply';
 
 interface ItemsToSell {
   name: string;
@@ -93,18 +94,18 @@ export default async function pardotRun(
   const guildId = i.guildId!;
 
   const user = await findUser(userId, guildId);
-  if (!user) return i.reply(errorEmbed);
+  if (!user) return intReply(i, errorEmbed);
 
   const { items, specialItems } = user;
 
   if (!items.length && !specialItems.length) {
-    return i.reply(emptyInvEmbed());
+    return intReply(i, emptyInvEmbed());
   }
 
   if (type === 'neizmantojamās') {
     const unusuableItems = items.filter(item => !('use' in itemList[item.name]));
     if (!unusuableItems.length) {
-      return i.reply(ephemeralReply('Tavā inventārā nav neviena neizmantojama manta'));
+      return intReply(i, ephemeralReply('Tavā inventārā nav neviena neizmantojama manta'));
     }
 
     const soldItemsValue = unusuableItems.reduce((p, c) => p + c.amount * itemList[c.name].value, 0);
@@ -123,21 +124,23 @@ export default async function pardotRun(
 
     await addItems(userId, guildId, itemsToSellObj);
 
-    return i.reply(pardotEmbed(i, user, itemsToSell, soldItemsValue));
+    return intReply(i, pardotEmbed(i, user, itemsToSell, soldItemsValue));
   }
 
   // visas
   if (user.specialItems.length && !user.specialItems.find(({ name }) => !('notSellable' in itemList[name]))) {
-    return i.reply(ephemeralReply('Tavā inventārā nav neviena pārdodama manta'));
+    return intReply(i, ephemeralReply('Tavā inventārā nav neviena pārdodama manta'));
   }
 
-  const msg = await i.reply({
+  const msg = await intReply(i, {
     embeds: smallEmbed('Vai tiešām gribi pārdot **VISAS** savas mantas? (bīstami)', commandColors.pardot).embeds,
     components: pardotVisuComponents(),
     fetchReply: true,
   });
 
-  await buttonHandler(
+  if (!msg) return;
+
+  buttonHandler(
     i,
     'pardot',
     msg,
@@ -159,7 +162,7 @@ export default async function pardotRun(
         const { lati, items, specialItems } = user;
 
         if (!items.length && !specialItems.length) {
-          int.reply(emptyInvEmbed());
+          intReply(int, emptyInvEmbed());
           return { end: true };
         }
 
@@ -173,7 +176,7 @@ export default async function pardotRun(
         ];
 
         if (!itemsToSell.length) {
-          int.reply(ephemeralReply('Tavā inventārā nav neviena pārdodama manta'));
+          intReply(int, ephemeralReply('Tavā inventārā nav neviena pārdodama manta'));
           return { end: true };
         }
 

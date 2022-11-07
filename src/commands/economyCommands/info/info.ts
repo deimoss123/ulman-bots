@@ -11,6 +11,7 @@ import Item, { TirgusItem } from '../../../interfaces/Item';
 import getDiscounts from '../../../items/helpers/getDiscounts';
 import getItemPrice from '../../../items/helpers/getItemPrice';
 import itemList, { ItemCategory } from '../../../items/itemList';
+import intReply from '../../../utils/intReply';
 import { ItemType, itemTypes } from '../inventars';
 import maksekeresData from '../zvejot/makskeresData';
 import infoAutocomplete from './infoAutocomplete';
@@ -37,7 +38,7 @@ const info: Command = {
 
     const itemObj = itemList[itemKey];
     if (!itemObj) {
-      return i.reply(wrongKeyEmbed);
+      return intReply(i, wrongKeyEmbed);
     }
 
     const itemType: ItemType =
@@ -62,7 +63,7 @@ const info: Command = {
 
     if (itemObj.categories.includes(ItemCategory.VEIKALS)) {
       const discounts = await getDiscounts();
-      if (!discounts) return i.reply(errorEmbed);
+      if (!discounts) return intReply(i, errorEmbed);
 
       const { price, discount } = getItemPrice(itemKey, discounts);
 
@@ -102,7 +103,8 @@ const info: Command = {
       });
     }
 
-    i.reply(
+    intReply(
+      i,
       embedTemplate({
         i,
         color: this.color,

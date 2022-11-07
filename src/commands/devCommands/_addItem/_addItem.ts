@@ -6,6 +6,7 @@ import addItem from '../../../economy/addItems';
 import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
 import itemList from '../../../items/itemList';
 import _addItemAutocomplete from './_addItemAutocomplete';
+import intReply from '../../../utils/intReply';
 
 const _addItem: Command = {
   description: 'Pievienot mantu inventārā',
@@ -43,19 +44,19 @@ const _addItem: Command = {
 
     const itemToAdd = itemList[itemToAddKey];
     if (!itemToAdd) {
-      await i.reply(wrongKeyEmbed);
-      return;
+      return intReply(i, wrongKeyEmbed);
     }
 
-    await i.reply(
+    await addItem(target.id, i.guildId!, { [itemToAddKey]: amountToAdd });
+
+    intReply(
+      i,
       embedTemplate({
         i,
         description: `Tu pievienoji <@${target.id}> ${itemString(itemToAdd, amountToAdd, true)}`,
         color: this.color,
       })
     );
-
-    await addItem(target.id, i.guildId!, { [itemToAddKey]: amountToAdd });
   },
 };
 

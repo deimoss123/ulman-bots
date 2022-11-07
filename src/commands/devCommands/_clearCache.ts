@@ -1,4 +1,5 @@
 import Command from '../../interfaces/Command';
+import intReply from '../../utils/intReply';
 import { clearCache } from '../../utils/userCache';
 
 const _clearCache: Command = {
@@ -11,7 +12,7 @@ const _clearCache: Command = {
   async run(i) {
     // ej n
     clearCache();
-    await i.reply('Cache iztīrīts!');
+    intReply(i, 'Cache iztīrīts!');
   },
 };
 

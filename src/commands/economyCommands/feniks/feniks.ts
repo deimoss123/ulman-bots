@@ -3,6 +3,7 @@ import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
 import errorEmbed from '../../../embeds/errorEmbed';
 import Command from '../../../interfaces/Command';
+import intReply from '../../../utils/intReply';
 import { KazinoLikme } from '../rulete/rulete';
 import feniksLaimesti from './feniksLaimesti';
 import feniksRun from './feniksRun';
@@ -82,13 +83,13 @@ const feniks: Command = {
   async run(i) {
     const subCommandName = i.options.getSubcommand();
     if (subCommandName === 'laimesti_info') {
-      return i.reply(infoEmbed(i));
+      return intReply(i, infoEmbed(i));
     }
 
     const likme: KazinoLikme =
       subCommandName === '-' ? i.options.getInteger('likme_lati')! : (subCommandName as 'virve' | 'viss');
 
-    if (likme < FENIKS_MIN_LIKME) return i.reply(errorEmbed);
+    if (likme < FENIKS_MIN_LIKME) return intReply(i, errorEmbed);
 
     feniksRun(i, likme);
   },

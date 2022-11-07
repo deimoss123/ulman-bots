@@ -20,6 +20,7 @@ import latiString from '../../../embeds/helpers/latiString';
 import Item from '../../../interfaces/Item';
 import UserProfile, { SpecialItemInProfile } from '../../../interfaces/UserProfile';
 import itemList, { ItemKey } from '../../../items/itemList';
+import intReply from '../../../utils/intReply';
 import { PIRKT_PARDOT_NODOKLIS } from './pardot';
 
 function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: Item, selectedIds: string[]) {
@@ -108,12 +109,13 @@ export default async function pardotRunSpecial(
     ]);
 
     const user = await removeItemsById(userId, guildId, [itemsInInv[0]._id!]);
-    if (!user) return i.reply(errorEmbed);
+    if (!user) return intReply(i, errorEmbed);
 
-    return i.reply(makeEmbed(i, user, itemsInInv, soldValue, embedColor));
+    return intReply(i, makeEmbed(i, user, itemsInInv, soldValue, embedColor));
   }
 
-  const msg = await i.reply(
+  const msg = await intReply(
+    i,
     embedTemplate({
       i,
       color: embedColor,
@@ -124,7 +126,9 @@ export default async function pardotRunSpecial(
     })
   );
 
-  await buttonHandler(
+  if (!msg) return;
+
+  buttonHandler(
     i,
     'pardot',
     msg,
@@ -158,7 +162,8 @@ export default async function pardotRunSpecial(
             return {
               end: true,
               after: () => {
-                int.reply(
+                intReply(
+                  int,
                   ephemeralReply(
                     '**Kļūda:** tavs inventāra saturs ir mainījies, kāda no izvēlētām mantām vairs nav tavā inventārā'
                   )

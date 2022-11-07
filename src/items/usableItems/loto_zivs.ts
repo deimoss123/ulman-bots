@@ -9,6 +9,7 @@ import errorEmbed from '../../embeds/errorEmbed';
 import itemString from '../../embeds/helpers/itemString';
 import iconEmojis from '../../embeds/iconEmojis';
 import { UsableItemFunc } from '../../interfaces/Item';
+import intReply from '../../utils/intReply';
 import chance, { ChanceObj, ChanceRecord } from '../helpers/chance';
 import countFreeInvSlots from '../helpers/countFreeInvSlots';
 import itemList, { ItemKey } from '../itemList';
@@ -81,12 +82,13 @@ const loto_zivs: UsableItemFunc = async (userId, guildId, _, specialItem) => {
       const holdsFishCount = specialItem!.attributes.holdsFishCount!;
 
       const user = await findUser(userId, guildId);
-      if (!user) return i.reply(errorEmbed);
+      if (!user) return intReply(i, errorEmbed);
 
       const freeSlots = countFreeInvSlots(user);
 
       if (freeSlots < holdsFishCount - 1) {
-        return i.reply(
+        return intReply(
+          i,
           ephemeralReply(
             `Lai izmantotu ${itemString(itemList.loto_zivs, null, true)} kas satur **${holdsFishCount}** zivis, ` +
               `tev inventārā ir jābūt vismaz **${holdsFishCount - 1}** brīvām vietām\n` +
@@ -105,9 +107,10 @@ const loto_zivs: UsableItemFunc = async (userId, guildId, _, specialItem) => {
 
       await addItems(userId, guildId, { ...wonFishObj });
       await removeItemsById(userId, guildId, [specialItem!._id!]);
-      await i.reply(lotoZivsEmbed(i, wonFishArr, wonFishObj, true));
+      const res = await intReply(i, lotoZivsEmbed(i, wonFishArr, wonFishObj, true));
+      if (!res) return;
 
-      setTimeout(() => i.editReply(lotoZivsEmbed(i, wonFishArr, wonFishObj)), 2000);
+      setTimeout(() => i.editReply(lotoZivsEmbed(i, wonFishArr, wonFishObj)).catch(_ => _), 2000);
     },
   };
 };

@@ -8,6 +8,7 @@ import addLati from '../../economy/addLati';
 import ephemeralReply from '../../embeds/ephemeralReply';
 import commandColors from '../../embeds/commandColors';
 import setStats from '../../economy/stats/setStats';
+import intReply from '../../utils/intReply';
 
 const maksat: Command = {
   description:
@@ -43,15 +44,15 @@ const maksat: Command = {
     const guildId = i.guildId!;
 
     if (target.id === i.user.id) {
-      return i.reply(ephemeralReply('Tu nevari maksāt sev'));
+      return intReply(i, ephemeralReply('Tu nevari maksāt sev'));
     }
 
     if (target.id === i.client.user?.id) {
-      return i.reply(ephemeralReply('Tu nevari maksāt Valsts bankai'));
+      return intReply(i, ephemeralReply('Tu nevari maksāt Valsts bankai'));
     }
 
     const user = await findUser(userId, guildId);
-    if (!user) return i.reply(errorEmbed);
+    if (!user) return intReply(i, errorEmbed);
 
     const hasJuridisks = user.status.juridisks > Date.now();
 
@@ -62,7 +63,8 @@ const maksat: Command = {
     if (user.lati < totalToPay) {
       const maxPay = Math.floor((1 / (1 + user.payTax)) * user.lati);
 
-      return i.reply(
+      return intReply(
+        i,
         ephemeralReply(
           `Tu nevari maksāt **${latiToAdd}** + ` +
             `**${totalTax}** (${user.payTax * 100}% nodoklis) = ` +
@@ -82,9 +84,10 @@ const maksat: Command = {
     if (!hasJuridisks) promises.push(addLati(i.client.user!.id, guildId, totalTax));
 
     const [targetUser, resUser] = await Promise.all(promises);
-    if (!targetUser || !resUser) return i.reply(errorEmbed);
+    if (!targetUser || !resUser) return intReply(i, errorEmbed);
 
-    i.reply(
+    intReply(
+      i,
       embedTemplate({
         i,
         content: `<@${target.id}>`,
