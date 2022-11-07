@@ -75,7 +75,6 @@ async function handleModal(i: ModalSubmitInteraction) {
 
 const divainais_burkans: UsableItemFunc = async (userId, guildId, _, specialItem) => {
   return {
-    text: '',
     custom: async (i, color) => {
       const res = await editItemAttribute(userId, guildId, specialItem!._id!, {
         ...specialItem!.attributes,
@@ -103,7 +102,7 @@ const divainais_burkans: UsableItemFunc = async (userId, guildId, _, specialItem
         })
       );
 
-      await buttonHandler(
+      buttonHandler(
         i,
         'izmantot_burkans',
         msg,

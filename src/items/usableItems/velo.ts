@@ -89,7 +89,6 @@ function makeComponents(hasAll: boolean) {
 
 const velo: UsableItemFunc = async (userId, guildId) => {
   return {
-    text: '',
     custom: async (i, color) => {
       const user = await findUser(userId, guildId);
       if (!user) return i.reply(errorEmbed);

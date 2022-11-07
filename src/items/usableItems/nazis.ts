@@ -7,7 +7,7 @@ export const NAZIS_STATUS_TIME = 3_600_000; // 1h
 
 const nazis: UsableItemFunc = async (userId, guildId) => {
   const user = await addStatus(userId, guildId, { laupitajs: NAZIS_STATUS_TIME });
-  if (!user) return { text: 'UlmaņBota kļūda' };
+  if (!user) return { error: true };
 
   return {
     text:

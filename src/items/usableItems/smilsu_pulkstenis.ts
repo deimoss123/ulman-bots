@@ -7,9 +7,7 @@ export const ZVEJA_SHIFT_TIME = 32_400_000; // 9h
 
 const smilsu_pulkstenis: UsableItemFunc = async (userId, guildId) => {
   const user = await syncFishing(userId, guildId);
-  if (!user) {
-    return { text: 'UlmaņBota kļūda' };
-  }
+  if (!user) return { error: true };
 
   if (!user.fishing.futureFishList) {
     return {
@@ -20,9 +18,7 @@ const smilsu_pulkstenis: UsableItemFunc = async (userId, guildId) => {
   await addItems(userId, guildId, { smilsu_pulkstenis: -1 });
   const userAfter = await syncFishing(userId, guildId, false, false, ZVEJA_SHIFT_TIME);
 
-  if (!userAfter) {
-    return { text: 'UlmaņBota kļūda' };
-  }
+  if (!userAfter) return { error: true };
 
   return {
     text: `Zvejošanas laiks maģiski tika pārbīdīts uz priekšu par \`${millisToReadableTime(ZVEJA_SHIFT_TIME)}\``,

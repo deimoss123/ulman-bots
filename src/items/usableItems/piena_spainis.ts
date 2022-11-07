@@ -7,7 +7,7 @@ import { UserStatus } from '../../interfaces/UserProfile';
 
 const piena_spainis: UsableItemFunc = async (userId, guildId) => {
   const user = await findUser(userId, guildId);
-  if (!user) return { text: 'UlmaņBota kļūda' };
+  if (!user) return { error: true };
 
   const { status } = user;
   if (!Object.values(status).find(s => s >= Date.now())) {

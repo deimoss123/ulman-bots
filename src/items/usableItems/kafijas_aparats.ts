@@ -20,7 +20,7 @@ const kafijas_aparats: UsableItemFunc = async (userId, guildId, _, specialItem) 
     };
   }
   const user = await findUser(userId, guildId);
-  if (!user) return { text: 'Ulmaņbota kļūda' };
+  if (!user) return { error: true };
 
   if (!countFreeInvSlots(user)) {
     return {
@@ -31,7 +31,7 @@ const kafijas_aparats: UsableItemFunc = async (userId, guildId, _, specialItem) 
   }
   await editItemAttribute(userId, guildId, specialItem!._id!, { lastUsed: Date.now() });
   const userAfter = await addItems(userId, guildId, { kafija: 1 });
-  if (!userAfter) return { text: 'Ulmaņbota kļūda' };
+  if (!userAfter) return { error: true };
 
   const itemCount = userAfter.items.find(item => item.name === 'kafija')?.amount || 1;
 

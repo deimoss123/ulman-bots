@@ -23,7 +23,7 @@ const divaina_zivs: UsableItemFunc = async (userId, guildId) => {
   const statusToAdd = Object.fromEntries([statusEntry]);
 
   const user = await addStatus(userId, guildId, statusToAdd);
-  if (!user) return { text: 'Ulmaņbota kļūda' };
+  if (!user) return { error: true };
 
   return {
     text:

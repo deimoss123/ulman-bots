@@ -174,7 +174,6 @@ function components(
 
 const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => {
   return {
-    text: '',
     custom: async i => {
       let currTime = Date.now();
 

@@ -4,7 +4,7 @@ import { UsableItemFunc } from '../../interfaces/Item';
 
 const virve: UsableItemFunc = async (userId, guildId) => {
   const user = await findUser(userId, guildId);
-  if (!user) return { text: 'UlmaņBota kļūda' };
+  if (!user) return { error: true };
 
   if (user.lati < 0) {
     return {

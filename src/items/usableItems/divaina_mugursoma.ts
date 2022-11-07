@@ -11,9 +11,7 @@ export const INV_NCREASE_AMOUNT_2 = 10;
 
 const divaina_mugursoma: UsableItemFunc = async (userId, guildId) => {
   const user = await findUser(userId, guildId);
-  if (!user) {
-    return { text: 'UlmaņBota kļūda' };
-  }
+  if (!user) return { error: true };
 
   if (user.itemCap < INCREASE_CAP_1) {
     return {

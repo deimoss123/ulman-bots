@@ -77,7 +77,6 @@ function lotoZivsEmbed(
 
 const loto_zivs: UsableItemFunc = async (userId, guildId, _, specialItem) => {
   return {
-    text: '',
     custom: async i => {
       const holdsFishCount = specialItem!.attributes.holdsFishCount!;
 

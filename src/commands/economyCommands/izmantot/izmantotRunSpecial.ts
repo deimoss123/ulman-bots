@@ -12,6 +12,7 @@ import findUser from '../../../economy/findUser';
 import buttonHandler from '../../../embeds/buttonHandler';
 import embedTemplate from '../../../embeds/embedTemplate';
 import ephemeralReply from '../../../embeds/ephemeralReply';
+import errorEmbed from '../../../embeds/errorEmbed';
 import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import itemString, { itemStringCustom } from '../../../embeds/helpers/itemString';
 import Item, { AttributeItem, NotSellableItem } from '../../../interfaces/Item';
@@ -54,7 +55,7 @@ function makeEmbed(
   i: CommandInteraction | ButtonInteraction,
   itemObj: Item,
   selectedItem: SpecialItemInProfile,
-  useRes: UsableItemReturn,
+  useRes: Extract<UsableItemReturn, { text: string }>,
   embedColor: number
 ) {
   return embedTemplate({
@@ -81,7 +82,8 @@ export default async function izmantotRunSpecial(
   if (itemsInInv.length === 1) {
     const selectedItem = itemsInInv[0];
     const useRes = await itemObj.use(userId, guildId, itemKey, selectedItem);
-    if (useRes.custom) return useRes.custom(i, embedColor);
+    if ('error' in useRes) return i.reply(errorEmbed);
+    if ('custom' in useRes) return useRes.custom(i, embedColor);
     return i.reply(makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
   }
 
@@ -100,18 +102,18 @@ export default async function izmantotRunSpecial(
     i,
     'izmantot',
     msg,
-    async componentInteraction => {
-      const { customId } = componentInteraction;
+    async int => {
+      const { customId } = int;
       if (customId === 'izmantot_special_select') {
-        if (componentInteraction.componentType !== ComponentType.StringSelect) return;
-        selectedItemId = componentInteraction.values[0]!;
+        if (int.componentType !== ComponentType.StringSelect) return;
+        selectedItemId = int.values[0]!;
         return {
           edit: {
             components: makeComponents(itemsInInv, itemObj, selectedItemId),
           },
         };
       } else if (customId === 'izmantot_special_confirm') {
-        if (componentInteraction.componentType !== ComponentType.Button) return;
+        if (int.componentType !== ComponentType.Button) return;
 
         const user = await findUser(userId, guildId);
         if (!user) return;
@@ -120,9 +122,7 @@ export default async function izmantotRunSpecial(
         if (!selectedItem) {
           return {
             after: async () => {
-              await componentInteraction.reply(
-                ephemeralReply('Tavs inventāra saturs ir mainījies, šī manta nav tavā inventārā')
-              );
+              await int.reply(ephemeralReply('Tavs inventāra saturs ir mainījies, šī manta nav tavā inventārā'));
             },
           };
         }
@@ -132,8 +132,10 @@ export default async function izmantotRunSpecial(
         return {
           end: true,
           after: async () => {
-            if (useRes.custom) return useRes.custom(componentInteraction, embedColor);
-            await componentInteraction.reply(makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
+            if ('error' in useRes) return int.reply(errorEmbed);
+            if ('custom' in useRes) return useRes.custom(int, embedColor);
+
+            int.reply(makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
           },
         };
       }

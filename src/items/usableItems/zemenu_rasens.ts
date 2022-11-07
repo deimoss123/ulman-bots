@@ -7,7 +7,7 @@ export const RASENS_STATUS_TIME = 10_800_000; // 3h
 
 const zemenu_rasens: UsableItemFunc = async (userId, guildId) => {
   const user = await addStatus(userId, guildId, { aizsargats: RASENS_STATUS_TIME });
-  if (!user) return { text: 'UlmaņBota kļūda' };
+  if (!user) return { error: true };
 
   return {
     text:

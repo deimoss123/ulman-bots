@@ -1,6 +1,6 @@
 import { UsableItemFunc } from '../../interfaces/Item';
 
-const kafija: UsableItemFunc = async () => {
+const kafija: UsableItemFunc = () => {
   return {
     text:
       'Kafija ir izmantojama, kad tev noteiktā dienā ir beigušās strādāšanas reizes\n' +

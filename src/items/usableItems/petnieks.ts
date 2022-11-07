@@ -25,7 +25,7 @@ const petnieks: UsableItemFunc = async (userId, guildId, _, specialItem) => {
   }
 
   const user = await findUser(userId, guildId);
-  if (!user) return { text: 'Ulmaņbota kļūda' };
+  if (!user) return { error: true };
 
   if (!countFreeInvSlots(user)) {
     return {
@@ -40,7 +40,7 @@ const petnieks: UsableItemFunc = async (userId, guildId, _, specialItem) => {
     foundItemKey: await getRandFreeSpin(),
   });
   const userAfter = await addItems(userId, guildId, { [itemKey]: 1 });
-  if (!userAfter) return { text: 'Ulmaņbota kļūda' };
+  if (!userAfter) return { error: true };
 
   return {
     text:

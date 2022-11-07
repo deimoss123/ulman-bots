@@ -53,7 +53,9 @@ export default async function izmantotRun(
   const itemsToUseLeft = itemInInv.amount - 1;
 
   const res = await (itemToUse as UsableItem).use(userId, guildId, itemToUseKey);
-  if (res.custom) return res.custom(i, embedColor);
+
+  if ('error' in res) return i.reply(errorEmbed);
+  if ('custom' in res) return res.custom(i, embedColor);
 
   const resFields = res.fields || [];
 

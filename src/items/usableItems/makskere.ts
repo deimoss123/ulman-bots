@@ -32,7 +32,6 @@ export function makskereCustomValue(itemKey: string): AttributeItem['customValue
 
 const makskere: UsableItemFunc = async (userId, guildId, itemKey, specialItem) => {
   return {
-    text: '',
     custom: async i => {
       const { attributes, _id } = specialItem!;
 

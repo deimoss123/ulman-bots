@@ -7,7 +7,7 @@ export const PETNIEKZIVS_STATUS_TIME = 900_000; // 15 min
 
 const petniekzivs: UsableItemFunc = async (userId, guildId) => {
   const user = await addStatus(userId, guildId, { veiksmigs: PETNIEKZIVS_STATUS_TIME });
-  if (!user) return { text: 'UlmaņBota kļūda' };
+  if (!user) return { error: true };
 
   return {
     text:
