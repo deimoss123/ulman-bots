@@ -125,7 +125,7 @@ const tirgus: Command = {
         if (!newListings.includes(selectedListing)) {
           return {
             end: true,
-            after: async () => {
+            after: () => {
               int.reply('Kļūda: šī manta vairs nepārdodas tirgū');
             },
           };
@@ -135,7 +135,7 @@ const tirgus: Command = {
         if (!hasAll) {
           return {
             end: true,
-            after: async () => {
+            after: () => {
               int.reply(ephemeralReply(`Tu nevari atļauties nopirkt **${itemString(itemObj, 1, true)}**`));
             },
           };
@@ -146,7 +146,7 @@ const tirgus: Command = {
           if (!specialRes.valid) {
             return {
               end: true,
-              after: async () => {
+              after: () => {
                 int.reply(
                   ephemeralReply(`Tu nevari nopirkt **${itemString(itemObj, 1, true)}**, jo ${specialRes.reason}`)
                 );
@@ -178,7 +178,7 @@ const tirgus: Command = {
             embeds: tirgusEmbed(i, newListings, userAfter, itemsBoughtAfter),
             components: tirgusComponents(newListings, userAfter, itemsBought),
           },
-          after: async () => {
+          after: () => {
             int.reply(smallEmbed(`Tu nopirki **${itemString(itemObj, 1, true)}**`, this.color));
           },
         };

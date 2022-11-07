@@ -128,18 +128,18 @@ export default async function pardotRunSpecial(
     i,
     'pardot',
     msg,
-    async componentInteraction => {
-      const { customId } = componentInteraction;
+    async int => {
+      const { customId } = int;
       if (customId === 'pardot_special_select') {
-        if (componentInteraction.componentType !== ComponentType.StringSelect) return;
-        selectedIds = componentInteraction.values;
+        if (int.componentType !== ComponentType.StringSelect) return;
+        selectedIds = int.values;
         return {
           edit: {
             components: makeComponents(itemsInInv, itemObj, selectedIds),
           },
         };
       } else if (customId === 'pardot_special_confirm') {
-        if (componentInteraction.componentType !== ComponentType.Button) return;
+        if (int.componentType !== ComponentType.Button) return;
         const selectedItems = itemsInInv.filter(item => selectedIds.includes(item._id!));
         const soldValue = selectedItems.reduce((p, { attributes }) => {
           return (
@@ -157,8 +157,8 @@ export default async function pardotRunSpecial(
           if (!userItemIds.includes(id)) {
             return {
               end: true,
-              after: async () => {
-                await componentInteraction.reply(
+              after: () => {
+                int.reply(
                   ephemeralReply(
                     '**Kļūda:** tavs inventāra saturs ir mainījies, kāda no izvēlētām mantām vairs nav tavā inventārā'
                   )

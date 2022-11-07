@@ -116,22 +116,22 @@ export default async function izmantotRunSpecial(
         if (int.componentType !== ComponentType.Button) return;
 
         const user = await findUser(userId, guildId);
-        if (!user) return;
+        if (!user) return { error: true };
 
         const selectedItem = user.specialItems.find(item => item._id === selectedItemId);
         if (!selectedItem) {
           return {
-            after: async () => {
-              await int.reply(ephemeralReply('Tavs inventāra saturs ir mainījies, šī manta nav tavā inventārā'));
+            after: () => {
+              int.reply(ephemeralReply('Tavs inventāra saturs ir mainījies, šī manta nav tavā inventārā'));
             },
           };
         }
 
-        const useRes = await itemObj.use!(userId, guildId, itemKey, selectedItem);
+        const useRes = await itemObj.use(userId, guildId, itemKey, selectedItem);
 
         return {
           end: true,
-          after: async () => {
+          after: () => {
             if ('error' in useRes) return int.reply(errorEmbed);
             if ('custom' in useRes) return useRes.custom(int, embedColor);
 

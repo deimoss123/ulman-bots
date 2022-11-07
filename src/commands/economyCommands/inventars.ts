@@ -315,9 +315,7 @@ const inventars: Command = {
                 embeds: invEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
                 components: invComponents(i, targetUser, fields, currentPage, totalPages, buttonsPressed),
               },
-              after: async () => {
-                await pardotRun(int, 'neizmantojamās');
-              },
+              after: () => pardotRun(int, 'neizmantojamās'),
             };
           }
           case 'inv_pardot_visas': {
@@ -327,9 +325,7 @@ const inventars: Command = {
                 embeds: invEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
                 components: invComponents(i, targetUser, fields, currentPage, totalPages, buttonsPressed),
               },
-              after: async () => {
-                await pardotRun(int, 'visas');
-              },
+              after: () => pardotRun(int, 'visas'),
             };
           }
         }

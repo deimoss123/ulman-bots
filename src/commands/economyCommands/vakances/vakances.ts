@@ -1,5 +1,5 @@
 import Command from '../../../interfaces/Command';
-import { ChatInputCommandInteraction, ComponentType, Message } from 'discord.js';
+import { ChatInputCommandInteraction, ComponentType } from 'discord.js';
 import commandColors from '../../../embeds/commandColors';
 import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
@@ -64,7 +64,7 @@ const vakances: Command = {
 
     let chosenJob = '';
 
-    const interactionReply = await i.reply(
+    const msg = await i.reply(
       embedTemplate({
         i,
         title: 'Vakances',
@@ -93,12 +93,12 @@ const vakances: Command = {
     await buttonHandler(
       i,
       'vakances',
-      interactionReply! as Message,
-      async componentInteraction => {
-        switch (componentInteraction.customId) {
+      msg,
+      async int => {
+        switch (int.customId) {
           case 'vakances_select':
-            if (componentInteraction.componentType !== ComponentType.StringSelect) return;
-            chosenJob = componentInteraction.values[0]!;
+            if (int.componentType !== ComponentType.StringSelect) return;
+            chosenJob = int.values[0]!;
 
             return {
               edit: {
@@ -106,7 +106,7 @@ const vakances: Command = {
               },
             };
           case 'vakances_button':
-            if (componentInteraction.componentType !== ComponentType.Button) return;
+            if (int.componentType !== ComponentType.Button) return;
 
             return {
               end: true,
@@ -116,7 +116,7 @@ const vakances: Command = {
               after: async () => {
                 await Promise.all([
                   setJobPosition(userId, guildId, chosenJob),
-                  componentInteraction.reply(
+                  int.reply(
                     smallEmbed(
                       `Tu nomainīji profesiju uz ` +
                         `<:${chosenJob}:${JobPositions[chosenJob]!.emojiId}> ` +

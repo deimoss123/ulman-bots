@@ -152,8 +152,8 @@ const stradat: Command = {
       i,
       'stradat',
       interactionReply,
-      async componentInteraction => {
-        const { customId } = componentInteraction;
+      async int => {
+        const { customId } = int;
         if (customId === 'stradat_velreiz') {
           await addItems(userId, guildId, { kafija: -1 });
           isExtraUse = true;

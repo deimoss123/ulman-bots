@@ -288,8 +288,8 @@ export default async function iedotRunSpecial(
 
         if (user.lati < totalTax) {
           return {
-            after: async () => {
-              await int.reply(cantPayTaxEmbed(itemObj, selectedItems.length, totalTax, user));
+            after: () => {
+              int.reply(cantPayTaxEmbed(itemObj, selectedItems.length, totalTax, user));
             },
           };
         }
@@ -298,8 +298,8 @@ export default async function iedotRunSpecial(
         for (const specItem of selectedItems) {
           if (!userItemIds.includes(specItem._id!)) {
             return {
-              after: async () => {
-                await int.reply(
+              after: () => {
+                int.reply(
                   ephemeralReply('Tavs inventāra saturs ir mainījies, kāda no izvēlētām mantām nav tavā inventārā')
                 );
               },
@@ -322,8 +322,8 @@ export default async function iedotRunSpecial(
           edit: {
             components: makeComponents(itemsInInv, itemObj, selectedItems, totalTax, user.lati, true),
           },
-          after: async () => {
-            await int.reply(makeEmbedAfter(i, totalTax, targetUser, selectedItems, hasJuridisks, itemObj));
+          after: () => {
+            int.reply(makeEmbedAfter(i, totalTax, targetUser, selectedItems, hasJuridisks, itemObj));
           },
         };
       }

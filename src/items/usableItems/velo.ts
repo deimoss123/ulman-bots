@@ -105,20 +105,18 @@ const velo: UsableItemFunc = async (userId, guildId) => {
         i,
         'izmantot_velo',
         msg,
-        async interaction => {
-          const { customId } = interaction;
-          if (interaction.componentType !== ComponentType.Button) return;
+        async int => {
+          const { customId } = int;
+          if (int.componentType !== ComponentType.Button) return;
 
           if (customId === 'izveidot_velosipedu') {
             const user = await findUser(userId, guildId);
-            if (!user) return;
+            if (!user) return { error: true };
 
             const { hasAll } = calcReqItems(user.items);
             if (!hasAll) {
-              await interaction.reply(ephemeralReply('Tev nav nepieciešamās detaļas, inventāra saturs ir mainījies'));
-              return {
-                end: true,
-              };
+              int.reply(ephemeralReply('Tev nav nepieciešamās detaļas, inventāra saturs ir mainījies'));
+              return { end: true };
             }
 
             const itemsToRemove: Record<ItemKey, number> = {};
@@ -129,8 +127,7 @@ const velo: UsableItemFunc = async (userId, guildId) => {
             const userAfter = await addItems(userId, guildId, { ...itemsToRemove, velosipeds: 1 });
             const userAfterXP = await addXp(userId, guildId, VELO_XP);
             if (!userAfter || !userAfterXP) {
-              await interaction.reply(errorEmbed);
-              return;
+              return { error: true };
             }
 
             const { items: items2, hasAll: hasAll2 } = calcReqItems(userAfter.items);
@@ -140,8 +137,8 @@ const velo: UsableItemFunc = async (userId, guildId) => {
                 embeds: makeEmbed(i, items2, color),
                 components: makeComponents(hasAll2),
               },
-              after: async () => {
-                await interaction.reply({
+              after: () => {
+                int.reply({
                   embeds: [
                     new EmbedBuilder()
                       .setDescription(

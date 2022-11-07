@@ -179,7 +179,7 @@ export default async function ruleteRun(
       if (int.customId === 'rulete_spin_again' && int.componentType === ComponentType.Button) {
         return {
           end: true,
-          after: async () => {
+          after: () => {
             ruleteRun(int, position, likme);
           },
         };

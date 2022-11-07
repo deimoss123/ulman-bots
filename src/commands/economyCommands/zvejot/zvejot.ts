@@ -84,11 +84,11 @@ const zvejot: Command = {
       i,
       'zvejot',
       msg,
-      async interaction => {
-        switch (interaction.customId) {
+      async int => {
+        switch (int.customId) {
           case 'select_fishing_rod': {
-            if (interaction.componentType !== ComponentType.StringSelect) return;
-            [selectedFishingRod, selectedFishingRodId] = interaction.values[0].split(' ');
+            if (int.componentType !== ComponentType.StringSelect) return;
+            [selectedFishingRod, selectedFishingRodId] = int.values[0].split(' ');
 
             const user = await findUser(userId, guildId);
             if (!user) return { error: true };
@@ -100,7 +100,7 @@ const zvejot: Command = {
             };
           }
           case 'start_fishing_btn': {
-            if (interaction.componentType !== ComponentType.Button || !selectedFishingRod) return;
+            if (int.componentType !== ComponentType.Button || !selectedFishingRod) return;
 
             const user = await findUser(userId, guildId);
             if (!user) return { error: true };
@@ -108,7 +108,7 @@ const zvejot: Command = {
             const rod = user.specialItems.find(item => item._id === selectedFishingRodId);
 
             if (!rod) {
-              interaction.reply(ephemeralReply('Hmmm, šī maksķere ir maģiski pazudusi no tava inventāra'));
+              int.reply(ephemeralReply('Hmmm, šī maksķere ir maģiski pazudusi no tava inventāra'));
               return { end: true };
             }
 
@@ -132,7 +132,7 @@ const zvejot: Command = {
             };
           }
           case 'collect_fish_btn': {
-            if (interaction.componentType !== ComponentType.Button) return;
+            if (int.componentType !== ComponentType.Button) return;
             const user = await syncFishing(userId, guildId);
             if (!user || !user.fishing.caughtFishes) return { error: true };
 
@@ -147,8 +147,8 @@ const zvejot: Command = {
                   embeds: zvejotEmbed(i, user),
                   components: zvejotComponents(user),
                 },
-                after: async () => {
-                  await interaction.reply(
+                after: () => {
+                  int.reply(
                     ephemeralReply(
                       `Tev nav vietas inventārā lai savāktu **${fishCount}** mantas no copes\n` +
                         `Tev ir **${freeSlots}** brīvas vietas`
@@ -163,7 +163,7 @@ const zvejot: Command = {
               for (const [name, amount] of specialItemsToAdd) {
                 const checkRes = checkUserSpecialItems(user, name, amount);
                 if (!checkRes.valid) {
-                  interaction.reply(ephemeralReply(`Tu nevari savāk zveju, jo ${checkRes.reason}`));
+                  int.reply(ephemeralReply(`Tu nevari savāk zveju, jo ${checkRes.reason}`));
                   return { end: true };
                 }
               }
@@ -182,8 +182,8 @@ const zvejot: Command = {
                 embeds: zvejotEmbed(i, leveledUser.user),
                 components: zvejotComponents(leveledUser.user),
               },
-              after: async () => {
-                await interaction.reply({
+              after: () => {
+                int.reply({
                   embeds: [
                     new EmbedBuilder().setColor(this.color).setFields({
                       name: 'Tu savāci copi:',
@@ -198,7 +198,7 @@ const zvejot: Command = {
             };
           }
           case 'remove_fishing_rod': {
-            if (interaction.componentType !== ComponentType.Button) return;
+            if (int.componentType !== ComponentType.Button) return;
 
             const user = await syncFishing(userId, guildId);
             if (!user) return { error: true };
@@ -209,13 +209,13 @@ const zvejot: Command = {
             if (!selectedRod) return { error: true };
 
             if (!countFreeInvSlots(user)) {
-              interaction.reply(ephemeralReply('Tu nevari noņemt maksķeri, jo tev inventārā nav vietas'));
+              int.reply(ephemeralReply('Tu nevari noņemt maksķeri, jo tev inventārā nav vietas'));
               return { end: true };
             }
 
             const checkRes = checkUserSpecialItems(user, selectedRod);
             if (!checkRes.valid) {
-              interaction.reply(ephemeralReply(`Tu nevari noņemt makšķeri, jo ${checkRes.reason}`));
+              int.reply(ephemeralReply(`Tu nevari noņemt makšķeri, jo ${checkRes.reason}`));
               return { end: true };
             }
 
@@ -236,8 +236,8 @@ const zvejot: Command = {
                 embeds: zvejotEmbed(i, userAfter),
                 components: zvejotComponents(userAfter, selectedFishingRodId),
               },
-              after: async () => {
-                interaction.reply({
+              after: () => {
+                int.reply({
                   embeds: [
                     new EmbedBuilder()
                       .setDescription('Tev inventāram tikai pievienota:')
@@ -252,14 +252,14 @@ const zvejot: Command = {
             };
           }
           case 'fix_fishing_rod': {
-            if (interaction.componentType !== ComponentType.Button) return;
+            if (int.componentType !== ComponentType.Button) return;
             const user = await syncFishing(userId, guildId);
             if (!user || !user.fishing.selectedRod) return { error: true };
 
             const selectedRod = user.fishing.selectedRod;
 
             if (!maksekeresData[selectedRod].repairable) {
-              interaction.reply(ephemeralReply(`${itemString(itemList[selectedRod])} nav salabojama`));
+              int.reply(ephemeralReply(`${itemString(itemList[selectedRod])} nav salabojama`));
               return { doNothing: true };
             }
 
@@ -274,8 +274,8 @@ const zvejot: Command = {
                   embeds: zvejotEmbed(i, user),
                   components: zvejotComponents(user),
                 },
-                after: async () => {
-                  interaction.reply(
+                after: () => {
+                  int.reply(
                     ephemeralReply(
                       `Tev nepietiek nauda lai salabotu makšķeri - ${latiString(repairCost, false, true)}\n` +
                         `Tev ir ${latiString(lati, false, true)}`
@@ -298,8 +298,8 @@ const zvejot: Command = {
                 embeds: zvejotEmbed(i, userAfter),
                 components: zvejotComponents(userAfter),
               },
-              after: async () => {
-                interaction.reply(
+              after: () => {
+                int.reply(
                   smallEmbed(
                     `Tu salaboji ${bold(itemString(itemList[fishing.selectedRod!], null, true))} - ` +
                       latiString(repairCost),
@@ -310,7 +310,7 @@ const zvejot: Command = {
             };
           }
           case 'test_button': {
-            if (interaction.componentType !== ComponentType.Button) return;
+            if (int.componentType !== ComponentType.Button) return;
             const user = await syncFishing(userId, guildId);
             if (!user) return { error: true };
 

@@ -125,9 +125,7 @@ export default async function feniksRun(
       if (customId === 'feniks_spin_again') {
         return {
           end: true,
-          after: async () => {
-            feniksRun(int, likme, false);
-          },
+          after: () => feniksRun(int, likme, false),
         };
       }
       if (customId.startsWith('freespin_')) {
@@ -148,9 +146,7 @@ export default async function feniksRun(
 
         return {
           end: true,
-          after: async () => {
-            feniksRun(int, +freeSpinLikme, true, itemName);
-          },
+          after: () => feniksRun(int, +freeSpinLikme, true, itemName),
         };
       }
     },

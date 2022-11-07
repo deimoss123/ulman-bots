@@ -16,7 +16,7 @@ import errorEmbed from './errorEmbed';
 export interface CallbackReturn {
   edit?: InteractionUpdateOptions | MessagePayload;
   end?: boolean;
-  after?: () => Promise<void>;
+  after?: () => any;
   setInactive?: boolean;
   doNothing?: boolean;
   error?: boolean;

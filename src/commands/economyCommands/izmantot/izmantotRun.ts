@@ -76,17 +76,17 @@ export default async function izmantotRun(
     components: itemsToUseLeft && 'removedOnUse' in itemToUse && itemToUse.removedOnUse ? [componentRow] : [],
   });
 
-  const interactionReply = await i.reply(replyMessage);
+  const msg = await i.reply(replyMessage);
 
   if (!itemsToUseLeft || ('removedOnUse' in itemToUse && !itemToUse.removedOnUse)) return;
 
   await buttonHandler(
     i,
     'izmantot',
-    interactionReply!,
-    async componentInteraction => {
-      if (componentInteraction.customId === 'izmantot_velreiz') {
-        if (componentInteraction.componentType !== ComponentType.Button) return;
+    msg,
+    async int => {
+      if (int.customId === 'izmantot_velreiz') {
+        if (int.componentType !== ComponentType.Button) return;
 
         let buttonStyle = ButtonStyle.Success;
 
@@ -109,7 +109,7 @@ export default async function izmantotRun(
         return {
           end: true,
           edit: { components: [componentRow] },
-          after: async () => izmantotRun(componentInteraction, itemToUseKey, embedColor),
+          after: () => izmantotRun(int, itemToUseKey, embedColor),
         };
       }
 

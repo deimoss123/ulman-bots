@@ -250,7 +250,7 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => {
                   embeds: embed(i, specialItem!.attributes, currTime),
                   components: components(user, specialItem!.attributes, currTime),
                 },
-                after: async () => {
+                after: () => {
                   int.reply('Tu nevari pabarot šo kaķi, jo tas tikko nomira :(');
                 },
               };
@@ -277,7 +277,7 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => {
                 embeds: embed(i, newItem.attributes, currTime),
                 components: components(userAfter, newItem.attributes, currTime),
               },
-              after: async () => {
+              after: () => {
                 int.reply(`Tu pabaroji kaķi`);
               },
             };

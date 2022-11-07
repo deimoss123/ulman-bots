@@ -133,25 +133,25 @@ export default async function pirktRun(
     components: 'use' in itemToBuy ? [componentRow] : [],
   });
 
-  const interactionReply = await i.reply(replyMessage);
+  const msg = await i.reply(replyMessage);
 
   if (!('use' in itemToBuy)) return;
 
   await buttonHandler(
     i,
     'pirkt',
-    interactionReply!,
-    async componentInteraction => {
-      if (componentInteraction.customId === 'pirkt_izmantot') {
-        if (componentInteraction.componentType !== ComponentType.Button) return;
+    msg,
+    async int => {
+      if (int.customId === 'pirkt_izmantot') {
+        if (int.componentType !== ComponentType.Button) return;
 
         let buttonStyle = ButtonStyle.Success;
 
         const userBeforeUse = await findUser(userId, guildId);
-        if (userBeforeUse) {
-          if (!userBeforeUse.items.find(item => item.name === itemToBuyKey)) {
-            buttonStyle = ButtonStyle.Danger;
-          }
+        if (!userBeforeUse) return { error: true };
+
+        if (!userBeforeUse.items.find(item => item.name === itemToBuyKey)) {
+          buttonStyle = ButtonStyle.Danger;
         }
 
         componentRow.setComponents(
@@ -166,7 +166,7 @@ export default async function pirktRun(
         return {
           end: true,
           edit: { components: [componentRow] },
-          after: async () => izmantotRun(componentInteraction, itemToBuyKey, embedColor),
+          after: () => izmantotRun(int, itemToBuyKey, embedColor),
         };
       }
 

@@ -24,9 +24,7 @@ const piena_spainis: UsableItemFunc = async (userId, guildId) => {
   await setUser(userId, guildId, { status: newStatus as UserStatus });
   await addItems(userId, guildId, { piena_spainis: -1 });
 
-  return {
-    text: 'Tev tika noņemti visi statusi',
-  };
+  return { text: 'Tev tika noņemti visi statusi' };
 };
 
 export default piena_spainis;

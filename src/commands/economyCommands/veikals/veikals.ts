@@ -1,5 +1,5 @@
 import Command from '../../../interfaces/Command';
-import { ButtonStyle, ComponentType, Message } from 'discord.js';
+import { ButtonStyle, ComponentType } from 'discord.js';
 import itemList, { ItemCategory } from '../../../items/itemList';
 import embedTemplate from '../../../embeds/embedTemplate';
 import latiString from '../../../embeds/helpers/latiString';
@@ -58,7 +58,7 @@ const veikals: Command = {
     const resetTime = new Date().setHours(24, 0, 0, 0);
     const timeUntilReset = resetTime - Date.now();
 
-    const interactionReply = await i.reply(
+    const msg = await i.reply(
       embedTemplate({
         i,
         title: 'Veikals',
@@ -75,57 +75,51 @@ const veikals: Command = {
     let chosenItem = '';
     let chosenAmount = 1;
 
-    await buttonHandler(
-      i,
-      'veikals',
-      interactionReply! as Message,
-      async componentInteraction => {
-        switch (componentInteraction.customId) {
-          case 'veikals_prece':
-            if (componentInteraction.componentType !== ComponentType.StringSelect) return;
-            chosenItem = componentInteraction.values[0]!;
+    await buttonHandler(i, 'veikals', msg, async int => {
+      switch (int.customId) {
+        case 'veikals_prece':
+          if (int.componentType !== ComponentType.StringSelect) return;
+          chosenItem = int.values[0]!;
 
-            return {
-              edit: {
-                components: veikalsComponents(shopItems, user, discounts, chosenItem, chosenAmount),
-              },
-            };
+          return {
+            edit: {
+              components: veikalsComponents(shopItems, user, discounts, chosenItem, chosenAmount),
+            },
+          };
 
-          case 'veikals_daudzums':
-            if (componentInteraction.componentType !== ComponentType.StringSelect) return;
-            chosenAmount = parseInt(componentInteraction.values[0]!);
+        case 'veikals_daudzums':
+          if (int.componentType !== ComponentType.StringSelect) return;
+          chosenAmount = +int.values[0]!;
 
-            return {
-              edit: {
-                components: veikalsComponents(shopItems, user, discounts, chosenItem, chosenAmount),
-              },
-            };
+          return {
+            edit: {
+              components: veikalsComponents(shopItems, user, discounts, chosenItem, chosenAmount),
+            },
+          };
 
-          case 'veikals_pirkt': {
-            if (componentInteraction.componentType !== ComponentType.Button) return;
+        case 'veikals_pirkt': {
+          if (int.componentType !== ComponentType.Button) return;
 
-            let buttonStyle = ButtonStyle.Success;
+          let buttonStyle = ButtonStyle.Success;
 
-            const userBeforeBuy = await findUser(userId, guildId);
-            if (userBeforeBuy) {
-              const totalCost = getItemPrice(chosenItem, discounts).price * chosenAmount;
-              if (userBeforeBuy.lati < totalCost || countFreeInvSlots(userBeforeBuy) < chosenAmount) {
-                buttonStyle = ButtonStyle.Danger;
-              }
+          const userBeforeBuy = await findUser(userId, guildId);
+          if (userBeforeBuy) {
+            const totalCost = getItemPrice(chosenItem, discounts).price * chosenAmount;
+            if (userBeforeBuy.lati < totalCost || countFreeInvSlots(userBeforeBuy) < chosenAmount) {
+              buttonStyle = ButtonStyle.Danger;
             }
-
-            return {
-              end: true,
-              edit: {
-                components: veikalsComponents(shopItems, user, discounts, chosenItem, chosenAmount, buttonStyle),
-              },
-              after: async () => pirktRun(componentInteraction, chosenItem, chosenAmount, commandColors.pirkt),
-            };
           }
+
+          return {
+            end: true,
+            edit: {
+              components: veikalsComponents(shopItems, user, discounts, chosenItem, chosenAmount, buttonStyle),
+            },
+            after: () => pirktRun(int, chosenItem, chosenAmount, commandColors.pirkt),
+          };
         }
-      },
-      60000
-    );
+      }
+    });
   },
 };
 

@@ -106,24 +106,24 @@ const divainais_burkans: UsableItemFunc = async (userId, guildId, _, specialItem
         i,
         'izmantot_burkans',
         msg,
-        async interaction => {
-          const { customId } = interaction;
+        async int => {
+          const { customId } = int;
           if (customId === 'change_name_burkans') {
-            if (interaction.componentType !== ComponentType.Button) return;
+            if (int.componentType !== ComponentType.Button) return;
 
             const user = await findUser(userId, guildId);
-            if (!user) return;
+            if (!user) return { error: true };
 
             if (user.lati < BURKANS_CHANGE_NAME_COST) {
-              await i.reply(
+              i.reply(
                 ephemeralReply(
                   'Tev nepietiek naudas lai nomainītu burkāna nosaukumu\n' + `Tev ir ${latiString(user.lati)}`
                 )
               );
-              return;
+              return { end: true };
             }
 
-            await interaction.showModal(
+            await int.showModal(
               new ModalBuilder()
                 .setCustomId(`burkans_modal_${specialItem!._id}`)
                 .setTitle('Mainīt dīvainā burkāna nosaukumu')
@@ -138,7 +138,7 @@ const divainais_burkans: UsableItemFunc = async (userId, guildId, _, specialItem
                   )
                 )
             );
-            interaction
+            int
               .awaitModalSubmit({
                 filter: i => i.customId.startsWith('burkans_modal'),
                 time: 60_000,
