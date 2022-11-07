@@ -1,5 +1,5 @@
 import Command from '../../../interfaces/Command';
-import { ChatInputCommandInteraction, ComponentType } from 'discord.js';
+import { ComponentType } from 'discord.js';
 import commandColors from '../../../embeds/commandColors';
 import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
@@ -53,7 +53,7 @@ const vakances: Command = {
     name: 'vakances',
     description: 'Apskatīties pieejamās darba vakances',
   },
-  async run(i: ChatInputCommandInteraction) {
+  async run(i) {
     const userId = i.user.id;
     const guildId = i.guildId!;
 

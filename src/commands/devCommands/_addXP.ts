@@ -1,5 +1,5 @@
 import Command from '../../interfaces/Command';
-import { ApplicationCommandOptionType, ChatInputCommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord.js';
 import errorEmbed from '../../embeds/errorEmbed';
 import embedTemplate from '../../embeds/embedTemplate';
 import addXp from '../../economy/addXp';
@@ -26,7 +26,7 @@ const _addXP: Command = {
       },
     ],
   },
-  async run(i: ChatInputCommandInteraction) {
+  async run(i) {
     const target = i.options.getUser('lietotājs')!;
     const xpToAdd = i.options.getInteger('daudzums')!;
 
@@ -41,9 +41,7 @@ const _addXP: Command = {
         description:
           `<@${target.id}> tika pievienoti ${xpToAdd} UlmaņPunkti\n` +
           `Līmenis: ${user.level}, UlmaņPunkti: ${user.xp}\n` +
-          (levelIncrease
-            ? `Palielināts līmenis **${levelIncrease.from}** -> **${levelIncrease.to}**\n`
-            : '') +
+          (levelIncrease ? `Palielināts līmenis **${levelIncrease.from}** -> **${levelIncrease.to}**\n` : '') +
           (maxLevelReward ? `Maksimālā līmeņa bonuss: **${latiString(maxLevelReward)}**` : ''),
         color: this.color,
       })

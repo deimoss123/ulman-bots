@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, CommandInteraction, EmbedField } from 'discord.js';
+import { ApplicationCommandOptionType, ChatInputCommandInteraction, EmbedField } from 'discord.js';
 import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
 import errorEmbed from '../../../embeds/errorEmbed';
@@ -9,7 +9,7 @@ import feniksRun from './feniksRun';
 
 export const FENIKS_MIN_LIKME = 20;
 
-function infoEmbed(i: CommandInteraction) {
+function infoEmbed(i: ChatInputCommandInteraction) {
   const fields: EmbedField[] = [];
 
   for (const { multipliers, emoji } of Object.values(feniksLaimesti)) {

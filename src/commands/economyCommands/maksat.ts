@@ -1,5 +1,5 @@
 import Command from '../../interfaces/Command';
-import { ApplicationCommandOptionType, ChatInputCommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord.js';
 import findUser from '../../economy/findUser';
 import embedTemplate from '../../embeds/embedTemplate';
 import latiString from '../../embeds/helpers/latiString';
@@ -35,7 +35,7 @@ const maksat: Command = {
       },
     ],
   },
-  async run(i: ChatInputCommandInteraction) {
+  async run(i) {
     const target = i.options.getUser('lietotājs')!;
     const latiToAdd = i.options.getInteger('latu_daudzums')!;
 

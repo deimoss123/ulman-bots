@@ -1,6 +1,6 @@
 import Command from '../../interfaces/Command';
 import commandColors from '../../embeds/commandColors';
-import { ApplicationCommandOptionType, ChatInputCommandInteraction, codeBlock } from 'discord.js';
+import { ApplicationCommandOptionType, codeBlock } from 'discord.js';
 import findUser from '../../economy/findUser';
 import errorEmbed from '../../embeds/errorEmbed';
 import userString from '../../embeds/helpers/userString';
@@ -38,7 +38,7 @@ const profils: Command = {
       },
     ],
   },
-  async run(i: ChatInputCommandInteraction) {
+  async run(i) {
     const target = i.options.getUser('lietotājs') ?? i.user;
 
     const user = await findUser(target.id, i.guildId!);

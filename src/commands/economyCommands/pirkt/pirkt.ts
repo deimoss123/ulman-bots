@@ -1,5 +1,5 @@
 import Command from '../../../interfaces/Command';
-import { ApplicationCommandOptionType, ChatInputCommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord.js';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import itemList, { ItemCategory } from '../../../items/itemList';
 import itemString from '../../../embeds/helpers/itemString';
@@ -34,7 +34,7 @@ const pirkt: Command = {
     ],
   },
   autocomplete: pirktAutocomplete,
-  async run(i: ChatInputCommandInteraction) {
+  async run(i) {
     const itemToBuyKey = i.options.getString('nosaukums')!;
     const amount = i.options.getInteger('daudzums') ?? 1;
 

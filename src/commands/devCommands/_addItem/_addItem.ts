@@ -1,5 +1,5 @@
 import Command from '../../../interfaces/Command';
-import { ApplicationCommandOptionType, ChatInputCommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord.js';
 import embedTemplate from '../../../embeds/embedTemplate';
 import itemString from '../../../embeds/helpers/itemString';
 import addItem from '../../../economy/addItems';
@@ -36,7 +36,7 @@ const _addItem: Command = {
     ],
   },
   autocomplete: _addItemAutocomplete,
-  async run(i: ChatInputCommandInteraction) {
+  async run(i) {
     const target = i.options.getUser('lietotājs')!;
     const itemToAddKey = i.options.getString('nosaukums')!;
     const amountToAdd = i.options.getInteger('daudzums')!;

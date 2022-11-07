@@ -1,5 +1,5 @@
 import Command from '../../../interfaces/Command';
-import { ApplicationCommandOptionType, ChatInputCommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord.js';
 import ephemeralReply from '../../../embeds/ephemeralReply';
 import findUser from '../../../economy/findUser';
 import errorEmbed from '../../../embeds/errorEmbed';
@@ -66,7 +66,7 @@ const iedot: Command = {
     ],
   },
   autocomplete: iedotAutocomplete,
-  async run(i: ChatInputCommandInteraction) {
+  async run(i) {
     const target = i.options.getUser('lietotājs')!;
     const itemToGiveKey = i.options.getString('nosaukums')!;
     let amountToGive = i.options.getInteger('daudzums') ?? 1;
