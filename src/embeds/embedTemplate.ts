@@ -28,7 +28,7 @@ interface EmbedTemplateOptions {
   )[];
 }
 
-export const ULMANBOTA_VERSIJA = '4.1';
+export const ULMANBOTA_VERSIJA = '4.2';
 
 export default function embedTemplate(options: EmbedTemplateOptions): InteractionReplyOptions & { fetchReply: true } {
   return {
