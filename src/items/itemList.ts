@@ -1,12 +1,4 @@
-import Item, {
-  AttributeItem,
-  BaseItem,
-  item,
-  NotSellableItem,
-  ShopItem,
-  TirgusItem,
-  UsableItem,
-} from '../interfaces/Item';
+import Item, { AttributeItem, BaseItem, item, ShopItem, TirgusItem, UsableItem } from '../interfaces/Item';
 import virve from './usableItems/virve';
 import divainais_burkans from './usableItems/divainais_burkans';
 import mugursoma, { INCREASE_CAP_1, INV_INCREASE_AMOUNT_1 } from './usableItems/mugursoma';
@@ -810,25 +802,25 @@ const itemList: { [key: ItemKey]: Item } = {
     removedOnUse: false,
     use: smilsu_pulkstenis,
   }),
-  patriota_piespraude: item<NotSellableItem>({
-    nameNomVsk: 'patriotu piespraude',
-    nameNomDsk: 'patriotu piespraudes',
-    nameAkuVsk: 'patriotu piespraudi',
-    nameAkuDsk: 'patriotu piespraudes',
-    isVirsiesuDzimte: false,
-    emoji: {
-      id: '1037454453990764636',
-      name: 'piespraude',
-    },
-    imgLink: null,
-    categories: [ItemCategory.OTHER],
-    value: 0,
-    notSellable: true,
-    attributes: {
-      piespraudeNum: 0,
-    },
-    use: () => ({ text: 'chau' }),
-  }),
+  // patriota_piespraude: item<NotSellableItem>({
+  //   nameNomVsk: 'patriotu piespraude',
+  //   nameNomDsk: 'patriotu piespraudes',
+  //   nameAkuVsk: 'patriotu piespraudi',
+  //   nameAkuDsk: 'patriotu piespraudes',
+  //   isVirsiesuDzimte: false,
+  //   emoji: {
+  //     id: '1037454453990764636',
+  //     name: 'piespraude',
+  //   },
+  //   imgLink: null,
+  //   categories: [ItemCategory.OTHER],
+  //   value: 0,
+  //   notSellable: true,
+  //   attributes: {
+  //     piespraudeNum: 0,
+  //   },
+  //   use: () => ({ text: 'chau' }),
+  // }),
 
   // -- brīvgriezieni --
   brivgriez10: item<UsableItem>({
