@@ -25,6 +25,7 @@ import statistika from './economyCommands/statistika/statistika';
 import palidziba from './economyCommands/palidziba/palidziba';
 import rulete from './economyCommands/rulete/rulete';
 import pabalsts from './economyCommands/pabalsts';
+import izsole from './devCommands/izsole/izsole';
 
 // komandu objektu saraksts
 export const commandList: Command[] = [
@@ -52,4 +53,4 @@ export const commandList: Command[] = [
   pabalsts,
 ];
 
-export const devCommandList: Command[] = [_addLati, _addItem, _addXP, _clearCache];
+export const devCommandList: Command[] = [_addLati, _addItem, _addXP, _clearCache, izsole];

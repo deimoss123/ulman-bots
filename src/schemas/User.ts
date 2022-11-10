@@ -28,6 +28,19 @@ export const dailyCooldownDefault = {
   pabalsts: dailyCooldownDefaultEach,
 };
 
+export const ItemAttributesSchema = {
+  timesUsed: Number,
+  customName: String,
+  durability: Number,
+  lastUsed: Number, // unix millis
+  foundItemKey: String,
+  latiCollected: Number,
+  holdsFishCount: Number,
+  createdAt: Number, // unix millis
+  fedUntil: Number, // unix millis
+  piespraudeNum: Number,
+};
+
 const userSchema = new Schema<UserProfile>({
   userId: ReqStringIndex,
   guildId: ReqStringIndex,
@@ -52,22 +65,12 @@ const userSchema = new Schema<UserProfile>({
     ],
     default: [],
   },
+
   specialItems: {
     type: [
       {
         name: String,
-        attributes: {
-          timesUsed: Number,
-          customName: String,
-          durability: Number,
-          lastUsed: Number, // unix millis
-          foundItemKey: String,
-          latiCollected: Number,
-          holdsFishCount: Number,
-          createdAt: Number, // unix millis
-          fedUntil: Number, // unix millis
-          piespraudeNum: Number,
-        },
+        attributes: ItemAttributesSchema,
       },
     ],
     default: [],

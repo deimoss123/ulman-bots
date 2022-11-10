@@ -7,6 +7,7 @@ import {
   InteractionUpdateOptions,
   Message,
   MessagePayload,
+  ModalSubmitInteraction,
   SelectMenuBuilder,
   SelectMenuInteraction,
 } from 'discord.js';
@@ -24,7 +25,7 @@ export interface CallbackReturn {
 }
 
 export default async function buttonHandler(
-  interaction: ChatInputCommandInteraction | ButtonInteraction | SelectMenuInteraction,
+  interaction: ChatInputCommandInteraction | ButtonInteraction | SelectMenuInteraction | ModalSubmitInteraction,
   interactionName: string,
   interactionMsg: Message,
   callback: (buttonInteraction: ButtonInteraction | SelectMenuInteraction) => Promise<CallbackReturn | void>,
