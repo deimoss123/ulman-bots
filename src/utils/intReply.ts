@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import {
   ButtonInteraction,
   ChatInputCommandInteraction,
@@ -28,14 +29,10 @@ async function intReply(
   options: (InteractionReplyOptions & { fetchReply: true }) | InteractionReplyOptions | string
 ): Promise<InteractionResponse | Message | null> {
   try {
-    if (typeof options !== 'string' && 'fetchReply' in options && options.fetchReply === true) {
-      const res = await interaction.reply(options);
-      return res;
-    }
-
     const res = await interaction.reply(options);
     return res;
-  } catch (_) {
+  } catch (e: any) {
+    console.log(new Date().toLocaleString('en-GB') + chalk.redBright(' [Error] ') + chalk.bold(e.message));
     return null;
   }
 }
