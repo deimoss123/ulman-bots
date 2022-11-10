@@ -126,10 +126,10 @@ const updatesList: Record<
       },
     ],
   },
-  '4.2': {
-    date: '???',
-    fields: [],
-  },
+  // '4.2': {
+  //   date: '???',
+  //   fields: [],
+  // },
 };
 
 export default updatesList;
