@@ -28,7 +28,7 @@ function millisFromStr(str: string): number | null {
     return null;
   }
 
-  const date = new Date(0).setFullYear(2022, +month, +day);
+  const date = new Date(0).setFullYear(2022, +month - 1, +day);
   const date2 = new Date(date).setHours(+hours, +minutes, 0, 0);
   return date2;
 }
@@ -54,6 +54,14 @@ export default async function izsoleCreate(i: ChatInputCommandInteraction) {
 
   if (endDate === null) {
     return intReply(i, ephemeralReply('Nepareizi ievadīts beigu datums/laiks'));
+  }
+
+  if (startDate < Date.now()) {
+    return intReply(i, ephemeralReply('Izsole nevar sākties pagātnē'));
+  }
+
+  if (startDate > endDate) {
+    return intReply(i, ephemeralReply('Izsole nevar beigties pirms tās sākuma'));
   }
 
   let attributes: ItemAttributes | null = null;
@@ -102,7 +110,16 @@ export default async function izsoleCreate(i: ChatInputCommandInteraction) {
 
     switch (customId) {
       case 'izsole_create_yes': {
-        const newAuction = await createAuction(itemKey, amount, attributes, startPrice, startDate, endDate);
+        const newAuction = await createAuction(
+          int.client.user.id,
+          itemKey,
+          amount,
+          attributes,
+          startPrice,
+          startDate,
+          endDate
+        );
+
         if (!newAuction) return { error: true };
 
         return {

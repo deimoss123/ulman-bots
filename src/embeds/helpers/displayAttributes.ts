@@ -9,7 +9,7 @@ import millisToReadableTime from './millisToReadableTime';
 
 const hiddenAttributes: Partial<keyof ItemAttributes>[] = ['customName', 'foundItemKey', 'fedUntil'];
 
-export function displayAttributes(item: SpecialItemInProfile, inline = false) {
+export function displayAttributes(item: SpecialItemInProfile, inline = false, prefix = '') {
   const currTime = Date.now();
 
   const attributesLat: Record<
@@ -73,5 +73,5 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false) {
   });
 
   if (inline) return textArr.join(', ');
-  return textArr.join('\n');
+  return textArr.map(a => `${prefix}${a}`).join('\n');
 }

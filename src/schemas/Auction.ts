@@ -12,6 +12,13 @@ const reqNum: SchemaDefinitionProperty = {
   required: true,
 };
 
+const bid = {
+  userId: reqStr,
+  userTag: reqStr,
+  lati: reqNum,
+  date: reqNum,
+};
+
 const auctionSchema = new Schema<AuctionType>({
   itemKey: reqStr,
   itemAmount: reqNum,
@@ -31,21 +38,12 @@ const auctionSchema = new Schema<AuctionType>({
   endDate: reqNum,
 
   currentBid: {
-    type: {
-      userId: reqStr,
-      lati: reqNum,
-    },
+    type: bid,
     default: null,
   },
 
   bidHistory: {
-    type: [
-      {
-        userId: reqStr,
-        lati: reqNum,
-        date: reqNum,
-      },
-    ],
+    type: [bid],
     default: [],
   },
 });

@@ -16,11 +16,13 @@ interface AuctionType {
 
   currentBid: {
     userId: string;
+    userTag: string;
     lati: number;
   } | null;
 
   bidHistory: {
     userId: string;
+    userTag: string;
     lati: number;
     date: number;
   }[];
