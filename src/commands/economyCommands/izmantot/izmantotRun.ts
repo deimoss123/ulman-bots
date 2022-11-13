@@ -46,7 +46,7 @@ export default async function izmantotRun(
     return intReply(i, ephemeralReply(`Tavā inventārā nav **${itemString(itemToUse)}**`));
   }
 
-  if ('removedOnUse' in itemToUse) {
+  if ('removedOnUse' in itemToUse && itemToUse.removedOnUse) {
     const resUser = await addItems(userId, guildId, { [itemToUseKey]: -1 });
     if (!resUser) return intReply(i, errorEmbed);
   }
