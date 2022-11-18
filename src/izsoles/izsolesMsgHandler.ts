@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 import findAuctionById from '../economy/auction/findAuctionById';
 import iconEmojis from '../embeds/iconEmojis';
 import smallEmbed from '../embeds/smallEmbed';
+import izsoleEmbed from './izsoleEmbed';
 
 export default async function izsolesMsgHandler(msg: Message, apiCommand: string, content: string[]) {
   if (!process.env.AUCTION_CHANNEL) return;
@@ -21,7 +22,7 @@ export default async function izsolesMsgHandler(msg: Message, apiCommand: string
       }
 
       try {
-        await auctionChannel.send('izsole :)');
+        await auctionChannel.send(izsoleEmbed(auction));
       } catch (e) {
         return msg.reply(
           smallEmbed(`${iconEmojis.cross} Neizdevās aizsūtīt ziņu izsoles kanālā (${auctionChannel.id})`, 0xee0000)

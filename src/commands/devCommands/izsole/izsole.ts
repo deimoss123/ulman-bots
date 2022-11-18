@@ -1,6 +1,9 @@
 import { ApplicationCommandOptionType } from 'discord.js';
+import findAuctionById from '../../../economy/auction/findAuctionById';
+import ephemeralReply from '../../../embeds/ephemeralReply';
 import errorEmbed from '../../../embeds/errorEmbed';
 import Command from '../../../interfaces/Command';
+import izsoleEmbed from '../../../izsoles/izsoleEmbed';
 import intReply from '../../../utils/intReply';
 import _addItemAutocomplete from '../_addItem/_addItemAutocomplete';
 import izsoleCreate from './izsoleCreate';
@@ -71,6 +74,11 @@ const izsole: Command = {
         description: 'Saraksts ar izsolēm',
         type: ApplicationCommandOptionType.Subcommand,
       },
+      {
+        name: 'test',
+        description: 'Tests',
+        type: ApplicationCommandOptionType.Subcommand,
+      },
     ],
   },
   autocomplete: _addItemAutocomplete,
@@ -88,6 +96,13 @@ const izsole: Command = {
       case 'list':
         izsoleList(i);
         break;
+      case 'test': {
+        const auctionChannel = i.client.channels.cache.get(process.env.AUCTION_CHANNEL!);
+        if (!auctionChannel?.isTextBased()) break;
+        const auction = await findAuctionById('637513a99e464ed7426ec075');
+        auctionChannel!.send(izsoleEmbed(auction!));
+        intReply(i, ephemeralReply(':)'));
+      }
     }
   },
 };
