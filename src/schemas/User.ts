@@ -38,6 +38,8 @@ export const ItemAttributesSchema = {
   holdsFishCount: Number,
   createdAt: Number, // unix millis
   fedUntil: Number, // unix millis
+  isCooked: Boolean,
+  hat: String,
   piespraudeNum: Number,
 };
 

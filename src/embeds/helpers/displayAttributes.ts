@@ -4,10 +4,12 @@ import itemList, { ItemCategory } from '../../items/itemList';
 import { KAFIJAS_APARATS_COOLDOWN } from '../../items/usableItems/kafijas_aparats';
 import { kakisFedState } from '../../items/usableItems/kakis';
 import { PETNIEKS_COOLDOWN } from '../../items/usableItems/petnieks';
+import capitalizeFirst from './capitalizeFirst';
+import { makeEmojiString } from './itemString';
 import latiString from './latiString';
 import millisToReadableTime from './millisToReadableTime';
 
-const hiddenAttributes: Partial<keyof ItemAttributes>[] = ['customName', 'foundItemKey', 'fedUntil'];
+const hiddenAttributes: Partial<keyof ItemAttributes>[] = ['customName', 'foundItemKey', 'fedUntil', 'isCooked', 'hat'];
 
 export function displayAttributes(item: SpecialItemInProfile, inline = false, prefix = '') {
   const currTime = Date.now();
@@ -30,12 +32,16 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false, pr
             (inline ? '' : '`'),
     },
     petnieks: {
-      lastUsed: (n, { foundItemKey }) =>
-        currTime - n >= PETNIEKS_COOLDOWN
+      lastUsed: (n, { foundItemKey, hat }) =>
+        (currTime - n >= PETNIEKS_COOLDOWN
           ? `${inline ? '' : '**'}Nopētījis:${inline ? '' : '**'} ${itemList[foundItemKey!].nameAkuVsk}`
           : `Pēta: ${inline ? '' : '`'}` +
             `${millisToReadableTime(PETNIEKS_COOLDOWN - currTime + n)}` +
-            (inline ? '' : '`'),
+            (inline ? '' : '`')) +
+        (hat
+          ? `${inline ? ', ' : '\n'}Cepure: ` +
+            (inline ? capitalizeFirst(itemList[hat].nameNomVsk) : makeEmojiString(itemList[hat].emoji!))
+          : ''),
     },
     makskeres: {
       durability: n => `Izturība: ${n}/${maksekeresData[item.name].maxDurability}`,
@@ -48,13 +54,20 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false, pr
       holdsFishCount: n => `Satur ${inline ? n : `**${n}**`} zivis`,
     },
     kakis: {
-      createdAt: (n, { fedUntil }) =>
-        fedUntil! < currTime
-          ? `${inline ? '' : '_**'}MIRIS${inline ? '' : '**_'} ⚰️`
-          : `Vecums: ${inline ? '' : '**'}${millisToReadableTime(currTime - n)}` +
-            (inline ? ', ' : '**\n**') +
-            kakisFedState.find(s => fedUntil! - currTime > s.time)?.name +
-            (inline ? '' : '**'),
+      createdAt: (n, { fedUntil, hat }) => {
+        return (
+          (fedUntil! < currTime
+            ? `${inline ? '' : '_**'}MIRIS${inline ? '' : '**_'} ⚰️`
+            : `Vecums: ${inline ? '' : '**'}${millisToReadableTime(currTime - n)}` +
+              (inline ? ', ' : '**\n**') +
+              kakisFedState.find(s => fedUntil! - currTime > s.time)?.name +
+              (inline ? '' : '**')) +
+          (hat
+            ? `${inline ? ', ' : '\n'}Cepure: ` +
+              (inline ? capitalizeFirst(itemList[hat].nameNomVsk) : makeEmojiString(itemList[hat].emoji!))
+            : '')
+        );
+      },
     },
     patriota_piespraude: {
       piespraudeNum: n => `${inline ? '' : '**'}Nr. ${n}${inline ? '' : '**'}`,

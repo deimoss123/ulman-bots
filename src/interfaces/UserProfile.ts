@@ -30,6 +30,10 @@ export interface ItemAttributes {
   // kaķis (unix millis)
   createdAt?: number;
   fedUntil?: number;
+  isCooked?: boolean; // vai kaķis ir izcepts
+
+  // cepure - kaķim un pētniekam
+  hat?: ItemKey;
 
   // sūdīgs nosaukums, bet domāts patriotu piespraudei, numurs pēc kārtas
   piespraudeNum?: number;

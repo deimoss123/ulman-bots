@@ -38,6 +38,7 @@ export enum ItemCategory {
   MAKSKERE,
   BRIVGRIEZIENS,
   TIRGUS,
+  ADVENTE_2022,
   OTHER,
 }
 
@@ -344,6 +345,16 @@ const itemList: { [key: ItemKey]: Item } = {
       id: '1029800146638213160',
       name: 'petnieks',
     },
+    customEmoji: function ({ hat }) {
+      if (hat === 'salaveca_cepure') {
+        return {
+          id: '1043304197631783042',
+          name: 'petnieks_zsv',
+        };
+      }
+
+      return this.emoji!;
+    },
     imgLink: 'https://www.ulmanbots.lv/images/items/petnieks.png',
     categories: [ItemCategory.TIRGUS],
     value: 300,
@@ -351,6 +362,7 @@ const itemList: { [key: ItemKey]: Item } = {
     attributes: {
       lastUsed: 0,
       foundItemKey: '',
+      hat: '',
     },
     use: petnieks,
   }),
@@ -456,8 +468,8 @@ const itemList: { [key: ItemKey]: Item } = {
       id: '1032294560816173136',
       name: 'kakis',
     },
-    customEmoji: function (a) {
-      if (a.customName) {
+    customEmoji: function ({ hat }) {
+      if (hat === 'salaveca_cepure') {
         return {
           id: '1043304195828240495',
           name: 'kakis_zsv',
@@ -474,6 +486,8 @@ const itemList: { [key: ItemKey]: Item } = {
       customName: '',
       createdAt: 0,
       fedUntil: 0,
+      isCooked: false,
+      hat: '',
     },
     use: kakis,
   }),
@@ -901,6 +915,25 @@ const itemList: { [key: ItemKey]: Item } = {
     value: 20,
     removedOnUse: false,
     use: brivgrieziens(100),
+  }),
+
+  // -- ziemassvētku mantas --
+  salaveca_cepure: item<UsableItem>({
+    info: '', // TODO
+    nameNomVsk: 'salaveča cepure',
+    nameNomDsk: 'salaveča cepures',
+    nameAkuVsk: 'salaveča cepuri',
+    nameAkuDsk: 'salaveča cepures',
+    isVirsiesuDzimte: false,
+    emoji: {
+      id: '1043304199309496330',
+      name: 'salaveca_cepure',
+    },
+    imgLink: null, // TODO
+    categories: [ItemCategory.ADVENTE_2022],
+    value: 75,
+    removedOnUse: false,
+    use: () => ({ text: '' }), // TODO
   }),
 };
 
