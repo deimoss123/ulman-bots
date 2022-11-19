@@ -87,17 +87,14 @@ function deadTime(createdAt: number, fedUntil: number) {
   );
 }
 
-function embed(
-  i: ChatInputCommandInteraction | ButtonInteraction,
-  { createdAt, fedUntil, customName }: ItemAttributes,
-  currTime: number
-) {
+function embed(i: ChatInputCommandInteraction | ButtonInteraction, attributes: ItemAttributes, currTime: number) {
+  const { createdAt, fedUntil } = attributes;
   const isDead = fedUntil! < currTime;
 
   return embedTemplate({
     i,
     color: commandColors.izmantot,
-    title: `Izmantot: ${itemString(itemList.kakis, null, true, customName)} ${isDead ? '(miris)' : ''}`,
+    title: `Izmantot: ${itemString(itemList.kakis, null, true, attributes)} ${isDead ? '(miris)' : ''}`,
     description: isDead
       ? `🪦 ${deadTime(createdAt!, fedUntil!)}`
       : `Vecums: **${millisToReadableTime(currTime - createdAt!)}**\n` +

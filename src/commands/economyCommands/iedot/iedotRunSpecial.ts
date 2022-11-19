@@ -18,7 +18,7 @@ import ephemeralReply from '../../../embeds/ephemeralReply';
 import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import itemString, { itemStringCustom, makeEmojiString } from '../../../embeds/helpers/itemString';
 import latiString from '../../../embeds/helpers/latiString';
-import Item from '../../../interfaces/Item';
+import Item, { AttributeItem } from '../../../interfaces/Item';
 import UserProfile, { SpecialItemInProfile } from '../../../interfaces/UserProfile';
 import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
@@ -64,7 +64,7 @@ function makeEmbedAfter(
 
     fields: [
       ...itemsToGive.map(item => ({
-        name: itemString(itemObj, null, true, item.attributes.customName),
+        name: itemString(itemObj, null, true, item.attributes),
         value:
           ('notSellable' in itemObj
             ? ''
@@ -107,7 +107,7 @@ function makeEmbed(
 
 function makeComponents(
   itemsInInv: SpecialItemInProfile[],
-  itemObj: Item,
+  itemObj: AttributeItem,
   selectedItems: SpecialItemInProfile[],
   totalTax = 0,
   userLati = 0,
@@ -141,7 +141,7 @@ function makeComponents(
                         : itemObj.value
                     )} | `) + displayAttributes(item, true),
               value: item._id!,
-              emoji: itemObj.emoji || '❓',
+              emoji: (itemObj.customEmoji ? itemObj.customEmoji(item.attributes) : itemObj.emoji) || '❓',
               default: !!selectedIds.length && selectedIds!.includes(item._id!),
             }))
         )
@@ -187,7 +187,7 @@ export default async function iedotRunSpecial(
   const userId = i.user.id;
   const guildId = i.guildId!;
 
-  const itemObj = itemList[itemKey];
+  const itemObj = itemList[itemKey] as AttributeItem;
   let selectedItems: SpecialItemInProfile[] = [];
 
   let totalTax: number;

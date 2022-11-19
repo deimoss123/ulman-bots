@@ -71,6 +71,8 @@ export interface AttributeItem extends Omit<UsableItem, 'removedOnUse'> {
   attributes: ItemAttributes;
   // speciāla vērtība, piem. makšķeres izturība ietekmē vērtību
   customValue?: (attributes: ItemAttributes) => number;
+  // speciāls emoji kas mainās atkarībā no atribūtiem
+  customEmoji?: (attributes: ItemAttributes) => APIMessageComponentEmoji;
 }
 
 export interface NotSellableItem extends AttributeItem {

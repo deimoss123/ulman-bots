@@ -1,5 +1,6 @@
 import { APIMessageComponentEmoji } from 'discord.js';
 import Item from '../../interfaces/Item';
+import { ItemAttributes } from '../../interfaces/UserProfile';
 import capitalizeFirst from './capitalizeFirst';
 
 export function makeEmojiString(emoji: APIMessageComponentEmoji) {
@@ -26,9 +27,12 @@ export default function itemString(
   item: Item,
   amount: number | null = null,
   akuzativs = false,
-  customName = ''
+  attributes?: ItemAttributes
 ): string {
-  const emojiStr = item.emoji ? makeEmojiString(item.emoji) : '❓';
+  const customName = attributes && attributes.customName ? attributes.customName : '';
+
+  const emoji = attributes && 'customEmoji' in item && item.customEmoji ? item.customEmoji(attributes) : item.emoji;
+  const emojiStr = emoji ? makeEmojiString(emoji) : '❓';
 
   let name = '';
   if (customName) {

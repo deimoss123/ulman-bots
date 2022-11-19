@@ -67,7 +67,7 @@ export function pardotEmbed(
       itemsToSell
         .map(
           ({ name, item, amount, attributes }) =>
-            `${itemString(item, amount, true, attributes?.customName)}` +
+            `${itemString(item, amount, true, attributes)}` +
             (attributes ? `\n${displayAttributes({ name, attributes })}` : '')
         )
         .join('\n'),

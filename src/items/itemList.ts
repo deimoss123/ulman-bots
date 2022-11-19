@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 import Item, { AttributeItem, BaseItem, item, ShopItem, TirgusItem, UsableItem } from '../interfaces/Item';
 import virve from './usableItems/virve';
 import divainais_burkans from './usableItems/divainais_burkans';
@@ -454,6 +455,16 @@ const itemList: { [key: ItemKey]: Item } = {
     emoji: {
       id: '1032294560816173136',
       name: 'kakis',
+    },
+    customEmoji: function (a) {
+      if (a.customName) {
+        return {
+          id: '1043304195828240495',
+          name: 'kakis_zsv',
+        };
+      }
+
+      return this.emoji!;
     },
     imgLink: 'https://www.ulmanbots.lv/images/items/kakis.png',
     categories: [ItemCategory.TIRGUS],

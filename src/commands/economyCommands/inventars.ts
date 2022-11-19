@@ -74,7 +74,7 @@ function mapItems({ items, specialItems }: UserProfile) {
       const value = item.customValue ? item.customValue(attributes) : item.value;
 
       return {
-        name: itemString(item, null, false, attributes?.customName),
+        name: itemString(item, null, false, attributes),
         value:
           `${itemTypes[currentItemType].emoji} ` +
           `${currentItemType === 'not_sellable' ? '??? lati' : latiString(value)}\n` +

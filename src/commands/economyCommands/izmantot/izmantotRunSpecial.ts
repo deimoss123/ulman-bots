@@ -36,7 +36,7 @@ function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: AttributeIt
               label: itemStringCustom(itemObj, item.attributes?.customName),
               description: displayAttributes(item, true),
               value: item._id!,
-              emoji: itemObj.emoji || '❓',
+              emoji: (itemObj.customEmoji ? itemObj.customEmoji(item.attributes) : itemObj.emoji) || '❓',
               default: selectedId === item._id,
             }))
         )
@@ -61,7 +61,7 @@ function makeEmbed(
   return embedTemplate({
     i,
     color: embedColor,
-    title: `Izmantot: ${itemString(itemObj, null, true, selectedItem.attributes?.customName)}`,
+    title: `Izmantot: ${itemString(itemObj, null, true, selectedItem.attributes)}`,
     description: useRes.text,
     fields: useRes.fields || [],
   });

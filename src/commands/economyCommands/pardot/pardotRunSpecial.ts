@@ -17,13 +17,13 @@ import errorEmbed from '../../../embeds/errorEmbed';
 import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import itemString, { itemStringCustom } from '../../../embeds/helpers/itemString';
 import latiString from '../../../embeds/helpers/latiString';
-import Item from '../../../interfaces/Item';
+import { AttributeItem } from '../../../interfaces/Item';
 import UserProfile, { SpecialItemInProfile } from '../../../interfaces/UserProfile';
 import itemList, { ItemKey } from '../../../items/itemList';
 import intReply from '../../../utils/intReply';
 import { PIRKT_PARDOT_NODOKLIS } from './pardot';
 
-function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: Item, selectedIds: string[]) {
+function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: AttributeItem, selectedIds: string[]) {
   return [
     new ActionRowBuilder<SelectMenuBuilder>().addComponents(
       new SelectMenuBuilder()
@@ -46,7 +46,7 @@ function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: Item, selec
                   'customValue' in itemObj && itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value
                 )} | ` + displayAttributes(item, true),
               value: item._id!,
-              emoji: itemObj.emoji || '❓',
+              emoji: (itemObj.customEmoji ? itemObj.customEmoji(item.attributes) : itemObj.emoji) || '❓',
               default: !!selectedIds.length && selectedIds!.includes(item._id!),
             }))
         )
@@ -74,7 +74,7 @@ function makeEmbed(
     color,
     fields: [
       ...soldItems.map(item => ({
-        name: itemString(itemList[item.name], null, false, item.attributes.customName),
+        name: itemString(itemList[item.name], null, false, item.attributes),
         value: displayAttributes(item),
         inline: false,
       })),
@@ -93,7 +93,7 @@ export default async function pardotRunSpecial(
   const userId = i.user.id;
   const guildId = i.guildId!;
 
-  const itemObj = itemList[itemKey];
+  const itemObj = itemList[itemKey] as AttributeItem;
   let selectedIds: string[] = [];
 
   if (itemsInInv.length === 1) {
