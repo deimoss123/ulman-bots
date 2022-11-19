@@ -69,8 +69,8 @@ async function handleModal(i: ModalSubmitInteraction) {
     i,
     smallEmbed(
       'Burkāna nosakums veiksmīgi nomainīts\n' +
-        `No: ${itemString(itemList.divainais_burkans, null, false, burkansPrev.attributes.customName)}\n` +
-        `Uz: **${itemString(itemList.divainais_burkans, null, false, res.newItem.attributes.customName)}**`,
+        `No: ${itemString(itemList.divainais_burkans, null, false, burkansPrev.attributes)}\n` +
+        `Uz: **${itemString(itemList.divainais_burkans, null, false, res.newItem.attributes)}**`,
       0xffffff
     )
   );
@@ -92,12 +92,7 @@ const divainais_burkans: UsableItemFunc = async (userId, guildId, _, specialItem
         embedTemplate({
           i,
           color,
-          title: `Izmantot: ${itemString(
-            itemList[specialItem!.name]!,
-            null,
-            true,
-            specialItem!.attributes.customName
-          )}`,
+          title: `Izmantot: ${itemString(itemList[specialItem!.name]!, null, true, specialItem!.attributes)}`,
           description:
             'Tu nokodies dīvaino burkānu, **mmmm** tas bija ļoti garšīgs\n' +
             `Šis burkāns ir nokosts **${res.newItem.attributes.timesUsed!}** ` +
