@@ -455,8 +455,7 @@ const itemList: { [key: ItemKey]: Item } = {
       '__Kaķi ir iespājms pabarot ar šīm mantām:__\n' +
       Object.entries(kakisFoodData)
         .sort(([, a], [, b]) => b.feedTimeMs - a.feedTimeMs)
-        // @ts-ignore
-        .map(([key]) => `**${itemString(this.default[key])}** ${foodDataPercentage(key)}`)
+        .map(([key]) => `**${itemString(key)}** ${foodDataPercentage(key)}`)
         .join('\n') +
       '\n\n_**Paldies Ričardam par šo izcilo kaķa bildi (viņu sauc Sāra)**_',
     nameNomVsk: 'kaķis',
@@ -919,7 +918,10 @@ const itemList: { [key: ItemKey]: Item } = {
 
   // -- ziemassvētku mantas --
   salaveca_cepure: item<UsableItem>({
-    info: '', // TODO
+    info: () =>
+      `Salaveča cepuri var uzvilkt:\n` +
+      ['petnieks', 'kakis'].map(key => `• **${itemString(key)}**\n`).join('') +
+      `\nUzvelkot cepuri mainīsies mantas izskatas (emoji), uzvilkt cepuri var izmantojot mantu kurai vēlies to uzvilkt`,
     nameNomVsk: 'salaveča cepure',
     nameNomDsk: 'salaveča cepures',
     nameAkuVsk: 'salaveča cepuri',
@@ -933,7 +935,10 @@ const itemList: { [key: ItemKey]: Item } = {
     categories: [ItemCategory.ADVENTE_2022],
     value: 75,
     removedOnUse: false,
-    use: () => ({ text: '' }), // TODO
+    use: function () {
+      // @ts-ignore
+      return { text: this.info() };
+    },
   }),
 };
 
