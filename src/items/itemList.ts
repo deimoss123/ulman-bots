@@ -480,6 +480,13 @@ const itemList: { [key: ItemKey]: Item } = {
     imgLink: 'https://www.ulmanbots.lv/images/items/kakis.png',
     categories: [ItemCategory.TIRGUS],
     value: 100,
+    customValue: function ({ fedUntil, createdAt }) {
+      const currTime = Date.now();
+      if (fedUntil! < Date.now()) return 0;
+
+      // katra pilna diena dod +15 latus vērtībai
+      return this.value + 15 * Math.floor((currTime - createdAt!) / 86_400_000);
+    },
     tirgusPrice: { items: { lidaka: 3, asaris: 3, lasis: 3 } },
     attributes: {
       customName: '',
