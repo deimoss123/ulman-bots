@@ -25,7 +25,7 @@ import divaina_zivs from './usableItems/divaina_zivs';
 import loto_zivs from './usableItems/loto_zivs';
 import petniekzivs, { PETNIEKZIVS_STATUS_TIME } from './usableItems/petniekzivs';
 import kakis, { foodDataPercentage, kakisFedState, kakisFoodData, KAKIS_MAX_FEED } from './usableItems/kakis';
-import itemString from '../embeds/helpers/itemString';
+import itemString, { makeEmojiString } from '../embeds/helpers/itemString';
 
 export type ItemKey = string;
 
@@ -825,6 +825,25 @@ const itemList: { [key: ItemKey]: Item } = {
     value: 75,
     removedOnUse: false,
     use: smilsu_pulkstenis,
+  }),
+  kaka_parsaucejs: item<UsableItem>({
+    info: () =>
+      `Ar šo mantu var nomainīt **${makeEmojiString(itemList.kakis.emoji!)} Kaķa** vārdu\n` +
+      `Ja tev inventārā ir ${itemString('kaka_parsaucejs', null)}, izmantojot kaķi tev piedāvās nomainīt tā vārdu`,
+    nameNomVsk: 'kaķa pārsaucējs', // TODO: labāks nosaukums
+    nameNomDsk: 'kaķa pārsaucēji',
+    nameAkuVsk: 'kaķa pārsaucēju',
+    nameAkuDsk: 'kaķa pārsaucējus',
+    isVirsiesuDzimte: true,
+    emoji: null,
+    imgLink: null,
+    categories: [ItemCategory.OTHER],
+    value: 90,
+    removedOnUse: false,
+    use: function () {
+      // @ts-ignore
+      return { text: this.info() };
+    },
   }),
   // patriota_piespraude: item<NotSellableItem>({
   //   nameNomVsk: 'patriotu piespraude',
