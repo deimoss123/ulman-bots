@@ -34,7 +34,8 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false, pr
     petnieks: {
       lastUsed: (n, { foundItemKey, hat }) =>
         (currTime - n >= PETNIEKS_COOLDOWN
-          ? `${inline ? '' : '**'}Nopētījis:${inline ? '' : '**'} ${itemList[foundItemKey!].nameAkuVsk}`
+          ? `${inline ? '' : '**'}Nopētījis:${inline ? '' : '**'} ` +
+            (inline ? itemList[foundItemKey!].nameAkuVsk : makeEmojiString(itemList[foundItemKey!].emoji!))
           : `Pēta: ${inline ? '' : '`'}` +
             `${millisToReadableTime(PETNIEKS_COOLDOWN - currTime + n)}` +
             (inline ? '' : '`')) +
