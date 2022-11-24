@@ -62,6 +62,7 @@ const itemList: { [key: ItemKey]: Item } = {
     attributes: {
       durability: maksekeresData.koka_makskere.maxDurability,
     },
+    sortBy: { durability: 1 },
     allowDiscount: true,
     use: makskere,
   }),
@@ -174,6 +175,7 @@ const itemList: { [key: ItemKey]: Item } = {
       timesUsed: 0,
       customName: '',
     },
+    sortBy: { timesUsed: 1 },
     allowDiscount: true,
     use: divainais_burkans,
   }),
@@ -214,10 +216,11 @@ const itemList: { [key: ItemKey]: Item } = {
     imgLink: 'https://www.ulmanbots.lv/images/items/divaina_makskere.gif',
     categories: [ItemCategory.VEIKALS, ItemCategory.MAKSKERE],
     value: 450,
-    customValue: makskereCustomValue('divaina_makskere'),
+    // customValue: makskereCustomValue('divaina_makskere'),
     attributes: {
       durability: maksekeresData.divaina_makskere.maxDurability,
     },
+    sortBy: { durability: 1 },
     allowDiscount: true,
     use: makskere,
   }),
@@ -329,6 +332,7 @@ const itemList: { [key: ItemKey]: Item } = {
     attributes: {
       lastUsed: 0,
     },
+    sortBy: { lastUsed: -1 },
     use: kafijas_aparats,
   }),
   petnieks: item<AttributeItem & TirgusItem>({
@@ -364,6 +368,7 @@ const itemList: { [key: ItemKey]: Item } = {
       foundItemKey: '',
       hat: '',
     },
+    sortBy: { lastUsed: -1 },
     use: petnieks,
   }),
   loto_makskere: item<AttributeItem & TirgusItem>({
@@ -388,6 +393,7 @@ const itemList: { [key: ItemKey]: Item } = {
     attributes: {
       durability: maksekeresData.loto_makskere.maxDurability,
     },
+    sortBy: { durability: 1 },
     use: makskere,
   }),
   luznu_makskere: item<AttributeItem & TirgusItem>({
@@ -411,6 +417,7 @@ const itemList: { [key: ItemKey]: Item } = {
     attributes: {
       durability: maksekeresData.luznu_makskere.maxDurability,
     },
+    sortBy: { durability: 1 },
     use: makskere,
   }),
   naudas_maiss: item<AttributeItem & TirgusItem>({
@@ -438,6 +445,7 @@ const itemList: { [key: ItemKey]: Item } = {
     attributes: {
       latiCollected: 0,
     },
+    sortBy: { latiCollected: 1 },
     use: naudas_maiss,
   }),
   kakis: item<AttributeItem & TirgusItem>({
@@ -495,6 +503,7 @@ const itemList: { [key: ItemKey]: Item } = {
       isCooked: false,
       hat: '',
     },
+    sortBy: { createdAt: -1 },
     use: kakis,
   }),
 
@@ -618,6 +627,7 @@ const itemList: { [key: ItemKey]: Item } = {
     attributes: {
       holdsFishCount: 0,
     },
+    sortBy: { holdsFishCount: 1 },
     use: loto_zivs,
   }),
   juridiska_zivs: item<UsableItem>({
@@ -811,6 +821,7 @@ const itemList: { [key: ItemKey]: Item } = {
     attributes: {
       durability: maksekeresData.dizmakskere.maxDurability,
     },
+    sortBy: { durability: 1 },
     use: makskere,
   }),
   smilsu_pulkstenis: item<UsableItem>({

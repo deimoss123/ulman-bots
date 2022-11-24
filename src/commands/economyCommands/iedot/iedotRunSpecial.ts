@@ -24,6 +24,7 @@ import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems'
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import itemList, { ItemKey } from '../../../items/itemList';
 import intReply from '../../../utils/intReply';
+import { attributeItemSort } from '../inventars';
 import { cantPayTaxEmbed } from './iedot';
 
 async function iedotSpecialQuery(
@@ -125,11 +126,15 @@ function makeComponents(
         .setOptions(
           itemsInInv
             .slice(0, 25)
-            .sort((a, b) =>
-              'customValue' in itemObj && itemObj.customValue
-                ? itemObj.customValue(b.attributes) - itemObj.customValue(a.attributes)
-                : 0
-            )
+            .sort((a, b) => {
+              const valueA = itemObj.customValue ? itemObj.customValue(a.attributes) : itemObj.value;
+              const valueB = itemObj.customValue ? itemObj.customValue(b.attributes) : itemObj.value;
+              if (valueA === valueB) {
+                return attributeItemSort(a.attributes, b.attributes, itemObj.sortBy);
+              }
+
+              return valueB - valueA;
+            })
             .map(item => ({
               label: itemStringCustom(itemObj, item.attributes?.customName),
               description:

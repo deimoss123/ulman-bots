@@ -69,6 +69,9 @@ export interface UsableItem extends BaseItem {
 export interface AttributeItem extends Omit<UsableItem, 'removedOnUse'> {
   // mantu atribūti, piemēram kaķa vecums vai burkāna nosaukums
   attributes: ItemAttributes;
+  // pēc kādiem atribūtiem kārtot mantas inventārā un izvēlnēs
+  // 1 ir no lielākā uz mazāko, -1 ir no mazākā uz lielāko
+  sortBy: Partial<Record<keyof ItemAttributes, 1 | -1>>;
   // speciāla vērtība, piem. makšķeres izturība ietekmē vērtību
   customValue?: (attributes: ItemAttributes) => number;
   // speciāls emoji kas mainās atkarībā no atribūtiem

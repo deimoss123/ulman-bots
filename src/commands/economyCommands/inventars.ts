@@ -19,7 +19,7 @@ import countItems from '../../items/helpers/countItems';
 import commandColors from '../../embeds/commandColors';
 import itemString from '../../embeds/helpers/itemString';
 import ephemeralReply from '../../embeds/ephemeralReply';
-import UserProfile, { ItemInProfile, SpecialItemInProfile } from '../../interfaces/UserProfile';
+import UserProfile, { ItemAttributes, ItemInProfile, SpecialItemInProfile } from '../../interfaces/UserProfile';
 import Item, { AttributeItem, NotSellableItem } from '../../interfaces/Item';
 import { displayAttributes } from '../../embeds/helpers/displayAttributes';
 import buttonHandler from '../../embeds/buttonHandler';
@@ -50,6 +50,34 @@ export const itemTypes: Record<ItemType, { text: string; emoji: string }> = {
   },
 };
 
+export function attributeItemSort(
+  attrA: ItemAttributes,
+  attrB: ItemAttributes,
+  sortByObj: Partial<Record<keyof ItemAttributes, 1 | -1>>,
+  index = 0
+): number {
+  if (index >= Object.keys(sortByObj).length) return 0;
+
+  const [currentAttr, sortDirection] = Object.entries(sortByObj)[index] as [keyof ItemAttributes, 1 | -1];
+  const valueA = attrA[currentAttr];
+  const valueB = attrB[currentAttr];
+
+  if (valueA === valueB) {
+    return attributeItemSort(attrA, attrB, sortByObj, index + 1);
+  }
+
+  switch (typeof valueA) {
+    case 'string':
+      return valueA ? -1 : 1;
+    case 'number':
+      return ((valueB as number) - valueA) * sortDirection;
+    case 'boolean':
+      return valueA ? -1 : 1;
+  }
+
+  return 0;
+}
+
 function mapItems({ items, specialItems }: UserProfile) {
   const itemTypesInInv = new Set<ItemType>();
 
@@ -57,12 +85,23 @@ function mapItems({ items, specialItems }: UserProfile) {
     .sort((a, b) => {
       const itemA = itemList[a.name] as AttributeItem | NotSellableItem;
       const itemB = itemList[b.name] as AttributeItem | NotSellableItem;
-      return 'notSellable' in itemA === 'notSellable' in itemB
-        ? (itemB.customValue ? itemB.customValue(b.attributes) : itemB.value) -
-            (itemA.customValue ? itemA.customValue(a.attributes) : itemA.value)
-        : 'notSellable' in itemB
-        ? 1
-        : -1;
+
+      if ('notSellable' in itemA === 'notSellable' in itemB) {
+        const valueA = itemA.customValue ? itemA.customValue(a.attributes) : itemA.value;
+        const valueB = itemB.customValue ? itemB.customValue(b.attributes) : itemB.value;
+
+        if (a.name === b.name && valueA === valueB) {
+          const { sortBy } = itemA;
+
+          return attributeItemSort(a.attributes, b.attributes, sortBy);
+        }
+
+        return valueB - valueA;
+      } else if ('notSellable' in itemB) {
+        return 1;
+      }
+
+      return -1;
     })
     .map(specialItem => {
       const { name, attributes } = specialItem;
