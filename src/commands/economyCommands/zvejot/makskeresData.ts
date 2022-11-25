@@ -87,13 +87,16 @@ const maksekeresData: Record<
       metalluznis: { chance: '*', cost: 1 },
       brivgriez25: { chance: '*', cost: 1 },
 
-      brivgriez50: { chance: 0.1, cost: 2 },
-      latloto: { chance: 0.1, cost: 2 },
-      divaina_zivs: { chance: 0.1, cost: 2 },
+      brivgriez50: { chance: 0.08, cost: 2 },
+      latloto: { chance: 0.08, cost: 2 },
+      divaina_zivs: { chance: 0.08, cost: 2 },
 
-      juridiska_zivs: { chance: 0.1, cost: 3 },
-      loto_zivs: { chance: 0.05, cost: 3 },
-      smilsu_pulkstenis: { chance: 0.02, cost: 3 },
+      juridiska_zivs: { chance: 0.08, cost: 3 },
+      loto_zivs: { chance: 0.04, cost: 3 },
+
+      kaka_parsaucejs: { chance: 0.03, cost: 2 },
+
+      smilsu_pulkstenis: { chance: 0.03, cost: 3 },
       brivgriez100: { chance: 0.01, cost: 3 },
 
       kafija: { chance: 0, cost: 1 },
@@ -135,7 +138,6 @@ const maksekeresData: Record<
     timeMinHours: 24,
     timeMaxHours: 24,
     fishChances: {
-      // TODO: taras aparāts,
       divaina_mugursoma: { chance: '*', cost: 1 },
       kafijas_aparats: { chance: '*', cost: 1 },
       petnieks: { chance: '*', cost: 1 },
