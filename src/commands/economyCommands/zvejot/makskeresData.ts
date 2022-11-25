@@ -94,7 +94,7 @@ const maksekeresData: Record<
       juridiska_zivs: { chance: 0.08, cost: 3 },
       loto_zivs: { chance: 0.04, cost: 3 },
 
-      kaka_parsaucejs: { chance: 0.03, cost: 2 },
+      kaka_parsaucejs: { chance: 0.03, cost: 3 },
 
       smilsu_pulkstenis: { chance: 0.03, cost: 3 },
       brivgriez100: { chance: 0.01, cost: 3 },
