@@ -6,10 +6,10 @@ import mugursoma, { INCREASE_CAP_1, INV_INCREASE_AMOUNT_1 } from './usableItems/
 import latloto from './usableItems/latloto';
 import dizloto from './usableItems/dizloto';
 import kafija from './usableItems/kafija';
-import kafijas_aparats from './usableItems/kafijas_aparats';
+import kafijas_aparats, { kafijasAparatsUseMany } from './usableItems/kafijas_aparats';
 import velo, { veloInfo } from './usableItems/velo';
 import divaina_mugursoma, { INCREASE_CAP_2, INV_NCREASE_AMOUNT_2 } from './usableItems/divaina_mugursoma';
-import petnieks from './usableItems/petnieks';
+import petnieks, { petnieksUseMany } from './usableItems/petnieks';
 import juridiska_zivs, { JURIDISKA_ZIVS_STATUS } from './usableItems/juridiska_zivs';
 import maksekeresData from '../commands/economyCommands/zvejot/makskeresData';
 import makskere, { makskereCustomValue } from './usableItems/makskere';
@@ -334,6 +334,7 @@ const itemList: { [key: ItemKey]: Item } = {
     },
     sortBy: { lastUsed: -1 },
     use: kafijas_aparats,
+    useMany: kafijasAparatsUseMany,
   }),
   petnieks: item<AttributeItem & TirgusItem>({
     info:
@@ -370,6 +371,7 @@ const itemList: { [key: ItemKey]: Item } = {
     },
     sortBy: { lastUsed: -1 },
     use: petnieks,
+    useMany: petnieksUseMany,
   }),
   loto_makskere: item<AttributeItem & TirgusItem>({
     info:

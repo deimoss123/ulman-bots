@@ -1,4 +1,4 @@
-import { APIMessageComponentEmoji } from 'discord.js';
+import { APIMessageComponentEmoji, ButtonInteraction } from 'discord.js';
 import { ItemCategory, ItemKey } from '../items/itemList';
 import UsableItemReturn from './UsableItemReturn';
 import { ItemAttributes, SpecialItemInProfile } from './UserProfile';
@@ -66,6 +66,13 @@ export interface UsableItem extends BaseItem {
   use: UsableItemFunc;
 }
 
+export type UseManyType = {
+  // filtrs lai parādītu cik daudzi ir izmantojami
+  filter: (attr: ItemAttributes) => boolean;
+  // funkcija kas tiks palaista izmantojot vairākus
+  runFunc: (i: ButtonInteraction) => any;
+};
+
 export interface AttributeItem extends Omit<UsableItem, 'removedOnUse'> {
   // mantu atribūti, piemēram kaķa vecums vai burkāna nosaukums
   attributes: ItemAttributes;
@@ -76,6 +83,8 @@ export interface AttributeItem extends Omit<UsableItem, 'removedOnUse'> {
   customValue?: (attributes: ItemAttributes) => number;
   // speciāls emoji kas mainās atkarībā no atribūtiem
   customEmoji?: (attributes: ItemAttributes) => APIMessageComponentEmoji;
+  // izmantot vairākus vienlaicīgi
+  useMany?: UseManyType;
 }
 
 export interface NotSellableItem extends AttributeItem {

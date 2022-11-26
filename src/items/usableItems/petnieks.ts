@@ -2,21 +2,23 @@ import { ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
 import { ButtonInteraction, ButtonStyle, ChatInputCommandInteraction, ComponentType } from 'discord.js';
 import addItems from '../../economy/addItems';
 import editItemAttribute from '../../economy/editItemAttribute';
+import editMultipleItemAttributes from '../../economy/editMultipleItemAttributes';
 import findUser from '../../economy/findUser';
 import buttonHandler from '../../embeds/buttonHandler';
+import commandColors from '../../embeds/commandColors';
 import embedTemplate from '../../embeds/embedTemplate';
 import ephemeralReply from '../../embeds/ephemeralReply';
 import errorEmbed from '../../embeds/errorEmbed';
 import itemString from '../../embeds/helpers/itemString';
 import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
 import smallEmbed from '../../embeds/smallEmbed';
-import { UsableItemFunc } from '../../interfaces/Item';
+import { UsableItemFunc, UseManyType } from '../../interfaces/Item';
 import { ItemAttributes, ItemInProfile } from '../../interfaces/UserProfile';
 import intReply from '../../utils/intReply';
 import countFreeInvSlots from '../helpers/countFreeInvSlots';
 import itemList, { ItemKey } from '../itemList';
 
-export async function getRandFreeSpin() {
+export function getRandFreeSpin() {
   const spins: ItemKey[] = ['brivgriez10', 'brivgriez25', 'brivgriez50'];
   return spins[Math.floor(Math.random() * spins.length)];
 }
@@ -51,6 +53,74 @@ function components(hatInInv: ItemInProfile | undefined, { hat }: ItemAttributes
   ];
 }
 
+export const petnieksUseMany: UseManyType = {
+  filter: ({ lastUsed }) => lastUsed! + PETNIEKS_COOLDOWN < Date.now(),
+  async runFunc(i) {
+    const userId = i.user.id;
+    const guildId = i.guildId!;
+
+    const user = await findUser(userId, guildId);
+    if (!user) return intReply(i, errorEmbed);
+
+    const usableItems = user.specialItems.filter(
+      ({ name, attributes }) => name === 'petnieks' && this.filter(attributes)
+    );
+
+    if (!usableItems.length) {
+      return intReply(i, ephemeralReply(`Tev nav neviens izmantojams **${itemString('petnieks')}**`));
+    }
+
+    const itemsToAdd: Record<ItemKey, number> = {};
+    for (const {
+      attributes: { foundItemKey },
+    } of usableItems) {
+      itemsToAdd[foundItemKey!] = itemsToAdd[foundItemKey!] ? itemsToAdd[foundItemKey!] + 1 : 1;
+    }
+
+    const freeSlots = countFreeInvSlots(user);
+    if (freeSlots < usableItems.length) {
+      return intReply(
+        i,
+        ephemeralReply(
+          `Lai saņemtu brīvgriezienus tev vajag vismaz **${usableItems.length}** brīvas vietas inventārā\n` +
+            `Tev ir **${freeSlots}** brīvas vietas`
+        )
+      );
+    }
+
+    const res = await editMultipleItemAttributes(
+      userId,
+      guildId,
+      usableItems.map(({ _id, attributes }) => ({
+        itemId: _id!,
+        newAttributes: { ...attributes, foundItemKey: getRandFreeSpin(), lastUsed: Date.now() },
+      }))
+    );
+    const res2 = await addItems(userId, guildId, itemsToAdd);
+
+    if (!res || !res2) return intReply(i, errorEmbed);
+
+    intReply(
+      i,
+      embedTemplate({
+        i,
+        color: commandColors.izmantot,
+        title: `Izmantot ${itemString('petnieks', usableItems.length, true)}`,
+        fields: [
+          {
+            name: 'Atrastie brīvgriezieni:',
+            value: Object.entries(itemsToAdd)
+              .sort((a, b) => itemList[b[0]].value - itemList[a[0]].value)
+              .map(([name, amount]) => `> ${itemString(name, amount)}`)
+              .join('\n'),
+            inline: false,
+          },
+        ],
+      })
+    );
+  },
+};
+
 const petnieks: UsableItemFunc = async (userId, guildId, _, specialItem) => {
   return {
     custom: async (i, color) => {
@@ -74,7 +144,7 @@ const petnieks: UsableItemFunc = async (userId, guildId, _, specialItem) => {
         await editItemAttribute(userId, guildId, specialItem!._id!, {
           ...specialItem!.attributes,
           lastUsed: Date.now(),
-          foundItemKey: await getRandFreeSpin(),
+          foundItemKey: getRandFreeSpin(),
         });
 
         const userAfter = await addItems(userId, guildId, { [itemKey]: 1 });

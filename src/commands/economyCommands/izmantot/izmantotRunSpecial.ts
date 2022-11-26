@@ -22,6 +22,27 @@ import intReply from '../../../utils/intReply';
 import { attributeItemSort } from '../inventars';
 
 function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: AttributeItem, selectedId?: string) {
+  const buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder()
+      .setCustomId('izmantot_special_confirm')
+      .setDisabled(!selectedId)
+      .setLabel('Izmantot')
+      .setStyle(selectedId ? ButtonStyle.Primary : ButtonStyle.Secondary)
+  );
+
+  if (itemObj.useMany) {
+    const usableItems = itemsInInv.filter(({ attributes }) => itemObj.useMany!.filter(attributes));
+
+    if (usableItems.length) {
+      buttonRow.addComponents(
+        new ButtonBuilder()
+          .setCustomId('izmantot_special_many')
+          .setLabel(`Izmantot visus (${usableItems.length}/${itemsInInv.length})`)
+          .setStyle(ButtonStyle.Primary)
+      );
+    }
+  }
+
   return [
     new ActionRowBuilder<SelectMenuBuilder>().addComponents(
       new SelectMenuBuilder()
@@ -48,13 +69,7 @@ function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: AttributeIt
             }))
         )
     ),
-    new ActionRowBuilder<ButtonBuilder>().addComponents(
-      new ButtonBuilder()
-        .setCustomId('izmantot_special_confirm')
-        .setDisabled(!selectedId)
-        .setLabel('Izmantot')
-        .setStyle(selectedId ? ButtonStyle.Primary : ButtonStyle.Secondary)
-    ),
+    buttonRow,
   ];
 }
 
@@ -114,6 +129,7 @@ export default async function izmantotRunSpecial(
     msg,
     async int => {
       const { customId } = int;
+
       if (customId === 'izmantot_special_select') {
         if (int.componentType !== ComponentType.StringSelect) return;
         selectedItemId = int.values[0]!;
@@ -122,9 +138,11 @@ export default async function izmantotRunSpecial(
             components: makeComponents(itemsInInv, itemObj, selectedItemId),
           },
         };
-      } else if (customId === 'izmantot_special_confirm') {
-        if (int.componentType !== ComponentType.Button) return;
+      }
 
+      if (int.componentType !== ComponentType.Button) return;
+
+      if (customId === 'izmantot_special_confirm') {
         const user = await findUser(userId, guildId);
         if (!user) return { error: true };
 
@@ -147,6 +165,15 @@ export default async function izmantotRunSpecial(
 
             intReply(int, makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
           },
+        };
+      }
+
+      if (customId === 'izmantot_special_many') {
+        if (!itemObj.useMany) return;
+
+        return {
+          end: true,
+          after: () => itemObj.useMany!.runFunc(int),
         };
       }
     },
