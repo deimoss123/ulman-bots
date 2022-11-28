@@ -67,7 +67,7 @@ const maksat: Command = {
         i,
         ephemeralReply(
           `Tu nevari maksāt **${latiToAdd}** + ` +
-            `**${totalTax}** (${user.payTax * 100}% nodoklis) = ` +
+            `**${totalTax}** (${Math.floor(user.payTax * 100)}% nodoklis) = ` +
             `**${latiString(totalToPay, true)}**\n` +
             `Tev ir **${latiString(user.lati)}**` +
             (user.lati > 1 ? `\n\nLielākā summa ko tu vari vari maksāt ir **${latiString(maxPay)}**` : '')
