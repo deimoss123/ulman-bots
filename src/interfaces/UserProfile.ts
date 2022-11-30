@@ -87,6 +87,7 @@ interface UserProfile {
   xp: number;
   level: number;
   jobPosition: string | null;
+  adventeClaimedDate: string | null;
 
   itemCap: number;
   items: ItemInProfile[];

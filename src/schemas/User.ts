@@ -54,6 +54,11 @@ const userSchema = new Schema<UserProfile>({
     default: null,
   },
 
+  adventeClaimedDate: {
+    type: String,
+    default: null,
+  },
+
   itemCap: {
     type: Number,
     default: 50,
