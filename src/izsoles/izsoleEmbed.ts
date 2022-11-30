@@ -1,18 +1,16 @@
-import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonStyle, Embed, time } from 'discord.js';
+import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonStyle, time } from 'discord.js';
 import itemString from '../embeds/helpers/itemString';
 import latiString from '../embeds/helpers/latiString';
 import iconEmojis from '../embeds/iconEmojis';
 import AuctionType from '../interfaces/AuctionType';
 import itemList from '../items/itemList';
 
-const ULMANBOTA_ROLE_ID = '905377993633955930';
+export const ULMANBOTA_ROLE_ID = '905377993633955930';
 
 export default function izsoleEmbed({
   _id,
   itemKey,
-  itemAmount,
   startPrice,
-  attributes,
   startDate,
   endDate,
   currentBid,
