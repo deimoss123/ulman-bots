@@ -2,7 +2,9 @@ import axios from 'axios';
 import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, Message } from 'discord.js';
 import iconEmojis from '../embeds/iconEmojis';
 import smallEmbed from '../embeds/smallEmbed';
+import itemList from '../items/itemList';
 import { ULMANBOTA_ROLE_ID } from '../izsoles/izsoleEmbed';
+import calendarRewards from './calendarRewards';
 import generateCalendarImage from './generateCalendarImage';
 
 export default async function adventeMsgHandler(msg: Message, apiCommand: string, content: string[]) {
@@ -24,15 +26,18 @@ export default async function adventeMsgHandler(msg: Message, apiCommand: string
       const img = await generateCalendarImage(date);
       const attachment = new AttachmentBuilder(img, { name: 'adventes-kalendars.png' });
 
-      const components = [
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder()
-            .setCustomId('advente_claim_btn')
-            .setStyle(date > 24 ? ButtonStyle.Secondary : ButtonStyle.Success)
-            .setLabel(date > 24 ? 'Adventes kalendārs ir beidzies' : 'Saņemt dāvanu')
-            .setDisabled(date > 24)
-        ),
-      ];
+      const button = new ButtonBuilder()
+        .setCustomId('advente_claim_btn')
+        .setStyle(date > 24 ? ButtonStyle.Secondary : ButtonStyle.Success)
+        .setLabel(date > 24 ? 'Adventes kalendārs ir beidzies' : 'Saņemt dāvanu')
+        .setDisabled(date > 24);
+
+      const reward = calendarRewards[date];
+      if (date <= 24) {
+        button.setEmoji('item' in reward ? itemList[reward.item].emoji! : { id: '911400812754915388', name: 'lats' });
+      }
+
+      const components = [new ActionRowBuilder<ButtonBuilder>().addComponents(button)];
 
       const res = await axios.get(`${process.env.UPSTASH_REDIS_URL}/get/adventeMessageId`, {
         headers: { Authorization: `Bearer ${process.env.UPSTASH_REDIS_TOKEN}` },

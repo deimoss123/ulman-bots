@@ -960,7 +960,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info: () =>
       `Salaveča cepuri var uzvilkt:\n` +
       ['petnieks', 'kakis'].map(key => `• **${itemString(key)}**\n`).join('') +
-      `\nUzvelkot cepuri mainīsies mantas izskatas (emoji), uzvilkt cepuri var izmantojot mantu kurai vēlies to uzvilkt`,
+      `\nUzvelkot cepuri mainīsies mantas izskats (emoji), uzvilkt cepuri var izmantojot mantu kurai vēlies to uzvilkt`,
     nameNomVsk: 'salaveča cepure',
     nameNomDsk: 'salaveča cepures',
     nameAkuVsk: 'salaveča cepuri',
@@ -970,7 +970,7 @@ const itemList: { [key: ItemKey]: Item } = {
       id: '1043304199309496330',
       name: 'salaveca_cepure',
     },
-    imgLink: null, // TODO
+    imgLink: 'https://www.ulmanbots.lv/images/items/salaveca_cepure.png',
     categories: [ItemCategory.ADVENTE_2022],
     value: 75,
     removedOnUse: false,
