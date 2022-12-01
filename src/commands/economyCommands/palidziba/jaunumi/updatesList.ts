@@ -128,7 +128,49 @@ const updatesList: Record<
   },
   '4.2': {
     date: '01.12.2022',
-    fields: [],
+    fields: [
+      {
+        name: `__Adventes kalendārs__`,
+        value:
+          '• No 1. līdz 24. decembrim saņem dāvanas katru dienu\n' +
+          '• Iepriekšējo dienu dāvanas nav iespējams iegūt, tāpēc **nenokavē**\n' +
+          '• Ekskluzīvs OkDraudziņDauni serverim ([pievienojies jau šodien!](<https://discord.gg/F4s5AwYTMy>))\n',
+        inline: false,
+      },
+      {
+        name: '__Jaunas Mantas__',
+        value:
+          `**${itemString('salaveca_cepure')}**\n` +
+          `• ${itemString('kakis')} un ${itemString('petnieks')} būs priecīgi to uzvilkt\n` +
+          '• Adventes kalendāram **ekskluzīva** manta (nepazaudē)\n' +
+          `**${itemString('kaka_parsaucejs')}**\n` +
+          '• Iedod savam pūkainajam draugam identitāti nomainot tā vārdu\n' +
+          `• Iegūstams no zvejošanas izmantojot ${itemString('divaina_makskere', null, true)}\n` +
+          `**❓ Piparkūka**\n` + // TODO
+          '• Izlaiž gaidīšanas laiku līdz nākamajai strādāšanas **un** ubagošanas reizei\n' +
+          '• Iespējams iegūt no ubagošanas',
+        inline: false,
+      },
+      {
+        name: '__"Izmantot Visus" Poga__',
+        value:
+          '_Oligarhu dzīve no šodienas paliek vēl vieglāka!_\n' +
+          `• Ja tavā inventārā ir vairāk par 1 ` +
+          `${itemString('kafijas_aparats', null, true)} vai 1 ${itemString('petnieks', null, true)}, ` +
+          'izmantojot kādu no tiem tiks piedāvāta iespēja **"Izmantot Visus"**, kas izmantos visas **gatavās** mantas vienlaicīgi',
+        inline: false,
+      },
+      {
+        name: '__Citas Izmaiņas__',
+        value:
+          `**${itemString('mugursoma')}**\n` +
+          `• cena samazināta **500** ➔ **350** lati\n` +
+          `**${itemString('kakis')}**\n` +
+          '• Kaķim tagad ir mainīga vērtība, kas palielinās ar katru kaķa nodzīvoto dienu\n' +
+          '• Miruša kaķa vērtība ir 0 lati :(',
+        inline: false,
+      },
+    ],
   },
 };
 

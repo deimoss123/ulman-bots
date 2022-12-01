@@ -239,7 +239,7 @@ const itemList: { [key: ItemKey]: Item } = {
     },
     imgLink: 'https://www.ulmanbots.lv/images/items/mugursoma.png',
     categories: [ItemCategory.VEIKALS],
-    value: 125,
+    value: 175,
     allowDiscount: true,
     removedOnUse: false,
     use: mugursoma,
