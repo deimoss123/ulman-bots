@@ -4,7 +4,7 @@ const calendarRewards: Record<string, { item: ItemKey; amount: number } | { lati
   '1': { item: 'metalluznis', amount: 3 },
   '2': { item: 'salaveca_cepure', amount: 1 },
   '3': { item: 'latloto', amount: 2 },
-  '4': { lati: 0 }, // TODO: piparkūkas
+  '4': { item: 'piparkuka', amount: 2 },
   '5': { item: 'virve', amount: 5 },
   '6': { lati: 125 },
   '7': { item: 'juridiska_zivs', amount: 2 },
@@ -14,15 +14,15 @@ const calendarRewards: Record<string, { item: ItemKey; amount: number } | { lati
   '11': { item: 'dizloto', amount: 1 },
   '12': { item: 'loto_zivs', amount: 1 },
   '13': { item: 'brivgriez50', amount: 3 },
-  '14': { lati: 0 }, // TODO: kaķa pārsaucējs
-  '15': { lati: 0 }, // TODO: piparkūkas
+  '14': { item: 'kaka_parsaucejs', amount: 1 },
+  '15': { item: 'piparkuka', amount: 2 },
   '16': { item: 'salaveca_cepure', amount: 1 },
   '17': { lati: 175 },
   '18': { item: 'latloto', amount: 2 },
   '19': { item: 'mugursoma', amount: 2 },
   '20': { lati: 200 },
   '21': { item: 'loto_zivs', amount: 1 },
-  '22': { lati: 0 }, // TODO: kaķa pārsaucējs
+  '22': { item: 'kaka_parsaucejs', amount: 1 },
   '23': { item: 'salaveca_cepure', amount: 1 },
   '24': { item: 'kakis', amount: 1 },
 };

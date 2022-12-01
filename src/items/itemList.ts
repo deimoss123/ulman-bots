@@ -26,6 +26,7 @@ import loto_zivs from './usableItems/loto_zivs';
 import petniekzivs, { PETNIEKZIVS_STATUS_TIME } from './usableItems/petniekzivs';
 import kakis, { foodDataPercentage, kakisFedState, kakisFoodData, KAKIS_MAX_FEED } from './usableItems/kakis';
 import itemString, { makeEmojiString } from '../embeds/helpers/itemString';
+import piparkuka from './usableItems/piparkuka';
 
 export type ItemKey = string;
 
@@ -855,8 +856,11 @@ const itemList: { [key: ItemKey]: Item } = {
     nameAkuVsk: 'kaķa pārsaucēju',
     nameAkuDsk: 'kaķa pārsaucējus',
     isVirsiesuDzimte: true,
-    emoji: null,
-    imgLink: null,
+    emoji: {
+      id: '1047887779897544835',
+      name: 'kaka_parsaucejs',
+    },
+    imgLink: 'https://www.ulmanbots.lv/images/items/kaka_parsaucejs.png',
     categories: [ItemCategory.OTHER],
     value: 90,
     removedOnUse: false,
@@ -864,6 +868,25 @@ const itemList: { [key: ItemKey]: Item } = {
       // @ts-ignore
       return { text: this.info() };
     },
+  }),
+  piparkuka: item<UsableItem>({
+    info:
+      'Apēdot piparkūku tiks izlaists gaidīšanas laiks līdz nākamajai strādāšanas **un** ubagošanas reizei\n' +
+      'Piparkūku var atrast ubagojot decembrī',
+    nameNomVsk: 'piparkūka',
+    nameNomDsk: 'piparkūkas',
+    nameAkuVsk: 'piparkūku',
+    nameAkuDsk: 'piparkūkas',
+    isVirsiesuDzimte: false,
+    emoji: {
+      id: '1047888133871653045',
+      name: 'piparkuka',
+    },
+    imgLink: 'https://www.ulmanbots.lv/images/items/piparkuka.png',
+    categories: [ItemCategory.OTHER],
+    value: 25,
+    removedOnUse: false,
+    use: piparkuka,
   }),
   // patriota_piespraude: item<NotSellableItem>({
   //   nameNomVsk: 'patriotu piespraude',
