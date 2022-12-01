@@ -13,7 +13,7 @@ import intReply from '../utils/intReply';
 import calendarRewards from './calendarRewards';
 
 export default async function handleAdventeButton(i: ButtonInteraction) {
-  const date = new Date(new Date().setFullYear(2022, 11, 12));
+  const date = new Date();
 
   if (date.getMonth() !== 11 || date.getDate() > 24) {
     return intReply(i, ephemeralReply('Šī gada adventes kalendārs ir beidzies'));
