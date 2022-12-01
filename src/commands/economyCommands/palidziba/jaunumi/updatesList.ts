@@ -1,4 +1,4 @@
-import { EmbedField } from 'discord.js';
+import { APIEmbedField } from 'discord.js';
 import itemString from '../../../../embeds/helpers/itemString';
 import itemList from '../../../../items/itemList';
 
@@ -7,7 +7,7 @@ const updatesList: Record<
   {
     date: string;
     description?: string;
-    fields: EmbedField[];
+    fields: APIEmbedField[];
   }
 > = {
   '4.0': {
@@ -24,7 +24,6 @@ const updatesList: Record<
           'Sasniedzot jaunu līmeni Tu vari saņemt latus, mantas un lietas kā nodokļu samazinājumus, un zvejošanas inventāra palielināšanu, kas paliek mūžīgi\n' +
           'UlmaņPunktus var iegūt dažādos veidos, bet primāri no strādāšanas, ubagošanas un zvejošanas\n' +
           'Savu līmeni var apskatīt ar komandu `/profils`, maksimālais līmenis ko pašlaik var sasniegt ir **40**',
-        inline: false,
       },
       {
         name: '__**Mantu atribūti:**__',
@@ -32,25 +31,21 @@ const updatesList: Record<
           'Jauna mantu sistēma, kas atļauj īpašām mantām ar "atribūtiem" eksistēt\n' +
           'Atribūti var ietekmēt mantas funkcionalitāti to lietojot, tās izskatu, vai pat tās vērtību (piem. makšķeru izturība)\n' +
           'Atribūtu mantas ir unikālas viena no otras, tāpēc tās tiek parādītas atsevišķi inventārā\n\n',
-        inline: false,
       },
       {
         name: '__**Mantu iedošana (/iedot)**__',
         value:
           'Tagad jebkuru mantu ir iespējams iedot citiem lietotājiem (samaksājot nodokli protams)\n' +
           'Ja mantai ir atribūti, tad to iedodot tie nekur nepazūd un paliek nemainīgi',
-        inline: false,
       },
       {
         name: '__**Uzlabota /palīdzība komanda**__',
         value:
           'Tagad var apskatīt detalizētu aprakstu par jebkuru komandu (dažām komandām ir īss apraksts jo tās ir pašsaprotamas, piemēram, `/maks`)',
-        inline: false,
       },
       {
         name: '__**/info komanda**__',
         value: 'Par **katru** mantu tagad ir iespējams apskatīties informāciju un aprakstu',
-        inline: false,
       },
       {
         name: '__**Tirgus (/tirgus)**__',
@@ -58,7 +53,6 @@ const updatesList: Record<
           'Tirgus ir veikals kur var nopirkt īpašas un retas mantas\n' +
           'Tirgū katram lietotājam katru mantu ir iespējams tikai nopirkt vienu reizi katru dienu\n' +
           'Tirgū pieejamās mantas mainās katru dienu pusnaktī',
-        inline: false,
       },
       {
         name: '__**Citas izmaiņas**__',
@@ -69,7 +63,6 @@ const updatesList: Record<
           '- Lai strādātu vairs nav nepieciešams "vakcinēts" statuss, jo tāds vairs nepastāv\n' +
           '- `/pabalsts` tagad ir pieejams tikai OkDraudziņDauni servera biedriem\n\n' +
           '_**... ā un slīpsvītru (/) komandas protams :^)**_',
-        inline: false,
       },
     ],
   },
@@ -88,7 +81,6 @@ const updatesList: Record<
           `**${itemString(itemList.petniekzivs)}**\n` +
           'Apēd šo zivi lai sajustos **VEIKSMĪGS** (jauns statuss, kas palielina feniksa, ruletes, un loto biļešu procentus)\n\n' +
           '_Informāciju par mantām var iegūt ar komandu_ `/info`',
-        inline: false,
       },
       {
         name: '__Mantu izmaiņas__',
@@ -135,7 +127,6 @@ const updatesList: Record<
           '• No 1. līdz 24. decembrim saņem dāvanas katru dienu\n' +
           '• Iepriekšējo dienu dāvanas nav iespējams iegūt, tāpēc **nenokavē**\n' +
           '• Ekskluzīvs OkDraudziņDauni serverim ([pievienojies jau šodien!](<https://discord.gg/F4s5AwYTMy>))\n',
-        inline: false,
       },
       {
         name: '__Jaunas Mantas__',
@@ -149,7 +140,6 @@ const updatesList: Record<
           `**❓ Piparkūka**\n` + // TODO
           '• Izlaiž gaidīšanas laiku līdz nākamajai strādāšanas **un** ubagošanas reizei\n' +
           '• Iespējams iegūt no ubagošanas',
-        inline: false,
       },
       {
         name: '__"Izmantot Visus" Poga__',
@@ -158,7 +148,6 @@ const updatesList: Record<
           `• Ja tavā inventārā ir vairāk par 1 ` +
           `${itemString('kafijas_aparats', null, true)} vai 1 ${itemString('petnieks', null, true)}, ` +
           'izmantojot kādu no tiem tiks piedāvāta iespēja **"Izmantot Visus"**, kas izmantos visas **gatavās** mantas vienlaicīgi',
-        inline: false,
       },
       {
         name: '__Citas Izmaiņas__',
@@ -168,7 +157,6 @@ const updatesList: Record<
           `**${itemString('kakis')}**\n` +
           '• Kaķim tagad ir mainīga vērtība, kas palielinās ar katru kaķa nodzīvoto dienu\n' +
           '• Miruša kaķa vērtība ir 0 lati :(',
-        inline: false,
       },
     ],
   },
