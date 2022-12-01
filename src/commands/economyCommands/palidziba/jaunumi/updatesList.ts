@@ -137,7 +137,7 @@ const updatesList: Record<
           `**${itemString('kaka_parsaucejs')}**\n` +
           '• Iedod savam pūkainajam draugam identitāti nomainot tā vārdu\n' +
           `• Iegūstams no zvejošanas izmantojot ${itemString('divaina_makskere', null, true)}\n` +
-          `**❓ Piparkūka**\n` + // TODO
+          `**${itemString('piparkuka')}**\n` + // TODO
           '• Izlaiž gaidīšanas laiku līdz nākamajai strādāšanas **un** ubagošanas reizei\n' +
           '• Iespējams iegūt no ubagošanas',
       },
