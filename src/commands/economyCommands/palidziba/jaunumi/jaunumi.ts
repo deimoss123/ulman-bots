@@ -1,4 +1,10 @@
-import { ActionRowBuilder, ChatInputCommandInteraction, ComponentType, SelectMenuBuilder } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ChatInputCommandInteraction,
+  ComponentType,
+  EmbedField,
+  SelectMenuBuilder,
+} from 'discord.js';
 import buttonHandler from '../../../../embeds/buttonHandler';
 import commandColors from '../../../../embeds/commandColors';
 import embedTemplate, { ULMANBOTA_VERSIJA } from '../../../../embeds/embedTemplate';
@@ -6,7 +12,8 @@ import intReply from '../../../../utils/intReply';
 import updatesList from './updatesList';
 
 function embed(i: ChatInputCommandInteraction, selectedVersion: string) {
-  const { date, description, fields } = updatesList[selectedVersion];
+  const { date, description } = updatesList[selectedVersion];
+  const fields = updatesList[selectedVersion].fields as EmbedField[];
 
   return embedTemplate({
     i,
