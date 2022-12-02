@@ -217,7 +217,7 @@ const itemList: { [key: ItemKey]: Item } = {
     imgLink: 'https://www.ulmanbots.lv/images/items/divaina_makskere.gif',
     categories: [ItemCategory.VEIKALS, ItemCategory.MAKSKERE],
     value: 450,
-    // customValue: makskereCustomValue('divaina_makskere'),
+    customValue: makskereCustomValue('divaina_makskere'),
     attributes: {
       durability: maksekeresData.divaina_makskere.maxDurability,
     },
