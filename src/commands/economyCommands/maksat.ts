@@ -94,7 +94,7 @@ const maksat: Command = {
         description:
           `Tu samaksāji <@${target.id}> **${latiString(latiToAdd, true)}**\n` +
           `Nodoklis: ` +
-          (hasJuridisks ? '0 lati (juridiska persona)' : `${latiString(totalTax)} (${user.payTax * 100}%)`),
+          (hasJuridisks ? '0 lati (juridiska persona)' : `${latiString(totalTax)} (${Math.floor(user.payTax * 100)}%)`),
         color: this.color,
         fields: [
           {
