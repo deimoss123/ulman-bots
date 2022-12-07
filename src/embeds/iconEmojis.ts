@@ -6,4 +6,5 @@ export default {
   arrow_1_right: '<:arrow_1_right:1030173209817006100>',
   arrow_2_right: '<:arrow_2_right:1030173212874657893>',
   emptyEmoji: '<:tuksums:1030165403822981270>',
-};
+  blueArrowRight: '<:top_arrow:1034111697746677841>',
+} satisfies Record<string, string>;

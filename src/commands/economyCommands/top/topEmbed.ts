@@ -1,13 +1,12 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
+import iconEmojis from '../../../embeds/iconEmojis';
 import StatsProfile from '../../../interfaces/StatsProfile';
 import UserProfile from '../../../interfaces/UserProfile';
 import { displayPlace } from '../statistika/statistika';
 import { SortDataProfileEntry } from './sortData';
 import { TOP_LIMIT } from './top';
-
-const topArrowEmoji = '<:top_arrow:1034111697746677841> ';
 
 export default function topEmbed<T extends UserProfile | StatsProfile>(
   i: ChatInputCommandInteraction,
@@ -20,7 +19,7 @@ export default function topEmbed<T extends UserProfile | StatsProfile>(
   const fields = sortedUsers.slice(0, TOP_LIMIT).map((user, index) => {
     return {
       name:
-        (user.userId === i.user.id ? `${topArrowEmoji} ` : '') +
+        (user.userId === i.user.id ? `${iconEmojis.blueArrowRight} ` : '') +
         `${displayPlace(index)} ${i.guild!.members.cache.get(user.userId)?.user.tag || 'Nezināms lietotājs'} ` +
         (total ? `\`${(partOfTotal!(total, user) * 100).toFixed(2)}%\`` : ''),
       value: displayValue(user),
@@ -36,7 +35,7 @@ export default function topEmbed<T extends UserProfile | StatsProfile>(
     fields[TOP_LIMIT - 1].value += `\n__${'\u2800'.repeat(20)}__`;
     fields.push({
       name:
-        `${topArrowEmoji} ${displayPlace(indexOf)} ${i.user.tag} ` +
+        `${iconEmojis.blueArrowRight} ${displayPlace(indexOf)} ${i.user.tag} ` +
         (total ? `\`${(partOfTotal!(total, foundUser) * 100).toFixed(2)}%\`` : ''),
       value: displayValue(foundUser),
       inline: false,
