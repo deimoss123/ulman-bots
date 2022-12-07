@@ -16,7 +16,7 @@ export default async function kamPiederRun(i: ChatInputCommandInteraction | Butt
 
   const itemObj = itemList[itemKey];
 
-  // mantas bez atribūtiem
+  // parastās mantas (bez atribūtiem)
   if (!('attributes' in itemObj)) {
     const users = (await User.find(
       { guildId, items: { $elemMatch: { name: itemKey } } },
@@ -43,5 +43,6 @@ export default async function kamPiederRun(i: ChatInputCommandInteraction | Butt
 
     return i.editReply({ embeds: kamPiederEmbed(i, itemKey, fields, total) }).catch(console.error);
   }
+
   // atribūtu mantas
 }

@@ -2,7 +2,7 @@ import Command from '../interfaces/Command';
 import maks from './economyCommands/maks';
 import _addLati from './devCommands/_addLati';
 import maksat from './economyCommands/maksat';
-import _addItem from './devCommands/_addItem/_addItem';
+import _addItem from './devCommands/_addItem';
 import inventars from './economyCommands/inventars';
 import iedot from './economyCommands/iedot/iedot';
 import veikals from './economyCommands/veikals/veikals';

@@ -4,7 +4,7 @@ import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
 import Command from '../../../interfaces/Command';
 import itemList from '../../../items/itemList';
 import intReply from '../../../utils/intReply';
-import infoAutocomplete from '../info/infoAutocomplete';
+import allItemAutocomplete from '../info/allItemAutocomplete';
 import kamPiederRun from './kamPiederRun';
 
 const kamPieder: Command = {
@@ -23,7 +23,7 @@ const kamPieder: Command = {
       },
     ],
   },
-  autocomplete: infoAutocomplete,
+  autocomplete: allItemAutocomplete('👁️'),
   async run(i) {
     const itemKey = i.options.getString('nosaukums')!;
 

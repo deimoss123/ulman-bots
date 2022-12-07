@@ -1,12 +1,12 @@
-import Command from '../../../interfaces/Command';
+import Command from '../../interfaces/Command';
 import { ApplicationCommandOptionType } from 'discord.js';
-import embedTemplate from '../../../embeds/embedTemplate';
-import itemString from '../../../embeds/helpers/itemString';
-import addItem from '../../../economy/addItems';
-import wrongKeyEmbed from '../../../embeds/wrongKeyEmbed';
-import itemList from '../../../items/itemList';
-import _addItemAutocomplete from './_addItemAutocomplete';
-import intReply from '../../../utils/intReply';
+import embedTemplate from '../../embeds/embedTemplate';
+import itemString from '../../embeds/helpers/itemString';
+import addItem from '../../economy/addItems';
+import wrongKeyEmbed from '../../embeds/wrongKeyEmbed';
+import itemList from '../../items/itemList';
+import intReply from '../../utils/intReply';
+import allItemAutocomplete from '../economyCommands/info/allItemAutocomplete';
 
 const _addItem: Command = {
   description: 'Pievienot mantu inventārā',
@@ -36,7 +36,7 @@ const _addItem: Command = {
       },
     ],
   },
-  autocomplete: _addItemAutocomplete,
+  autocomplete: allItemAutocomplete('⛔'),
   async run(i) {
     const target = i.options.getUser('lietotājs')!;
     const itemToAddKey = i.options.getString('nosaukums')!;

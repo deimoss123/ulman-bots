@@ -5,7 +5,7 @@ import errorEmbed from '../../../embeds/errorEmbed';
 import Command from '../../../interfaces/Command';
 import izsoleEmbed from '../../../izsoles/izsoleEmbed';
 import intReply from '../../../utils/intReply';
-import _addItemAutocomplete from '../_addItem/_addItemAutocomplete';
+import allItemAutocomplete from '../../economyCommands/info/allItemAutocomplete';
 import izsoleCreate from './izsoleCreate';
 import izsoleList from './IzsoleList';
 import izsolesDelete from './izsolesDelete';
@@ -81,7 +81,7 @@ const izsole: Command = {
       },
     ],
   },
-  autocomplete: _addItemAutocomplete,
+  autocomplete: allItemAutocomplete('⛔'),
   async run(i) {
     const subCommandName = i.options.getSubcommand();
     if (!subCommandName) return intReply(i, errorEmbed);

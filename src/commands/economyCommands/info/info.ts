@@ -23,7 +23,7 @@ import intReply from '../../../utils/intReply';
 import { ItemType, itemTypes } from '../inventars';
 import kamPiederRun from '../kamPieder/kamPiederRun';
 import maksekeresData from '../zvejot/makskeresData';
-import infoAutocomplete from './infoAutocomplete';
+import allItemAutocomplete from './allItemAutocomplete';
 
 const info: Command = {
   description: 'Iegūt detalizētu informāciju par kādu mantu - vērtība, cena, tirgus cena, makšķeres informācija, utt.',
@@ -41,7 +41,7 @@ const info: Command = {
       },
     ],
   },
-  autocomplete: infoAutocomplete,
+  autocomplete: allItemAutocomplete('🔍'),
   async run(i) {
     const itemKey = i.options.getString('nosaukums')!;
 
