@@ -1,4 +1,12 @@
-import { ApplicationCommandOptionType, EmbedField } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ApplicationCommandOptionType,
+  ButtonBuilder,
+  ButtonStyle,
+  ComponentType,
+  EmbedField,
+} from 'discord.js';
+import buttonHandler from '../../../embeds/buttonHandler';
 import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
 import errorEmbed from '../../../embeds/errorEmbed';
@@ -13,6 +21,7 @@ import getItemPrice from '../../../items/helpers/getItemPrice';
 import itemList, { ItemCategory } from '../../../items/itemList';
 import intReply from '../../../utils/intReply';
 import { ItemType, itemTypes } from '../inventars';
+import kamPiederRun from '../kamPieder/kamPiederRun';
 import maksekeresData from '../zvejot/makskeresData';
 import infoAutocomplete from './infoAutocomplete';
 
@@ -103,7 +112,7 @@ const info: Command = {
       });
     }
 
-    intReply(
+    const msg = await intReply(
       i,
       embedTemplate({
         i,
@@ -116,8 +125,30 @@ const info: Command = {
           : 'UlmaņBota veidotājs ir aizmirsis pievienot aprakstu šai mantai dritvai kociņ',
         thumbnail: itemObj.imgLink || undefined,
         fields,
+        components: [
+          new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new ButtonBuilder()
+              .setCustomId('info-kam-pieder-btn')
+              .setLabel('Kam pieder?')
+              .setEmoji('👁️')
+              .setStyle(ButtonStyle.Primary)
+          ),
+        ],
       })
     );
+
+    if (!msg) return intReply(i, errorEmbed);
+
+    buttonHandler(i, 'info', msg, async int => {
+      const { customId, componentType } = int;
+
+      if (customId === 'info-kam-pieder-btn' && componentType === ComponentType.Button) {
+        return {
+          end: true,
+          after: () => kamPiederRun(int, itemKey),
+        };
+      }
+    });
   },
 };
 
