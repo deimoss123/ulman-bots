@@ -1,4 +1,4 @@
-import { APIEmbedField, ButtonInteraction, ChatInputCommandInteraction } from 'discord.js';
+import { APIEmbedField, ButtonInteraction, ChatInputCommandInteraction, Collection } from 'discord.js';
 import errorEmbed from '../../../embeds/errorEmbed';
 import iconEmojis from '../../../embeds/iconEmojis';
 import itemList, { ItemKey } from '../../../items/itemList';
@@ -9,7 +9,7 @@ import kamPiederEmbed from './kamPiederEmbed';
 const FIELD_COUNT = 15;
 
 export default async function kamPiederRun(i: ChatInputCommandInteraction | ButtonInteraction, itemKey: ItemKey) {
-  const defer = await i.deferReply().catch(() => null);
+  const defer = i.deferReply();
   if (!defer) return intReply(i, errorEmbed);
 
   const guildId = i.guildId!;
