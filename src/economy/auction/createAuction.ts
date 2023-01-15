@@ -19,13 +19,13 @@ export default async function createAuction(
 
     await Promise.all([
       axios.post(
-        `https://qstash.upstash.io/v1/publish/${process.env.WEBHOOK_URL}`,
+        `https://qstash.upstash.io/v1/publish/${process.env.DISCORD_WEBHOOK_URL}`,
         {
           content: `<@${clientId}> auction-start ${newAuction._id}`,
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.UPSTASH_TOKEN}`,
+            Authorization: `Bearer ${process.env.UPSTASH_QSTASH_TOKEN}`,
             'Upstash-Delay': `${secondsUntil}s`,
             'Content-Type': 'application/json',
           },

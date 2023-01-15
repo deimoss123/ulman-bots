@@ -1,21 +1,35 @@
 declare namespace NodeJS {
   interface ProcessEnv {
+    // tokens lai ielogotos discordā
     BOT_TOKEN: string;
-    DEV_SERVER_ID: string;
-    MONGO_PATH: string;
-    DEV_ID: string;
-    API_URL: string;
 
+    // testēšanas serveris
+    DEV_SERVER_ID: string;
+
+    // mongo url
+    MONGO_PATH: string;
+
+    // īpašnieka ID
+    DEV_ID: string;
+
+    // ulmaņbota API
+    ULMANBOTS_API_URL: string;
+
+    // adventes kanāla ID
     ADVENTE_CHANNEL: string;
 
-    UPSTASH_TOKEN: string;
+    // upstash lietas ehh
+    UPSTASH_QSTASH_TOKEN: string;
     UPSTASH_REDIS_URL: string;
     UPSTASH_REDIS_TOKEN: string;
 
-    WEBHOOK_URL: string;
+    // webhooks ko izmanto API un upstash lai sūtītu ulmaņbotam "komandas"
+    DISCORD_WEBHOOK_URL: string;
 
+    // kanāls nepabeigtajai akciju sistēmai
     AUCTION_CHANNEL: string;
 
+    // api kanāls testēšanas serverī, kur bots saņem "komandas"
     API_CHANNEL: string;
   }
 }

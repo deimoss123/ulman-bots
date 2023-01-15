@@ -41,7 +41,7 @@ export function calcReqItems({ items, lati }: UserProfile, itemObj: Item) {
 
 async function getTirgusData(): Promise<ItemKey[] | null> {
   try {
-    const res = await axios.get(`${process.env.API_URL}/api/get-tirgus`);
+    const res = await axios.get(`${process.env.ULMANBOTS_API_URL}/api/get-tirgus`);
     return res.data as ItemKey[];
   } catch (e) {
     return null;
