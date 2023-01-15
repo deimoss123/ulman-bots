@@ -6,7 +6,7 @@ import chalk from 'chalk';
 import { getPalidzibaChoices } from './commands/economyCommands/palidziba/palidziba';
 
 async function registerGuildCommands(client: Client) {
-  const guild = await client.guilds.fetch(process.env.DEV_SERVER_ID!);
+  const guild = await client.guilds.fetch(process.env.DEV_SERVER_ID);
 
   guild.commands
     .set(
