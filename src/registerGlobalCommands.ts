@@ -1,9 +1,9 @@
 import { Client, GatewayIntentBits } from 'discord.js';
 import { commandList } from './commands/commandList';
-import dotenv from 'dotenv';
 import validateEnv from './utils/validateEnv';
 import chalk from 'chalk';
 import { getPalidzibaChoices } from './commands/economyCommands/palidziba/palidziba';
+import 'dotenv/config';
 
 async function registerGuildCommands(client: Client) {
   client
@@ -21,8 +21,6 @@ async function registerGuildCommands(client: Client) {
       process.exit(0);
     });
 }
-
-dotenv.config();
 
 if (!validateEnv()) process.exit(1);
 

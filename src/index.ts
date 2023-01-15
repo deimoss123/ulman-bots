@@ -1,5 +1,4 @@
 import { Client, GatewayIntentBits } from 'discord.js';
-import dotenv from 'dotenv';
 import validateEnv from './utils/validateEnv';
 import mongo from './utils/mongo';
 import commandHandler from './commands/commandHandler';
@@ -8,8 +7,8 @@ import chalk from 'chalk';
 import setBotPresence from './utils/setBotPresence';
 import buttonInteractionHandler from './utils/buttonInteractionHandler';
 import messageHandler from './utils/messageHandler';
+import 'dotenv/config';
 
-dotenv.config();
 process.env.TZ = 'Europe/Riga';
 
 // pārbauda vai .env failā ir ievadīti mainīgie
