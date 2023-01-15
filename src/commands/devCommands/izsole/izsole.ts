@@ -97,7 +97,7 @@ const izsole: Command = {
         izsoleList(i);
         break;
       case 'test': {
-        const auctionChannel = i.client.channels.cache.get(process.env.AUCTION_CHANNEL!);
+        const auctionChannel = i.client.channels.cache.get(process.env.AUCTION_CHANNEL);
         if (!auctionChannel?.isTextBased()) break;
         const auction = await findAuctionById('637513a99e464ed7426ec075');
         auctionChannel!.send(izsoleEmbed(auction!));
