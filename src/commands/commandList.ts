@@ -27,6 +27,7 @@ import rulete from './economyCommands/rulete/rulete';
 import pabalsts from './economyCommands/pabalsts';
 import izsole from './devCommands/izsole/izsole';
 import kamPieder from './economyCommands/kamPieder/kamPieder';
+import akcijas from './economyCommands/akcijas/akcijas';
 
 // komandu objektu saraksts
 export const commandList: Command[] = [
@@ -53,6 +54,7 @@ export const commandList: Command[] = [
   rulete,
   pabalsts,
   kamPieder,
+  akcijas,
 ];
 
 export const devCommandList: Command[] = [_addLati, _addItem, _addXP, _clearCache, izsole];

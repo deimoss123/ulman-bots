@@ -8,6 +8,7 @@ import setBotPresence from './utils/setBotPresence';
 import buttonInteractionHandler from './utils/buttonInteractionHandler';
 import messageHandler from './utils/messageHandler';
 import 'dotenv/config';
+import User from './schemas/User';
 
 process.env.TZ = 'Europe/Riga';
 
@@ -20,6 +21,10 @@ const client = new Client({
 
 client.once('ready', async () => {
   await mongo().then(() => console.log('Connected to MongoDB'));
+
+  User.watch().on('change', data => {
+    console.log(data);
+  });
 
   setBotPresence(client);
   setInterval(() => setBotPresence(client), 3_600_000);
