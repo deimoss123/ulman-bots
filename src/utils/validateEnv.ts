@@ -8,7 +8,7 @@ export default function validateEnv(): boolean {
     'DEV_SERVER_ID',
     'DEV_ID',
     'MONGO_PATH',
-    'API_URL',
+    'ULMANBOTS_API_URL',
   ];
 
   for (const envVar of requiredEnvVars) {
