@@ -50,13 +50,19 @@ const akcijas: Command = {
         const foundAkcija = await Akcija.findOne({ time: currTime, akcijaId });
         if (!foundAkcija) return intReply(i, errorEmbed);
 
-        console.log(foundAkcija);
+        const { name, color } = akcijasList[akcijaId];
 
-        return intReply(i, embedTemplate({ i, image: foundAkcija.imgUrls[selectedTime] }));
+        return intReply(
+          i,
+          embedTemplate({
+            i,
+            title: `Akcijas grafiks - ${name} (${selectedTime})`,
+            color,
+            image: foundAkcija.imgUrls[selectedTime],
+          })
+        );
       }
     }
-
-    intReply(i, 'akcijas');
   },
 };
 

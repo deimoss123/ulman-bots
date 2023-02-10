@@ -172,6 +172,27 @@ const userSchema = new Schema<UserProfile>({
       default: [],
     },
   },
+
+  stocks: {
+    owned: {
+      latvijasPiens: NumZero,
+      latvijasRadio: NumZero,
+      martinsonaVelo: NumZero,
+      bachaKazino: NumZero,
+    },
+    transactions: {
+      type: [
+        {
+          akcijaId: String,
+          timestamp: Number,
+          type: Number,
+          amount: Number,
+          price: Number,
+        },
+      ],
+      default: [],
+    },
+  },
 });
 
 export default model('User', userSchema);

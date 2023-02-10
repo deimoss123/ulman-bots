@@ -1,3 +1,4 @@
+import { AkcijaId } from '../commands/economyCommands/akcijas/akcijasList';
 import { ItemKey } from '../items/itemList';
 
 export interface ItemInProfile {
@@ -80,6 +81,33 @@ interface UserTirgus {
   lastDayUsed: string;
   itemsBought: ItemKey[];
 }
+
+export enum StocksTransactionType {
+  BUY = 0,
+  SELL = 1,
+}
+
+interface UserStocksTransaction {
+  akcijaId: AkcijaId;
+  // millis
+  timestamp: number;
+  type: StocksTransactionType;
+  // akciju daudzums
+  amount: number;
+  // tā laika akcijas cena
+  price: number;
+}
+
+interface UserStocks {
+  owned: {
+    latvijasPiens: number;
+    latvijasRadio: number;
+    martinsonaVelo: number;
+    bachaKazino: number;
+  };
+  transactions: UserStocksTransaction[];
+}
+
 interface UserProfile {
   userId: string;
   guildId: string;
@@ -107,6 +135,8 @@ interface UserProfile {
   fishing: UserFishing;
 
   tirgus: UserTirgus;
+
+  stocks: UserStocks;
 }
 
 export default UserProfile;
