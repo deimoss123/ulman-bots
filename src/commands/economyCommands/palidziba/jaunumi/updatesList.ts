@@ -160,6 +160,10 @@ const updatesList: Record<
       },
     ],
   },
+  '4.3': {
+    date: '???',
+    fields: [],
+  },
 };
 
 export default updatesList;

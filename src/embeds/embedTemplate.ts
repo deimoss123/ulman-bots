@@ -29,7 +29,7 @@ interface EmbedTemplateOptions {
   )[];
 }
 
-export const ULMANBOTA_VERSIJA = '4.2';
+export const ULMANBOTA_VERSIJA = '4.3';
 
 export default function embedTemplate(options: EmbedTemplateOptions): InteractionReplyOptions & { fetchReply: true } {
   return {
