@@ -41,11 +41,11 @@ const ubagotChances: Record<string, UbagotRes> = {
     text: `tajā pamanījies atrast **${itemString(itemList.metalluznis, 1, true)}**`,
     reward: { metalluznis: 1 },
   },
-  piparkuka: {
-    chance: 0.1,
-    text: `tajā iekrita ${itemString('piparkuka')}`,
-    reward: { piparkuka: 1 },
-  },
+  // piparkuka: {
+  //   chance: 0.1,
+  //   text: `tajā iekrita ${itemString('piparkuka')}`,
+  //   reward: { piparkuka: 1 },
+  // },
   piens: {
     chance: 0.1,
     text: `tajā ielija piens, tava krūze pārvērtās par **${itemString(itemList.piena_spainis, null, true)}**`,
