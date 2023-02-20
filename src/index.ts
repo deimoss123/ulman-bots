@@ -22,9 +22,9 @@ const client = new Client({
 client.once('ready', async () => {
   await mongo().then(() => console.log('Connected to MongoDB'));
 
-  User.watch().on('change', data => {
-    console.log(data);
-  });
+  // User.watch().on('change', data => {
+  //   console.log(data);
+  // });
 
   setBotPresence(client);
   setInterval(() => setBotPresence(client), 3_600_000);
