@@ -27,6 +27,7 @@ import petniekzivs, { PETNIEKZIVS_STATUS_TIME } from './usableItems/petniekzivs'
 import kakis, { foodDataPercentage, kakisFedState, kakisFoodData, KAKIS_MAX_FEED } from './usableItems/kakis';
 import itemString, { makeEmojiString } from '../embeds/helpers/itemString';
 import piparkuka from './usableItems/piparkuka';
+import { text } from 'stream/consumers';
 
 export type ItemKey = string;
 
@@ -888,6 +889,22 @@ const itemList: { [key: ItemKey]: Item } = {
     removedOnUse: false,
     use: piparkuka,
   }),
+  zivju_kaste: {
+    info: 'Šī kaste satur zivis',
+    nameNomVsk: 'zivju kaste',
+    nameNomDsk: 'zivju kastes',
+    nameAkuVsk: 'zivju kasti',
+    nameAkuDsk: 'zivju kastes',
+    isVirsiesuDzimte: false,
+    emoji: null,
+    imgLink: null,
+    categories: [ItemCategory.OTHER],
+    value: 10,
+    removedOnUse: false,
+    use: () => ({
+      text: 'chau',
+    }),
+  },
   // patriota_piespraude: item<NotSellableItem>({
   //   nameNomVsk: 'patriotu piespraude',
   //   nameNomDsk: 'patriotu piespraudes',
