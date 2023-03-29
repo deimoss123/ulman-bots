@@ -126,29 +126,29 @@ const info: Command = {
         thumbnail: itemObj.imgLink || undefined,
         fields,
         components: [
-          new ActionRowBuilder<ButtonBuilder>().addComponents(
-            new ButtonBuilder()
-              .setCustomId('info-kam-pieder-btn')
-              .setLabel('Kam pieder?')
-              .setEmoji('👁️')
-              .setStyle(ButtonStyle.Primary)
-          ),
+          // new ActionRowBuilder<ButtonBuilder>().addComponents(
+          //   new ButtonBuilder()
+          //     .setCustomId('info-kam-pieder-btn')
+          //     .setLabel('Kam pieder?')
+          //     .setEmoji('👁️')
+          //     .setStyle(ButtonStyle.Primary)
+          // ),
         ],
       })
     );
 
-    if (!msg) return intReply(i, errorEmbed);
+    //   if (!msg) return intReply(i, errorEmbed);
 
-    buttonHandler(i, 'info', msg, async int => {
-      const { customId, componentType } = int;
+    //   buttonHandler(i, 'info', msg, async int => {
+    //     const { customId, componentType } = int;
 
-      if (customId === 'info-kam-pieder-btn' && componentType === ComponentType.Button) {
-        return {
-          end: true,
-          after: () => kamPiederRun(int, itemKey),
-        };
-      }
-    });
+    //     if (customId === 'info-kam-pieder-btn' && componentType === ComponentType.Button) {
+    //       return {
+    //         end: true,
+    //         after: () => kamPiederRun(int, itemKey),
+    //       };
+    //     }
+    //   });
   },
 };
 
