@@ -38,6 +38,9 @@ export interface ItemAttributes {
 
   // sūdīgs nosaukums, bet domāts patriotu piespraudei, numurs pēc kārtas
   piespraudeNum?: number;
+
+  // ogu krūmam
+  berryType?: ItemKey;
 }
 
 export interface SpecialItemInProfile {

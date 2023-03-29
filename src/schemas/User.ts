@@ -41,6 +41,7 @@ export const ItemAttributesSchema = {
   isCooked: Boolean,
   hat: String,
   piespraudeNum: Number,
+  berryType: String,
 };
 
 const userSchema = new Schema<UserProfile>({
