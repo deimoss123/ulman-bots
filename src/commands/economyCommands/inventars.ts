@@ -28,6 +28,7 @@ import iconEmojis from '../../embeds/iconEmojis';
 import { INCREASE_CAP_1 } from '../../items/usableItems/mugursoma';
 import { INCREASE_CAP_2 } from '../../items/usableItems/divaina_mugursoma';
 import intReply from '../../utils/intReply';
+import btnPaginationRow from '../../items/helpers/btnPaginationRow';
 
 export type ItemType = 'not_usable' | 'usable' | 'special' | 'not_sellable';
 
@@ -199,26 +200,6 @@ function invEmbed(
   }).embeds;
 }
 
-function paginationRow(currentPage: number, totalPages: number) {
-  return new ActionRowBuilder<ButtonBuilder>().addComponents(
-    new ButtonBuilder()
-      .setCustomId('_')
-      .setLabel(`${currentPage + 1}/${totalPages}`)
-      .setStyle(ButtonStyle.Secondary)
-      .setDisabled(true),
-    new ButtonBuilder()
-      .setCustomId('inv_prev_page')
-      .setLabel('Iepriekšējā lapa')
-      .setDisabled(currentPage === 0)
-      .setStyle(currentPage === 0 ? ButtonStyle.Secondary : ButtonStyle.Primary),
-    new ButtonBuilder()
-      .setCustomId('inv_next_page')
-      .setLabel('Nākamā lapa')
-      .setDisabled(currentPage + 1 === totalPages)
-      .setStyle(currentPage + 1 === totalPages ? ButtonStyle.Secondary : ButtonStyle.Primary)
-  );
-}
-
 function sellRow({ items }: UserProfile, buttonsPressed: ('visas' | 'neizmantojamas')[] = []) {
   const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
@@ -259,7 +240,7 @@ function invComponents(
   const rows: ActionRowBuilder<ButtonBuilder>[] = [];
 
   if (fields.length > INV_PAGE_SIZE) {
-    rows.push(paginationRow(currentPage!, totalPages!));
+    rows.push(btnPaginationRow('inv', currentPage!, totalPages!));
   }
 
   if (
