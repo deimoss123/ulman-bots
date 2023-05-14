@@ -1,4 +1,5 @@
 import chance from '../../../items/helpers/chance';
+import shuffleArray from '../../../items/helpers/shuffleArray';
 import feniksLaimesti from './feniksLaimesti';
 
 export interface CalcSpinRes {
@@ -8,15 +9,6 @@ export interface CalcSpinRes {
     isWinner: boolean;
   }[];
   totalMultiplier: number;
-}
-
-function shuffleArray<T>(arr: T[]): T[] {
-  const array = [...arr];
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
 }
 
 export default function calcSpin(emojiCount: number): CalcSpinRes {
