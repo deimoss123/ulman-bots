@@ -27,7 +27,6 @@ import petniekzivs, { PETNIEKZIVS_STATUS_TIME } from './usableItems/petniekzivs'
 import kakis, { foodDataPercentage, kakisFedState, kakisFoodData, KAKIS_MAX_FEED } from './usableItems/kakis';
 import itemString, { makeEmojiString } from '../embeds/helpers/itemString';
 import piparkuka from './usableItems/piparkuka';
-import { text } from 'stream/consumers';
 
 export type ItemKey = string;
 
@@ -82,7 +81,7 @@ const itemList: { [key: ItemKey]: Item } = {
     imgLink: 'https://www.ulmanbots.lv/images/items/latloto.png',
     categories: [ItemCategory.VEIKALS],
     value: 50,
-    removedOnUse: true,
+    removedOnUse: false,
     use: latloto,
   }),
   nazis: item<UsableItem & ShopItem>({
@@ -198,7 +197,7 @@ const itemList: { [key: ItemKey]: Item } = {
     imgLink: 'https://www.ulmanbots.lv/images/items/dizloto.gif',
     categories: [ItemCategory.VEIKALS],
     value: 250,
-    removedOnUse: true,
+    removedOnUse: false,
     use: dizloto,
   }),
   divaina_makskere: item<AttributeItem & ShopItem>({
