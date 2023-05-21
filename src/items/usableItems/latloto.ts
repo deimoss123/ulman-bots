@@ -1,4 +1,3 @@
-import iconEmojis from '../../embeds/iconEmojis';
 import loto, { LotoOptions } from './loto';
 
 const latlotoOptions: LotoOptions = {
@@ -10,22 +9,22 @@ const latlotoOptions: LotoOptions = {
   rewards: {
     '25_lati': {
       lati: 25,
-      emoji: iconEmojis.checkmark,
+      emoji: '<:loto_25:1109595002331463750>',
       chance: '*',
+    },
+    '50_lati': {
+      lati: 50,
+      emoji: '<:loto_50:1109595004151812197>',
+      chance: 0.2,
     },
     '100_lati': {
       lati: 100,
-      emoji: iconEmojis.checkmark,
-      chance: 0.2,
-    },
-    '250_lati': {
-      lati: 250,
-      emoji: iconEmojis.checkmark,
+      emoji: '<:loto_100_2:1109594522989633616>',
       chance: 0.2,
     },
     '2x': {
       multiplier: 2,
-      emoji: iconEmojis.blueArrowRight,
+      emoji: '<:loto_2x:1107689016595329115>',
       chance: 0.2,
     },
   },
