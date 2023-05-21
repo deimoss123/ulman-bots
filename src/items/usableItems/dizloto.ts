@@ -1,4 +1,3 @@
-import laimestiDizloto from '../../casino/laimesti/laimestiDizloto';
 import loto from './loto';
 import { UsableItemFunc } from '../../interfaces/Item';
 
