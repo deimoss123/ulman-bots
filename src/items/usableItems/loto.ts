@@ -1,4 +1,4 @@
-import chance, { ChanceRecord, ChanceValue } from '../helpers/chance';
+import chance, { ChanceValue } from '../helpers/chance';
 import itemList, { ItemKey } from '../itemList';
 import { UsableItemFunc } from '../../interfaces/Item';
 import findUser from '../../economy/findUser';
@@ -20,32 +20,29 @@ import buttonHandler from '../../embeds/buttonHandler';
 import iconEmojis from '../../embeds/iconEmojis';
 import addLati from '../../economy/addLati';
 import addItems from '../../economy/addItems';
+import smallEmbed from '../../embeds/smallEmbed';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function testLaimesti(laimesti: ChanceRecord) {
-  let total = 0;
-  const count = 100000;
+function testLaimesti(options: LotoOptions, count: number) {
+  console.log(`Started testing ${count} spins`);
+  let totalLati = 0;
+
   for (let i = 0; i < count; i++) {
-    const test = chance(laimesti);
-    total += test.obj.reward;
+    if (i % 100_000 === 0) console.log(`i = ${i}`);
+    const lotoArr = generateLotoArr(options);
+    // scrach first x items
+    lotoArr.forEach((item, index) => {
+      if (index < options.scratches) item.scratched = true;
+    });
+
+    const calcRes = calcTotal(lotoArr);
+    totalLati += calcRes.total;
   }
-  console.log(total / count);
+
+  console.log(`Finished testing ${count} spins`);
+  const avg = (totalLati / count).toFixed(3);
+  console.log(`Avg reward: ${avg} lati`);
 }
-
-// export default async function loto(userId: string, guildId: string, laimesti: ChanceRecord): Promise<UsableItemReturn> {
-//   const res = chance(laimesti);
-
-//   // testLaimesti(laimesti)
-
-//   await addLati(userId, guildId, res.obj.reward);
-
-//   let text = 'Tu neko nelaimēji :(';
-//   if (res.key !== 'lose') {
-//     text = `Tu laimēji ${res.obj.name} laimestu - **${res.obj.reward}** latus!`;
-//   }
-
-//   return { text, color: res.obj.color };
-// }
 
 // prettier-ignore
 export type LotoReward = {
@@ -238,9 +235,17 @@ function calcTotal(lotoArray: LotoArray) {
   };
 }
 
+const TEST_SPINS = false;
+
 export default function loto(itemKey: ItemKey, options: LotoOptions): UsableItemFunc {
   return () => ({
     custom: async i => {
+      if (TEST_SPINS) {
+        await intReply(i, smallEmbed('Testing spins...', 0xffffff));
+        testLaimesti(options, 1_000_000);
+        return;
+      }
+
       const userId = i.user.id;
       const guildId = i.guildId!;
 
