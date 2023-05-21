@@ -114,6 +114,16 @@ const top: Command = {
         if (componentType !== ComponentType.Button) return;
 
         switch (customId) {
+          case 'top_first_page': {
+            currentPage = 0;
+            return {
+              edit: {
+                // @ts-ignore
+                embeds: topEmbed(i, categoryTitle, currentPage, sortedUsers, sortDataObj).embeds,
+                components: [btnPaginationRow('top', currentPage, totalPages)],
+              },
+            };
+          }
           case 'top_prev_page': {
             currentPage--;
             if (currentPage < 0) currentPage = 0;
@@ -128,6 +138,16 @@ const top: Command = {
           case 'top_next_page': {
             currentPage++;
             if (currentPage >= totalPages) currentPage = totalPages - 1;
+            return {
+              edit: {
+                // @ts-ignore
+                embeds: topEmbed(i, categoryTitle, currentPage, sortedUsers, sortDataObj).embeds,
+                components: [btnPaginationRow('top', currentPage, totalPages)],
+              },
+            };
+          }
+          case 'top_last_page': {
+            currentPage = totalPages - 1;
             return {
               edit: {
                 // @ts-ignore

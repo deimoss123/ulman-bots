@@ -1,6 +1,10 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import iconEmojis from '../../embeds/iconEmojis';
 
 export default function btnPaginationRow(cmd: string, currentPage: number, totalPages: number) {
+  const isFirstPage = currentPage === 0;
+  const isLastPage = currentPage + 1 >= totalPages;
+
   return new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setCustomId('_')
@@ -8,14 +12,24 @@ export default function btnPaginationRow(cmd: string, currentPage: number, total
       .setStyle(ButtonStyle.Secondary)
       .setDisabled(true),
     new ButtonBuilder()
+      .setCustomId(`${cmd}_first_page`)
+      .setEmoji(iconEmojis.arrow_2_left)
+      .setDisabled(isFirstPage)
+      .setStyle(ButtonStyle.Secondary),
+    new ButtonBuilder()
       .setCustomId(`${cmd}_prev_page`)
-      .setLabel('Iepriekšējā lapa')
-      .setDisabled(currentPage === 0)
-      .setStyle(currentPage === 0 ? ButtonStyle.Secondary : ButtonStyle.Primary),
+      .setEmoji(iconEmojis.arrow_1_left)
+      .setDisabled(isFirstPage)
+      .setStyle(isFirstPage ? ButtonStyle.Secondary : ButtonStyle.Primary),
     new ButtonBuilder()
       .setCustomId(`${cmd}_next_page`)
-      .setLabel('Nākamā lapa')
-      .setDisabled(currentPage + 1 === totalPages)
-      .setStyle(currentPage + 1 === totalPages ? ButtonStyle.Secondary : ButtonStyle.Primary)
+      .setEmoji(iconEmojis.arrow_1_right)
+      .setDisabled(isLastPage)
+      .setStyle(isLastPage ? ButtonStyle.Secondary : ButtonStyle.Primary),
+    new ButtonBuilder()
+      .setCustomId(`${cmd}_last_page`)
+      .setEmoji(iconEmojis.arrow_2_right)
+      .setDisabled(isLastPage)
+      .setStyle(ButtonStyle.Secondary)
   );
 }

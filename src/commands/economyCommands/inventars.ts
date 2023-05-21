@@ -309,9 +309,18 @@ const inventars: Command = {
         if (int.componentType !== ComponentType.Button) return;
 
         switch (customId) {
+          case 'inv_first_page': {
+            currentPage = 0;
+            return {
+              edit: {
+                embeds: invEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
+                components: invComponents(i, targetUser, fields, currentPage, totalPages),
+              },
+            };
+          }
           case 'inv_prev_page': {
             currentPage--;
-            if (currentPage >= totalPages) currentPage = totalPages - 1;
+            if (currentPage < 0) currentPage = 0;
             return {
               edit: {
                 embeds: invEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
@@ -321,7 +330,17 @@ const inventars: Command = {
           }
           case 'inv_next_page': {
             currentPage++;
-            if (currentPage < 0) currentPage = 0;
+            if (currentPage >= totalPages) currentPage = totalPages - 1;
+            return {
+              edit: {
+                embeds: invEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
+                components: invComponents(i, targetUser, fields, currentPage, totalPages),
+              },
+            };
+          }
+
+          case 'inv_last_page': {
+            currentPage = totalPages - 1;
             return {
               edit: {
                 embeds: invEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
@@ -331,7 +350,6 @@ const inventars: Command = {
           }
           case 'inv_pardot_neizmantojamas': {
             if (!buttonsPressed.includes('neizmantojamas')) buttonsPressed.push('neizmantojamas');
-
             return {
               edit: {
                 embeds: invEmbed(i, target, targetUser, fields, currentPage, itemTypesInv),
