@@ -5,7 +5,7 @@ import {
   ButtonStyle,
   ChatInputCommandInteraction,
   ComponentType,
-  SelectMenuBuilder,
+  StringSelectMenuBuilder,
 } from 'discord.js';
 import findUser from '../../../economy/findUser';
 import buttonHandler from '../../../embeds/buttonHandler';
@@ -44,8 +44,8 @@ function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: AttributeIt
   }
 
   return [
-    new ActionRowBuilder<SelectMenuBuilder>().addComponents(
-      new SelectMenuBuilder()
+    new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+      new StringSelectMenuBuilder()
         .setCustomId('izmantot_special_select')
         .setPlaceholder('Izvēlies kuru izmantot')
         .setOptions(

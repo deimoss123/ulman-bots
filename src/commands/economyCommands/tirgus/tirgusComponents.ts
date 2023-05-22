@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, SelectMenuBuilder } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } from 'discord.js';
 import capitalizeFirst from '../../../embeds/helpers/capitalizeFirst';
 import UserProfile from '../../../interfaces/UserProfile';
 import itemList, { ItemKey } from '../../../items/itemList';
@@ -12,8 +12,8 @@ export default function tirgusComponents(
 ) {
   const calcRes = selectedListing ? calcReqItems(user, itemList[selectedListing]) : null;
   return [
-    new ActionRowBuilder<SelectMenuBuilder>().addComponents(
-      new SelectMenuBuilder()
+    new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+      new StringSelectMenuBuilder()
         .setCustomId('tirgus_select_menu')
         .setPlaceholder('Izvēlies tirgus preci')
         .addOptions(

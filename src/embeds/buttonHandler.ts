@@ -8,7 +8,7 @@ import {
   Message,
   MessagePayload,
   ModalSubmitInteraction,
-  SelectMenuBuilder,
+  StringSelectMenuBuilder,
   SelectMenuInteraction,
 } from 'discord.js';
 import interactionCache, { InteractionInCache } from '../utils/interactionCache';
@@ -119,18 +119,18 @@ export default async function buttonHandler(
 
     let areAllComponentsAlreadyDisabled = true;
 
-    const editedMessageComponents: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[] = [];
+    const editedMessageComponents: ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] = [];
 
     // iziet cauri visām pogām message objektā un atspējo tās
     currentMessage.components.forEach(row => {
-      const editedRow = new ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>();
+      const editedRow = new ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>();
       row.components.forEach(component => {
         if (!component.data.disabled) areAllComponentsAlreadyDisabled = false;
 
         if (component.type === ComponentType.Button) {
           editedRow.addComponents(ButtonBuilder.from(component).setDisabled(true));
         } else if (component.type === ComponentType.StringSelect) {
-          editedRow.addComponents(SelectMenuBuilder.from(component).setDisabled(true));
+          editedRow.addComponents(StringSelectMenuBuilder.from(component).setDisabled(true));
         }
       });
       editedMessageComponents.push(editedRow);

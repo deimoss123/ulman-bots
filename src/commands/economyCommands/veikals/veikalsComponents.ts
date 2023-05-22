@@ -2,7 +2,7 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
-  SelectMenuBuilder,
+  StringSelectMenuBuilder,
   SelectMenuComponentOptionData,
 } from 'discord.js';
 import Item from '../../../interfaces/Item';
@@ -74,8 +74,8 @@ export default function veikalsComponents(
   }
 
   return [
-    new ActionRowBuilder<SelectMenuBuilder>().addComponents(
-      new SelectMenuBuilder()
+    new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+      new StringSelectMenuBuilder()
         .setCustomId('veikals_prece')
         .setPlaceholder(`Izvēlies preci, tev ir ${latiString(user.lati)}`)
         .addOptions(
@@ -88,8 +88,8 @@ export default function veikalsComponents(
           }))
         )
     ),
-    new ActionRowBuilder<SelectMenuBuilder>().addComponents(
-      new SelectMenuBuilder()
+    new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+      new StringSelectMenuBuilder()
         .setCustomId('veikals_daudzums')
         .setPlaceholder(`Daudzums: ${chosenAmount}`)
         .addOptions(amountMenuOptions)

@@ -4,7 +4,7 @@ import {
   ButtonStyle,
   ChatInputCommandInteraction,
   ComponentType,
-  SelectMenuBuilder,
+  StringSelectMenuBuilder,
 } from 'discord.js';
 import addLati from '../../../economy/addLati';
 import addSpecialItems from '../../../economy/addSpecialItems';
@@ -117,8 +117,8 @@ function makeComponents(
   const selectedIds = selectedItems.map(item => item._id!);
 
   return [
-    new ActionRowBuilder<SelectMenuBuilder>().addComponents(
-      new SelectMenuBuilder()
+    new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+      new StringSelectMenuBuilder()
         .setCustomId('iedot_special_select')
         .setPlaceholder('Izvēlies ko iedot')
         .setMinValues(1)

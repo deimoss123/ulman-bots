@@ -8,7 +8,7 @@ import {
   ModalActionRowComponentBuilder,
   ModalBuilder,
   ModalSubmitInteraction,
-  SelectMenuBuilder,
+  StringSelectMenuBuilder,
   TextInputBuilder,
   TextInputStyle,
   time,
@@ -135,10 +135,10 @@ function components(
   currTime: number,
   hatModified: boolean,
   selectedFood: ItemKey = ''
-): ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[] {
+): ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] {
   const isDead = fedUntil! < currTime;
 
-  const components: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[] = [];
+  const components: ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] = [];
   let buttonRow: ActionRowBuilder<ButtonBuilder> | null = null;
 
   const foodInInv = items
@@ -169,8 +169,8 @@ function components(
 
   if (!isDead && !buttonRow) {
     components.push(
-      new ActionRowBuilder<SelectMenuBuilder>().addComponents(
-        new SelectMenuBuilder()
+      new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+        new StringSelectMenuBuilder()
           .setCustomId('feed_cat_select')
           .setPlaceholder('Izvēlies ēdienu')
           .addOptions(

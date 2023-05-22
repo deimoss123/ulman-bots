@@ -4,7 +4,7 @@ import {
   ButtonStyle,
   ChatInputCommandInteraction,
   ComponentType,
-  SelectMenuBuilder,
+  StringSelectMenuBuilder,
 } from 'discord.js';
 import addLati from '../../../economy/addLati';
 import findUser from '../../../economy/findUser';
@@ -26,8 +26,8 @@ import { PIRKT_PARDOT_NODOKLIS } from './pardot';
 
 function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: AttributeItem, selectedIds: string[]) {
   return [
-    new ActionRowBuilder<SelectMenuBuilder>().addComponents(
-      new SelectMenuBuilder()
+    new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+      new StringSelectMenuBuilder()
         .setCustomId('pardot_special_select')
         .setPlaceholder('Izvēlies ko pārdot')
         .setMinValues(1)

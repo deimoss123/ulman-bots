@@ -2,16 +2,12 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
-  SelectMenuBuilder,
+  StringSelectMenuBuilder,
   SelectMenuComponentOptionData,
 } from 'discord.js';
 import { JobPositions } from './vakances';
 
-export default function vakancesComponents(
-  chosen: string,
-  level: number,
-  currentJob: string | null
-) {
+export default function vakancesComponents(chosen: string, level: number, currentJob: string | null) {
   const options: SelectMenuComponentOptionData[] = Object.entries(JobPositions)
     .filter(([key, value]) => key !== currentJob && level >= value.minLevel)
     .map(([key, value]) => ({
@@ -22,8 +18,8 @@ export default function vakancesComponents(
     }));
 
   return [
-    new ActionRowBuilder<SelectMenuBuilder>().addComponents(
-      new SelectMenuBuilder()
+    new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+      new StringSelectMenuBuilder()
         .setCustomId('vakances_select')
         .setPlaceholder('Izvēlies vakanci')
         .setDisabled(!options.length)

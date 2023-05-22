@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, SelectMenuBuilder } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } from 'discord.js';
 import capitalizeFirst from '../../../embeds/helpers/capitalizeFirst';
 import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import latiString from '../../../embeds/helpers/latiString';
@@ -23,7 +23,7 @@ const collectFishButton = new ButtonBuilder()
 export default function zvejotComponents(
   user: UserProfile,
   selectedFishingRodId?: string
-): ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[] {
+): ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] {
   const { specialItems, fishing } = user;
   const { selectedRod, usesLeft, caughtFishes } = fishing;
 
@@ -54,8 +54,8 @@ export default function zvejotComponents(
     if (caughtFishes && Object.keys(caughtFishes).length) btnRow.push(collectFishButton);
 
     return [
-      new ActionRowBuilder<SelectMenuBuilder>().addComponents(
-        new SelectMenuBuilder()
+      new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+        new StringSelectMenuBuilder()
           .setCustomId('select_fishing_rod')
           .setPlaceholder('Izvēlies makšķeri')
           .addOptions(

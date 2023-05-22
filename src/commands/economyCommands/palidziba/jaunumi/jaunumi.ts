@@ -3,7 +3,7 @@ import {
   ChatInputCommandInteraction,
   ComponentType,
   EmbedField,
-  SelectMenuBuilder,
+  StringSelectMenuBuilder,
 } from 'discord.js';
 import buttonHandler from '../../../../embeds/buttonHandler';
 import commandColors from '../../../../embeds/commandColors';
@@ -26,8 +26,8 @@ function embed(i: ChatInputCommandInteraction, selectedVersion: string) {
 
 function components(selectedVersion: string) {
   return [
-    new ActionRowBuilder<SelectMenuBuilder>().addComponents(
-      new SelectMenuBuilder().setCustomId('jaunumi_select').addOptions(
+    new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+      new StringSelectMenuBuilder().setCustomId('jaunumi_select').addOptions(
         Object.entries(updatesList)
           .map(([v, { date }]) => ({ label: v, description: date, value: v, default: selectedVersion === v }))
           .reverse()
