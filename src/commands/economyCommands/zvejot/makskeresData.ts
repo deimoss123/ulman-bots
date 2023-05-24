@@ -117,6 +117,7 @@ const maksekeresData: Record<
       dizloto: { chance: 0.1, cost: 3 },
 
       brivgriez100: { chance: 0.08, cost: 5 },
+      ulmanloto: { chance: 0.01, cost: 5 },
     },
   },
   luznu_makskere: {

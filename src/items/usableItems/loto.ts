@@ -21,6 +21,7 @@ import iconEmojis from '../../embeds/iconEmojis';
 import addLati from '../../economy/addLati';
 import addItems from '../../economy/addItems';
 import smallEmbed from '../../embeds/smallEmbed';
+import commandColors from '../../embeds/commandColors';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function testLaimesti(options: LotoOptions, count: number) {
@@ -64,6 +65,7 @@ export interface LotoOptions {
   minRewards: number;
   maxRewards: number;
   rewards: Record<string, LotoReward>; // pirmais rewards ir garantēts
+  colors: { lati: number; color: number }[];
 }
 
 type LotoArray = {
@@ -79,7 +81,7 @@ function generateLotoArr(
 
   const array = Array.from({ length: rows * columns }, (_, index) => {
     if (index === 0) return rewards[Object.keys(rewards)[0]];
-    if (index <= rewardsCount) return chance(rewards).obj as LotoReward;
+    if (index < rewardsCount) return chance(rewards).obj as LotoReward;
     return null;
   }).map(reward => ({ reward, scratched: false }));
 
@@ -115,16 +117,19 @@ function lotoEmbed(
   i: ButtonInteraction | ChatInputCommandInteraction,
   itemKey: ItemKey,
   lotoArrWon: LotoArray,
+  { colors }: LotoOptions,
   totalWin: number,
   scratchesLeft: number
 ) {
   const latiArr = lotoArrWon.filter(item => item.reward?.lati);
   const multiplierArr = lotoArrWon.filter(item => item.reward?.multiplier);
+  const color = scratchesLeft ? commandColors.feniks : colors.find(({ lati }) => totalWin >= lati)!.color;
 
   return embedTemplate({
     i,
     title: `Izmantot: ${itemString(itemKey, null, true)}`,
     description: scratchesLeftText(scratchesLeft, true),
+    color,
     fields: [
       {
         name: 'Atrastie lati:',
@@ -144,7 +149,8 @@ function lotoEmbed(
   }).embeds;
 }
 
-const LOTO_QUESTION_MARK_EMOJI = '<a:loto_question_mark:1107683760402616412>';
+// const LOTO_QUESTION_MARK_EMOJI = '<a:loto_question_mark:1107683760402616412>';
+const LOTO_QUESTION_MARK_EMOJI = '<:loto_question_mark:1110920964142792744>';
 
 function lotoComponents(
   itemKey: ItemKey,
@@ -252,7 +258,7 @@ export default function loto(itemKey: ItemKey, options: LotoOptions): UsableItem
       let user = await findUser(userId, guildId);
       if (!user) return intReply(i, errorEmbed);
 
-      const lotoArray = generateLotoArr(options, true);
+      const lotoArray = generateLotoArr(options);
       const buttonCount = options.rows * options.columns;
       let scratchesLeft = options.scratches;
       let latiAdded = false;
@@ -260,7 +266,7 @@ export default function loto(itemKey: ItemKey, options: LotoOptions): UsableItem
 
       const msg = await intReply(i, {
         content: '\u200b',
-        embeds: lotoEmbed(i, itemKey, [], 0, scratchesLeft),
+        embeds: lotoEmbed(i, itemKey, [], options, 0, scratchesLeft),
         components: lotoComponents(itemKey, lotoArray, options, scratchesLeft),
         fetchReply: true,
       });
@@ -317,7 +323,7 @@ export default function loto(itemKey: ItemKey, options: LotoOptions): UsableItem
 
           return {
             edit: {
-              embeds: lotoEmbed(int, itemKey, sorted, total, scratchesLeft),
+              embeds: lotoEmbed(int, itemKey, sorted, options, total, scratchesLeft),
               components: lotoComponents(itemKey, lotoArray, options, scratchesLeft, hasEnded, lotoInInv),
             },
             setInactive: hasEnded,

@@ -1,12 +1,4 @@
-import {
-  ActionRowBuilder,
-  ApplicationCommandOptionType,
-  ButtonBuilder,
-  ButtonStyle,
-  ComponentType,
-  EmbedField,
-} from 'discord.js';
-import buttonHandler from '../../../embeds/buttonHandler';
+import { ApplicationCommandOptionType, EmbedField } from 'discord.js';
 import commandColors from '../../../embeds/commandColors';
 import embedTemplate from '../../../embeds/embedTemplate';
 import errorEmbed from '../../../embeds/errorEmbed';
@@ -21,9 +13,9 @@ import getItemPrice from '../../../items/helpers/getItemPrice';
 import itemList, { ItemCategory } from '../../../items/itemList';
 import intReply from '../../../utils/intReply';
 import { ItemType, itemTypes } from '../inventars';
-import kamPiederRun from '../kamPieder/kamPiederRun';
 import maksekeresData from '../zvejot/makskeresData';
 import allItemAutocomplete from './allItemAutocomplete';
+import { LotoOptions } from '../../../items/usableItems/loto';
 
 const info: Command = {
   description: 'Iegūt detalizētu informāciju par kādu mantu - vērtība, cena, tirgus cena, makšķeres informācija, utt.',
@@ -110,6 +102,30 @@ const info: Command = {
           .join('\n')}`,
         inline: true,
       });
+    }
+
+    if (itemObj.categories.includes(ItemCategory.LOTO) && 'lotoOptions' in itemObj) {
+      const { columns, rows, scratches, rewards } = itemObj.lotoOptions as LotoOptions;
+      const latiRewards = Object.values(rewards).filter(reward => reward.lati);
+      const multiplierRewards = Object.values(rewards).filter(reward => reward.multiplier);
+
+      fields.unshift(
+        {
+          name: 'Loto informācija:',
+          value: `Izmērs: **${rows}**x**${columns}**\n` + `Skrāp. skaits: **${scratches}**`,
+          inline: true,
+        },
+        {
+          name: 'Iesp. laimesti:',
+          value: latiRewards.map(({ emoji, lati }) => `${emoji} - ${latiString(lati!, false, true)}`).join('\n'),
+          inline: true,
+        },
+        {
+          name: 'Iesp. reizinātāji:',
+          value: multiplierRewards.map(({ emoji, multiplier }) => `${emoji} - **${multiplier!}x** reiz.`).join('\n'),
+          inline: true,
+        }
+      );
     }
 
     const msg = await intReply(

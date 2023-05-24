@@ -2,6 +2,7 @@ import { APIMessageComponentEmoji, ButtonInteraction } from 'discord.js';
 import { ItemCategory, ItemKey } from '../items/itemList';
 import UsableItemReturn from './UsableItemReturn';
 import { ItemAttributes, SpecialItemInProfile } from './UserProfile';
+import { LotoOptions } from '../items/usableItems/loto';
 
 // masīvs ar vismaz vienu vērtību
 interface categories extends Array<ItemCategory> {
@@ -47,6 +48,10 @@ export interface ShopItem {
   // vai ir atļautas atlaides
   allowDiscount?: boolean;
   categories: ShopCategories;
+}
+
+export interface LotoItem {
+  lotoOptions: LotoOptions;
 }
 
 interface TirgusCategories extends Array<ItemCategory> {

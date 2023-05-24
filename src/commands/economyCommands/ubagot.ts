@@ -46,10 +46,15 @@ const ubagotChances: Record<string, UbagotRes> = {
   //   text: `tajā iekrita ${itemString('piparkuka')}`,
   //   reward: { piparkuka: 1 },
   // },
-  piens: {
+  // piens: {
+  //   chance: 0.1,
+  //   text: `tajā ielija piens, tava krūze pārvērtās par **${itemString(itemList.piena_spainis, null, true)}**`,
+  //   reward: { piena_spainis: 1 },
+  // },
+  nabagloto: {
     chance: 0.1,
-    text: `tajā ielija piens, tava krūze pārvērtās par **${itemString(itemList.piena_spainis, null, true)}**`,
-    reward: { piena_spainis: 1 },
+    text: `tajā iekrita **${itemString(itemList.nabagloto, 1)}**`,
+    reward: { nabagloto: 1 },
   },
   kafija: {
     chance: 0.1,
@@ -57,7 +62,7 @@ const ubagotChances: Record<string, UbagotRes> = {
     reward: { kafija: 1 },
   },
   latloto: {
-    chance: 0.1,
+    chance: 0.05,
     text: `kādam garāmgājējam no kabatas izkrita **${itemString(itemList.latloto, 1)}**`,
     reward: { latloto: 1 },
   },

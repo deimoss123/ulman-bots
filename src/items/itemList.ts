@@ -1,10 +1,10 @@
 /* eslint-disable func-names */
-import Item, { AttributeItem, BaseItem, item, ShopItem, TirgusItem, UsableItem } from '../interfaces/Item';
+import Item, { AttributeItem, BaseItem, item, LotoItem, ShopItem, TirgusItem, UsableItem } from '../interfaces/Item';
 import virve from './usableItems/virve';
 import divainais_burkans from './usableItems/divainais_burkans';
 import mugursoma, { INCREASE_CAP_1, INV_INCREASE_AMOUNT_1 } from './usableItems/mugursoma';
-import latloto from './usableItems/latloto';
-import dizloto from './usableItems/dizloto';
+import latloto, { latlotoOptions } from './usableItems/latloto';
+import dizloto, { dizlotoOptions } from './usableItems/dizloto';
 import kafija from './usableItems/kafija';
 import kafijas_aparats, { kafijasAparatsUseMany } from './usableItems/kafijas_aparats';
 import velo, { veloInfo } from './usableItems/velo';
@@ -27,6 +27,8 @@ import petniekzivs, { PETNIEKZIVS_STATUS_TIME } from './usableItems/petniekzivs'
 import kakis, { foodDataPercentage, kakisFedState, kakisFoodData, KAKIS_MAX_FEED } from './usableItems/kakis';
 import itemString, { makeEmojiString } from '../embeds/helpers/itemString';
 import piparkuka from './usableItems/piparkuka';
+import nabagloto, { nabagLotoOptions } from './usableItems/nabagloto';
+import ulmanloto, { ulmanlotoOptions } from './usableItems/ulmanloto';
 
 export type ItemKey = string;
 
@@ -40,6 +42,7 @@ export enum ItemCategory {
   BRIVGRIEZIENS,
   TIRGUS,
   ADVENTE_2022,
+  LOTO,
   OTHER,
 }
 
@@ -67,21 +70,22 @@ const itemList: { [key: ItemKey]: Item } = {
     allowDiscount: true,
     use: makskere,
   }),
-  latloto: item<UsableItem & ShopItem>({
+  latloto: item<UsableItem & ShopItem & LotoItem>({
     info: 'Lētākā loterijas biļete kas nopērkama veikalā,\npārbaudi savu veiksmi jau šodien!',
-    nameNomVsk: 'latloto biļete',
-    nameNomDsk: 'latloto biļetes',
-    nameAkuVsk: 'latloto biļeti',
-    nameAkuDsk: 'latloto biļetes',
-    isVirsiesuDzimte: true,
+    nameNomVsk: 'latLoto biļete',
+    nameNomDsk: 'latLoto biļetes',
+    nameAkuVsk: 'latLoto biļeti',
+    nameAkuDsk: 'latLoto biļetes',
+    isVirsiesuDzimte: false,
     emoji: {
       id: '1009557006098645062',
       name: 'latloto',
     },
     imgLink: 'https://www.ulmanbots.lv/images/items/latloto.png',
-    categories: [ItemCategory.VEIKALS],
+    categories: [ItemCategory.VEIKALS, ItemCategory.LOTO],
     value: 50,
     removedOnUse: false,
+    lotoOptions: latlotoOptions,
     use: latloto,
   }),
   nazis: item<UsableItem & ShopItem>({
@@ -180,14 +184,14 @@ const itemList: { [key: ItemKey]: Item } = {
     allowDiscount: true,
     use: divainais_burkans,
   }),
-  dizloto: item<UsableItem & ShopItem>({
+  dizloto: item<UsableItem & ShopItem & LotoItem>({
     info:
-      'Ja tev ir apnicis skrāpēt Latloto biļetes un vēlies palielināt savas likmes, ' +
-      'tad pārbaudi savu veiksmi ar Dižloto jau šodien!\n',
-    nameNomVsk: 'dižloto biļete',
-    nameNomDsk: 'dižloto biļetes',
-    nameAkuVsk: 'dižloto biļeti',
-    nameAkuDsk: 'dižloto biļetes',
+      'Ja tev ir apnicis skrāpēt LatLoto biļetes un vēlies palielināt savas likmes, ' +
+      'tad pārbaudi savu veiksmi ar DižLoto jau šodien!\n',
+    nameNomVsk: 'dižLoto biļete',
+    nameNomDsk: 'dižLoto biļetes',
+    nameAkuVsk: 'dižLoto biļeti',
+    nameAkuDsk: 'dižLoto biļetes',
     isVirsiesuDzimte: false,
     emoji: {
       id: '1029738364875837500',
@@ -195,9 +199,10 @@ const itemList: { [key: ItemKey]: Item } = {
       animated: true,
     },
     imgLink: 'https://www.ulmanbots.lv/images/items/dizloto.gif',
-    categories: [ItemCategory.VEIKALS],
+    categories: [ItemCategory.VEIKALS, ItemCategory.LOTO],
     value: 250,
     removedOnUse: false,
+    lotoOptions: dizlotoOptions,
     use: dizloto,
   }),
   divaina_makskere: item<AttributeItem & ShopItem>({
@@ -904,6 +909,43 @@ const itemList: { [key: ItemKey]: Item } = {
       text: 'chau',
     }),
   },
+  nabagloto: item<UsableItem & LotoItem>({
+    info: 'Slapja un netīra loto biļete kuru var atrast uz ietves malas, iespējams iegūt no ubagošanas (`/ubagot`)',
+    nameNomVsk: 'nabagLoto biļete',
+    nameNomDsk: 'nabagLoto biļetes',
+    nameAkuVsk: 'nabagLoto biļeti',
+    nameAkuDsk: 'nabagLoto biļetes',
+    isVirsiesuDzimte: false,
+    emoji: {
+      id: '1107670976428265514',
+      name: 'nabagloto',
+    },
+    imgLink: null, // TODO
+    categories: [ItemCategory.LOTO],
+    value: 10,
+    removedOnUse: false,
+    lotoOptions: nabagLotoOptions,
+    use: nabagloto,
+  }),
+  ulmanloto: item<UsableItem & LotoItem>({
+    info: 'Reta un ļoti ekskluzīva loto biļete kas garantēs lielu peļņu tās skrāpētājam',
+    nameNomVsk: 'ulmaņLoto biļete',
+    nameNomDsk: 'ulmaņLoto biļetes',
+    nameAkuVsk: 'ulmaņLoto biļeti',
+    nameAkuDsk: 'ulmaņLoto biļetes',
+    isVirsiesuDzimte: false,
+    emoji: {
+      id: '1107670979943075891',
+      name: 'ulmanloto',
+      animated: true,
+    },
+    imgLink: null, // TODO
+    categories: [ItemCategory.LOTO],
+    value: 500,
+    removedOnUse: false,
+    lotoOptions: ulmanlotoOptions,
+    use: ulmanloto,
+  }),
 
   avene: item<UsableItem>({
     info: '',
