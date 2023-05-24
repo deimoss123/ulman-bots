@@ -1,5 +1,12 @@
 import { commandList, devCommandList } from './commandList';
-import { ChannelType, ChatInputCommandInteraction, PermissionsBitField } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  ChannelType,
+  ChatInputCommandInteraction,
+  PermissionsBitField,
+} from 'discord.js';
 import errorEmbed from '../embeds/errorEmbed';
 import interactionCache from '../utils/interactionCache';
 import ephemeralReply from '../embeds/ephemeralReply';
@@ -34,12 +41,22 @@ export default async function commandHandler(i: ChatInputCommandInteraction) {
     const cachedCommand = interactionCache.get(`${userId}-${guildId}`)?.get(command.data.name);
     if (cachedCommand?.isInteractionActive) {
       const { channelId, messageId } = cachedCommand.collector;
-      return intReply(
-        i,
-        ephemeralReply(
-          `Šī komanda jau ir **[aktīva](https://discord.com/channels/${guildId}/${channelId}/${messageId})**`
-        )
-      );
+      const url = `https://discord.com/channels/${guildId}/${channelId}/${messageId}`;
+
+      return intReply(i, {
+        embeds: [
+          {
+            description: `Šī komanda jau ir **[aktīva](${url})**`,
+            color: 0x9d2235,
+          },
+        ],
+        ephemeral: true,
+        components: [
+          new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new ButtonBuilder().setURL(url).setLabel('Doties uz ziņu').setStyle(ButtonStyle.Link)
+          ),
+        ],
+      });
     }
 
     const user = await findUser(userId, guildId);
