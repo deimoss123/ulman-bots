@@ -7,4 +7,9 @@ export default {
   arrow_2_right: '<:arrow_2_right:1030173212874657893>',
   emptyEmoji: '<:tuksums:1030165403822981270>',
   blueArrowRight: '<:top_arrow:1034111697746677841>',
+  
+  pageFirst: '<:page_first:1110954523171754069>',
+  pagePrev: '<:page_prev:1110954530981548112>',
+  pageNext: '<:page_next:1110954528347529407>',
+  pageLast: '<:page_last:1110954524652355635>',
 } satisfies Record<string, string>;
