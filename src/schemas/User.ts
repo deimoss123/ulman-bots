@@ -41,6 +41,8 @@ export const ItemAttributesSchema = {
   isCooked: Boolean,
   hat: String,
   piespraudeNum: Number,
+  cookingItem: String,
+  cookingStartedTime: Number, // unix millis
   berryType: String,
 };
 

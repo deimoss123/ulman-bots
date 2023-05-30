@@ -1,15 +1,23 @@
 import maksekeresData from '../../commands/economyCommands/zvejot/makskeresData';
 import { ItemAttributes, SpecialItemInProfile } from '../../interfaces/UserProfile';
-import itemList, { ItemCategory } from '../../items/itemList';
+import itemList, { ItemCategory, ItemKey } from '../../items/itemList';
+import { cookableItems } from '../../items/usableItems/gazes_plits';
 import { KAFIJAS_APARATS_COOLDOWN } from '../../items/usableItems/kafijas_aparats';
 import { kakisFedState } from '../../items/usableItems/kakis';
 import { PETNIEKS_COOLDOWN } from '../../items/usableItems/petnieks';
 import capitalizeFirst from './capitalizeFirst';
-import { makeEmojiString } from './itemString';
+import itemString, { makeEmojiString } from './itemString';
 import latiString from './latiString';
 import millisToReadableTime from './millisToReadableTime';
 
-const hiddenAttributes: Partial<keyof ItemAttributes>[] = ['customName', 'foundItemKey', 'fedUntil', 'isCooked', 'hat'];
+const hiddenAttributes: Partial<keyof ItemAttributes>[] = [
+  'customName',
+  'foundItemKey',
+  'fedUntil',
+  'isCooked',
+  'hat',
+  'cookingStartedTime',
+];
 
 export function displayAttributes(item: SpecialItemInProfile, inline = false, prefix = '') {
   const currTime = Date.now();
@@ -72,6 +80,27 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false, pr
     },
     patriota_piespraude: {
       piespraudeNum: n => `${inline ? '' : '**'}Nr. ${n}${inline ? '' : '**'}`,
+    },
+    gazes_plits: {
+      cookingItem: (_, { cookingStartedTime, cookingItem }) => {
+        if (!cookingItem) return 'Gatava cepšanai!';
+        const { output, time } = cookableItems.find(({ input }) => input === cookingItem)!;
+        const timeWhenDone = cookingStartedTime! + time;
+        const isDoneCooking = timeWhenDone < currTime;
+
+        const itemStr = (key: ItemKey) =>
+          inline ? capitalizeFirst(itemList[key].nameNomVsk) : `**${itemString(key)}**`;
+
+        if (isDoneCooking) {
+          return `Izcepts: ${itemStr(output)}`;
+        }
+
+        return (
+          `Cepjas: ${itemStr(cookingItem)}` +
+          (inline ? `, ` : '\n') +
+          `Gatavs pēc: ${inline ? '' : '`'}${millisToReadableTime(timeWhenDone - currTime)}${inline ? '' : '`'}`
+        );
+      },
     },
   };
 

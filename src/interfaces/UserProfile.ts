@@ -39,6 +39,10 @@ export interface ItemAttributes {
   // sūdīgs nosaukums, bet domāts patriotu piespraudei, numurs pēc kārtas
   piespraudeNum?: number;
 
+  // gāzes plīts
+  cookingItem?: ItemKey;
+  cookingStartedTime?: number;
+
   // ogu krūmam
   berryType?: ItemKey;
 }

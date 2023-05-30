@@ -29,6 +29,7 @@ import itemString, { makeEmojiString } from '../embeds/helpers/itemString';
 import piparkuka from './usableItems/piparkuka';
 import nabagloto, { nabagLotoOptions } from './usableItems/nabagloto';
 import ulmanloto, { ulmanlotoOptions } from './usableItems/ulmanloto';
+import gazes_plits from './usableItems/gazes_plits';
 
 export type ItemKey = string;
 
@@ -514,6 +515,28 @@ const itemList: { [key: ItemKey]: Item } = {
     sortBy: { createdAt: -1 },
     use: kakis,
   }),
+  gazes_plits: item<AttributeItem & TirgusItem>({
+    info: '',
+    nameNomVsk: 'gāzes plīts',
+    nameNomDsk: 'gāzes plītis',
+    nameAkuVsk: 'gāzes plīti',
+    nameAkuDsk: 'gāzes plītis',
+    isVirsiesuDzimte: false,
+    emoji: {
+      id: '1110984524273303565',
+      name: 'gazes_plits',
+    },
+    imgLink: null,
+    categories: [ItemCategory.TIRGUS],
+    value: 50,
+    tirgusPrice: { items: { metalluznis: 10 } },
+    attributes: {
+      cookingItem: '',
+      cookingStartedTime: 0,
+    },
+    sortBy: { cookingItem: 1, cookingStartedTime: -1 },
+    use: gazes_plits,
+  }),
 
   // -- atkritumi --
   kartona_kaste: item<BaseItem>({
@@ -584,6 +607,24 @@ const itemList: { [key: ItemKey]: Item } = {
     categories: [ItemCategory.ZIVIS],
     value: 10,
   }),
+  cepta_lidaka: item<BaseItem>({
+    info: () =>
+      'mmm... pusdienas\n\n' +
+      `Šo zivi var iegūt izcepjot **${itemString('lidaka', null, true)}** ` +
+      `ar **${itemString('gazes_plits', null, true)}**`,
+    nameNomVsk: 'cepta līdaka',
+    nameNomDsk: 'ceptas līdakas',
+    nameAkuVsk: 'ceptu līdaku',
+    nameAkuDsk: 'ceptas līdakas',
+    isVirsiesuDzimte: false,
+    emoji: {
+      id: '1111389909383655595',
+      name: 'cepta_lidaka',
+    },
+    imgLink: null,
+    categories: [ItemCategory.ZIVIS],
+    value: 50,
+  }),
   asaris: item<BaseItem>({
     info: 'Šī zivs novedīs tevi līdz asarām',
     nameNomVsk: 'asaris',
@@ -599,6 +640,24 @@ const itemList: { [key: ItemKey]: Item } = {
     categories: [ItemCategory.ZIVIS],
     value: 15,
   }),
+  cepts_asaris: item<BaseItem>({
+    info: () =>
+      'mmm... pusdienas\n\n' +
+      `Šo zivi var iegūt izcepjot **${itemString('asaris', null, true)}** ` +
+      `ar **${itemString('gazes_plits', null, true)}**`,
+    nameNomVsk: 'cepts asaris',
+    nameNomDsk: 'cepti asari',
+    nameAkuVsk: 'ceptu asari',
+    nameAkuDsk: 'ceptus asarus',
+    isVirsiesuDzimte: true,
+    emoji: {
+      id: '1111389912227401738',
+      name: 'cepts_asaris',
+    },
+    imgLink: null,
+    categories: [ItemCategory.ZIVIS],
+    value: 75,
+  }),
   lasis: item<BaseItem>({
     info: 'Tu labprāt šo zivi apēstu, bet nejaukais Discord čatbots tev to neļauj darīt',
     nameNomVsk: 'lasis',
@@ -613,6 +672,24 @@ const itemList: { [key: ItemKey]: Item } = {
     imgLink: 'https://www.ulmanbots.lv/images/items/lasis.png',
     categories: [ItemCategory.ZIVIS],
     value: 20,
+  }),
+  cepts_lasis: item<BaseItem>({
+    info: () =>
+      'mmm... pusdienas\n\n' +
+      `Šo zivi var iegūt izcepjot **${itemString('lasis', null, true)}** ` +
+      `ar **${itemString('gazes_plits', null, true)}**`,
+    nameNomVsk: 'cepts lasis',
+    nameNomDsk: 'cepti laši',
+    nameAkuVsk: 'ceptu lasi',
+    nameAkuDsk: 'ceptus lašus',
+    isVirsiesuDzimte: true,
+    emoji: {
+      id: '1111389913720561785',
+      name: 'cepts_lasis',
+    },
+    imgLink: null,
+    categories: [ItemCategory.ZIVIS],
+    value: 100,
   }),
   loto_zivs: item<AttributeItem>({
     info:
