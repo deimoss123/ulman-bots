@@ -52,7 +52,7 @@ const stradat: Command = {
     'Pašreizējo darba pozīciju un līmeni var redzet ar komandu `/profils`\n\n' +
     `Katrs var strādāt **${MAX_DAILY}** reizes dienā (resetojas plkst. ${midNightStr()}), ` +
     `bet ir iespējams iegūt papildus ${MAX_EXTRA_DAILY} strādāšanas reizes dienā\n` +
-    `Lai strādātu papildus reizes inventārā ir nepieciešama **${itemString(itemList.kafija)}** vai **${itemString(itemList.redbull)}**, ` +
+    `Lai strādātu papildus reizes inventārā ir nepieciešama **${itemString(itemList.kafija)}** vai **${itemString(itemList.redbulls)}**, ` +
     `par katru papildus reizi izvēlētā manta tiks iztērēta\n\n` +
     `Strādāt var ik **${millisToReadableTime(STRADAT_COOLDOWN)}**\n` +
     `Katra strādāšanas reize dod **${STRADAT_XP_MIN}** - **${STRADAT_XP_MAX}** UlmaņPunktus`,
@@ -107,12 +107,12 @@ const stradat: Command = {
     let interactionReply: Message | null;
 
     if (dailyCooldowns.stradat.timesUsed >= MAX_DAILY) {
-      if (!items.find(item => item.name === 'kafija') || !items.find(item => item.name === 'redbulls')) {
+      if (!items.find(item => item.name === 'kafija'|| item.name === 'redbulls')) {
         return intReply(
           i,
           ephemeralReply(
             'Tu esi sasniedzis maksimālo strādāšanas daudzumu šodien\n' +
-              `Lai strādātu vēlreiz tev ir nepieciešama: ${itemString(itemList.kafija)} vai ${itemString(itemList.redbull)}`
+              `Lai strādātu vēlreiz tev ir nepieciešama: ${itemString(itemList.kafija)} vai ${itemString(itemList.redbulls)}`
           )
         );
       }

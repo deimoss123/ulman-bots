@@ -64,7 +64,7 @@ const ubagotChances: Record<string, UbagotRes> = {
   redbull: {
     chance: 0.1,
     text: `tavā krūzītē kāds ielējā **${itemString(itemList.redbulls, null, true)}**`,
-    reward: { redbull: 1 },
+    reward: { redbulls: 1 },
   },
   latloto: {
     chance: 0.05,
