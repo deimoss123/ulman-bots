@@ -52,8 +52,8 @@ const stradat: Command = {
     'Pašreizējo darba pozīciju un līmeni var redzet ar komandu `/profils`\n\n' +
     `Katrs var strādāt **${MAX_DAILY}** reizes dienā (resetojas plkst. ${midNightStr()}), ` +
     `bet ir iespējams iegūt papildus ${MAX_EXTRA_DAILY} strādāšanas reizes dienā\n` +
-    `Lai strādātu papildus reizes inventārā ir nepieciešama **${itemString(itemList.kafija)}**, ` +
-    `kas par katru papildus reizi tiks iztērēta\n\n` +
+    `Lai strādātu papildus reizes inventārā ir nepieciešama **${itemString(itemList.kafija)}** vai **${itemString(itemList.redbull)}**, ` +
+    `par katru papildus reizi izvēlētā manta tiks iztērēta\n\n` +
     `Strādāt var ik **${millisToReadableTime(STRADAT_COOLDOWN)}**\n` +
     `Katra strādāšanas reize dod **${STRADAT_XP_MIN}** - **${STRADAT_XP_MAX}** UlmaņPunktus`,
   color: commandColors.stradat,
@@ -107,12 +107,12 @@ const stradat: Command = {
     let interactionReply: Message | null;
 
     if (dailyCooldowns.stradat.timesUsed >= MAX_DAILY) {
-      if (!items.find(item => item.name === 'kafija')) {
+      if (!items.find(item => item.name === 'kafija') || !items.find(item => item.name === 'redbulls')) {
         return intReply(
           i,
           ephemeralReply(
             'Tu esi sasniedzis maksimālo strādāšanas daudzumu šodien\n' +
-              `Lai strādātu vēlreiz tev ir nepieciešama ${itemString(itemList.kafija)}`
+              `Lai strādātu vēlreiz tev ir nepieciešama: ${itemString(itemList.kafija)} vai ${itemString(itemList.redbull)}`
           )
         );
       }
@@ -122,6 +122,11 @@ const stradat: Command = {
           .setCustomId('stradat_velreiz')
           .setStyle(ButtonStyle.Primary)
           .setLabel('Strādāt vēlreiz (izdzert kafiju)')
+          .setEmoji(itemList.kafija.emoji!),
+        new ButtonBuilder()
+          .setCustomId('stradat_velreiz_bullis')
+          .setStyle(ButtonStyle.Primary)
+          .setLabel('Strādāt vēlreiz (izdzert bulli)')
           .setEmoji(itemList.kafija.emoji!)
       );
 
@@ -161,6 +166,12 @@ const stradat: Command = {
         const { customId } = int;
         if (customId === 'stradat_velreiz') {
           await addItems(userId, guildId, { kafija: -1 });
+          isExtraUse = true;
+          return {
+            edit: { embeds: [embed], components: [btnRow] },
+          };
+        } else if (customId === 'stradat_velreiz_bullis') {
+          await addItems(userId, guildId, { redbulls: -1 });
           isExtraUse = true;
           return {
             edit: { embeds: [embed], components: [btnRow] },

@@ -6,6 +6,7 @@ import mugursoma, { INCREASE_CAP_1, INV_INCREASE_AMOUNT_1 } from './usableItems/
 import latloto, { latlotoOptions } from './usableItems/latloto';
 import dizloto, { dizlotoOptions } from './usableItems/dizloto';
 import kafija from './usableItems/kafija';
+import redbull from './usableItems/redbull';
 import kafijas_aparats, { kafijasAparatsUseMany } from './usableItems/kafijas_aparats';
 import velo, { veloInfo } from './usableItems/velo';
 import divaina_mugursoma, { INCREASE_CAP_2, INV_NCREASE_AMOUNT_2 } from './usableItems/divaina_mugursoma';
@@ -884,6 +885,27 @@ const itemList: { [key: ItemKey]: Item } = {
     value: 30,
     removedOnUse: false,
     use: kafija,
+  }),
+  // es. bumbotajs te taisu sizofreniju Deimoss ir izveidojis loti labu sistemu >.<
+  redbulls: item<UsableItem>({
+    info:
+      `Strādāt ir grūti ja esi noguris, izdzer SARKANO BULLI!\n\n` +
+      'Redbulls ir izmantojams, kad tev noteiktā dienā ir beigušās strādāšanas reizes\n' +
+      'Komandai `/stradat` ir poga `izdzert redbull` lai strādātu vēlreiz',
+    nameNomVsk: 'redbulls',
+    nameNomDsk: 'redbulli',
+    nameAkuVsk: 'redbullu',
+    nameAkuDsk: 'redbullus',
+    isVirsiesuDzimte: true,
+    emoji: {
+      id: '1009557001451356161',
+      name: 'kafija',
+    },
+    imgLink: 'https://www.ulmanbots.lv/images/items/kafija.png',
+    categories: [ItemCategory.VEIKALS],
+    value: 35,
+    removedOnUse: false,
+    use: redbull,
   }),
   dizmakskere: item<AttributeItem>({
     info:
