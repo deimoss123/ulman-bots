@@ -36,20 +36,20 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false, pr
         currTime - n >= KAFIJAS_APARATS_COOLDOWN
           ? `${inline ? '' : '**'}Kafija gatava!${inline ? '' : '**'}`
           : `Gatavo: ${inline ? '' : '`'}` +
-            millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - currTime + n) +
-            (inline ? '' : '`'),
+          millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - currTime + n) +
+          (inline ? '' : '`'),
     },
     petnieks: {
       lastUsed: (n, { foundItemKey, hat }) =>
         (currTime - n >= PETNIEKS_COOLDOWN
           ? `${inline ? '' : '**'}Nopētījis:${inline ? '' : '**'} ` +
-            (inline ? itemList[foundItemKey!].nameAkuVsk : makeEmojiString(itemList[foundItemKey!].emoji!))
+          (inline ? itemList[foundItemKey!].nameAkuVsk : makeEmojiString(itemList[foundItemKey!].emoji!))
           : `Pēta: ${inline ? '' : '`'}` +
-            `${millisToReadableTime(PETNIEKS_COOLDOWN - currTime + n)}` +
-            (inline ? '' : '`')) +
+          `${millisToReadableTime(PETNIEKS_COOLDOWN - currTime + n)}` +
+          (inline ? '' : '`')) +
         (hat
           ? `${inline ? ', ' : '\n'}Cepure: ` +
-            (inline ? capitalizeFirst(itemList[hat].nameNomVsk) : makeEmojiString(itemList[hat].emoji!))
+          (inline ? capitalizeFirst(itemList[hat].nameNomVsk) : makeEmojiString(itemList[hat].emoji!))
           : ''),
     },
     makskeres: {
@@ -68,12 +68,12 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false, pr
           (fedUntil! < currTime
             ? `${inline ? '' : '_**'}MIRIS${inline ? '' : '**_'} ⚰️`
             : `Vecums: ${inline ? '' : '**'}${millisToReadableTime(currTime - n)}` +
-              (inline ? ', ' : '**\n**') +
-              kakisFedState.find(s => fedUntil! - currTime > s.time)?.name +
-              (inline ? '' : '**')) +
+            (inline ? ', ' : '**\n**') +
+            kakisFedState.find(s => fedUntil! - currTime > s.time)?.name +
+            (inline ? '' : '**')) +
           (hat
             ? `${inline ? ', ' : '\n'}Cepure: ` +
-              (inline ? capitalizeFirst(itemList[hat].nameNomVsk) : makeEmojiString(itemList[hat].emoji!))
+            (inline ? capitalizeFirst(itemList[hat].nameNomVsk) : makeEmojiString(itemList[hat].emoji!))
             : '')
         );
       },
@@ -100,6 +100,19 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false, pr
           (inline ? `, ` : '\n') +
           `Gatavs pēc: ${inline ? '' : '`'}${millisToReadableTime(timeWhenDone - currTime)}${inline ? '' : '`'}`
         );
+      },
+    },
+    ogu_krums: {
+      // sita noladeta attributu uzradisana ir panemusi stundu no manas dzives (bumbotajs)
+      // es ari esmu stulbs
+      // AAAaaaAaAAaAAaAAAaaAaAaAaaa
+      berryType: (_, { berryType }) => {
+        const itemStr = (key: ItemKey) =>
+          inline ? capitalizeFirst(itemList[key].nameAkuDsk) : `**${capitalizeFirst(itemList[key].nameAkuDsk)}**`
+        return (
+          `Tagad audzē - ${itemStr(berryType!)}` +
+          (inline ? `, ` : '\n')
+        )
       },
     },
   };

@@ -43,7 +43,11 @@ export const ItemAttributesSchema = {
   piespraudeNum: Number,
   cookingItem: String,
   cookingStartedTime: Number, // unix millis
+
+  // ogu krums
   berryType: String,
+  growthTime: Number, // laikam arī unix millis es nez
+  maxBerries: Number,
 };
 
 const userSchema = new Schema<UserProfile>({

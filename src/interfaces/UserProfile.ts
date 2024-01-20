@@ -45,6 +45,8 @@ export interface ItemAttributes {
 
   // ogu krūmam
   berryType?: ItemKey;
+  growthTime?: number;
+  maxBerries?: number;
 }
 
 export interface SpecialItemInProfile {

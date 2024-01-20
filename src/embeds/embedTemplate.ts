@@ -47,7 +47,7 @@ export default function embedTemplate(options: EmbedTemplateOptions): Interactio
         image: options.image ? { url: options.image } : undefined,
         footer: {
           icon_url: 'https://i.postimg.cc/Hnp1BG37/ulmanis-footer1.png',
-          text: `Versija: ${ULMANBOTA_VERSIJA} (${updatesList[ULMANBOTA_VERSIJA].date})  |  Veidotājs: Deimoss#1984`,
+          text: `Versija: ❗ Aliexpress ulmaņ-bots ❗  |  Veidotājs: Deimoss#1984`,
         },
         thumbnail: options.thumbnail ? { url: options.thumbnail } : undefined,
       },

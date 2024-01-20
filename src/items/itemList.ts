@@ -5,6 +5,7 @@ import divainais_burkans from './usableItems/divainais_burkans';
 import mugursoma, { INCREASE_CAP_1, INV_INCREASE_AMOUNT_1 } from './usableItems/mugursoma';
 import latloto, { latlotoOptions } from './usableItems/latloto';
 import dizloto, { dizlotoOptions } from './usableItems/dizloto';
+import ogukrums from './usableItems/ogu_krums';
 import kafija from './usableItems/kafija';
 import redbull from './usableItems/redbull';
 import kafijas_aparats, { kafijasAparatsUseMany } from './usableItems/kafijas_aparats';
@@ -1076,7 +1077,8 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
 
   ogu_krums: item<AttributeItem>({
-    info: '', // TODO
+    info: 'Iejūties īstā okeānijas garā un audzē ogas uz šī "mistiskā" krūma\n' +
+      'Katram krūmam ogu tips tiek izvēlēts nejauši, jo vairāk azratspēles, jo labāk :)', // TODO
     nameNomVsk: 'ogu krūms',
     nameNomDsk: 'ogu krūmi',
     nameAkuVsk: 'ogu krūmu',
@@ -1088,9 +1090,12 @@ const itemList: { [key: ItemKey]: Item } = {
     value: 400,
     attributes: {
       berryType: '',
+      growthTime: 0,
+      maxBerries: 0,
+      lastUsed: 0,
     },
-    use: () => ({ text: 'ogu krūms' }),
-    sortBy: {},
+    use: ogukrums,
+    sortBy: { berryType: 1 },
   }),
   // patriota_piespraude: item<NotSellableItem>({
   //   nameNomVsk: 'patriotu piespraude',
