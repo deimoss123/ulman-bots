@@ -541,6 +541,23 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
 
   // -- atkritumi --
+
+  //hmmmm... šitā iespējams būs vajadzīgā, kā izmantojama manta, bet tas vēlēkam
+  akumulators: item<BaseItem>({
+    info: 'MmMMmmm, tas šķidrums izskatās ļoti garšīgs\n' + 'ļoti noslēpumaina manta',
+    nameNomVsk: 'akumulators',
+    nameNomDsk: 'akumulatori',
+    nameAkuVsk: 'akumulatoru',
+    nameAkuDsk: 'akumulatorus',
+    isVirsiesuDzimte: true,
+    emoji: {
+      id: '1199417487033380874',
+      name: 'akumulators',
+    },
+    imgLink: 'https://beanson.lv/images/akumulators.png',
+    categories: [ItemCategory.ATKRITUMI],
+    value: 20,
+  }),
   kartona_kaste: item<BaseItem>({
     info: 'Kāds šeit iekšā ir dzīvojis...',
     nameNomVsk: 'kartona kaste',
@@ -1048,7 +1065,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
 
   avene: item<UsableItem>({
-    info: '',
+    info: '', //TODO
     nameNomVsk: 'avene',
     nameNomDsk: 'avenes',
     nameAkuVsk: 'aveni',
@@ -1062,7 +1079,7 @@ const itemList: { [key: ItemKey]: Item } = {
     use: () => ({ text: 'avene' }),
   }),
   mellene: item<UsableItem>({
-    info: '',
+    info: '', //TODO
     nameNomVsk: 'mellene',
     nameNomDsk: 'mellenes',
     nameAkuVsk: 'melleni',
@@ -1076,9 +1093,25 @@ const itemList: { [key: ItemKey]: Item } = {
     use: () => ({ text: 'mellene' }),
   }),
 
+  vinoga: item<UsableItem>({
+    info: '', //TODO
+    nameNomVsk: 'vīnoga',
+    nameNomDsk: 'vīnogas',
+    nameAkuVsk: 'vīnogu',
+    nameAkuDsk: 'vīnogas',
+    isVirsiesuDzimte: false,
+    emoji: null,
+    imgLink: null,
+    categories: [ItemCategory.OTHER],
+    value: 15,
+    removedOnUse: false,
+    use: () => ({ text: 'vīnoga' }),
+  }),
+
   ogu_krums: item<AttributeItem>({
-    info: 'Iejūties īstā okeānijas garā un audzē ogas uz šī "mistiskā" krūma\n' +
-      'Katram krūmam ogu tips tiek izvēlēts nejauši, jo vairāk azratspēles, jo labāk :)', // TODO
+    info:
+      'Iejūties īstā okeānijas garā un audzē ogas uz šī "mistiskā" krūma\n' +
+      'Katram krūmam ogu tips tiek izvēlēts nejauši, jo vairāk azratspēles, jo labāk :)', // TODO`
     nameNomVsk: 'ogu krūms',
     nameNomDsk: 'ogu krūmi',
     nameAkuVsk: 'ogu krūmu',
@@ -1096,6 +1129,24 @@ const itemList: { [key: ItemKey]: Item } = {
     },
     use: ogukrums,
     sortBy: { berryType: 1 },
+  }),
+
+  roltons: item<UsableItem>({
+    info: 'Patiesi viena no visu laiku labākajām maltītēm',
+    nameNomVsk: 'roltons',
+    nameNomDsk: 'roltoni',
+    nameAkuVsk: 'roltonu',
+    nameAkuDsk: 'roltonus',
+    isVirsiesuDzimte: true,
+    emoji: {
+      id: '1199634609114202162',
+      name: 'roltons',
+    },
+    imgLink: 'https://beanson.lv/images/roltons.png',
+    categories: [ItemCategory.ATKRITUMI],
+    value: 15,
+    removedOnUse: false,
+    use: async () => ({ text: 'Tas bija garšīgs... laikam.' }),
   }),
   // patriota_piespraude: item<NotSellableItem>({
   //   nameNomVsk: 'patriotu piespraude',

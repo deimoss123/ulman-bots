@@ -9,6 +9,7 @@ import capitalizeFirst from './capitalizeFirst';
 import itemString, { makeEmojiString } from './itemString';
 import latiString from './latiString';
 import millisToReadableTime from './millisToReadableTime';
+import { dabutOguInfo } from '../../items/usableItems/ogu_krums';
 
 const hiddenAttributes: Partial<keyof ItemAttributes>[] = [
   'customName',
@@ -17,6 +18,9 @@ const hiddenAttributes: Partial<keyof ItemAttributes>[] = [
   'isCooked',
   'hat',
   'cookingStartedTime',
+  'berryType',
+  'maxBerries',
+  'growthTime',
 ];
 
 export function displayAttributes(item: SpecialItemInProfile, inline = false, prefix = '') {
@@ -36,20 +40,20 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false, pr
         currTime - n >= KAFIJAS_APARATS_COOLDOWN
           ? `${inline ? '' : '**'}Kafija gatava!${inline ? '' : '**'}`
           : `Gatavo: ${inline ? '' : '`'}` +
-          millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - currTime + n) +
-          (inline ? '' : '`'),
+            millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - currTime + n) +
+            (inline ? '' : '`'),
     },
     petnieks: {
       lastUsed: (n, { foundItemKey, hat }) =>
         (currTime - n >= PETNIEKS_COOLDOWN
           ? `${inline ? '' : '**'}Nopētījis:${inline ? '' : '**'} ` +
-          (inline ? itemList[foundItemKey!].nameAkuVsk : makeEmojiString(itemList[foundItemKey!].emoji!))
+            (inline ? itemList[foundItemKey!].nameAkuVsk : makeEmojiString(itemList[foundItemKey!].emoji!))
           : `Pēta: ${inline ? '' : '`'}` +
-          `${millisToReadableTime(PETNIEKS_COOLDOWN - currTime + n)}` +
-          (inline ? '' : '`')) +
+            `${millisToReadableTime(PETNIEKS_COOLDOWN - currTime + n)}` +
+            (inline ? '' : '`')) +
         (hat
           ? `${inline ? ', ' : '\n'}Cepure: ` +
-          (inline ? capitalizeFirst(itemList[hat].nameNomVsk) : makeEmojiString(itemList[hat].emoji!))
+            (inline ? capitalizeFirst(itemList[hat].nameNomVsk) : makeEmojiString(itemList[hat].emoji!))
           : ''),
     },
     makskeres: {
@@ -68,12 +72,12 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false, pr
           (fedUntil! < currTime
             ? `${inline ? '' : '_**'}MIRIS${inline ? '' : '**_'} ⚰️`
             : `Vecums: ${inline ? '' : '**'}${millisToReadableTime(currTime - n)}` +
-            (inline ? ', ' : '**\n**') +
-            kakisFedState.find(s => fedUntil! - currTime > s.time)?.name +
-            (inline ? '' : '**')) +
+              (inline ? ', ' : '**\n**') +
+              kakisFedState.find(s => fedUntil! - currTime > s.time)?.name +
+              (inline ? '' : '**')) +
           (hat
             ? `${inline ? ', ' : '\n'}Cepure: ` +
-            (inline ? capitalizeFirst(itemList[hat].nameNomVsk) : makeEmojiString(itemList[hat].emoji!))
+              (inline ? capitalizeFirst(itemList[hat].nameNomVsk) : makeEmojiString(itemList[hat].emoji!))
             : '')
         );
       },
@@ -106,13 +110,24 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false, pr
       // sita noladeta attributu uzradisana ir panemusi stundu no manas dzives (bumbotajs)
       // es ari esmu stulbs
       // AAAaaaAaAAaAAaAAAaaAaAaAaaa
-      berryType: (_, { berryType }) => {
+      // berryType: (_, { berryType, lastUsed, maxBerries }) => {
+      //   const max_berries = dabutOguInfo()
+      //   const itemStr = (key: ItemKey) =>
+      //     inline ? capitalizeFirst(itemList[key].nameAkuDsk) : `**${capitalizeFirst(itemList[key].nameAkuDsk)}**`;
+      //   return `Tagad audzē - ${itemStr(berryType!)} ${maxBerries}` + (inline ? `, ` : '\n');
+      // },
+
+      lastUsed: (n, { maxBerries, growthTime, berryType, lastUsed }) => {
+        const { cikNakamaOga, sobridOgas } = dabutOguInfo(item, currTime);
+        const cikOgasRadit = Math.min(sobridOgas, maxBerries!);
+        console.log(sobridOgas);
         const itemStr = (key: ItemKey) =>
-          inline ? capitalizeFirst(itemList[key].nameAkuDsk) : `**${capitalizeFirst(itemList[key].nameAkuDsk)}**`
+          inline ? capitalizeFirst(itemList[key].nameAkuDsk) : `**${capitalizeFirst(itemList[key].nameAkuDsk)}**`;
         return (
-          `Tagad audzē - ${itemStr(berryType!)}` +
-          (inline ? `, ` : '\n')
-        )
+          `Tagad audzē - ${itemStr(berryType!)} ${cikOgasRadit}/${maxBerries} ${
+            sobridOgas < maxBerries! ? millisToReadableTime(cikNakamaOga) : ''
+          }` + (inline ? `, ` : '\n')
+        );
       },
     },
   };

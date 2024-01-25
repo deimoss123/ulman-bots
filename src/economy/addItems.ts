@@ -35,6 +35,7 @@ export default async function addItems(
           if ('holdsFishCount' in attributes) newAttributes.holdsFishCount = generateFishCount();
           if ('createdAt' in attributes) newAttributes.createdAt = Date.now();
           if ('fedUntil' in attributes) newAttributes.fedUntil = Date.now() + 172_800_000; // 2d
+          if ('lastUsed' in attributes && itemToAdd === 'ogu_krums') newAttributes.lastUsed = Date.now();
 
           specialItems.push({ name: itemToAdd, attributes: newAttributes });
         }
