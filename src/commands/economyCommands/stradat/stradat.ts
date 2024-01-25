@@ -10,6 +10,7 @@ import StradatInteractions, { StradatResult, StradatVeids } from '../../../inter
 import chance from '../../../items/helpers/chance';
 import setnieks from './darbi/setnieks';
 import veikala_darbinieks from './darbi/veikala_darbinieks';
+import automehanikis from './darbi/automehanikis';
 import { JobPositions } from '../vakances/vakances';
 import latiString from '../../../embeds/helpers/latiString';
 import itemString from '../../../embeds/helpers/itemString';
@@ -26,7 +27,7 @@ import midNightStr from '../../../embeds/helpers/midnightStr';
 import millisToReadableTime from '../../../embeds/helpers/millisToReadableTime';
 import intReply from '../../../utils/intReply';
 
-const darbiRun: Record<string, StradatInteractions> = { setnieks, veikala_darbinieks };
+const darbiRun: Record<string, StradatInteractions> = { setnieks, veikala_darbinieks, automehanikis };
 
 const STRADAT_XP_MIN = 2;
 const STRADAT_XP_MAX = 4;
@@ -52,7 +53,9 @@ const stradat: Command = {
     'Pašreizējo darba pozīciju un līmeni var redzet ar komandu `/profils`\n\n' +
     `Katrs var strādāt **${MAX_DAILY}** reizes dienā (resetojas plkst. ${midNightStr()}), ` +
     `bet ir iespējams iegūt papildus ${MAX_EXTRA_DAILY} strādāšanas reizes dienā\n` +
-    `Lai strādātu papildus reizes inventārā ir nepieciešama **${itemString(itemList.kafija)}** vai **${itemString(itemList.redbulls)}**, ` +
+    `Lai strādātu papildus reizes inventārā ir nepieciešama **${itemString(itemList.kafija)}** vai **${itemString(
+      itemList.redbulls
+    )}**, ` +
     `par katru papildus reizi izvēlētā manta tiks iztērēta\n\n` +
     `Strādāt var ik **${millisToReadableTime(STRADAT_COOLDOWN)}**\n` +
     `Katra strādāšanas reize dod **${STRADAT_XP_MIN}** - **${STRADAT_XP_MAX}** UlmaņPunktus`,
@@ -107,12 +110,14 @@ const stradat: Command = {
     let interactionReply: Message | null;
 
     if (dailyCooldowns.stradat.timesUsed >= MAX_DAILY) {
-      if (!items.find(item => item.name === 'kafija'|| item.name === 'redbulls')) {
+      if (!items.find(item => item.name === 'kafija' || item.name === 'redbulls')) {
         return intReply(
           i,
           ephemeralReply(
             'Tu esi sasniedzis maksimālo strādāšanas daudzumu šodien\n' +
-              `Lai strādātu vēlreiz tev ir nepieciešama: ${itemString(itemList.kafija)} vai ${itemString(itemList.redbulls)}`
+              `Lai strādātu vēlreiz tev ir nepieciešama: ${itemString(itemList.kafija)} vai ${itemString(
+                itemList.redbulls
+              )}`
           )
         );
       }
