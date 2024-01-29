@@ -9,7 +9,7 @@ import capitalizeFirst from './capitalizeFirst';
 import itemString, { makeEmojiString } from './itemString';
 import latiString from './latiString';
 import millisToReadableTime from './millisToReadableTime';
-import { dabutOguInfo } from '../../items/usableItems/ogu_krums';
+import { dabutOguInfo, dabutKrumaInfo } from '../../items/usableItems/ogu_krums';
 
 const hiddenAttributes: Partial<keyof ItemAttributes>[] = [
   'customName',
@@ -21,6 +21,8 @@ const hiddenAttributes: Partial<keyof ItemAttributes>[] = [
   'berryType',
   'maxBerries',
   'growthTime',
+  'iestadits',
+  'apliets',
 ];
 
 export function displayAttributes(item: SpecialItemInProfile, inline = false, prefix = '') {
@@ -119,15 +121,16 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false, pr
 
       lastUsed: (n, { maxBerries, growthTime, berryType, lastUsed }) => {
         const { cikNakamaOga, sobridOgas } = dabutOguInfo(item, currTime);
+        const { izaudzis, cikIlgiAug, izaugsanasProg, augsanasLaiks } = dabutKrumaInfo(item, currTime);
         const cikOgasRadit = Math.min(sobridOgas, maxBerries!);
-        console.log(sobridOgas);
+        //console.log(sobridOgas);
         const itemStr = (key: ItemKey) =>
           inline ? capitalizeFirst(itemList[key].nameAkuDsk) : `**${capitalizeFirst(itemList[key].nameAkuDsk)}**`;
-        return (
-          `Tagad audzē - ${itemStr(berryType!)} ${cikOgasRadit}/${maxBerries} ${
-            sobridOgas < maxBerries! ? millisToReadableTime(cikNakamaOga) : ''
-          }` + (inline ? `, ` : '\n')
-        );
+        return izaudzis === true
+          ? `Audzē - ${itemStr(berryType!)} ${cikOgasRadit}/${maxBerries} ${
+              sobridOgas < maxBerries! ? millisToReadableTime(cikNakamaOga) : ''
+            }` + (inline ? `, ` : '\n')
+          : `Krūms vēl aug... **${izaugsanasProg}%**`;
       },
     },
   };

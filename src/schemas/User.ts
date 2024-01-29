@@ -46,8 +46,10 @@ export const ItemAttributesSchema = {
 
   // ogu krums
   berryType: String,
-  growthTime: Number, // laikam arī unix millis es nez
+  growthTime: Number, // unix millis
   maxBerries: Number,
+  apliets: Number, // unix millis
+  iestadits: Number, // unix millis
 };
 
 const userSchema = new Schema<UserProfile>({

@@ -47,6 +47,8 @@ export interface ItemAttributes {
   berryType?: ItemKey;
   growthTime?: number;
   maxBerries?: number;
+  apliets?: number;
+  iestadits?: number;
 }
 
 export interface SpecialItemInProfile {

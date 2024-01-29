@@ -59,6 +59,10 @@ const MAX_LAIKS = 600_000; // 10 min
 const MIN_OGAS = 3;
 const MAX_OGAS = 6;
 
+// pasa ogu kruma augsanas ilgums
+// 3_600_000 1h
+const BAZES_KRUMA_AUGSANAS_LAIKS = 3_600_000; //1h
+
 export function getRandomOga() {
   const ogas: ItemKey[] = ['mellene', 'avene', 'vinoga'];
   return ogas[Math.floor(Math.random() * ogas.length)];
@@ -83,7 +87,26 @@ export function dabutOguInfo({ attributes }: SpecialItemInProfile, currTime: num
   const sobridOgas = Math.floor(laikaStarpiba / attributes.growthTime!);
   //lastused + (sobridogas + 1) * growthtime - curtime
   const cikNakamaOga = lastUsed + (sobridOgas + 1) * attributes.growthTime! - currTime;
+
   return { sobridOgas, cikNakamaOga };
+}
+
+export function dabutKrumaInfo({ attributes }: SpecialItemInProfile, currTime: number) {
+  const augsanasLaiks = BAZES_KRUMA_AUGSANAS_LAIKS + attributes.growthTime!;
+  const iestadits = attributes.iestadits!;
+  const apliets = attributes.apliets!;
+  const cikIlgiAug = currTime - iestadits; // testesanai
+  const izaugsanasProg = Math.floor(((currTime - iestadits) / augsanasLaiks) * 100);
+
+  //hmmmm sitais neizskatas parak labi
+  let izaudzis = false;
+  if (currTime > iestadits + augsanasLaiks) {
+    izaudzis = true;
+  } else {
+    izaudzis = false;
+  }
+
+  return { izaudzis, cikIlgiAug, izaugsanasProg, augsanasLaiks };
 }
 
 const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
@@ -91,7 +114,14 @@ const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
   const AUGSANAS_ILGUMS = specialItem!.attributes.growthTime!;
   const LAST_USED = specialItem!.attributes.lastUsed!;
   const OGAS_TIPS = specialItem!.attributes.berryType!;
+  const iestadisanasLaiks = specialItem!.attributes.iestadits!;
+  const krumaAugsanasLaiks = BAZES_KRUMA_AUGSANAS_LAIKS + AUGSANAS_ILGUMS;
   const { cikNakamaOga, sobridOgas } = dabutOguInfo(specialItem!, currTime);
+  if (currTime < iestadisanasLaiks + krumaAugsanasLaiks) {
+    return {
+      text: 'Tavs ogu krūms vēl nav izaudzis!',
+    };
+  }
   if (sobridOgas < 1) {
     return {
       text: `Tavs ogu krūms vēl nav izaudzējis ogas...\n` + `Izaugs pēc \`${millisToReadableTime(cikNakamaOga)}\``,
@@ -115,35 +145,17 @@ const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
     text: `Tu ievāci **${cikOgasDot}** ogas \n` + `Nākamā oga pēc \`${millisToReadableTime(cikNakamaOga)}\``,
     fields: [
       {
-        name: 'Tu ievāci',
+        name: 'Tu ievāci:',
         value: `${itemString(OGAS_TIPS, cikOgasDot, true)}`,
         inline: true,
       },
       {
-        name: 'Tev tagad ir',
+        name: 'Tev tagad ir:',
         value: `${itemString(OGAS_TIPS, itemCount)}`,
         inline: true,
       },
     ],
   };
-
-  // return {
-  //     custom: async (i, color) => {
-  //         const res = await editItemAttribute(userId, guildId, specialItem!._id!, {
-  //             ...specialItem!.attributes,
-  //             berryType: specialItem!.attributes!.berryType
-  //         })
-  //         if (!res) return intReply(i, errorEmbed);
-  //         const { berryType } = res.newItem.attributes;
-  //         const msg = await intReply(
-  //             i, embedTemplate({
-  //                 i, color, title: "Tu izmantoji ogu krūmu", description: `Tavs ogu krūms šobrīd audzē: **${berryType}s**`
-  //             })
-  //         )
-  //         if (!msg) return;
-  //     }
-
-  // }
 };
 
 export default ogu_krums;
