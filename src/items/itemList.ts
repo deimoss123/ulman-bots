@@ -1200,6 +1200,9 @@ const itemList: { [key: ItemKey]: Item } = {
   //   use: async () => ({ text: 'Tu uzvilki svārkus un kļuvi par sievpuiku.' }),
   // }),
 
+  // granulu katls
+  // cena 5700 lati
+
   // patriota_piespraude: item<NotSellableItem>({
   //   nameNomVsk: 'patriotu piespraude',
   //   nameNomDsk: 'patriotu piespraudes',

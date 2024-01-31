@@ -1,4 +1,5 @@
 //šis pavisam noteikti nebūs labs kods (ja salīdzina ar pārējo)
+//praktiski visu šo šizofrēniju ir veidojis bumbotajs (ar "mazu" deimosa palīdzību)
 
 import {
   ActionRowBuilder,
@@ -29,23 +30,6 @@ import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
 import countFreeInvSlots from '../helpers/countFreeInvSlots';
 import addItems from '../../economy/addItems';
 import { SpecialItemInProfile } from '../../interfaces/UserProfile';
-
-// gan jau vairs nevajadzes jo tagad ogu krumi balstiti uz veiksmi...
-// interface OGA {
-//   name: string;
-//   time: number; // milisekundes, jo deimoss tā taisija
-// }
-
-// export const auzdzejamasogas: OGA[] = [
-//   {
-//     name: 'avene',
-//     time: 7_200_000, //2h
-//   },
-//   {
-//     name: 'mellene',
-//     time: 7_200_000, //2h
-//   },
-// ];
 
 //ogu rekinasana
 //no currTime atnemt lastUsed un tad dalīt ar augasnas laiku
@@ -99,23 +83,22 @@ export function dabutKrumaInfo({ attributes }: SpecialItemInProfile, currTime: n
   const izaugsanasProg = Math.floor(((currTime - iestadits) / augsanasLaiks) * 100);
 
   //hmmmm sitais neizskatas parak labi
+  // dievs lūdzu saki, ka šis strādā      - bumbotajs
   let izaudzis = false;
-  if (currTime > iestadits + augsanasLaiks) {
-    izaudzis = true;
-  } else {
-    izaudzis = false;
-  }
+  currTime > iestadits + augsanasLaiks ? (izaudzis = true) : (izaudzis = false);
 
   return { izaudzis, cikIlgiAug, izaugsanasProg, augsanasLaiks };
 }
 
 const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
   const currTime = Date.now();
+  // stulba attributu siena
   const AUGSANAS_ILGUMS = specialItem!.attributes.growthTime!;
   const LAST_USED = specialItem!.attributes.lastUsed!;
   const OGAS_TIPS = specialItem!.attributes.berryType!;
   const iestadisanasLaiks = specialItem!.attributes.iestadits!;
   const krumaAugsanasLaiks = BAZES_KRUMA_AUGSANAS_LAIKS + AUGSANAS_ILGUMS;
+
   const { cikNakamaOga, sobridOgas } = dabutOguInfo(specialItem!, currTime);
   if (currTime < iestadisanasLaiks + krumaAugsanasLaiks) {
     return {
