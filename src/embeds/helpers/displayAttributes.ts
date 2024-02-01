@@ -111,26 +111,21 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false, pr
     ogu_krums: {
       // sita noladeta attributu uzradisana ir panemusi stundu no manas dzives (bumbotajs)
       // es ari esmu stulbs
-      // AAAaaaAaAAaAAaAAAaaAaAaAaaa
-      // berryType: (_, { berryType, lastUsed, maxBerries }) => {
-      //   const max_berries = dabutOguInfo()
-      //   const itemStr = (key: ItemKey) =>
-      //     inline ? capitalizeFirst(itemList[key].nameAkuDsk) : `**${capitalizeFirst(itemList[key].nameAkuDsk)}**`;
-      //   return `Tagad audzē - ${itemStr(berryType!)} ${maxBerries}` + (inline ? `, ` : '\n');
-      // },
+      // AAAaaaAaAAaAAaAAAaaAaAaAaa
 
       lastUsed: (n, { maxBerries, growthTime, berryType, lastUsed }) => {
         const { cikNakamaOga, sobridOgas } = dabutOguInfo(item, currTime);
         const { izaudzis, cikIlgiAug, izaugsanasProg, augsanasLaiks } = dabutKrumaInfo(item, currTime);
         const cikOgasRadit = Math.min(sobridOgas, maxBerries!);
-        //console.log(sobridOgas);
         const itemStr = (key: ItemKey) =>
           inline ? capitalizeFirst(itemList[key].nameAkuDsk) : `**${capitalizeFirst(itemList[key].nameAkuDsk)}**`;
-        return izaudzis === true
+        return izaudzis === true // šitā ir reāla elle. ja elle pastāv, tad tā ir šeit
           ? `Audzē - ${itemStr(berryType!)} ${cikOgasRadit}/${maxBerries} ${
               sobridOgas < maxBerries! ? millisToReadableTime(cikNakamaOga) : ''
             }` + (inline ? `, ` : '\n')
-          : `Krūms vēl aug... **${izaugsanasProg}%**`;
+          : inline
+          ? `Krūms vēl aug... ${izaugsanasProg}%, `
+          : `Krūms vēl aug... **${izaugsanasProg}%** `;
       },
     },
   };

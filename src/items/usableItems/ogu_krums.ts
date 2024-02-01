@@ -32,7 +32,7 @@ import addItems from '../../economy/addItems';
 import { SpecialItemInProfile } from '../../interfaces/UserProfile';
 
 //ogu rekinasana
-//no currTime atnemt lastUsed un tad dalīt ar augasnas laiku
+//no currTime atnemt lastUsed un tad dalīt ar augasnas laiku un tad floorosu
 //tad laikam dabusu cik odzinas izaugusas...
 
 // krumu vertibu generesana
@@ -40,10 +40,11 @@ import { SpecialItemInProfile } from '../../interfaces/UserProfile';
 const MIN_LAIKS = 300_000; // 5 min
 const MAX_LAIKS = 600_000; // 10 min
 
+// maksimalais un minimalais ogu daudzums vienam krumam
 const MIN_OGAS = 3;
 const MAX_OGAS = 6;
 
-// pasa ogu kruma augsanas ilgums
+// pasa ogu kruma augsanas ilgums (velak koda pieskaitu klat ogu augsanas ilgumu)
 // 3_600_000 1h
 const BAZES_KRUMA_AUGSANAS_LAIKS = 3_600_000; //1h
 
@@ -70,6 +71,7 @@ export function dabutOguInfo({ attributes }: SpecialItemInProfile, currTime: num
   const laikaStarpiba = currTime - lastUsed;
   const sobridOgas = Math.floor(laikaStarpiba / attributes.growthTime!);
   //lastused + (sobridogas + 1) * growthtime - curtime
+  // es isti nezinu ko sis viss nozime
   const cikNakamaOga = lastUsed + (sobridOgas + 1) * attributes.growthTime! - currTime;
 
   return { sobridOgas, cikNakamaOga };
@@ -93,16 +95,17 @@ export function dabutKrumaInfo({ attributes }: SpecialItemInProfile, currTime: n
 const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
   const currTime = Date.now();
   // stulba attributu siena
-  const AUGSANAS_ILGUMS = specialItem!.attributes.growthTime!;
-  const LAST_USED = specialItem!.attributes.lastUsed!;
-  const OGAS_TIPS = specialItem!.attributes.berryType!;
+  const oguAgusanasIlgums = specialItem!.attributes.growthTime!;
+  const lastUsed = specialItem!.attributes.lastUsed!;
+  const ogasTips = specialItem!.attributes.berryType!;
   const iestadisanasLaiks = specialItem!.attributes.iestadits!;
-  const krumaAugsanasLaiks = BAZES_KRUMA_AUGSANAS_LAIKS + AUGSANAS_ILGUMS;
+  const krumaAugsanasLaiks = BAZES_KRUMA_AUGSANAS_LAIKS + oguAgusanasIlgums;
 
   const { cikNakamaOga, sobridOgas } = dabutOguInfo(specialItem!, currTime);
+  const { izaugsanasProg } = dabutKrumaInfo(specialItem!, currTime);
   if (currTime < iestadisanasLaiks + krumaAugsanasLaiks) {
     return {
-      text: 'Tavs ogu krūms vēl nav izaudzis!',
+      text: 'Tavs ogu krūms vēl nav izaudzis!\n' + `Izaudzis: ${izaugsanasProg}`,
     };
   }
   if (sobridOgas < 1) {
@@ -119,22 +122,23 @@ const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
   await editItemAttribute(userId, guildId, specialItem!._id!, {
     ...specialItem?.attributes,
 
-    lastUsed: sobridOgas >= specialItem!.attributes.maxBerries! ? currTime : currTime - AUGSANAS_ILGUMS + cikNakamaOga,
+    lastUsed:
+      sobridOgas >= specialItem!.attributes.maxBerries! ? currTime : currTime - oguAgusanasIlgums + cikNakamaOga,
   });
-  const userAfter = await addItems(userId, guildId, { [OGAS_TIPS]: cikOgasDot });
+  const userAfter = await addItems(userId, guildId, { [ogasTips]: cikOgasDot });
   if (!userAfter) return { error: true };
-  const itemCount = userAfter.items.find(item => item.name === OGAS_TIPS)?.amount || 1;
+  const itemCount = userAfter.items.find(item => item.name === ogasTips)?.amount || 1;
   return {
     text: `Tu ievāci **${cikOgasDot}** ogas \n` + `Nākamā oga pēc \`${millisToReadableTime(cikNakamaOga)}\``,
     fields: [
       {
         name: 'Tu ievāci:',
-        value: `${itemString(OGAS_TIPS, cikOgasDot, true)}`,
+        value: `${itemString(ogasTips, cikOgasDot, true)}`,
         inline: true,
       },
       {
         name: 'Tev tagad ir:',
-        value: `${itemString(OGAS_TIPS, itemCount)}`,
+        value: `${itemString(ogasTips, itemCount)}`,
         inline: true,
       },
     ],
