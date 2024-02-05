@@ -6,6 +6,8 @@ import {
   ButtonBuilder,
   ButtonStyle,
   ComponentType,
+  EmbedBuilder,
+  Message,
   ModalActionRowComponentBuilder,
   ModalBuilder,
   ModalSubmitInteraction,
@@ -37,8 +39,8 @@ import { SpecialItemInProfile } from '../../interfaces/UserProfile';
 
 // krumu vertibu generesana
 // reizinataja intervals 0-1 ik pa 0.1
-const MIN_LAIKS = 300_000; // 5 min
-const MAX_LAIKS = 600_000; // 10 min
+const MIN_LAIKS = 10000; // 5 min
+const MAX_LAIKS = 10000; // 10 min
 
 // maksimalais un minimalais ogu daudzums vienam krumam
 const MIN_OGAS = 3;
@@ -46,8 +48,10 @@ const MAX_OGAS = 6;
 
 // pasa ogu kruma augsanas ilgums (velak koda pieskaitu klat ogu augsanas ilgumu)
 // 3_600_000 1h
-const BAZES_KRUMA_AUGSANAS_LAIKS = 3_600_000; //1h
+const BAZES_KRUMA_AUGSANAS_LAIKS = 60_000; //1h
+const NOMIR = 1_90_080_00_00; // 20 dienas
 
+// dabuju ogu tipu krumam
 export function getRandomOga() {
   const ogas: ItemKey[] = ['mellene', 'avene', 'vinoga'];
   return ogas[Math.floor(Math.random() * ogas.length)];
@@ -77,71 +81,145 @@ export function dabutOguInfo({ attributes }: SpecialItemInProfile, currTime: num
   return { sobridOgas, cikNakamaOga };
 }
 
+export function apliesanasLaiks() {
+  return 15000;
+}
+
 export function dabutKrumaInfo({ attributes }: SpecialItemInProfile, currTime: number) {
   const augsanasLaiks = BAZES_KRUMA_AUGSANAS_LAIKS + attributes.growthTime!;
   const iestadits = attributes.iestadits!;
   const apliets = attributes.apliets!;
   const cikIlgiAug = currTime - iestadits; // testesanai
-  const izaugsanasProg = Math.floor(((currTime - iestadits) / augsanasLaiks) * 100);
+  const izaugsanasProg = Math.floor(((Math.min(currTime, apliets) - iestadits) / augsanasLaiks) * 100);
 
   //hmmmm sitais neizskatas parak labi
   // dievs lūdzu saki, ka šis strādā      - bumbotajs
   let izaudzis = false;
-  currTime > iestadits + augsanasLaiks ? (izaudzis = true) : (izaudzis = false);
+  Math.min(currTime, apliets) > iestadits + augsanasLaiks ? (izaudzis = true) : (izaudzis = false); // deimosam nepatik, bet man patik
 
-  return { izaudzis, cikIlgiAug, izaugsanasProg, augsanasLaiks };
+  const vajagApliet = apliets <= currTime;
+
+  return { izaudzis, cikIlgiAug, izaugsanasProg, augsanasLaiks, vajagApliet };
+}
+
+function makeComponents() {
+  return [
+    new ActionRowBuilder<ButtonBuilder>().addComponents(
+      new ButtonBuilder()
+        .setCustomId('apliet_krumu')
+        .setStyle(ButtonStyle.Primary)
+        .setEmoji('💧')
+        .setLabel('Apliet Krūmu')
+    ),
+  ];
 }
 
 const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
-  const currTime = Date.now();
-  // stulba attributu siena
-  const oguAgusanasIlgums = specialItem!.attributes.growthTime!;
-  const lastUsed = specialItem!.attributes.lastUsed!;
-  const ogasTips = specialItem!.attributes.berryType!;
-  const iestadisanasLaiks = specialItem!.attributes.iestadits!;
-  const krumaAugsanasLaiks = BAZES_KRUMA_AUGSANAS_LAIKS + oguAgusanasIlgums;
-
-  const { cikNakamaOga, sobridOgas } = dabutOguInfo(specialItem!, currTime);
-  const { izaugsanasProg } = dabutKrumaInfo(specialItem!, currTime);
-  if (currTime < iestadisanasLaiks + krumaAugsanasLaiks) {
-    return {
-      text: 'Tavs ogu krūms vēl nav izaudzis!\n' + `Izaudzis: ${izaugsanasProg}`,
-    };
-  }
-  if (sobridOgas < 1) {
-    return {
-      text: `Tavs ogu krūms vēl nav izaudzējis ogas...\n` + `Izaugs pēc \`${millisToReadableTime(cikNakamaOga)}\``,
-    };
-  }
-
-  const cikOgasDot = Math.min(sobridOgas, specialItem!.attributes.maxBerries!);
-
-  const user = await findUser(userId, guildId);
-  if (!user) return { error: true };
-
-  await editItemAttribute(userId, guildId, specialItem!._id!, {
-    ...specialItem?.attributes,
-
-    lastUsed:
-      sobridOgas >= specialItem!.attributes.maxBerries! ? currTime : currTime - oguAgusanasIlgums + cikNakamaOga,
-  });
-  const userAfter = await addItems(userId, guildId, { [ogasTips]: cikOgasDot });
-  if (!userAfter) return { error: true };
-  const itemCount = userAfter.items.find(item => item.name === ogasTips)?.amount || 1;
   return {
-    text: `Tu ievāci **${cikOgasDot}** ogas \n` + `Nākamā oga pēc \`${millisToReadableTime(cikNakamaOga)}\``,
-    fields: [
-      {
-        name: 'Tu ievāci:',
-        value: `${itemString(ogasTips, cikOgasDot, true)}`,
-        inline: true,
-      },
-      {
-        name: 'Tev tagad ir:',
-        value: `${itemString(ogasTips, itemCount)}`,
-        inline: true,
-      },
-    ],
+    custom: async (i, color) => {
+      const currTime = Date.now();
+      // stulba attributu siena
+      const oguAgusanasIlgums = specialItem!.attributes.growthTime!;
+      const lastUsed = specialItem!.attributes.lastUsed!;
+      const ogasTips = specialItem!.attributes.berryType!;
+      const aplaistits = specialItem!.attributes.apliets!;
+      const iestadisanasLaiks = specialItem!.attributes.iestadits!;
+      const krumaAugsanasLaiks = BAZES_KRUMA_AUGSANAS_LAIKS + oguAgusanasIlgums;
+      const { cikNakamaOga, sobridOgas } = dabutOguInfo(specialItem!, currTime);
+      const { izaugsanasProg, izaudzis, vajagApliet } = dabutKrumaInfo(specialItem!, currTime);
+
+      if (iestadisanasLaiks + NOMIR < currTime) {
+        return intReply(i, embedTemplate({ i, description: `Diemžēl tavs krūms vairs nav starp mums... 💀⚰`, color }));
+      }
+
+      if (!izaudzis) {
+        if (!vajagApliet) {
+          return intReply(
+            i,
+            embedTemplate({ i, description: `Tavs krūms vēl nav izaudzis! **${izaugsanasProg}%**`, color })
+          );
+        }
+        const msg = await intReply(i, {
+          embeds: embedTemplate({
+            i,
+            description:
+              `Tavs krūms vēl nav izaudzis! **${izaugsanasProg}%**\n` + `_(Ei! Vispār tavs krūms ir izslāpis... 🥵)_`,
+            color,
+          }).embeds!,
+          components: makeComponents(),
+          fetchReply: true,
+        });
+        if (!msg) return;
+
+        buttonHandler(i, 'izmantot', msg, async int => {
+          const sobridLaiks = Date.now();
+          const { customId } = int;
+          if (int.componentType !== ComponentType.Button) return;
+
+          if (customId === 'apliet_krumu') {
+            await editItemAttribute(userId, guildId, specialItem!._id!, {
+              ...specialItem?.attributes,
+              iestadits: sobridLaiks - aplaistits + iestadisanasLaiks,
+              apliets: sobridLaiks + apliesanasLaiks(),
+            });
+            return {
+              edit: {
+                embeds: embedTemplate({ i, description: `Tu aplaistīji ogu krūmu! 👍`, color }).embeds!,
+                components: [],
+              },
+            };
+          }
+        });
+        return;
+      }
+
+      if (sobridOgas < 1) {
+        return intReply(
+          i,
+          smallEmbed(
+            `Tavs ogu krūms vēl nav izaudzējis ogas...\n` + `Izaugs pēc \`${millisToReadableTime(cikNakamaOga)}\``,
+            0xff0000
+          )
+        );
+      }
+
+      const cikOgasDot = Math.min(sobridOgas, specialItem!.attributes.maxBerries!);
+
+      const user = await findUser(userId, guildId);
+      if (!user) return intReply(i, errorEmbed);
+
+      const afterEdit = await editItemAttribute(userId, guildId, specialItem!._id!, {
+        ...specialItem?.attributes,
+
+        lastUsed:
+          sobridOgas >= specialItem!.attributes.maxBerries! ? currTime : currTime - oguAgusanasIlgums + cikNakamaOga,
+      });
+      const userAfter = await addItems(userId, guildId, { [ogasTips]: cikOgasDot });
+      if (!userAfter || !afterEdit) return intReply(i, errorEmbed);
+      const { cikNakamaOga: cikNakamaOgaJauns } = dabutOguInfo(afterEdit.newItem, currTime);
+      const itemCount = userAfter.items.find(item => item.name === ogasTips)?.amount || 1;
+      return intReply(
+        i,
+        embedTemplate({
+          i,
+          description:
+            `Tu ievāci **${cikOgasDot}** ogas \n` + `Nākamā oga pēc \`${millisToReadableTime(cikNakamaOgaJauns)}\``,
+          fields: [
+            {
+              name: 'Tu ievāci:',
+              value: `${itemString(ogasTips, cikOgasDot, true)}`,
+              inline: true,
+            },
+            {
+              name: 'Tev tagad ir:',
+              value: `${itemString(ogasTips, itemCount)}`,
+              inline: true,
+            },
+          ],
+          color,
+        })
+      );
+    },
   };
 };
 

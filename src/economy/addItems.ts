@@ -4,7 +4,7 @@ import UserProfile from '../interfaces/UserProfile';
 import userCache from '../utils/userCache';
 import itemList, { ItemKey } from '../items/itemList';
 import { getRandFreeSpin } from '../items/usableItems/petnieks';
-import { getRandomOga, getRandomGrowthTime, getRandomMaxOgas } from '../items/usableItems/ogu_krums';
+import { getRandomOga, getRandomGrowthTime, getRandomMaxOgas, apliesanasLaiks } from '../items/usableItems/ogu_krums';
 import { generateFishCount } from '../items/usableItems/loto_zivs';
 
 export default async function addItems(
@@ -33,6 +33,7 @@ export default async function addItems(
           if ('growthTime' in attributes) newAttributes.growthTime = getRandomGrowthTime();
           if ('maxBerries' in attributes) newAttributes.maxBerries = getRandomMaxOgas();
           if ('iestadits' in attributes) newAttributes.iestadits = Date.now();
+          if ('apliets' in attributes) newAttributes.apliets = Date.now() + apliesanasLaiks();
           if ('holdsFishCount' in attributes) newAttributes.holdsFishCount = generateFishCount();
           if ('createdAt' in attributes) newAttributes.createdAt = Date.now();
           if ('fedUntil' in attributes) newAttributes.fedUntil = Date.now() + 172_800_000; // 2d

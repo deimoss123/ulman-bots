@@ -115,7 +115,7 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false, pr
 
       lastUsed: (n, { maxBerries, growthTime, berryType, lastUsed }) => {
         const { cikNakamaOga, sobridOgas } = dabutOguInfo(item, currTime);
-        const { izaudzis, cikIlgiAug, izaugsanasProg, augsanasLaiks } = dabutKrumaInfo(item, currTime);
+        const { izaudzis, cikIlgiAug, izaugsanasProg, augsanasLaiks, vajagApliet } = dabutKrumaInfo(item, currTime);
         const cikOgasRadit = Math.min(sobridOgas, maxBerries!);
         const itemStr = (key: ItemKey) =>
           inline ? capitalizeFirst(itemList[key].nameAkuDsk) : `**${capitalizeFirst(itemList[key].nameAkuDsk)}**`;
@@ -123,6 +123,8 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false, pr
           ? `Audzē - ${itemStr(berryType!)} ${cikOgasRadit}/${maxBerries} ${
               sobridOgas < maxBerries! ? millisToReadableTime(cikNakamaOga) : ''
             }` + (inline ? `, ` : '\n')
+          : vajagApliet
+          ? `Krūms ir izslāpis! 🥵 ${izaugsanasProg}%`
           : inline
           ? `Krūms vēl aug... ${izaugsanasProg}%, `
           : `Krūms vēl aug... **${izaugsanasProg}%** `;
