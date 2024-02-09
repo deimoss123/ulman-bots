@@ -1,35 +1,18 @@
 //šis pavisam noteikti nebūs labs kods (ja salīdzina ar pārējo)
 //praktiski visu šo šizofrēniju ir veidojis bumbotajs (ar "mazu" deimosa palīdzību)
 
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  ComponentType,
-  EmbedBuilder,
-  Message,
-  ModalActionRowComponentBuilder,
-  ModalBuilder,
-  ModalSubmitInteraction,
-  TextInputBuilder,
-  TextInputStyle,
-} from 'discord.js';
-import addLati from '../../economy/addLati';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } from 'discord.js';
 import editItemAttribute from '../../economy/editItemAttribute';
 import findUser from '../../economy/findUser';
 import buttonHandler from '../../embeds/buttonHandler';
 import embedTemplate from '../../embeds/embedTemplate';
-import ephemeralReply from '../../embeds/ephemeralReply';
 import errorEmbed from '../../embeds/errorEmbed';
 import itemString from '../../embeds/helpers/itemString';
-import latiString from '../../embeds/helpers/latiString';
 import smallEmbed from '../../embeds/smallEmbed';
 import { UsableItemFunc, item } from '../../interfaces/Item';
 import intReply from '../../utils/intReply';
 import itemList, { ItemKey } from '../itemList';
-import { MAX_LEVEL } from '../../levelingSystem/levelsList';
 import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
-import countFreeInvSlots from '../helpers/countFreeInvSlots';
 import addItems from '../../economy/addItems';
 import { SpecialItemInProfile } from '../../interfaces/UserProfile';
 
@@ -39,17 +22,22 @@ import { SpecialItemInProfile } from '../../interfaces/UserProfile';
 
 // krumu vertibu generesana
 // reizinataja intervals 0-1 ik pa 0.1
-const MIN_LAIKS = 10000; // 5 min
-const MAX_LAIKS = 10000; // 10 min
+const MIN_LAIKS = 3_600_000; // 1h
+const MAX_LAIKS = 4_320_000; // 1.2h (80min)
 
 // maksimalais un minimalais ogu daudzums vienam krumam
 const MIN_OGAS = 3;
 const MAX_OGAS = 6;
 
-// pasa ogu kruma augsanas ilgums (velak koda pieskaitu klat ogu augsanas ilgumu)
+// pasa ogu kruma augsanas ilgums
+// un arī krūma dzīves ilgums
 // 3_600_000 1h
-const BAZES_KRUMA_AUGSANAS_LAIKS = 60_000; //1h
-const NOMIR = 1_90_080_00_00; // 20 dienas
+// 43_200_000 12h
+const KRUMA_AUGSANAS_LAIKS = 43_200_000; //12h
+const NOMIR = 1_9_0_080_00_00; // 22 dienas (smieklīgs formatējums)
+
+// reizes cik krums jaaplaista augsanas procesa
+const APLIESANAS_REIZES = 4;
 
 // dabuju ogu tipu krumam
 export function getRandomOga() {
@@ -57,6 +45,7 @@ export function getRandomOga() {
   return ogas[Math.floor(Math.random() * ogas.length)];
 }
 
+// funkcija kas dabus nejausu ogu augsanas laiku
 export function getRandomGrowthTime() {
   // varbut nav efektivaaka metode, bet strada
   const randomInterval = Math.floor(Math.random() * 11); // generes no 0 - 10
@@ -65,11 +54,13 @@ export function getRandomGrowthTime() {
   return skaitlis;
 }
 
+// nejausi izvelas cik krumam var maksimali izaugt ogas
 export function getRandomMaxOgas() {
   const rand = Math.floor(Math.random() * (MAX_OGAS - MIN_OGAS + 1)) + MIN_OGAS;
   return rand;
 }
 
+// funkcija, ar kuru var dabut info par ogam (cik ilgi lidz nakamajai, cik ogas ir sobrid)
 export function dabutOguInfo({ attributes }: SpecialItemInProfile, currTime: number) {
   const lastUsed = attributes.lastUsed!;
   const laikaStarpiba = currTime - lastUsed;
@@ -81,12 +72,16 @@ export function dabutOguInfo({ attributes }: SpecialItemInProfile, currTime: num
   return { sobridOgas, cikNakamaOga };
 }
 
+// nez cik laba si funckija izrekinas laiku, bet butu jastrada
 export function apliesanasLaiks() {
-  return 15000;
+  const augsanasLaiks = KRUMA_AUGSANAS_LAIKS;
+  const aplietLaiks = augsanasLaiks / APLIESANAS_REIZES;
+  return aplietLaiks;
 }
 
+// kruma info funkcija
 export function dabutKrumaInfo({ attributes }: SpecialItemInProfile, currTime: number) {
-  const augsanasLaiks = BAZES_KRUMA_AUGSANAS_LAIKS + attributes.growthTime!;
+  const augsanasLaiks = KRUMA_AUGSANAS_LAIKS;
   const iestadits = attributes.iestadits!;
   const apliets = attributes.apliets!;
   const cikIlgiAug = currTime - iestadits; // testesanai
@@ -101,7 +96,7 @@ export function dabutKrumaInfo({ attributes }: SpecialItemInProfile, currTime: n
 
   return { izaudzis, cikIlgiAug, izaugsanasProg, augsanasLaiks, vajagApliet };
 }
-
+//????
 function makeComponents() {
   return [
     new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -124,7 +119,7 @@ const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
       const ogasTips = specialItem!.attributes.berryType!;
       const aplaistits = specialItem!.attributes.apliets!;
       const iestadisanasLaiks = specialItem!.attributes.iestadits!;
-      const krumaAugsanasLaiks = BAZES_KRUMA_AUGSANAS_LAIKS + oguAgusanasIlgums;
+      const krumaAugsanasLaiks = KRUMA_AUGSANAS_LAIKS;
       const { cikNakamaOga, sobridOgas } = dabutOguInfo(specialItem!, currTime);
       const { izaugsanasProg, izaudzis, vajagApliet } = dabutKrumaInfo(specialItem!, currTime);
 
@@ -154,6 +149,7 @@ const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
         buttonHandler(i, 'izmantot', msg, async int => {
           const sobridLaiks = Date.now();
           const { customId } = int;
+
           if (int.componentType !== ComponentType.Button) return;
 
           if (customId === 'apliet_krumu') {
