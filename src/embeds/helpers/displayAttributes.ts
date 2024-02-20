@@ -23,6 +23,7 @@ const hiddenAttributes: Partial<keyof ItemAttributes>[] = [
   'growthTime',
   'iestadits',
   'apliets',
+  'apliesanasReizes',
 ];
 
 export function displayAttributes(item: SpecialItemInProfile, inline = false, prefix = '') {

@@ -49,6 +49,7 @@ export interface ItemAttributes {
   maxBerries?: number;
   apliets?: number;
   iestadits?: number;
+  apliesanasReizes?: number;
 }
 
 export interface SpecialItemInProfile {

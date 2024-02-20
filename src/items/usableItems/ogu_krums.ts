@@ -22,6 +22,7 @@ import { SpecialItemInProfile } from '../../interfaces/UserProfile';
 
 // krumu vertibu generesana
 // reizinataja intervals 0-1 ik pa 0.1
+// ogu augsanas laiks
 const MIN_LAIKS = 3_600_000; // 1h
 const MAX_LAIKS = 4_320_000; // 1.2h (80min)
 
@@ -37,7 +38,16 @@ const KRUMA_AUGSANAS_LAIKS = 43_200_000; //12h
 const NOMIR = 1_9_0_080_00_00; // 22 dienas (smieklīgs formatējums)
 
 // reizes cik krums jaaplaista augsanas procesa
-const APLIESANAS_REIZES = 4;
+// izlemu, ka aplaistisanas reizes ari varetu uzgenerte, jo tagad cilveki sapratis ka krums vienmer jaaplej
+// tad, kad tas ir 25% izaudzis... (tas būtu pārāk mazs olu vēzis)
+// const APLIESANAS_REIZES = 4;
+const MAX_APLIESANAS_REIZES = 6;
+const MIN_APLIESANAS_REIZES = 4;
+
+export function getRandomApliesanasReizes() {
+  const rand = Math.floor(Math.random() * (MAX_APLIESANAS_REIZES - MIN_APLIESANAS_REIZES + 1)) + MIN_APLIESANAS_REIZES;
+  return rand;
+}
 
 // dabuju ogu tipu krumam
 export function getRandomOga() {
@@ -73,9 +83,9 @@ export function dabutOguInfo({ attributes }: SpecialItemInProfile, currTime: num
 }
 
 // nez cik laba si funckija izrekinas laiku, bet butu jastrada
-export function apliesanasLaiks() {
+export function apliesanasLaiks({ attributes }: SpecialItemInProfile) {
   const augsanasLaiks = KRUMA_AUGSANAS_LAIKS;
-  const aplietLaiks = augsanasLaiks / APLIESANAS_REIZES;
+  const aplietLaiks = augsanasLaiks / attributes.apliesanasReizes!;
   return aplietLaiks;
 }
 
@@ -138,7 +148,8 @@ const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
           embeds: embedTemplate({
             i,
             description:
-              `Tavs krūms vēl nav izaudzis! **${izaugsanasProg}%**\n` + `_(Ei! Vispār tavs krūms ir izslāpis... 🥵)_`,
+              `Tavs krūms vēl nav izaudzis! **${izaugsanasProg}%**\n` +
+              `_(Ei, tu tur! Vispār tavs krūms ir izslāpis... 🥵)_`,
             color,
           }).embeds!,
           components: makeComponents(),
@@ -156,7 +167,7 @@ const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
             await editItemAttribute(userId, guildId, specialItem!._id!, {
               ...specialItem?.attributes,
               iestadits: sobridLaiks - aplaistits + iestadisanasLaiks,
-              apliets: sobridLaiks + apliesanasLaiks(),
+              apliets: sobridLaiks + apliesanasLaiks(specialItem!),
             });
             return {
               edit: {

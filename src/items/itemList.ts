@@ -1151,6 +1151,7 @@ const itemList: { [key: ItemKey]: Item } = {
     imgLink: 'https://beanson.lv/images/krums.png',
     categories: [ItemCategory.OTHER],
     value: 400,
+    //ak mans dievs... attributi nekad nebeidzas
     attributes: {
       berryType: '',
       growthTime: 0,
@@ -1158,6 +1159,7 @@ const itemList: { [key: ItemKey]: Item } = {
       lastUsed: 0,
       apliets: 0,
       iestadits: 0,
+      apliesanasReizes: 0,
     },
     use: ogukrums,
     sortBy: { berryType: 1 },

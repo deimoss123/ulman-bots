@@ -48,6 +48,7 @@ export const ItemAttributesSchema = {
   berryType: String,
   growthTime: Number, // unix millis
   maxBerries: Number,
+  apliesanasReizes: Number,
   apliets: Number, // unix millis
   iestadits: Number, // unix millis
 };
