@@ -1181,25 +1181,6 @@ const itemList: { [key: ItemKey]: Item } = {
     use: async () => ({ text: 'Tas bija garšīgs... laikam.' }),
   }),
 
-  // sitais bus jadzes ara....
-  // svarki: item<UsableItem>({
-  //   info: 'Ouuuu.. cik mīļi svārciņi',
-  //   nameNomVsk: 'svārki',
-  //   nameNomDsk: 'svārki',
-  //   nameAkuVsk: 'svārkus',
-  //   nameAkuDsk: 'svārkus',
-  //   isVirsiesuDzimte: true,
-  //   emoji: {
-  //     name: 'svarki',
-  //     id: '1201235340514562278',
-  //   },
-  //   imgLink: null,
-  //   categories: [ItemCategory.ATKRITUMI],
-  //   value: 50,
-  //   removedOnUse: false,
-  //   use: async () => ({ text: 'Tu uzvilki svārkus un kļuvi par sievpuiku.' }),
-  // }),
-
   // granulu katls
   // cena 5700 lati
 
