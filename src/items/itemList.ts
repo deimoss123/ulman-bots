@@ -1133,6 +1133,42 @@ const itemList: { [key: ItemKey]: Item } = {
     use: () => ({ text: 'vīnoga' }),
   }),
 
+  zemene: item<UsableItem>({
+    info: '',
+    nameNomVsk: 'zemene',
+    nameNomDsk: 'zemenes',
+    nameAkuVsk: 'zemeni',
+    nameAkuDsk: 'zemenes',
+    isVirsiesuDzimte: false,
+    emoji: {
+      id: '1209986801213636608',
+      name: 'zemene',
+    },
+    imgLink: null,
+    categories: [ItemCategory.OTHER],
+    value: 15,
+    removedOnUse: false,
+    use: () => ({ text: 'zemene' }),
+  }),
+
+  janoga: item<UsableItem>({
+    info: '',
+    nameNomVsk: 'jāņoga',
+    nameNomDsk: 'jāņogas',
+    nameAkuVsk: 'jāņogu',
+    nameAkuDsk: 'jāņogas',
+    isVirsiesuDzimte: false,
+    emoji: {
+      id: '1209988449860591636',
+      name: 'janoga',
+    },
+    imgLink: null,
+    categories: [ItemCategory.OTHER],
+    value: 15,
+    removedOnUse: false,
+    use: () => ({ text: 'jāņoga' }),
+  }),
+
   ogu_krums: item<AttributeItem>({
     info:
       'Kļūsti par īstu dārznieku.\n' +

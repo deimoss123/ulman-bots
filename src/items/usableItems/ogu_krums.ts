@@ -51,7 +51,7 @@ export function getRandomApliesanasReizes() {
 
 // dabuju ogu tipu krumam
 export function getRandomOga() {
-  const ogas: ItemKey[] = ['mellene', 'avene', 'vinoga'];
+  const ogas: ItemKey[] = ['mellene', 'avene', 'vinoga', 'zemene', 'janoga'];
   return ogas[Math.floor(Math.random() * ogas.length)];
 }
 
