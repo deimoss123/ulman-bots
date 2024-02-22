@@ -41,7 +41,7 @@ export default async function addItems(
           if ('fedUntil' in attributes) newAttributes.fedUntil = Date.now() + 172_800_000; // 2d
 
           // ogu krumam
-          if ('lastUsed' in attributes && itemToAdd === 'ogu_krums') newAttributes.lastUsed = Date.now();
+          //if ('lastUsed' in attributes && itemToAdd === 'ogu_krums') newAttributes.lastUsed = 0;
           if ('maxBerries' in attributes) newAttributes.maxBerries = getRandomMaxOgas();
           if ('apliets' in attributes) newAttributes.apliets = Date.now();
           if ('growthTime' in attributes) newAttributes.growthTime = getRandomGrowthTime();

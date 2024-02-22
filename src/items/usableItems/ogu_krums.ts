@@ -41,8 +41,8 @@ const NOMIR = 1_9_0_080_00_00; // 22 dienas (smieklīgs formatējums)
 // izlemu, ka aplaistisanas reizes ari varetu uzgenerte, jo tagad cilveki sapratis ka krums vienmer jaaplej
 // tad, kad tas ir 25% izaudzis... (tas būtu pārāk mazs olu vēzis)
 // const APLIESANAS_REIZES = 4;
-const MAX_APLIESANAS_REIZES = 6;
 const MIN_APLIESANAS_REIZES = 4;
+const MAX_APLIESANAS_REIZES = 6;
 
 export function getRandomApliesanasReizes() {
   const rand = Math.floor(Math.random() * (MAX_APLIESANAS_REIZES - MIN_APLIESANAS_REIZES + 1)) + MIN_APLIESANAS_REIZES;
@@ -73,11 +73,22 @@ export function getRandomMaxOgas() {
 // funkcija, ar kuru var dabut info par ogam (cik ilgi lidz nakamajai, cik ogas ir sobrid)
 export function dabutOguInfo({ attributes }: SpecialItemInProfile, currTime: number) {
   const lastUsed = attributes.lastUsed!;
-  const laikaStarpiba = currTime - lastUsed;
+
+  const izaudzis = Math.min(currTime, attributes.apliets!) > attributes.iestadits! + KRUMA_AUGSANAS_LAIKS;
+
+  let startGrowthTime: number;
+
+  if (lastUsed === 0 && izaudzis) {
+    startGrowthTime = attributes.iestadits! + KRUMA_AUGSANAS_LAIKS;
+  } else {
+    startGrowthTime = lastUsed;
+  }
+
+  const laikaStarpiba = currTime - startGrowthTime;
   const sobridOgas = Math.floor(laikaStarpiba / attributes.growthTime!);
   //lastused + (sobridogas + 1) * growthtime - curtime
   // es isti nezinu ko sis viss nozime
-  const cikNakamaOga = lastUsed + (sobridOgas + 1) * attributes.growthTime! - currTime;
+  const cikNakamaOga = startGrowthTime + (sobridOgas + 1) * attributes.growthTime! - currTime;
 
   return { sobridOgas, cikNakamaOga };
 }
