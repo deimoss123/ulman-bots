@@ -7,7 +7,6 @@ import chalk from 'chalk';
 import setBotPresence from './utils/setBotPresence';
 import buttonInteractionHandler from './utils/buttonInteractionHandler';
 import messageHandler from './utils/messageHandler';
-import 'dotenv/config';
 import User from './schemas/User';
 
 process.env.TZ = 'Europe/Riga';
@@ -19,8 +18,10 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
 
+const mongoPromise = mongo();
+
 client.once('ready', async () => {
-  await mongo().then(() => console.log('Connected to MongoDB'));
+  await mongoPromise.then(() => console.log('Connected to MongoDB'));
 
   // User.watch().on('change', data => {
   //   console.log(data);

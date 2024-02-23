@@ -21,7 +21,7 @@ function infoEmbed(i: ChatInputCommandInteraction) {
       value: Object.entries(multipliers)
         .map(
           ([n, mult]) =>
-            `**\` ` + ' '.repeat(longestNum - `${mult}`.length) + `${mult}x \`** ${emoji.repeat(Number(n))}`
+            `**\` ` + ' '.repeat(longestNum - `${mult}`.length) + `${mult}x \`** ${emoji.repeat(Number(n))}`,
         )
         .join('\n'),
       inline: true,
@@ -89,6 +89,7 @@ const feniks: Command = {
     const likme: KazinoLikme =
       subCommandName === '-' ? i.options.getInteger('likme_lati')! : (subCommandName as 'virve' | 'viss');
 
+    // @ts-ignore
     if (likme < FENIKS_MIN_LIKME) return intReply(i, errorEmbed);
 
     feniksRun(i, likme);

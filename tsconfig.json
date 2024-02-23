@@ -1,21 +1,22 @@
 {
   "compilerOptions": {
-    "target": "ES2021",
-    "module": "commonjs",
     "rootDir": "./src",
     "outDir": "./dist",
-    "noEmitOnError": true,
+    "types": ["bun-types"],
+    "lib": ["esnext"],
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "moduleDetection": "force",
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
-  },
-  "ts-node": {
-    "swc": true
   },
   "paths": {
     "*": ["src/types/environment.d.ts"]
   },
-  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }

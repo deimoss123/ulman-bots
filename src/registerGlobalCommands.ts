@@ -3,7 +3,6 @@ import { commandList } from './commands/commandList';
 import validateEnv from './utils/validateEnv';
 import chalk from 'chalk';
 import { getPalidzibaChoices } from './commands/economyCommands/palidziba/palidziba';
-import 'dotenv/config';
 
 async function registerGuildCommands(client: Client) {
   client
@@ -14,7 +13,7 @@ async function registerGuildCommands(client: Client) {
           command.data.options[1].options[0].choices = getPalidzibaChoices();
         }
         return command.data;
-      })
+      }),
     )
     .then(() => {
       console.log(chalk.green('Global commands registered!'));

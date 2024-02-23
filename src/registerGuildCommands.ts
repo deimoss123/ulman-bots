@@ -3,10 +3,9 @@ import { commandList, devCommandList } from './commands/commandList';
 import validateEnv from './utils/validateEnv';
 import chalk from 'chalk';
 import { getPalidzibaChoices } from './commands/economyCommands/palidziba/palidziba';
-import 'dotenv/config';
 
 async function registerGuildCommands(client: Client) {
-  const guild = await client.guilds.fetch(process.env.DEV_SERVER_ID);
+  const guild = await client.guilds.fetch(process.env.DEV_SERVER_ID!);
 
   guild.commands
     .set(
@@ -16,7 +15,7 @@ async function registerGuildCommands(client: Client) {
           command.data.options[1].options[0].choices = getPalidzibaChoices();
         }
         return command.data;
-      })
+      }),
     )
     .then(() => {
       console.log(chalk.green('Guild commands registered!'));

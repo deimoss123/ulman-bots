@@ -1,7 +1,4 @@
 import axios from 'axios';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 async function registerUpstash() {
   const date = Date.now();
@@ -22,7 +19,7 @@ async function registerUpstash() {
           'Upstash-Delay': `${secondsUntil}s`,
           'Content-Type': 'application/json',
         },
-      }
+      },
     );
   }
 }
