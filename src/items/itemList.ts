@@ -5,7 +5,9 @@ import divainais_burkans from './usableItems/divainais_burkans';
 import mugursoma, { INCREASE_CAP_1, INV_INCREASE_AMOUNT_1 } from './usableItems/mugursoma';
 import latloto, { latlotoOptions } from './usableItems/latloto';
 import dizloto, { dizlotoOptions } from './usableItems/dizloto';
+import ogukrums from './usableItems/ogu_krums';
 import kafija from './usableItems/kafija';
+import redbull from './usableItems/redbull';
 import kafijas_aparats, { kafijasAparatsUseMany } from './usableItems/kafijas_aparats';
 import velo, { veloInfo } from './usableItems/velo';
 import divaina_mugursoma, { INCREASE_CAP_2, INV_NCREASE_AMOUNT_2 } from './usableItems/divaina_mugursoma';
@@ -30,6 +32,7 @@ import piparkuka from './usableItems/piparkuka';
 import nabagloto, { nabagLotoOptions } from './usableItems/nabagloto';
 import ulmanloto, { ulmanlotoOptions } from './usableItems/ulmanloto';
 import gazes_plits from './usableItems/gazes_plits';
+import krumu_sekla from './usableItems/kruma_sekla';
 
 export type ItemKey = string;
 
@@ -539,6 +542,23 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
 
   // -- atkritumi --
+
+  //hmmmm... šitā iespējams būs vajadzīgā, kā izmantojama manta, bet tas vēlēkam
+  akumulators: item<BaseItem>({
+    info: 'MmMMmmm, tas šķidrums izskatās ļoti garšīgs\n' + 'ļoti noslēpumaina manta',
+    nameNomVsk: 'akumulators',
+    nameNomDsk: 'akumulatori',
+    nameAkuVsk: 'akumulatoru',
+    nameAkuDsk: 'akumulatorus',
+    isVirsiesuDzimte: true,
+    emoji: {
+      id: '1199417487033380874',
+      name: 'akumulators',
+    },
+    imgLink: 'https://beanson.lv/images/akumulators.png',
+    categories: [ItemCategory.ATKRITUMI],
+    value: 20,
+  }),
   kartona_kaste: item<BaseItem>({
     info: 'Kāds šeit iekšā ir dzīvojis...',
     nameNomVsk: 'kartona kaste',
@@ -885,6 +905,27 @@ const itemList: { [key: ItemKey]: Item } = {
     removedOnUse: false,
     use: kafija,
   }),
+  // es. bumbotajs te taisu sizofreniju Deimoss ir izveidojis loti labu sistemu >.<
+  redbulls: item<UsableItem>({
+    info:
+      `Strādāt ir grūti ja esi noguris, izdzer SARKANO BULLI!\n\n` +
+      'Redbulls ir izmantojams, kad tev noteiktā dienā ir beigušās strādāšanas reizes\n' +
+      'Komandai `/stradat` ir poga `izdzert redbull` lai strādātu vēlreiz',
+    nameNomVsk: 'redbulls',
+    nameNomDsk: 'redbulli',
+    nameAkuVsk: 'redbullu',
+    nameAkuDsk: 'redbullus',
+    isVirsiesuDzimte: true,
+    emoji: {
+      id: '1009557001451356161',
+      name: 'kafija',
+    },
+    imgLink: 'https://www.ulmanbots.lv/images/items/kafija.png',
+    categories: [ItemCategory.VEIKALS],
+    value: 35,
+    removedOnUse: false,
+    use: redbull,
+  }),
   dizmakskere: item<AttributeItem>({
     info:
       'UlmaņBota veidotājs rakstot šo aprakstu aizmirsa kāpēc dižmakšķere eksistē...\n\n' +
@@ -1024,14 +1065,32 @@ const itemList: { [key: ItemKey]: Item } = {
     use: ulmanloto,
   }),
 
+  kruma_sekla: item<UsableItem>({
+    info: '', //TODO,
+    nameNomVsk: 'sēkla',
+    nameNomDsk: 'sēklas',
+    nameAkuDsk: 'sēklu',
+    nameAkuVsk: 'sēklas',
+    isVirsiesuDzimte: false,
+    emoji: null,
+    imgLink: null,
+    categories: [ItemCategory.OTHER],
+    value: 10,
+    removedOnUse: true,
+    use: krumu_sekla,
+  }),
+
   avene: item<UsableItem>({
-    info: '',
+    info: '', //TODO
     nameNomVsk: 'avene',
     nameNomDsk: 'avenes',
     nameAkuVsk: 'aveni',
     nameAkuDsk: 'avenes',
     isVirsiesuDzimte: false,
-    emoji: null,
+    emoji: {
+      name: 'avene',
+      id: '1200949813966016662',
+    },
     imgLink: null,
     categories: [ItemCategory.OTHER],
     value: 15,
@@ -1039,13 +1098,16 @@ const itemList: { [key: ItemKey]: Item } = {
     use: () => ({ text: 'avene' }),
   }),
   mellene: item<UsableItem>({
-    info: '',
+    info: '', //TODO
     nameNomVsk: 'mellene',
     nameNomDsk: 'mellenes',
     nameAkuVsk: 'melleni',
     nameAkuDsk: 'mellenes',
     isVirsiesuDzimte: false,
-    emoji: null,
+    emoji: {
+      id: '1200946874383876176',
+      name: 'mellene',
+    },
     imgLink: null,
     categories: [ItemCategory.OTHER],
     value: 15,
@@ -1053,23 +1115,113 @@ const itemList: { [key: ItemKey]: Item } = {
     use: () => ({ text: 'mellene' }),
   }),
 
+  vinoga: item<UsableItem>({
+    info: '', //TODO
+    nameNomVsk: 'vīnoga',
+    nameNomDsk: 'vīnogas',
+    nameAkuVsk: 'vīnogu',
+    nameAkuDsk: 'vīnogas',
+    isVirsiesuDzimte: false,
+    emoji: {
+      id: '1200948299755171991',
+      name: 'vinoga',
+    },
+    imgLink: null,
+    categories: [ItemCategory.OTHER],
+    value: 15,
+    removedOnUse: false,
+    use: () => ({ text: 'vīnoga' }),
+  }),
+
+  zemene: item<UsableItem>({
+    info: '',
+    nameNomVsk: 'zemene',
+    nameNomDsk: 'zemenes',
+    nameAkuVsk: 'zemeni',
+    nameAkuDsk: 'zemenes',
+    isVirsiesuDzimte: false,
+    emoji: {
+      id: '1209986801213636608',
+      name: 'zemene',
+    },
+    imgLink: null,
+    categories: [ItemCategory.OTHER],
+    value: 15,
+    removedOnUse: false,
+    use: () => ({ text: 'zemene' }),
+  }),
+
+  janoga: item<UsableItem>({
+    info: '',
+    nameNomVsk: 'jāņoga',
+    nameNomDsk: 'jāņogas',
+    nameAkuVsk: 'jāņogu',
+    nameAkuDsk: 'jāņogas',
+    isVirsiesuDzimte: false,
+    emoji: {
+      id: '1209988449860591636',
+      name: 'janoga',
+    },
+    imgLink: null,
+    categories: [ItemCategory.OTHER],
+    value: 15,
+    removedOnUse: false,
+    use: () => ({ text: 'jāņoga' }),
+  }),
+
   ogu_krums: item<AttributeItem>({
-    info: '', // TODO
+    info:
+      'Kļūsti par īstu dārznieku.\n' +
+      'Katrs ogu krūms, ko iegūsti būs ar nejauši izvēlētu ogu tipu\n' +
+      '(Tas tādēļ, jo biji ierāvis kamēr to stādiji)\n' +
+      'Katram krūmam arī ir limitēts maksimālo ogu skaits (arī tiek nejauši izvēlēts)', // TODO`
     nameNomVsk: 'ogu krūms',
     nameNomDsk: 'ogu krūmi',
     nameAkuVsk: 'ogu krūmu',
     nameAkuDsk: 'ogu krūmus',
     isVirsiesuDzimte: true,
-    emoji: null,
-    imgLink: null,
+    emoji: {
+      name: 'krums',
+      id: '1200950098646020127',
+    },
+    imgLink: 'https://beanson.lv/images/krums.png',
     categories: [ItemCategory.OTHER],
     value: 400,
+    //ak mans dievs... attributi nekad nebeidzas
     attributes: {
       berryType: '',
+      growthTime: 0,
+      maxBerries: 0,
+      lastUsed: 0,
+      apliets: 0,
+      iestadits: 0,
+      apliesanasReizes: 0,
     },
-    use: () => ({ text: 'ogu krūms' }),
-    sortBy: {},
+    use: ogukrums,
+    sortBy: { berryType: 1 },
   }),
+
+  roltons: item<UsableItem>({
+    info: 'Patiesi viena no visu laiku labākajām maltītēm',
+    nameNomVsk: 'roltons',
+    nameNomDsk: 'roltoni',
+    nameAkuVsk: 'roltonu',
+    nameAkuDsk: 'roltonus',
+    isVirsiesuDzimte: true,
+    emoji: {
+      id: '1199634609114202162',
+      name: 'roltons',
+    },
+    imgLink: 'https://beanson.lv/images/roltons.png',
+    categories: [ItemCategory.ATKRITUMI],
+    value: 15,
+    removedOnUse: false,
+    use: async () => ({ text: 'Tas bija garšīgs... laikam.' }),
+  }),
+
+  // granulu katls
+  // cena 5700 lati
+
   // patriota_piespraude: item<NotSellableItem>({
   //   nameNomVsk: 'patriotu piespraude',
   //   nameNomDsk: 'patriotu piespraudes',

@@ -48,6 +48,7 @@
   "prettier": {
     "arrowParens": "avoid",
     "singleQuote": true,
-    "printWidth": 120
+    "printWidth": 120,
+    "tabWidth": 2
   }
 }

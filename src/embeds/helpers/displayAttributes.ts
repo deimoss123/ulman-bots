@@ -9,6 +9,7 @@ import capitalizeFirst from './capitalizeFirst';
 import itemString, { makeEmojiString } from './itemString';
 import latiString from './latiString';
 import millisToReadableTime from './millisToReadableTime';
+import { dabutOguInfo, dabutKrumaInfo } from '../../items/usableItems/ogu_krums';
 
 const hiddenAttributes: Partial<keyof ItemAttributes>[] = [
   'customName',
@@ -17,6 +18,12 @@ const hiddenAttributes: Partial<keyof ItemAttributes>[] = [
   'isCooked',
   'hat',
   'cookingStartedTime',
+  'berryType',
+  'maxBerries',
+  'growthTime',
+  'iestadits',
+  'apliets',
+  'apliesanasReizes',
 ];
 
 export function displayAttributes(item: SpecialItemInProfile, inline = false, prefix = '') {
@@ -100,6 +107,28 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false, pr
           (inline ? `, ` : '\n') +
           `Gatavs pēc: ${inline ? '' : '`'}${millisToReadableTime(timeWhenDone - currTime)}${inline ? '' : '`'}`
         );
+      },
+    },
+    ogu_krums: {
+      // sita noladeta attributu uzradisana ir panemusi stundu no manas dzives (bumbotajs)
+      // es ari esmu stulbs
+      // AAAaaaAaAAaAAaAAAaaAaAaAaa
+
+      lastUsed: (n, { maxBerries, growthTime, berryType, lastUsed }) => {
+        const { cikNakamaOga, sobridOgas } = dabutOguInfo(item, currTime);
+        const { izaudzis, cikIlgiAug, izaugsanasProg, augsanasLaiks, vajagApliet } = dabutKrumaInfo(item, currTime);
+        const cikOgasRadit = Math.min(sobridOgas, maxBerries!);
+        const itemStr = (key: ItemKey) =>
+          inline ? capitalizeFirst(itemList[key].nameAkuDsk) : `**${capitalizeFirst(itemList[key].nameAkuDsk)}**`;
+        return izaudzis === true // šitā ir reāla elle. ja elle pastāv, tad tā ir šeit
+          ? `Audzē - ${itemStr(berryType!)} ${cikOgasRadit}/${maxBerries} ${
+              sobridOgas < maxBerries! ? millisToReadableTime(cikNakamaOga) : ''
+            }` + (inline ? `, ` : '\n')
+          : vajagApliet
+          ? `Krūms ir izslāpis! 🥵 ${izaugsanasProg}%`
+          : inline
+          ? `Krūms vēl aug... ${izaugsanasProg}%, `
+          : `Krūms vēl aug... **${izaugsanasProg}%** `;
       },
     },
   };

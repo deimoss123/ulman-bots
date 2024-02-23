@@ -30,6 +30,12 @@ export const JobPositions: Record<string, JobPosData> = {
     emojiId: '1009557052282118155',
     minLevel: 10,
   },
+  automehanikis: {
+    name: 'Automehāniķis',
+    description: 'Labot mašīnas un nožēlot savu dzīvi dubultā',
+    emojiId: '1199705677338251324',
+    minLevel: 20,
+  },
   // velo_labotajs: {
   //   name: 'Velosipēdu labotājs',
   //   description: 'Labot padomju laiku velosipēdus',
