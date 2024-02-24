@@ -1,4 +1,10 @@
-import { ButtonInteraction, ChatInputCommandInteraction } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ButtonInteraction,
+  ChatInputCommandInteraction,
+  ComponentType,
+  StringSelectMenuBuilder,
+} from 'discord.js';
 import addItems from '../../economy/addItems';
 import findUser from '../../economy/findUser';
 import removeItemsById from '../../economy/removeItemsById';
@@ -13,6 +19,10 @@ import intReply from '../../utils/intReply';
 import chance, { ChanceObj, ChanceRecord } from '../helpers/chance';
 import countFreeInvSlots from '../helpers/countFreeInvSlots';
 import itemList, { ItemKey } from '../itemList';
+import { SpecialItemInProfile } from '../../interfaces/UserProfile';
+import { displayAttributes } from '../../embeds/helpers/displayAttributes';
+import buttonHandler from '../../embeds/buttonHandler';
+import capitalizeFirst from '../../embeds/helpers/capitalizeFirst';
 
 const fishCountChance: ChanceRecord = {
   3: { chance: '*' }, // 0.25
@@ -42,7 +52,7 @@ function lotoZivsEmbed(
   i: ChatInputCommandInteraction | ButtonInteraction,
   wonFishArr: ItemKey[],
   wonFishObj: Record<ItemKey, number>,
-  spinning = false
+  spinning = false,
 ) {
   const { emptyEmoji, arrow_1_left, arrow_1_right, arrow_2_left, arrow_2_right } = iconEmojis;
 
@@ -73,12 +83,39 @@ function lotoZivsEmbed(
             inline: true,
           },
         ],
-  });
+  }).embeds!;
 }
 
-const loto_zivs: UsableItemFunc = async (userId, guildId, _, specialItem) => {
+function lotoZivsComponents(lotoZivis: SpecialItemInProfile[], disabled = false, selectedId = '') {
+  if (!lotoZivis.length) return [];
+
+  const itemObj = itemList.loto_zivs;
+
+  const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+    new StringSelectMenuBuilder()
+      .setCustomId('loto_zivs_izmantot_velreiz_select')
+      .setPlaceholder('Izmantot vēlreiz')
+      .setDisabled(disabled)
+      .setOptions(
+        lotoZivis
+          .slice(0, 25)
+          .sort((a, b) => b.attributes.holdsFishCount! - a.attributes.holdsFishCount!)
+          .map(item => ({
+            label: capitalizeFirst(itemObj.nameNomVsk),
+            description: displayAttributes(item, true),
+            emoji: itemObj.emoji || '❓',
+            value: item._id!,
+            default: selectedId === item._id,
+          })),
+      ),
+  );
+
+  return [row];
+}
+
+const loto_zivs: UsableItemFunc = (userId, guildId, _, specialItem) => {
   return {
-    custom: async i => {
+    custom: async (i, color) => {
       const holdsFishCount = specialItem!.attributes.holdsFishCount!;
 
       const user = await findUser(userId, guildId);
@@ -92,8 +129,8 @@ const loto_zivs: UsableItemFunc = async (userId, guildId, _, specialItem) => {
           ephemeralReply(
             `Lai izmantotu ${itemString(itemList.loto_zivs, null, true)} kas satur **${holdsFishCount}** zivis, ` +
               `tev inventārā ir jābūt vismaz **${holdsFishCount - 1}** brīvām vietām\n` +
-              `Tev ir ${freeSlots} brīvas vietas`
-          )
+              `Tev ir ${freeSlots} brīvas vietas`,
+          ),
         );
       }
 
@@ -106,11 +143,71 @@ const loto_zivs: UsableItemFunc = async (userId, guildId, _, specialItem) => {
       }
 
       await addItems(userId, guildId, { ...wonFishObj });
-      await removeItemsById(userId, guildId, [specialItem!._id!]);
-      const res = await intReply(i, lotoZivsEmbed(i, wonFishArr, wonFishObj, true));
-      if (!res) return;
+      const userNew = await removeItemsById(userId, guildId, [specialItem!._id!]);
+      if (!userNew) return intReply(i, errorEmbed);
 
-      setTimeout(() => i.editReply(lotoZivsEmbed(i, wonFishArr, wonFishObj)).catch(_ => _), 2000);
+      const fishInInv = userNew.specialItems.filter(item => item.name === 'loto_zivs');
+
+      const msg = await intReply(i, {
+        embeds: lotoZivsEmbed(i, wonFishArr, wonFishObj, true),
+        components: lotoZivsComponents(fishInInv, true),
+        fetchReply: true,
+      });
+
+      let isSpinning = true;
+
+      setTimeout(() => {
+        isSpinning = false;
+        i.editReply({
+          embeds: lotoZivsEmbed(i, wonFishArr, wonFishObj),
+          components: lotoZivsComponents(fishInInv),
+        }).catch(_ => _);
+      }, 1000);
+
+      if (!msg || !fishInInv.length) return;
+
+      buttonHandler(
+        i,
+        'izmantot_loto_zivs',
+        msg,
+        async int => {
+          const { customId, componentType } = int;
+
+          if (isSpinning || componentType !== ComponentType.StringSelect) return;
+
+          const user = await findUser(userId, guildId);
+          if (!user) return { error: true };
+
+          if (customId === 'loto_zivs_izmantot_velreiz_select') {
+            const itemId = int.values[0];
+            const itemInInv = user.specialItems.find(item => item._id === itemId);
+
+            if (!itemInInv) {
+              intReply(
+                int,
+                ephemeralReply(
+                  `Tavs inventāra saturs ir mainījies, šī **${itemString('loto_zivs')}** vairs nav tavā inventārā`,
+                ),
+              );
+              return { end: true };
+            }
+
+            return {
+              edit: {
+                components: lotoZivsComponents(fishInInv, true, itemId),
+              },
+              end: true,
+              after: async () => {
+                const useRes = await loto_zivs(userId, guildId, 'loto_zivs', itemInInv);
+
+                // @ts-ignore būs labi :^)
+                useRes.custom(int, color);
+              },
+            };
+          }
+        },
+        20000,
+      );
     },
   };
 };
