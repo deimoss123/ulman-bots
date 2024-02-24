@@ -8,7 +8,7 @@
     "dev": "bun --watch src/index.ts",
     "check": "tsc --noEmit",
     "register": "bun src/registerGuildCommands.ts",
-    "register-global": "bun src/registerGlobalCommands.ts",
+    "register:global": "bun src/registerGlobalCommands.ts",
     "lint": "eslint . --ext .ts",
     "updatedb": "bun src/utils/updatedb.ts"
   },
