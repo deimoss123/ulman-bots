@@ -38,14 +38,13 @@ bun install
 
 ## 4. Reģistrē komandas
 
-Lokāli, vienam serverim, izstrādei.
+Lokāli, vienam serverim, izstrādei:
 
 ```sh
 bun register
 ```
 
-<br/>
-Visos serveros.
+Visos serveros:
 
 ```sh
 bun register:global
@@ -53,14 +52,13 @@ bun register:global
 
 ## 5. Palaid botu
 
-Izstrādes režīms, restartēsies pēc failu izmaiņās.
+Izstrādes režīms, restartēsies pēc failu izmaiņās:
 
 ```sh
 bun dev
 ```
 
-<br/>
-Parastais režīms, ignorēs izmaiņas.
+Parastais režīms, ignorēs izmaiņas:
 
 ```sh
 bun start
