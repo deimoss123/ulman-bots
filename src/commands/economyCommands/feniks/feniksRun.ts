@@ -26,7 +26,7 @@ export default async function feniksRun(
   i: ChatInputCommandInteraction | ButtonInteraction,
   likme: KazinoLikme,
   isFree = false,
-  freeSpinName?: string
+  freeSpinName?: string,
 ) {
   const userId = i.user.id;
   const guildId = i.guildId!;
@@ -42,8 +42,8 @@ export default async function feniksRun(
         i,
         ephemeralReply(
           `Tev vajag vismaz ${latiString(FENIKS_MIN_LIKME, true, true)} lai grieztu aparātu\n` +
-            `Tev ir ${latiString(lati, false, true)}`
-        )
+            `Tev ir ${latiString(lati, false, true)}`,
+        ),
       );
     }
 
@@ -52,8 +52,8 @@ export default async function feniksRun(
         i,
         ephemeralReply(
           `Tu nepietiek naudas lai griezt aparātu ar likmi ${latiString(likme, false, true)}\n` +
-            `Tev ir ${latiString(lati, false, true)}`
-        )
+            `Tev ir ${latiString(lati, false, true)}`,
+        ),
       );
     }
 
@@ -64,9 +64,9 @@ export default async function feniksRun(
           i,
           ephemeralReply(
             `Lai grieztu aparātu ar likmi \`virve\`, tev inventārā ir jābūt **${itemString(
-              itemList.virve
-            )}** (nopērkama veikalā)`
-          )
+              itemList.virve,
+            )}** (nopērkama veikalā)`,
+          ),
         );
       }
     }
@@ -76,8 +76,8 @@ export default async function feniksRun(
     typeof likme === 'number'
       ? likme
       : likme === 'virve'
-      ? Math.floor(Math.random() * (lati - FENIKS_MIN_LIKME) + FENIKS_MIN_LIKME)
-      : lati;
+        ? Math.floor(Math.random() * (lati - FENIKS_MIN_LIKME) + FENIKS_MIN_LIKME)
+        : lati;
 
   const spinRes = calcSpin(DEFAULT_EMOJI_COUNT);
   const latiWon = Math.floor(likmeLati * spinRes.totalMultiplier);
@@ -105,7 +105,7 @@ export default async function feniksRun(
         fenkaSpent: likmeLati,
         fenkaWon: latiWon,
         fenkaSpinCount: 1,
-      })
+      }),
     );
   }
 
@@ -158,16 +158,19 @@ export default async function feniksRun(
     },
     20000,
     true,
-    true
+    true,
   );
 
-  setTimeout(async () => {
-    // guh
-    const a = interactionCache.get(`${userId}-${guildId}`)!.get('feniks')!;
-    interactionCache.get(`${userId}-${guildId}`)?.set('feniks', { ...a, isInteractionActive: false });
-    i.editReply({
-      embeds: feniksEmbed(i, likme, likmeLati, DEFAULT_EMOJI_COUNT, isFree, spinRes, latiWon),
-      components: feniksComponents(likme, userAfter, isFree),
-    }).catch(_ => _);
-  }, 1500);
+  setTimeout(
+    async () => {
+      // guh
+      const a = interactionCache.get(`${userId}-${guildId}`)!.get('feniks')!;
+      interactionCache.get(`${userId}-${guildId}`)?.set('feniks', { ...a, isInteractionActive: false });
+      i.editReply({
+        embeds: feniksEmbed(i, likme, likmeLati, DEFAULT_EMOJI_COUNT, isFree, spinRes, latiWon),
+        components: feniksComponents(likme, userAfter, isFree),
+      }).catch(_ => _);
+    },
+    isFree ? 300 : 1500,
+  );
 }
