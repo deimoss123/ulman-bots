@@ -11,139 +11,144 @@ import latiString from './latiString';
 import millisToReadableTime from './millisToReadableTime';
 import { dabutOguInfo, dabutKrumaInfo } from '../../items/usableItems/ogu_krums';
 
-const hiddenAttributes: Partial<keyof ItemAttributes>[] = [
-  'customName',
-  'foundItemKey',
-  'fedUntil',
-  'isCooked',
-  'hat',
-  'cookingStartedTime',
-  'berryType',
-  'maxBerries',
-  'growthTime',
-  'iestadits',
-  'apliets',
-  'apliesanasReizes',
-];
+// palīgu funkcija, lai ietītu tekstu vienā no diviem stringiem
+// pēdējais parametrs nosaka kurā wrappot, šis vnk uztaisa īsāku un lasāmāku (?) kodu
+function wrap(originalStr: string | number, wrapInline: string, wrapRegular: string, inline: boolean) {
+  if (inline) {
+    return `${wrapInline}${originalStr}${wrapInline}`;
+  }
 
-export function displayAttributes(item: SpecialItemInProfile, inline = false, prefix = '') {
+  return `${wrapRegular}${originalStr}${wrapRegular}`;
+}
+
+export function displayAttributes(item: SpecialItemInProfile, inline = false) {
   const currTime = Date.now();
 
-  const attributesLat: Record<
-    string,
-    Partial<Record<keyof ItemAttributes, (n: number, attributes: ItemAttributes) => string>>
-  > = {
-    divainais_burkans: {
-      timesUsed: n =>
-        `Nokosts ${inline ? '' : '**'}${n}${inline ? '' : '**'} ` +
-        `reiz${n % 10 === 1 && n % 100 !== 11 ? 'i' : 'es'}`,
-    },
-    kafijas_aparats: {
-      lastUsed: n =>
-        currTime - n >= KAFIJAS_APARATS_COOLDOWN
-          ? `${inline ? '' : '**'}Kafija gatava!${inline ? '' : '**'}`
-          : `Gatavo: ${inline ? '' : '`'}` +
-            millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - currTime + n) +
-            (inline ? '' : '`'),
-    },
-    petnieks: {
-      lastUsed: (n, { foundItemKey, hat }) =>
-        (currTime - n >= PETNIEKS_COOLDOWN
-          ? `${inline ? '' : '**'}Nopētījis:${inline ? '' : '**'} ` +
-            (inline ? itemList[foundItemKey!].nameAkuVsk : makeEmojiString(itemList[foundItemKey!].emoji!))
-          : `Pēta: ${inline ? '' : '`'}` +
-            `${millisToReadableTime(PETNIEKS_COOLDOWN - currTime + n)}` +
-            (inline ? '' : '`')) +
-        (hat
-          ? `${inline ? ', ' : '\n'}Cepure: ` +
-            (inline ? capitalizeFirst(itemList[hat].nameNomVsk) : makeEmojiString(itemList[hat].emoji!))
-          : ''),
-    },
-    makskeres: {
-      durability: n => `Izturība: ${n}/${maksekeresData[item.name].maxDurability}`,
-    },
-    naudas_maiss: {
-      latiCollected: n =>
-        n ? `Maisā ir ${latiString(n, false, !inline)}` : `${inline ? '' : '**'}Maiss ir tukšs${inline ? '' : '**'}`,
-    },
-    loto_zivs: {
-      holdsFishCount: n => `Satur ${inline ? n : `**${n}**`} zivis`,
-    },
-    kakis: {
-      createdAt: (n, { fedUntil, hat }) => {
-        return (
-          (fedUntil! < currTime
-            ? `${inline ? '' : '_**'}MIRIS${inline ? '' : '**_'} ⚰️`
-            : `Vecums: ${inline ? '' : '**'}${millisToReadableTime(currTime - n)}` +
-              (inline ? ', ' : '**\n**') +
-              kakisFedState.find(s => fedUntil! - currTime > s.time)?.name +
-              (inline ? '' : '**')) +
-          (hat
-            ? `${inline ? ', ' : '\n'}Cepure: ` +
-              (inline ? capitalizeFirst(itemList[hat].nameNomVsk) : makeEmojiString(itemList[hat].emoji!))
-            : '')
-        );
-      },
-    },
-    patriota_piespraude: {
-      piespraudeNum: n => `${inline ? '' : '**'}Nr. ${n}${inline ? '' : '**'}`,
-    },
-    gazes_plits: {
-      cookingItem: (_, { cookingStartedTime, cookingItem }) => {
-        if (!cookingItem) return 'Gatava cepšanai!';
-        const { output, time } = cookableItems.find(({ input }) => input === cookingItem)!;
-        const timeWhenDone = cookingStartedTime! + time;
-        const isDoneCooking = timeWhenDone < currTime;
+  const attributesLat: Record<ItemKey, (attributes: Required<ItemAttributes>) => string> = {
+    divainais_burkans: ({ timesUsed }) =>
+      // `Nokosts ${inline ? '' : '**'}${timesUsed}${inline ? '' : '**'} ` +
+      `Nokosts ${wrap(timesUsed, '', '**', inline)} ` +
+      `reiz${timesUsed % 10 === 1 && timesUsed % 100 !== 11 ? 'i' : 'es'}`,
 
-        const itemStr = (key: ItemKey) =>
-          inline ? capitalizeFirst(itemList[key].nameNomVsk) : `**${itemString(key)}**`;
+    kafijas_aparats: ({ lastUsed }) => {
+      if (currTime - lastUsed >= KAFIJAS_APARATS_COOLDOWN) {
+        return wrap('Kafija gatava!', '', '**', inline);
+      }
 
-        if (isDoneCooking) {
-          return `Izcepts: ${itemStr(output)}`;
-        }
-
-        return (
-          `Cepjas: ${itemStr(cookingItem)}` +
-          (inline ? `, ` : '\n') +
-          `Gatavs pēc: ${inline ? '' : '`'}${millisToReadableTime(timeWhenDone - currTime)}${inline ? '' : '`'}`
-        );
-      },
+      const timeStr = millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - currTime + lastUsed);
+      return `Gatavo: ${wrap(timeStr, '', '`', inline)}`;
     },
-    ogu_krums: {
-      // sita noladeta attributu uzradisana ir panemusi stundu no manas dzives (bumbotajs)
-      // es ari esmu stulbs
-      // AAAaaaAaAAaAAaAAAaaAaAaAaa
 
-      lastUsed: (n, { maxBerries, growthTime, berryType, lastUsed }) => {
-        const { cikNakamaOga, sobridOgas } = dabutOguInfo(item, currTime);
-        const { izaudzis, cikIlgiAug, izaugsanasProg, augsanasLaiks, vajagApliet } = dabutKrumaInfo(item, currTime);
-        const cikOgasRadit = Math.min(sobridOgas, maxBerries!);
-        const itemStr = (key: ItemKey) =>
-          inline ? capitalizeFirst(itemList[key].nameAkuDsk) : `**${capitalizeFirst(itemList[key].nameAkuDsk)}**`;
-        return izaudzis === true // šitā ir reāla elle. ja elle pastāv, tad tā ir šeit
-          ? `Audzē - ${itemStr(berryType!)} ${cikOgasRadit}/${maxBerries} ${
-              sobridOgas < maxBerries! ? millisToReadableTime(cikNakamaOga) : ''
-            }` + (inline ? `, ` : '\n')
-          : vajagApliet
+    petnieks: ({ lastUsed, foundItemKey, hat }) => {
+      let str = '';
+
+      if (currTime - lastUsed >= PETNIEKS_COOLDOWN) {
+        str += wrap('Nopētījis: ', '', '**', inline);
+
+        if (inline) str += itemList[foundItemKey].nameAkuVsk;
+        else str += makeEmojiString(itemList[foundItemKey].emoji!);
+      } else {
+        const timeStr = millisToReadableTime(PETNIEKS_COOLDOWN - currTime + lastUsed);
+        str += `Pēta: ${wrap(timeStr, '', '`', inline)}`;
+      }
+
+      if (hat) {
+        str += `${inline ? ', ' : '\n'}Cepure: `;
+
+        if (inline) str += capitalizeFirst(itemList[hat].nameNomVsk);
+        else str += makeEmojiString(itemList[hat].emoji!);
+      }
+
+      return str;
+    },
+
+    makskeres: ({ durability }) => `Izturība: ${durability}/${maksekeresData[item.name].maxDurability}`,
+
+    naudas_maiss: ({ latiCollected }) => {
+      if (latiCollected) {
+        return `Maisā ir ${latiString(latiCollected, false, !inline)}`;
+      }
+
+      return wrap('Maiss ir tukšs', '', '**', inline);
+    },
+
+    loto_zivs: ({ holdsFishCount }) => `Satur ${wrap(holdsFishCount, '', '**', inline)} zivis`,
+
+    kakis: ({ createdAt, fedUntil, hat }) => {
+      let str = '';
+
+      if (fedUntil < currTime) {
+        str += `${inline ? '' : '_**'}MIRIS${inline ? '' : '**_'} ⚰️`;
+      } else {
+        str +=
+          `Vecums: ${wrap(millisToReadableTime(currTime - createdAt), '', '**', inline)}` +
+          (inline ? ', ' : '\n') +
+          wrap(kakisFedState.find(s => fedUntil! - currTime > s.time)?.name!, '', '**', inline);
+      }
+
+      if (hat) {
+        str += `${inline ? ', ' : '\n'}Cepure: `;
+
+        if (inline) str += capitalizeFirst(itemList[hat].nameNomVsk);
+        else str += makeEmojiString(itemList[hat].emoji!);
+      }
+
+      return str;
+    },
+
+    patriota_piespraude: ({ piespraudeNum }) => wrap(`Nr. ${piespraudeNum}`, '', '**', inline),
+
+    gazes_plits: ({ cookingStartedTime, cookingItem }) => {
+      if (!cookingItem) return 'Gatava cepšanai!';
+      const { output, time } = cookableItems.find(({ input }) => input === cookingItem)!;
+      const timeWhenDone = cookingStartedTime! + time;
+      const isDoneCooking = timeWhenDone < currTime;
+
+      const itemStr = (key: ItemKey) => (inline ? capitalizeFirst(itemList[key].nameNomVsk) : `**${itemString(key)}**`);
+
+      if (isDoneCooking) {
+        return `Izcepts: ${itemStr(output)}`;
+      }
+
+      return (
+        `Cepjas: ${itemStr(cookingItem)}` +
+        (inline ? `, ` : '\n') +
+        `Gatavs pēc: ${inline ? '' : '`'}${millisToReadableTime(timeWhenDone - currTime)}${inline ? '' : '`'}`
+      );
+    },
+
+    // sita noladeta attributu uzradisana ir panemusi stundu no manas dzives (bumbotajs)
+    // es ari esmu stulbs
+    // AAAaaaAaAAaAAaAAAaaAaAaAaa
+    ogu_krums: ({ maxBerries, growthTime, berryType, lastUsed }) => {
+      const { cikNakamaOga, sobridOgas } = dabutOguInfo(item, currTime);
+      const { izaudzis, cikIlgiAug, izaugsanasProg, augsanasLaiks, vajagApliet } = dabutKrumaInfo(item, currTime);
+      const cikOgasRadit = Math.min(sobridOgas, maxBerries!);
+      const itemStr = (key: ItemKey) =>
+        inline ? capitalizeFirst(itemList[key].nameAkuDsk) : `**${capitalizeFirst(itemList[key].nameAkuDsk)}**`;
+      return izaudzis === true // šitā ir reāla elle. ja elle pastāv, tad tā ir šeit
+        ? `Audzē - ${itemStr(berryType!)} ${cikOgasRadit}/${maxBerries} ${
+            sobridOgas < maxBerries! ? millisToReadableTime(cikNakamaOga) : ''
+          }` + (inline ? `, ` : '\n')
+        : vajagApliet
           ? `Krūms ir izslāpis! 🥵 ${izaugsanasProg}%`
           : inline
-          ? `Krūms vēl aug... ${izaugsanasProg}%, `
-          : `Krūms vēl aug... **${izaugsanasProg}%** `;
-      },
+            ? `Krūms vēl aug... ${izaugsanasProg}%, `
+            : `Krūms vēl aug... **${izaugsanasProg}%** `;
     },
   };
 
-  const attributes = Object.entries(item.attributes).filter(
-    item => !hiddenAttributes.includes(item[0] as keyof ItemAttributes)
-  );
+  let key = item.name;
 
-  const textArr = attributes.map(([key, value]) => {
-    let name = item.name;
-    if (itemList[name].categories.includes(ItemCategory.MAKSKERE)) name = 'makskeres';
+  if (itemList[key].categories.includes(ItemCategory.MAKSKERE)) {
+    key = 'makskeres';
+  }
 
-    return attributesLat[name][key as keyof ItemAttributes]!(value, item.attributes);
-  });
+  if (!attributesLat[key]) {
+    return `womp womp, tu aizmirsi mantai "${key}" pievienot ierakstu failā displayAttributes.ts :/`;
+  }
 
-  if (inline) return textArr.join(', ');
-  return textArr.map(a => `${prefix}${a}`).join('\n');
+  // es uzticos, ka neviens nemēģinās izmantot atribūtus kas konkrētajai mantai nav
+  // ... jo tas būtu diezgan smieklīgi
+  return attributesLat[key]!(item.attributes as Required<ItemAttributes>);
 }
