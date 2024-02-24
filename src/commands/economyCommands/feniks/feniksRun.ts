@@ -80,7 +80,11 @@ export default async function feniksRun(
         : lati;
 
   const spinRes = calcSpin(DEFAULT_EMOJI_COUNT);
-  const latiWon = Math.floor(likmeLati * spinRes.totalMultiplier);
+  let latiWon = Math.floor(likmeLati * spinRes.totalMultiplier);
+
+  if (spinRes.totalMultiplier && latiWon === 0) {
+    latiWon = 1;
+  }
 
   if (isFree) {
     user = await addItems(userId, guildId, { [freeSpinName!]: -1 });
