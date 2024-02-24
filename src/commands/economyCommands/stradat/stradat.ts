@@ -53,9 +53,7 @@ const stradat: Command = {
     'Pašreizējo darba pozīciju un līmeni var redzet ar komandu `/profils`\n\n' +
     `Katrs var strādāt **${MAX_DAILY}** reizes dienā (resetojas plkst. ${midNightStr()}), ` +
     `bet ir iespējams iegūt papildus ${MAX_EXTRA_DAILY} strādāšanas reizes dienā\n` +
-    `Lai strādātu papildus reizes inventārā ir nepieciešama **${itemString(itemList.kafija)}** vai **${itemString(
-      itemList.redbulls
-    )}**, ` +
+    `Lai strādātu papildus reizes inventārā ir nepieciešama **${itemString(itemList.kafija)}**, ` +
     `par katru papildus reizi izvēlētā manta tiks iztērēta\n\n` +
     `Strādāt var ik **${millisToReadableTime(STRADAT_COOLDOWN)}**\n` +
     `Katra strādāšanas reize dod **${STRADAT_XP_MIN}** - **${STRADAT_XP_MAX}** UlmaņPunktus`,
@@ -78,7 +76,7 @@ const stradat: Command = {
     if (!jobPosition) {
       return intReply(
         i,
-        ephemeralReply('Lai strādātu tev ir nepieciešama profesija, to var izvēlēties ar komandu `/vakances`')
+        ephemeralReply('Lai strādātu tev ir nepieciešama profesija, to var izvēlēties ar komandu `/vakances`'),
       );
     }
 
@@ -94,8 +92,8 @@ const stradat: Command = {
 
     const btnRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
       ...darbsRun.options.map(o =>
-        new ButtonBuilder().setCustomId(o.customId).setStyle(ButtonStyle.Primary).setLabel(o.label)
-      )
+        new ButtonBuilder().setCustomId(o.customId).setStyle(ButtonStyle.Primary).setLabel(o.label),
+      ),
     );
 
     const embed = EmbedBuilder.from(
@@ -104,21 +102,19 @@ const stradat: Command = {
         color: this.color,
         title: embedTitle(user, jobPosition),
         description: darbsRun.text,
-      }).embeds![0]
+      }).embeds![0],
     );
 
     let interactionReply: Message | null;
 
     if (dailyCooldowns.stradat.timesUsed >= MAX_DAILY) {
-      if (!items.find(item => item.name === 'kafija' || item.name === 'redbulls')) {
+      if (!items.find(item => item.name === 'kafija')) {
         return intReply(
           i,
           ephemeralReply(
             'Tu esi sasniedzis maksimālo strādāšanas daudzumu šodien\n' +
-              `Lai strādātu vēlreiz tev ir nepieciešama: ${itemString(itemList.kafija)} vai ${itemString(
-                itemList.redbulls
-              )}`
-          )
+              `Lai strādātu vēlreiz tev ir nepieciešama ${itemString(itemList.kafija)}`,
+          ),
         );
       }
 
@@ -128,11 +124,6 @@ const stradat: Command = {
           .setStyle(ButtonStyle.Primary)
           .setLabel('Strādāt vēlreiz (izdzert kafiju)')
           .setEmoji(itemList.kafija.emoji!),
-        new ButtonBuilder()
-          .setCustomId('stradat_velreiz_bullis')
-          .setStyle(ButtonStyle.Primary)
-          .setLabel('Strādāt vēlreiz (izdzert bulli)')
-          .setEmoji(itemList.kafija.emoji!)
       );
 
       const stradatVelreizEmbed = EmbedBuilder.from(
@@ -141,7 +132,7 @@ const stradat: Command = {
           color: this.color,
           title: embedTitle(user, jobPosition),
           description: 'Tu esi sasniedzis maksimālo strādāšanas daudzumu šodien\n',
-        }).embeds![0]
+        }).embeds![0],
       );
 
       interactionReply = await intReply(i, {
@@ -171,12 +162,6 @@ const stradat: Command = {
         const { customId } = int;
         if (customId === 'stradat_velreiz') {
           await addItems(userId, guildId, { kafija: -1 });
-          isExtraUse = true;
-          return {
-            edit: { embeds: [embed], components: [btnRow] },
-          };
-        } else if (customId === 'stradat_velreiz_bullis') {
-          await addItems(userId, guildId, { redbulls: -1 });
           isExtraUse = true;
           return {
             edit: { embeds: [embed], components: [btnRow] },
@@ -223,7 +208,7 @@ const stradat: Command = {
                     `${embed.data.description}\n` +
                       `> Izvēle: \`${choice.label}\`\n` +
                       `${choiceResult.text}\n\n` +
-                      rewardText
+                      rewardText,
                   ),
                 xpAddedEmbed(leveledUser, xpToAdd, 'Par strādāšanu tu saņēmi'),
               ],
@@ -233,7 +218,7 @@ const stradat: Command = {
         }
       },
       60000,
-      true
+      true,
     );
   },
 };

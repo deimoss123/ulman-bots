@@ -61,11 +61,6 @@ const ubagotChances: Record<string, UbagotRes> = {
     text: `tavā krūzītē kāds ielējā **${itemString(itemList.kafija, null, true)}**`,
     reward: { kafija: 1 },
   },
-  redbull: {
-    chance: 0.1,
-    text: `tavā krūzītē kāds ielējā **${itemString(itemList.redbulls, null, true)}**`,
-    reward: { redbulls: 1 },
-  },
   latloto: {
     chance: 0.05,
     text: `kādam garāmgājējam no kabatas izkrita **${itemString(itemList.latloto, 1)}**`,
@@ -92,7 +87,7 @@ function ubagotEmbed(
   i: ChatInputCommandInteraction,
   dailyCooldowns: DailyCooldowns,
   { text, reward }: UbagotRes,
-  earnedLati?: number
+  earnedLati?: number,
 ) {
   return embedTemplate({
     i,
