@@ -46,10 +46,10 @@ const info: Command = {
       'notSellable' in itemObj
         ? 'not_sellable'
         : 'attributes' in itemObj
-        ? 'special'
-        : 'use' in itemObj
-        ? 'usable'
-        : 'not_usable';
+          ? 'special'
+          : 'use' in itemObj
+            ? 'usable'
+            : 'not_usable';
 
     const fields: EmbedField[] = [
       {
@@ -84,6 +84,7 @@ const info: Command = {
           .join('\n')}`;
     }
 
+    // makšķeru informācija
     if (itemObj.categories.includes(ItemCategory.MAKSKERE)) {
       const { maxDurability, repairable, timeMinHours, timeMaxHours, fishChances } = maksekeresData[itemKey];
       const timeStr = timeMinHours === timeMaxHours ? `${timeMinHours}h` : `${timeMinHours}h - ${timeMaxHours}h`;
@@ -104,6 +105,21 @@ const info: Command = {
       });
     }
 
+    // atrod vai mantu var nocopēt
+    const makskeres = Object.entries(maksekeresData).filter(([_makskere, { fishChances }]) =>
+      Object.entries(fishChances).find(([key, { chance }]) => key === itemKey && chance !== 0),
+    );
+
+    // info no kuras makšķeres var dabūt
+    if (makskeres.length) {
+      fields.push({
+        name: 'Var nozvejot ar:',
+        value: makskeres.map(m => itemString(m[0], null, true)).join('\n'),
+        inline: true,
+      });
+    }
+
+    // loto biļešu info
     if (itemObj.categories.includes(ItemCategory.LOTO) && 'lotoOptions' in itemObj) {
       const { columns, rows, scratches, rewards } = itemObj.lotoOptions as LotoOptions;
       const latiRewards = Object.values(rewards).filter(reward => reward.lati);
@@ -124,7 +140,7 @@ const info: Command = {
           name: 'Iesp. reizinātāji:',
           value: multiplierRewards.map(({ emoji, multiplier }) => `${emoji} - **${multiplier!}x** reiz.`).join('\n'),
           inline: true,
-        }
+        },
       );
     }
 
@@ -150,7 +166,7 @@ const info: Command = {
           //     .setStyle(ButtonStyle.Primary)
           // ),
         ],
-      })
+      }),
     );
 
     //   if (!msg) return intReply(i, errorEmbed);
