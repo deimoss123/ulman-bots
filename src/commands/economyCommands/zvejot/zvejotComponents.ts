@@ -3,7 +3,7 @@ import capitalizeFirst from '../../../embeds/helpers/capitalizeFirst';
 import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import latiString from '../../../embeds/helpers/latiString';
 import { AttributeItem } from '../../../interfaces/Item';
-import UserProfile from '../../../interfaces/UserProfile';
+import UserProfile, { ItemAttributes } from '../../../interfaces/UserProfile';
 import itemList, { ItemCategory } from '../../../items/itemList';
 import maksekeresData from './makskeresData';
 import { calcRepairCost } from './zvejot';
@@ -22,7 +22,7 @@ const collectFishButton = new ButtonBuilder()
 
 export default function zvejotComponents(
   user: UserProfile,
-  selectedFishingRodId?: string
+  selectedFishingRodId?: string,
 ): ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] {
   const { specialItems, fishing } = user;
   const { selectedRod, usesLeft, caughtFishes } = fishing;
@@ -62,8 +62,8 @@ export default function zvejotComponents(
             rodsInInv
               .slice(0, 25)
               .sort((a, b) => {
-                const itemA = itemList[a.name] as AttributeItem;
-                const itemB = itemList[b.name] as AttributeItem;
+                const itemA = itemList[a.name] as AttributeItem<ItemAttributes>;
+                const itemB = itemList[b.name] as AttributeItem<ItemAttributes>;
                 return itemB.customValue!(b.attributes) - itemA.customValue!(a.attributes);
               })
               .map(item => ({
@@ -72,8 +72,8 @@ export default function zvejotComponents(
                 emoji: itemList[item.name].emoji ?? '❓',
                 description: displayAttributes(item, true),
                 default: selectedFishingRodId === item._id,
-              }))
-          )
+              })),
+          ),
       ),
       new ActionRowBuilder<ButtonBuilder>().addComponents(...btnRow),
     ];
@@ -91,7 +91,7 @@ export default function zvejotComponents(
       new ButtonBuilder()
         .setCustomId('test_button')
         .setLabel('Atjaunot (testēšanas poga)')
-        .setStyle(ButtonStyle.Secondary)
+        .setStyle(ButtonStyle.Secondary),
     );
   }
 
@@ -104,11 +104,11 @@ export default function zvejotComponents(
         .setLabel(
           repairable
             ? `Salabot makšķeri (${latiString(calcRepairCost(selectedRod, usesLeft))})`
-            : 'Šī makšķere nav salabojama'
+            : 'Šī makšķere nav salabojama',
         )
         .setStyle(repairable ? ButtonStyle.Primary : ButtonStyle.Danger)
         .setDisabled(!repairable)
-        .setEmoji('🔧')
+        .setEmoji('🔧'),
     );
   }
 

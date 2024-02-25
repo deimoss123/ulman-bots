@@ -15,8 +15,9 @@ import smallEmbed from '../../embeds/smallEmbed';
 import { AttributeItem, UsableItemFunc } from '../../interfaces/Item';
 import intReply from '../../utils/intReply';
 import itemList from '../itemList';
+import { ItemAttributes } from '../../interfaces/UserProfile';
 
-export function makskereCustomValue(itemKey: string): AttributeItem['customValue'] {
+export function makskereCustomValue(itemKey: string): AttributeItem<ItemAttributes>['customValue'] {
   return ({ durability }) => {
     const { value } = itemList[itemKey];
     const { maxDurability } = maksekeresData[itemKey];
@@ -47,7 +48,7 @@ const makskere: UsableItemFunc = async (userId, guildId, itemKey, specialItem) =
           embeds: [
             embed.setDescription(
               (embed.data.description +=
-                '\n\n💡 Ja makšķerei ir samazinājusies izturība, to var salabot ar šo pašu komandu')
+                '\n\n💡 Ja makšķerei ir samazinājusies izturība, to var salabot ar šo pašu komandu'),
             ),
           ],
         });
@@ -62,11 +63,11 @@ const makskere: UsableItemFunc = async (userId, guildId, itemKey, specialItem) =
           .setLabel(
             repairable
               ? `Salabot ${itemObj.nameAkuVsk} (${latiString(repairCost)})`
-              : `${capitalizeFirst(itemObj.nameNomVsk)} nav salabojama`
+              : `${capitalizeFirst(itemObj.nameNomVsk)} nav salabojama`,
           )
           .setStyle(repairable ? ButtonStyle.Primary : ButtonStyle.Danger)
           .setDisabled(!repairable)
-          .setEmoji(itemObj.emoji || '❓')
+          .setEmoji(itemObj.emoji || '❓'),
       );
 
       const msg = await intReply(i, { embeds: [embed], components: [row], fetchReply: true });
@@ -86,8 +87,8 @@ const makskere: UsableItemFunc = async (userId, guildId, itemKey, specialItem) =
             int,
             ephemeralReply(
               `Tev nepietiek nauda lai salabotu makšķeri - ${latiString(repairCost, false, true)}\n` +
-                `Tev ir ${latiString(lati, false, true)}`
-            )
+                `Tev ir ${latiString(lati, false, true)}`,
+            ),
           );
           return { end: true };
         }
@@ -106,8 +107,8 @@ const makskere: UsableItemFunc = async (userId, guildId, itemKey, specialItem) =
           smallEmbed(
             `Tu salaboji ${bold(itemString(itemObj, null, true))} - ${latiString(repairCost)}\n` +
               displayAttributes(userAfter.newItem),
-            commandColors.zvejot
-          )
+            commandColors.zvejot,
+          ),
         );
         return { end: true };
       });

@@ -5,13 +5,13 @@ import userCache from '../utils/userCache';
 export default async function addSpecialItems(
   userId: string,
   guildId: string,
-  itemsToAdd: SpecialItemInProfile[]
+  itemsToAdd: SpecialItemInProfile[],
 ): Promise<UserProfile | void> {
   try {
     const res = (await User.findOneAndUpdate(
       { userId, guildId },
       { $push: { specialItems: itemsToAdd } },
-      { new: true }
+      { new: true },
     )) as UserProfile;
 
     if (!userCache[guildId]) userCache[guildId] = {};

@@ -83,7 +83,7 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false) {
         str +=
           `Vecums: ${wrap(millisToReadableTime(currTime - createdAt), '', '**', inline)}` +
           (inline ? ', ' : '\n') +
-          wrap(kakisFedState.find(s => fedUntil! - currTime > s.time)?.name!, '', '**', inline);
+          wrap(kakisFedState.find(s => fedUntil! - currTime > s.time)!.name, '', '**', inline);
       }
 
       if (hat) {

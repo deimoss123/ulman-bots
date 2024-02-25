@@ -5,12 +5,17 @@ import divainais_burkans from './usableItems/divainais_burkans';
 import mugursoma, { INCREASE_CAP_1, INV_INCREASE_AMOUNT_1 } from './usableItems/mugursoma';
 import latloto, { latlotoOptions } from './usableItems/latloto';
 import dizloto, { dizlotoOptions } from './usableItems/dizloto';
-import ogukrums from './usableItems/ogu_krums';
+import ogukrums, {
+  getRandomApliesanasReizes,
+  getRandomGrowthTime,
+  getRandomMaxOgas,
+  getRandomOga,
+} from './usableItems/ogu_krums';
 import kafija from './usableItems/kafija';
 import kafijas_aparats, { kafijasAparatsUseMany } from './usableItems/kafijas_aparats';
 import velo, { veloInfo } from './usableItems/velo';
 import divaina_mugursoma, { INCREASE_CAP_2, INV_NCREASE_AMOUNT_2 } from './usableItems/divaina_mugursoma';
-import petnieks, { petnieksUseMany } from './usableItems/petnieks';
+import petnieks, { getRandFreeSpin, petnieksUseMany } from './usableItems/petnieks';
 import juridiska_zivs, { JURIDISKA_ZIVS_STATUS } from './usableItems/juridiska_zivs';
 import maksekeresData from '../commands/economyCommands/zvejot/makskeresData';
 import makskere, { makskereCustomValue } from './usableItems/makskere';
@@ -23,7 +28,7 @@ import { statusList } from '../commands/economyCommands/profils';
 import millisToReadableTime from '../embeds/helpers/millisToReadableTime';
 import piena_spainis from './usableItems/piena_spainis';
 import divaina_zivs from './usableItems/divaina_zivs';
-import loto_zivs from './usableItems/loto_zivs';
+import loto_zivs, { generateFishCount } from './usableItems/loto_zivs';
 import petniekzivs, { PETNIEKZIVS_STATUS_TIME } from './usableItems/petniekzivs';
 import kakis, { foodDataPercentage, kakisFedState, kakisFoodData, KAKIS_MAX_FEED } from './usableItems/kakis';
 import itemString, { makeEmojiString } from '../embeds/helpers/itemString';
@@ -51,7 +56,11 @@ export enum ItemCategory {
 
 const itemList: { [key: ItemKey]: Item } = {
   // -- veikals --
-  koka_makskere: item<AttributeItem & ShopItem>({
+  // prettier-ignore
+  koka_makskere: item<AttributeItem<{
+    durability: number;
+  }> & ShopItem>({
+
     info: 'Izcila maksķere iesācēju zvejotājiem - lēta un vienmēr pieejama.',
     nameNomVsk: 'koka makšķere',
     nameNomDsk: 'koka makšķeres',
@@ -66,9 +75,9 @@ const itemList: { [key: ItemKey]: Item } = {
     categories: [ItemCategory.VEIKALS, ItemCategory.MAKSKERE],
     value: 100,
     customValue: makskereCustomValue('koka_makskere'),
-    attributes: {
+    attributes: () => ({
       durability: maksekeresData.koka_makskere.maxDurability,
-    },
+    }),
     sortBy: { durability: 1 },
     allowDiscount: true,
     use: makskere,
@@ -151,7 +160,13 @@ const itemList: { [key: ItemKey]: Item } = {
     removedOnUse: true,
     use: zemenu_rasens,
   }),
-  divainais_burkans: item<AttributeItem & ShopItem>({
+
+  // prettier-ignore
+  divainais_burkans: item<AttributeItem<{
+    timesUsed: number;
+    customName: string;
+  }> & ShopItem>({
+
     info:
       'Šis burkāns ir ne tikai dīvains, bet arī garšīgs!\n' +
       'Burkānam piemīt atrībuts, kas uzskaita cik reizes tas ir bijis nokosts (izmantots)\n\n' +
@@ -179,10 +194,10 @@ const itemList: { [key: ItemKey]: Item } = {
 
       return this.value;
     },
-    attributes: {
+    attributes: () => ({
       timesUsed: 0,
       customName: '',
-    },
+    }),
     sortBy: { timesUsed: 1 },
     allowDiscount: true,
     use: divainais_burkans,
@@ -208,7 +223,12 @@ const itemList: { [key: ItemKey]: Item } = {
     lotoOptions: dizlotoOptions,
     use: dizloto,
   }),
-  divaina_makskere: item<AttributeItem & ShopItem>({
+
+  // prettier-ignore
+  divaina_makskere: item<AttributeItem<{
+    durability: number;
+  }> & ShopItem>({
+
     info:
       'Koka makšķere ir pārāk lēna?\nTā pārāk bieži lūzt?\nNenes pietiekami lielu pelņu?\n' +
       'Tad ir laiks investēt dīvainajā maksķerē!!!',
@@ -226,9 +246,9 @@ const itemList: { [key: ItemKey]: Item } = {
     categories: [ItemCategory.VEIKALS, ItemCategory.MAKSKERE],
     value: 450,
     customValue: makskereCustomValue('divaina_makskere'),
-    attributes: {
+    attributes: () => ({
       durability: maksekeresData.divaina_makskere.maxDurability,
-    },
+    }),
     sortBy: { durability: 1 },
     allowDiscount: true,
     use: makskere,
@@ -321,7 +341,12 @@ const itemList: { [key: ItemKey]: Item } = {
     removedOnUse: false,
     use: divaina_mugursoma,
   }),
-  kafijas_aparats: item<AttributeItem & TirgusItem>({
+
+  // prettier-ignore
+  kafijas_aparats: item<AttributeItem<{
+    lastUsed: number;
+  }> & TirgusItem>({
+
     info:
       `Kafijas aparāts ik \`24h\` uztaisīs kafiju, kuru var iegūt kafijas aparātu izmantojot\n\n` +
       '_Nevienam vēljoprojām nav zināms kā šis kafijas aparāts ir spējīgs bezgalīgi taisīt kafiju bez pupiņām, vai ūdens, vai ... elektrības_',
@@ -338,14 +363,22 @@ const itemList: { [key: ItemKey]: Item } = {
     categories: [ItemCategory.TIRGUS],
     value: 200,
     tirgusPrice: { items: { kafija: 15, metalluznis: 3 } },
-    attributes: {
+    attributes: (): {
+      lastUsed: number;
+    } => ({
       lastUsed: 0,
-    },
+    }),
     sortBy: { lastUsed: -1 },
     use: kafijas_aparats,
     useMany: kafijasAparatsUseMany,
   }),
-  petnieks: item<AttributeItem & TirgusItem>({
+  // prettier-ignore
+  petnieks: item<AttributeItem<{
+    lastUsed: number;
+    foundItemKey: string;
+    hat: string;
+  }> & TirgusItem>({
+
     info:
       `Pētnieks vēlās kļūt par tavu labāko draugu!\n` +
       `Viņš ir tik draudzīgs, ka pētīs krievu mājaslapas lai **tev** atrastu brīvgriezienus\n\n` +
@@ -373,16 +406,20 @@ const itemList: { [key: ItemKey]: Item } = {
     categories: [ItemCategory.TIRGUS],
     value: 300,
     tirgusPrice: { items: { brivgriez25: 6, brivgriez50: 4, brivgriez100: 2 }, lati: 750 },
-    attributes: {
+    attributes: () => ({
       lastUsed: 0,
-      foundItemKey: '',
+      foundItemKey: getRandFreeSpin(),
       hat: '',
-    },
+    }),
     sortBy: { lastUsed: -1 },
     use: petnieks,
     useMany: petnieksUseMany,
   }),
-  loto_makskere: item<AttributeItem & TirgusItem>({
+  // prettier-ignore
+  loto_makskere: item<AttributeItem<{
+    durability: number;
+  }> & TirgusItem>({
+
     info:
       'Šī makšķere ir īpaši veidota tieši azartspēļu atkarības cietušajiem\n' +
       'Iegādājies to, ja nevari atturēties no aparāta un loto biļetēm',
@@ -401,13 +438,17 @@ const itemList: { [key: ItemKey]: Item } = {
     value: 500,
     customValue: makskereCustomValue('loto_makskere'),
     tirgusPrice: { items: { latloto: 3, dizloto: 2, brivgriez25: 2, brivgriez50: 1 } },
-    attributes: {
+    attributes: () => ({
       durability: maksekeresData.loto_makskere.maxDurability,
-    },
+    }),
     sortBy: { durability: 1 },
     use: makskere,
   }),
-  luznu_makskere: item<AttributeItem & TirgusItem>({
+  // prettier-ignore
+  luznu_makskere: item<AttributeItem<{
+    durability: number;
+  }> & TirgusItem>({
+
     info:
       'Ja mīlēsi metāllūžņus, tie visnotaļ mīlēs arī tevi!\n' +
       'Par cik šī makšķere knapi turās kopā, to nav iespējams salabot',
@@ -425,13 +466,18 @@ const itemList: { [key: ItemKey]: Item } = {
     value: 100,
     customValue: makskereCustomValue('luznu_makskere'),
     tirgusPrice: { items: { metalluznis: 15 } },
-    attributes: {
+    attributes: () => ({
       durability: maksekeresData.luznu_makskere.maxDurability,
-    },
+    }),
     sortBy: { durability: 1 },
     use: makskere,
   }),
-  naudas_maiss: item<AttributeItem & TirgusItem>({
+
+  // prettier-ignore
+  naudas_maiss: item<AttributeItem<{
+    latiCollected: number;
+  }> & TirgusItem>({
+
     info:
       'Kļūt par bankas zagli ir viegli, bet kur liksi nolaupīto naudu?\n\n' +
       'Naudas maiss glabā no Valsts Bankas (UlmaņBota) nozagto naudu, ' +
@@ -453,13 +499,22 @@ const itemList: { [key: ItemKey]: Item } = {
       return latiCollected || this.value;
     },
     tirgusPrice: { items: { nazis: 1, zemenu_rasens: 1, juridiska_zivs: 1, divaina_zivs: 1 } },
-    attributes: {
+    attributes: () => ({
       latiCollected: 0,
-    },
+    }),
     sortBy: { latiCollected: 1 },
     use: naudas_maiss,
   }),
-  kakis: item<AttributeItem & TirgusItem>({
+
+  // prettier-ignore
+  kakis: item<AttributeItem<{
+    customName: string;
+    createdAt: number;
+    fedUntil: number;
+    isCooked: boolean;
+    hat: string;
+  }> & TirgusItem>({
+
     info: () =>
       '**Pūkains, stilīgs un episks!**\n\n' +
       `Kaķim ir 2 atribūti - vecums un garastāvoklis\n` +
@@ -501,23 +556,29 @@ const itemList: { [key: ItemKey]: Item } = {
     value: 100,
     customValue: function ({ fedUntil, createdAt }) {
       const currTime = Date.now();
-      if (fedUntil! < Date.now()) return 0;
+      if (fedUntil < Date.now()) return 0;
 
       // katra pilna diena dod +15 latus vērtībai
-      return this.value + 15 * Math.floor((currTime - createdAt!) / 86_400_000);
+      return this.value + 15 * Math.floor((currTime - createdAt) / 86_400_000);
     },
     tirgusPrice: { items: { lidaka: 3, asaris: 3, lasis: 3 } },
-    attributes: {
+    attributes: (currTime) => ({
       customName: '',
-      createdAt: 0,
-      fedUntil: 0,
+      createdAt: currTime,
+      fedUntil: currTime + 172_800_000, // 2d
       isCooked: false,
       hat: '',
-    },
+    }),
     sortBy: { createdAt: -1 },
     use: kakis,
   }),
-  gazes_plits: item<AttributeItem & TirgusItem>({
+
+  // prettier-ignore
+  gazes_plits: item<AttributeItem<{
+    cookingItem: string,
+    cookingStartedTime: number
+  }> & TirgusItem>({
+
     info: '',
     nameNomVsk: 'gāzes plīts',
     nameNomDsk: 'gāzes plītis',
@@ -532,10 +593,10 @@ const itemList: { [key: ItemKey]: Item } = {
     categories: [ItemCategory.TIRGUS],
     value: 50,
     tirgusPrice: { items: { metalluznis: 10 } },
-    attributes: {
+    attributes: () => ({
       cookingItem: '',
       cookingStartedTime: 0,
-    },
+    }),
     sortBy: { cookingItem: 1, cookingStartedTime: -1 },
     use: gazes_plits,
   }),
@@ -710,7 +771,12 @@ const itemList: { [key: ItemKey]: Item } = {
     categories: [ItemCategory.ZIVIS],
     value: 100,
   }),
-  loto_zivs: item<AttributeItem>({
+
+  // prettier-ignore
+  loto_zivs: item<AttributeItem<{
+    holdsFishCount: number,
+  }>>({
+
     info:
       'Uzgriez loto zivi un kā laimestu saņem... zivis\n' +
       'Loto zivij piemīt atribūts "Satur **x** zivis", kas nosaka cik zivis no loto zivs ir iespējams laimēt',
@@ -728,9 +794,9 @@ const itemList: { [key: ItemKey]: Item } = {
     categories: [ItemCategory.ZIVIS],
     value: 0,
     customValue: ({ holdsFishCount }) => holdsFishCount! * 10,
-    attributes: {
-      holdsFishCount: 0,
-    },
+    attributes: () => ({
+      holdsFishCount: generateFishCount(),
+    }),
     sortBy: { holdsFishCount: 1 },
     use: loto_zivs,
   }),
@@ -904,7 +970,12 @@ const itemList: { [key: ItemKey]: Item } = {
     removedOnUse: false,
     use: kafija,
   }),
-  dizmakskere: item<AttributeItem>({
+
+  // prettier-ignore
+  dizmakskere: item<AttributeItem<{ 
+    durability: number
+  }>>({
+
     info:
       'UlmaņBota veidotājs rakstot šo aprakstu aizmirsa kāpēc dižmakšķere eksistē...\n\n' +
       'Dižmakšķere var nocopēt tikai un vienīgi vērtīgas mantas, tajā skaitā visas mantas kas nopērkamas tirgū\n',
@@ -922,9 +993,9 @@ const itemList: { [key: ItemKey]: Item } = {
     categories: [ItemCategory.MAKSKERE],
     value: 500,
     customValue: makskereCustomValue('dizmakskere'),
-    attributes: {
+    attributes: () => ({
       durability: maksekeresData.dizmakskere.maxDurability,
-    },
+    }),
     sortBy: { durability: 1 },
     use: makskere,
   }),
@@ -1147,7 +1218,18 @@ const itemList: { [key: ItemKey]: Item } = {
     use: () => ({ text: 'jāņoga' }),
   }),
 
-  ogu_krums: item<AttributeItem>({
+  // prettier-ignore
+  ogu_krums: item<AttributeItem<{
+    berryType: string,
+    growthTime: number,
+    maxBerries: number,
+    lastUsed: number,
+    apliets: number,
+    iestadits: number,
+    apliesanasReizes: number,
+  }>>({
+
+
     info:
       'Kļūsti par īstu dārznieku.\n' +
       'Katrs ogu krūms, ko iegūsti būs ar nejauši izvēlētu ogu tipu\n' +
@@ -1166,15 +1248,15 @@ const itemList: { [key: ItemKey]: Item } = {
     categories: [ItemCategory.OTHER],
     value: 400,
     //ak mans dievs... attributi nekad nebeidzas
-    attributes: {
-      berryType: '',
-      growthTime: 0,
-      maxBerries: 0,
+    attributes: (currTime) => ({
+      berryType: getRandomOga(),
+      growthTime: getRandomGrowthTime(),
+      maxBerries: getRandomMaxOgas(),
       lastUsed: 0,
-      apliets: 0,
-      iestadits: 0,
-      apliesanasReizes: 0,
-    },
+      apliets: currTime,
+      iestadits: currTime,
+      apliesanasReizes: getRandomApliesanasReizes(),
+    }),
     use: ogukrums,
     sortBy: { berryType: 1 },
   }),

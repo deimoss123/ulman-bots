@@ -16,18 +16,22 @@ import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import itemString, { itemStringCustom } from '../../../embeds/helpers/itemString';
 import Item, { AttributeItem, NotSellableItem } from '../../../interfaces/Item';
 import UsableItemReturn from '../../../interfaces/UsableItemReturn';
-import { SpecialItemInProfile } from '../../../interfaces/UserProfile';
+import { ItemAttributes, SpecialItemInProfile } from '../../../interfaces/UserProfile';
 import itemList, { ItemKey } from '../../../items/itemList';
 import intReply from '../../../utils/intReply';
 import { attributeItemSort } from '../inventars';
 
-function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: AttributeItem, selectedId?: string) {
+function makeComponents(
+  itemsInInv: SpecialItemInProfile[],
+  itemObj: AttributeItem<ItemAttributes>,
+  selectedId?: string,
+) {
   const buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setCustomId('izmantot_special_confirm')
       .setDisabled(!selectedId)
       .setLabel('Izmantot')
-      .setStyle(selectedId ? ButtonStyle.Primary : ButtonStyle.Secondary)
+      .setStyle(selectedId ? ButtonStyle.Primary : ButtonStyle.Secondary),
   );
 
   if (itemObj.useMany) {
@@ -38,7 +42,7 @@ function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: AttributeIt
         new ButtonBuilder()
           .setCustomId('izmantot_special_many')
           .setLabel(`Izmantot visus (${usableItems.length}/${itemsInInv.length})`)
-          .setStyle(ButtonStyle.Primary)
+          .setStyle(ButtonStyle.Primary),
       );
     }
   }
@@ -66,8 +70,8 @@ function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: AttributeIt
               value: item._id!,
               emoji: (itemObj.customEmoji ? itemObj.customEmoji(item.attributes) : itemObj.emoji) || '❓',
               default: selectedId === item._id,
-            }))
-        )
+            })),
+        ),
     ),
     buttonRow,
   ];
@@ -78,7 +82,7 @@ function makeEmbed(
   itemObj: Item,
   selectedItem: SpecialItemInProfile,
   useRes: Extract<UsableItemReturn, { text: string }>,
-  embedColor: number
+  embedColor: number,
 ) {
   return embedTemplate({
     i,
@@ -93,12 +97,12 @@ export default async function izmantotRunSpecial(
   i: ChatInputCommandInteraction | ButtonInteraction,
   itemKey: ItemKey,
   itemsInInv: SpecialItemInProfile[],
-  embedColor: number
+  embedColor: number,
 ): Promise<any> {
   const userId = i.user.id;
   const guildId = i.guildId!;
 
-  const itemObj = itemList[itemKey] as AttributeItem | NotSellableItem;
+  const itemObj = itemList[itemKey] as AttributeItem<ItemAttributes> | NotSellableItem;
   let selectedItemId = '';
 
   if (itemsInInv.length === 1) {
@@ -118,7 +122,7 @@ export default async function izmantotRunSpecial(
         `Tavā inventārā ir **${itemString(itemObj, itemsInInv.length)}**\n` +
         `No saraksta izvēlies kuru tu gribi izmantot`,
       components: makeComponents(itemsInInv, itemObj),
-    })
+    }),
   );
 
   if (!msg) return;
@@ -177,6 +181,6 @@ export default async function izmantotRunSpecial(
         };
       }
     },
-    60000
+    60000,
   );
 }

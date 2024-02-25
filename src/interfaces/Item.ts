@@ -14,7 +14,7 @@ export type UsableItemFunc = (
   userId: string,
   guildId: string,
   itemKey: ItemKey,
-  specialItem?: SpecialItemInProfile
+  specialItem?: SpecialItemInProfile,
 ) => Promise<UsableItemReturn> | UsableItemReturn;
 
 export interface BaseItem {
@@ -78,26 +78,26 @@ export type UseManyType = {
   runFunc: (i: ButtonInteraction) => any;
 };
 
-export interface AttributeItem extends Omit<UsableItem, 'removedOnUse'> {
+export interface AttributeItem<A extends Partial<ItemAttributes>> extends Omit<UsableItem, 'removedOnUse'> {
   // mantu atribūti, piemēram kaķa vecums vai burkāna nosaukums
-  attributes: ItemAttributes;
+  attributes: (currTime: number) => A;
   // pēc kādiem atribūtiem kārtot mantas inventārā un izvēlnēs
   // 1 ir no lielākā uz mazāko, -1 ir no mazākā uz lielāko
-  sortBy: Partial<Record<keyof ItemAttributes, 1 | -1>>;
+  sortBy: Partial<Record<keyof A, 1 | -1>>;
   // speciāla vērtība, piem. makšķeres izturība ietekmē vērtību
-  customValue?: (attributes: ItemAttributes) => number;
+  customValue?: (attributes: A) => number;
   // speciāls emoji kas mainās atkarībā no atribūtiem
-  customEmoji?: (attributes: ItemAttributes) => APIMessageComponentEmoji;
+  customEmoji?: (attributes: A) => APIMessageComponentEmoji;
   // izmantot vairākus vienlaicīgi
   useMany?: UseManyType;
 }
 
-export interface NotSellableItem extends AttributeItem {
+export interface NotSellableItem extends AttributeItem<ItemAttributes> {
   notSellable: true;
   value: 0;
 }
 
-type Item = BaseItem | UsableItem | AttributeItem | NotSellableItem;
+type Item = BaseItem | UsableItem | AttributeItem<ItemAttributes> | NotSellableItem;
 
 export const item: <T extends Item>(item: T) => T = item => item;
 

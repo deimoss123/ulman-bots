@@ -19,7 +19,7 @@ import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import itemString, { itemStringCustom, makeEmojiString } from '../../../embeds/helpers/itemString';
 import latiString from '../../../embeds/helpers/latiString';
 import Item, { AttributeItem } from '../../../interfaces/Item';
-import UserProfile, { SpecialItemInProfile } from '../../../interfaces/UserProfile';
+import UserProfile, { ItemAttributes, SpecialItemInProfile } from '../../../interfaces/UserProfile';
 import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems';
 import countFreeInvSlots from '../../../items/helpers/countFreeInvSlots';
 import itemList, { ItemKey } from '../../../items/itemList';
@@ -31,12 +31,12 @@ async function iedotSpecialQuery(
   i: ChatInputCommandInteraction,
   targetUser: UserProfile,
   guildId: string,
-  selectedItems: SpecialItemInProfile[]
+  selectedItems: SpecialItemInProfile[],
 ) {
   const user = await removeItemsById(
     i.user.id,
     guildId,
-    selectedItems.map(item => item._id!)
+    selectedItems.map(item => item._id!),
   );
   await addSpecialItems(targetUser.userId, guildId, selectedItems);
   return user;
@@ -48,7 +48,7 @@ function makeEmbedAfter(
   targetUser: UserProfile,
   itemsToGive: SpecialItemInProfile[],
   hasJuridisks: boolean,
-  itemObj: Item
+  itemObj: Item,
 ) {
   return embedTemplate({
     i,
@@ -59,8 +59,8 @@ function makeEmbedAfter(
       'notSellable' in itemObj
         ? '0 lati **(nepārdodama manta)**'
         : hasJuridisks
-        ? '0 lati **(juridiska persona)**'
-        : `${latiString(taxLati, false, true)}`
+          ? '0 lati **(juridiska persona)**'
+          : `${latiString(taxLati, false, true)}`
     }\n<@${targetUser.userId}> tu iedevi:`,
 
     fields: [
@@ -73,7 +73,7 @@ function makeEmbedAfter(
               latiString(
                 'customValue' in itemObj && itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value,
                 false,
-                true
+                true,
               ) +
               '\n') + displayAttributes(item),
         inline: false,
@@ -89,7 +89,7 @@ function makeEmbed(
   targetUserId: string,
   user: UserProfile,
   hasJuridisks: boolean,
-  taxLati?: number
+  taxLati?: number,
 ) {
   return embedTemplate({
     i,
@@ -101,18 +101,18 @@ function makeEmbed(
       ('notSellable' in itemObj
         ? `0 lati **(nepārdodama manta)**`
         : hasJuridisks
-        ? `0 lati **(${makeEmojiString(itemList.juridiska_zivs.emoji!)} juridiska persona)**`
-        : `${taxLati ? latiString(taxLati) : '-'} (${Math.floor(user.giveTax * 100)}% no mantu kopējās vērtības)`),
+          ? `0 lati **(${makeEmojiString(itemList.juridiska_zivs.emoji!)} juridiska persona)**`
+          : `${taxLati ? latiString(taxLati) : '-'} (${Math.floor(user.giveTax * 100)}% no mantu kopējās vērtības)`),
   }).embeds!;
 }
 
 function makeComponents(
   itemsInInv: SpecialItemInProfile[],
-  itemObj: AttributeItem,
+  itemObj: AttributeItem<ItemAttributes>,
   selectedItems: SpecialItemInProfile[],
   totalTax = 0,
   userLati = 0,
-  hasGiven = false
+  hasGiven = false,
 ) {
   const selectedIds = selectedItems.map(item => item._id!);
 
@@ -143,13 +143,13 @@ function makeComponents(
                   : `${latiString(
                       'customValue' in itemObj && itemObj.customValue
                         ? itemObj.customValue(item.attributes)
-                        : itemObj.value
+                        : itemObj.value,
                     )} | `) + displayAttributes(item, true),
               value: item._id!,
               emoji: (itemObj.customEmoji ? itemObj.customEmoji(item.attributes) : itemObj.emoji) || '❓',
               default: !!selectedIds.length && selectedIds!.includes(item._id!),
-            }))
-        )
+            })),
+        ),
     ),
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
@@ -160,11 +160,11 @@ function makeComponents(
           hasGiven // šizofrēnija
             ? ButtonStyle.Success
             : userLati < totalTax
-            ? ButtonStyle.Danger
-            : selectedIds.length
-            ? ButtonStyle.Primary
-            : ButtonStyle.Secondary
-        )
+              ? ButtonStyle.Danger
+              : selectedIds.length
+                ? ButtonStyle.Primary
+                : ButtonStyle.Secondary,
+        ),
     ),
   ];
 }
@@ -177,7 +177,7 @@ function checkTargetInv(targetUser: UserProfile, amountToGive: number): boolean 
 export function noInvSpaceEmbed(targetUser: UserProfile, itemToGive: Item, amountToGive: number) {
   return ephemeralReply(
     `Tu nevari iedot ${itemString(itemToGive, amountToGive, true)}\n` +
-      `<@${targetUser.userId}> inventārā ir **${countFreeInvSlots(targetUser)}** brīvas vietas`
+      `<@${targetUser.userId}> inventārā ir **${countFreeInvSlots(targetUser)}** brīvas vietas`,
   );
 }
 
@@ -187,12 +187,12 @@ export default async function iedotRunSpecial(
   targetUser: UserProfile,
   itemKey: ItemKey,
   itemsInInv: SpecialItemInProfile[],
-  hasJuridisks: boolean
+  hasJuridisks: boolean,
 ) {
   const userId = i.user.id;
   const guildId = i.guildId!;
 
-  const itemObj = itemList[itemKey] as AttributeItem;
+  const itemObj = itemList[itemKey] as AttributeItem<ItemAttributes>;
   let selectedItems: SpecialItemInProfile[] = [];
 
   let totalTax: number;
@@ -261,7 +261,7 @@ export default async function iedotRunSpecial(
             Math.floor(
               ('customValue' in itemObj && itemObj.customValue
                 ? selectedItems.reduce((prev, item) => prev + itemObj.customValue!(item.attributes), 0)
-                : itemObj.value * selectedItems.length) * userAfterSelect.giveTax
+                : itemObj.value * selectedItems.length) * userAfterSelect.giveTax,
             ) || 1;
         }
 
@@ -308,7 +308,7 @@ export default async function iedotRunSpecial(
               after: () => {
                 intReply(
                   int,
-                  ephemeralReply('Tavs inventāra saturs ir mainījies, kāda no izvēlētām mantām nav tavā inventārā')
+                  ephemeralReply('Tavs inventāra saturs ir mainījies, kāda no izvēlētām mantām nav tavā inventārā'),
                 );
               },
             };
@@ -336,6 +336,6 @@ export default async function iedotRunSpecial(
         };
       }
     },
-    60000
+    60000,
   );
 }

@@ -55,7 +55,7 @@ export function attributeItemSort(
   attrA: ItemAttributes,
   attrB: ItemAttributes,
   sortByObj: Partial<Record<keyof ItemAttributes, 1 | -1>>,
-  index = 0
+  index = 0,
 ): number {
   if (index >= Object.keys(sortByObj).length) return 0;
 
@@ -84,8 +84,8 @@ function mapItems({ items, specialItems }: UserProfile) {
 
   const specialItemsFields = specialItems
     .sort((a, b) => {
-      const itemA = itemList[a.name] as AttributeItem | NotSellableItem;
-      const itemB = itemList[b.name] as AttributeItem | NotSellableItem;
+      const itemA = itemList[a.name] as AttributeItem<ItemAttributes> | NotSellableItem;
+      const itemB = itemList[b.name] as AttributeItem<ItemAttributes> | NotSellableItem;
 
       if ('notSellable' in itemA === 'notSellable' in itemB) {
         const valueA = itemA.customValue ? itemA.customValue(a.attributes) : itemA.value;
@@ -106,7 +106,7 @@ function mapItems({ items, specialItems }: UserProfile) {
     })
     .map(specialItem => {
       const { name, attributes } = specialItem;
-      const item = itemList[name] as AttributeItem | NotSellableItem;
+      const item = itemList[name] as AttributeItem<ItemAttributes> | NotSellableItem;
 
       const currentItemType: ItemType = 'notSellable' in item && item.notSellable ? 'not_sellable' : 'special';
       itemTypesInInv.add(currentItemType);
@@ -154,7 +154,7 @@ export function getInvValue({ items, specialItems }: UserProfile) {
       return prev + itemList[name]!.value * amount;
     }, 0) +
     specialItems.reduce((prev, { name, attributes }) => {
-      const itemObj = itemList[name] as AttributeItem;
+      const itemObj = itemList[name] as AttributeItem<ItemAttributes>;
       return prev + (itemObj.customValue ? itemObj.customValue!(attributes) : itemObj.value);
     }, 0)
   );
@@ -173,7 +173,7 @@ function invEmbed(
   targetUser: UserProfile,
   fields: EmbedField[],
   currentPage: number,
-  itemTypesInv: ItemType[]
+  itemTypesInv: ItemType[],
 ) {
   const { items, specialItems, itemCap } = targetUser;
 
@@ -191,7 +191,7 @@ function invEmbed(
           Object.entries(itemTypes).reduce(
             (prev, [key, { text, emoji }]) =>
               itemTypesInv.includes(key as ItemType) ? prev + `${emoji} - ${text}\n` : prev,
-            ''
+            '',
           ) +
           '\u2800'
         : 'Tev nav nevienas mantas (diezgan bēdīgi)\nIzmanto komandu `/palidziba`',
@@ -206,7 +206,7 @@ function sellRow({ items }: UserProfile, buttonsPressed: ('visas' | 'neizmantoja
       .setCustomId('inv_pardot_visas')
       .setLabel('Pārdot visas mantas')
       .setStyle(buttonsPressed.includes('visas') ? ButtonStyle.Success : ButtonStyle.Primary)
-      .setDisabled(buttonsPressed.includes('visas'))
+      .setDisabled(buttonsPressed.includes('visas')),
   );
 
   const hasUnusableItems = items.find(item => !('use' in itemList[item.name]));
@@ -216,7 +216,7 @@ function sellRow({ items }: UserProfile, buttonsPressed: ('visas' | 'neizmantoja
         .setCustomId('inv_pardot_neizmantojamas')
         .setLabel('Pārdot neizmantojamās mantas')
         .setStyle(buttonsPressed.includes('neizmantojamas') ? ButtonStyle.Success : ButtonStyle.Primary)
-        .setDisabled(buttonsPressed.includes('neizmantojamas'))
+        .setDisabled(buttonsPressed.includes('neizmantojamas')),
     );
   }
 
@@ -233,7 +233,7 @@ function invComponents(
   }[],
   currentPage?: number,
   totalPages?: number,
-  buttonsPressed: ('visas' | 'neizmantojamas')[] = []
+  buttonsPressed: ('visas' | 'neizmantojamas')[] = [],
 ) {
   const { userId, items, specialItems } = targetUser;
 
@@ -370,7 +370,7 @@ const inventars: Command = {
           }
         }
       },
-      60000
+      60000,
     );
   },
 };

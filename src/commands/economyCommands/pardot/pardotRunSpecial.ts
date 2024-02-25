@@ -18,13 +18,17 @@ import { displayAttributes } from '../../../embeds/helpers/displayAttributes';
 import itemString, { itemStringCustom } from '../../../embeds/helpers/itemString';
 import latiString from '../../../embeds/helpers/latiString';
 import { AttributeItem } from '../../../interfaces/Item';
-import UserProfile, { SpecialItemInProfile } from '../../../interfaces/UserProfile';
+import UserProfile, { ItemAttributes, SpecialItemInProfile } from '../../../interfaces/UserProfile';
 import itemList, { ItemKey } from '../../../items/itemList';
 import intReply from '../../../utils/intReply';
 import { attributeItemSort } from '../inventars';
 import { PIRKT_PARDOT_NODOKLIS } from './pardot';
 
-function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: AttributeItem, selectedIds: string[]) {
+function makeComponents(
+  itemsInInv: SpecialItemInProfile[],
+  itemObj: AttributeItem<ItemAttributes>,
+  selectedIds: string[],
+) {
   return [
     new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
       new StringSelectMenuBuilder()
@@ -48,20 +52,22 @@ function makeComponents(itemsInInv: SpecialItemInProfile[], itemObj: AttributeIt
               label: itemStringCustom(itemObj, item.attributes?.customName),
               description:
                 `${latiString(
-                  'customValue' in itemObj && itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value
+                  'customValue' in itemObj && itemObj.customValue
+                    ? itemObj.customValue(item.attributes)
+                    : itemObj.value,
                 )} | ` + displayAttributes(item, true),
               value: item._id!,
               emoji: (itemObj.customEmoji ? itemObj.customEmoji(item.attributes) : itemObj.emoji) || '❓',
               default: !!selectedIds.length && selectedIds!.includes(item._id!),
-            }))
-        )
+            })),
+        ),
     ),
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
         .setCustomId('pardot_special_confirm')
         .setDisabled(!selectedIds.length)
         .setLabel('Pārdot')
-        .setStyle(selectedIds.length ? ButtonStyle.Primary : ButtonStyle.Secondary)
+        .setStyle(selectedIds.length ? ButtonStyle.Primary : ButtonStyle.Secondary),
     ),
   ];
 }
@@ -71,7 +77,7 @@ function makeEmbed(
   user: UserProfile,
   soldItems: SpecialItemInProfile[],
   soldValue: number,
-  color: number
+  color: number,
 ) {
   return embedTemplate({
     i,
@@ -93,12 +99,12 @@ export default async function pardotRunSpecial(
   i: ChatInputCommandInteraction,
   itemKey: ItemKey,
   itemsInInv: SpecialItemInProfile[],
-  embedColor: number
+  embedColor: number,
 ) {
   const userId = i.user.id;
   const guildId = i.guildId!;
 
-  const itemObj = itemList[itemKey] as AttributeItem;
+  const itemObj = itemList[itemKey] as AttributeItem<ItemAttributes>;
   let selectedIds: string[] = [];
 
   if (itemsInInv.length === 1) {
@@ -128,7 +134,7 @@ export default async function pardotRunSpecial(
         `Tavā inventārā ir **${itemString(itemObj, itemsInInv.length)}**\n` +
         `No saraksta izvēlies vienu vai vairākas mantas kuras pārdot`,
       components: makeComponents(itemsInInv, itemObj, selectedIds),
-    })
+    }),
   );
 
   if (!msg) return;
@@ -170,8 +176,8 @@ export default async function pardotRunSpecial(
                 intReply(
                   int,
                   ephemeralReply(
-                    '**Kļūda:** tavs inventāra saturs ir mainījies, kāda no izvēlētām mantām vairs nav tavā inventārā'
-                  )
+                    '**Kļūda:** tavs inventāra saturs ir mainījies, kāda no izvēlētām mantām vairs nav tavā inventārā',
+                  ),
                 );
               },
             };
@@ -197,6 +203,6 @@ export default async function pardotRunSpecial(
         };
       }
     },
-    60000
+    60000,
   );
 }

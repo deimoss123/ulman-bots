@@ -3,27 +3,19 @@ import User from '../schemas/User';
 import UserProfile from '../interfaces/UserProfile';
 import userCache from '../utils/userCache';
 import itemList, { ItemKey } from '../items/itemList';
-import { getRandFreeSpin } from '../items/usableItems/petnieks';
-import {
-  getRandomOga,
-  getRandomGrowthTime,
-  getRandomMaxOgas,
-  apliesanasLaiks,
-  getRandomApliesanasReizes,
-} from '../items/usableItems/ogu_krums';
-import { generateFishCount } from '../items/usableItems/loto_zivs';
-import { item } from '../interfaces/Item';
 
 export default async function addItems(
   userId: string,
   guildId: string,
-  itemsToAdd: Record<ItemKey, number>
+  itemsToAdd: Record<ItemKey, number>,
 ): Promise<UserProfile | undefined> {
   try {
     const user = await findUser(userId, guildId);
     if (!user) return;
 
     const { items, specialItems } = user;
+
+    const currTime = Date.now();
 
     for (const [itemToAdd, amountToAdd] of Object.entries(itemsToAdd)) {
       if (amountToAdd === 0) continue;
@@ -32,25 +24,13 @@ export default async function addItems(
 
       // pārbauda vai manta ir ar atribūtiem
       if ('attributes' in itemObj) {
-        const attributes = itemObj.attributes;
         for (let i = 0; i < amountToAdd; i++) {
-          const newAttributes = { ...attributes };
-          if ('foundItemKey' in attributes) newAttributes.foundItemKey = getRandFreeSpin();
-          if ('holdsFishCount' in attributes) newAttributes.holdsFishCount = generateFishCount();
-          if ('createdAt' in attributes) newAttributes.createdAt = Date.now();
-          if ('fedUntil' in attributes) newAttributes.fedUntil = Date.now() + 172_800_000; // 2d
-
-          // ogu krumam
-          //if ('lastUsed' in attributes && itemToAdd === 'ogu_krums') newAttributes.lastUsed = 0;
-          if ('maxBerries' in attributes) newAttributes.maxBerries = getRandomMaxOgas();
-          if ('apliets' in attributes) newAttributes.apliets = Date.now();
-          if ('growthTime' in attributes) newAttributes.growthTime = getRandomGrowthTime();
-          if ('berryType' in attributes) newAttributes.berryType = getRandomOga();
-          if ('iestadits' in attributes) newAttributes.iestadits = Date.now();
-          if ('apliesanasReizes' in attributes) newAttributes.apliesanasReizes = getRandomApliesanasReizes();
-
-          specialItems.push({ name: itemToAdd, attributes: newAttributes });
+          specialItems.push({
+            name: itemToAdd,
+            attributes: itemObj.attributes(currTime),
+          });
         }
+
         continue;
       }
 
@@ -77,7 +57,7 @@ export default async function addItems(
     const res = (await User.findOneAndUpdate(
       { userId, guildId },
       { $set: { items, specialItems } },
-      { new: true }
+      { new: true },
     )) as UserProfile;
 
     userCache[guildId][userId] = res;
