@@ -3,6 +3,7 @@ import { ItemCategory, ItemKey } from '../items/itemList';
 import UsableItemReturn from './UsableItemReturn';
 import { ItemAttributes, SpecialItemInProfile } from './UserProfile';
 import { LotoOptions } from '../items/usableItems/loto';
+import { VersionString } from '../commands/economyCommands/palidziba/jaunumi/updatesList';
 
 // masīvs ar vismaz vienu vērtību
 interface categories extends Array<ItemCategory> {
@@ -20,6 +21,8 @@ export type UsableItemFunc = (
 export interface BaseItem {
   // īss apraksts par mantu
   info?: string | (() => string);
+  // kurā ulmaņbota versijā šī manta pievienota
+  addedInVersion: VersionString;
   // nominatīvs vienskaitlis
   nameNomVsk: string;
   // nominatīvs daudzskaitlis

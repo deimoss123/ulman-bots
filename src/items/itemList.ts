@@ -62,6 +62,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }> & ShopItem>({
 
     info: 'Izcila maksķere iesācēju zvejotājiem - lēta un vienmēr pieejama.',
+    addedInVersion: '4.0',
     nameNomVsk: 'koka makšķere',
     nameNomDsk: 'koka makšķeres',
     nameAkuVsk: 'koka makšķeri',
@@ -84,6 +85,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   latloto: item<UsableItem & ShopItem & LotoItem>({
     info: 'Lētākā loterijas biļete kas nopērkama veikalā,\npārbaudi savu veiksmi jau šodien!',
+    addedInVersion: '4.0',
     nameNomVsk: 'latLoto biļete',
     nameNomDsk: 'latLoto biļetes',
     nameAkuVsk: 'latLoto biļeti',
@@ -105,6 +107,7 @@ const itemList: { [key: ItemKey]: Item } = {
       'Ja jūties viltīgs un ar vēlmi zagt, tad nazis ir domāts tev.\n' +
       `Izmantojot nazi tu iegūsi **"${statusList.laupitajs}"** statusu uz ` +
       `\`${millisToReadableTime(NAZIS_STATUS_TIME)}\``,
+    addedInVersion: '4.0',
     nameNomVsk: 'nazis',
     nameNomDsk: 'naži',
     nameAkuVsk: 'nazi',
@@ -123,6 +126,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   virve: item<UsableItem & ShopItem>({
     info: 'Nopērc virvi, ja vienkārši vairs nevari izturēt...\nVirvi izmantot nav ieteicams.',
+    addedInVersion: '4.0',
     nameNomVsk: 'virve',
     nameNomDsk: 'virves',
     nameAkuVsk: 'virvi',
@@ -144,6 +148,7 @@ const itemList: { [key: ItemKey]: Item } = {
       'Ja tev riebjas nolādētie zagļi kas visu laiku no tevis zog, izdzer zemeņu Rasēnu\n' +
       'Izdzerot (izmantojot) rasenu tu iegūsi ' +
       `**"${statusList.aizsargats}"** statusu uz \`${millisToReadableTime(RASENS_STATUS_TIME)}\``,
+    addedInVersion: '4.0',
     nameNomVsk: 'zemeņu Rasēns',
     nameNomDsk: 'zemeņu Rasēni',
     nameAkuVsk: 'zemeņu Rasēnu',
@@ -171,6 +176,7 @@ const itemList: { [key: ItemKey]: Item } = {
       'Šis burkāns ir ne tikai dīvains, bet arī garšīgs!\n' +
       'Burkānam piemīt atrībuts, kas uzskaita cik reizes tas ir bijis nokosts (izmantots)\n\n' +
       '_burkānam piemīt vēlviens atribūts, par kuru uzzinās tikai tie kas to ir nopirkuši_',
+    addedInVersion: '4.0',
     nameNomVsk: 'dīvainais burkāns',
     nameNomDsk: 'dīvainie burkāni',
     nameAkuVsk: 'dīvaino burkānu',
@@ -206,6 +212,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info:
       'Ja tev ir apnicis skrāpēt LatLoto biļetes un vēlies palielināt savas likmes, ' +
       'tad pārbaudi savu veiksmi ar DižLoto jau šodien!\n',
+    addedInVersion: '4.0',
     nameNomVsk: 'dižLoto biļete',
     nameNomDsk: 'dižLoto biļetes',
     nameAkuVsk: 'dižLoto biļeti',
@@ -232,6 +239,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info:
       'Koka makšķere ir pārāk lēna?\nTā pārāk bieži lūzt?\nNenes pietiekami lielu pelņu?\n' +
       'Tad ir laiks investēt dīvainajā maksķerē!!!',
+    addedInVersion: '4.0',
     nameNomVsk: 'dīvainā makšķere',
     nameNomDsk: 'dīvainās makšķeres',
     nameAkuVsk: 'dīvaino makšķeri',
@@ -257,6 +265,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info:
       'Inventārs pilns, ||bikses pilnas,|| ko tagad darīt?\n' +
       `Mugursoma palielinās tava inventāra ietilpību par **${INV_INCREASE_AMOUNT_1}** (līdz **${INCREASE_CAP_1}** vietām)`,
+    addedInVersion: '4.0',
     nameNomVsk: 'mugursoma',
     nameNomDsk: 'mugursomas',
     nameAkuVsk: 'mugursomu',
@@ -275,6 +284,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   piena_spainis: item<UsableItem & ShopItem>({
     info: 'Izdzerot (izmantojot) šo gardo piena spaini tev tiks noņemti visi statusi',
+    addedInVersion: '4.0',
     nameNomVsk: 'piena spainis',
     nameNomDsk: 'piena spaiņi',
     nameAkuVsk: 'piena spaini',
@@ -297,6 +307,7 @@ const itemList: { [key: ItemKey]: Item } = {
       `Iecienītas brokastis, pusdienas un vakariņas (kaķim)\n` +
       // @ts-ignore
       `Ar kaķu barību var pabarot **${itemString(this.default.kakis, null, true)}**`,
+    addedInVersion: '4.1',
     nameNomVsk: 'kaķu barība',
     nameNomDsk: 'kaķu barības',
     nameAkuVsk: 'kaķu barību',
@@ -324,6 +335,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info:
       `Tu esi izmantojis parastās mugursomas un sasniedzis ${INCREASE_CAP_1} vietas inventārā\n` +
       `Ar dīvaino mugursomu tu vari palielināt inventāra iepilpību par **${INV_NCREASE_AMOUNT_2}** (līdz **${INCREASE_CAP_2}** vietām)`,
+    addedInVersion: '4.0',
     nameNomVsk: 'dīvainā mugursoma',
     nameNomDsk: 'dīvainās mugursomas',
     nameAkuVsk: 'dīvaino mugursomu',
@@ -350,6 +362,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info:
       `Kafijas aparāts ik \`24h\` uztaisīs kafiju, kuru var iegūt kafijas aparātu izmantojot\n\n` +
       '_Nevienam vēljoprojām nav zināms kā šis kafijas aparāts ir spējīgs bezgalīgi taisīt kafiju bez pupiņām, vai ūdens, vai ... elektrības_',
+    addedInVersion: '4.0',
     nameNomVsk: 'kafijas aparāts',
     nameNomDsk: 'kafijas aparāti',
     nameAkuVsk: 'kafijas aparātu',
@@ -383,6 +396,7 @@ const itemList: { [key: ItemKey]: Item } = {
       `Pētnieks vēlās kļūt par tavu labāko draugu!\n` +
       `Viņš ir tik draudzīgs, ka pētīs krievu mājaslapas lai **tev** atrastu brīvgriezienus\n\n` +
       'Pētnieks atrod vienu brīvgriezienu ik `12h`, kuru tu vari saņemt pētnieku "izmantojot"',
+    addedInVersion: '4.0',
     nameNomVsk: 'pētnieks',
     nameNomDsk: 'pētnieki',
     nameAkuVsk: 'pētnieku',
@@ -423,6 +437,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info:
       'Šī makšķere ir īpaši veidota tieši azartspēļu atkarības cietušajiem\n' +
       'Iegādājies to, ja nevari atturēties no aparāta un loto biļetēm',
+    addedInVersion: '4.0',
     nameNomVsk: 'loto makšķere',
     nameNomDsk: 'loto makšķeres',
     nameAkuVsk: 'loto makšķeri',
@@ -452,6 +467,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info:
       'Ja mīlēsi metāllūžņus, tie visnotaļ mīlēs arī tevi!\n' +
       'Par cik šī makšķere knapi turās kopā, to nav iespējams salabot',
+    addedInVersion: '4.0',
     nameNomVsk: 'lūžņu makšķere',
     nameNomDsk: 'lūžņu makšķeres',
     nameAkuVsk: 'lūžņu makšķeri',
@@ -482,6 +498,7 @@ const itemList: { [key: ItemKey]: Item } = {
       'Kļūt par bankas zagli ir viegli, bet kur liksi nolaupīto naudu?\n\n' +
       'Naudas maiss glabā no Valsts Bankas (UlmaņBota) nozagto naudu, ' +
       'un lai zagtu no bankas inventārā ir jābūt vismaz vienam **tukšam** naudas maisam',
+    addedInVersion: '4.0',
     nameNomVsk: 'naudas maiss',
     nameNomDsk: 'naudas maisi',
     nameAkuVsk: 'naudas maisu',
@@ -532,6 +549,7 @@ const itemList: { [key: ItemKey]: Item } = {
         .map(([key]) => `**${itemString(key)}** ${foodDataPercentage(key)}`)
         .join('\n') +
       '\n\n_**Paldies Ričardam par šo izcilo kaķa bildi (viņu sauc Sāra)**_',
+    addedInVersion: '4.1',
     nameNomVsk: 'kaķis',
     nameNomDsk: 'kaķi',
     nameAkuVsk: 'kaķi',
@@ -580,6 +598,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }> & TirgusItem>({
 
     info: '',
+    addedInVersion: '4.3',
     nameNomVsk: 'gāzes plīts',
     nameNomDsk: 'gāzes plītis',
     nameAkuVsk: 'gāzes plīti',
@@ -606,6 +625,7 @@ const itemList: { [key: ItemKey]: Item } = {
   //hmmmm... šitā iespējams būs vajadzīgā, kā izmantojama manta, bet tas vēlēkam
   akumulators: item<BaseItem>({
     info: 'MmMMmmm, tas šķidrums izskatās ļoti garšīgs\n' + 'ļoti noslēpumaina manta',
+    addedInVersion: '4.3',
     nameNomVsk: 'akumulators',
     nameNomDsk: 'akumulatori',
     nameAkuVsk: 'akumulatoru',
@@ -621,6 +641,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   kartona_kaste: item<BaseItem>({
     info: 'Kāds šeit iekšā ir dzīvojis...',
+    addedInVersion: '4.0',
     nameNomVsk: 'kartona kaste',
     nameNomDsk: 'kartona kastes',
     nameAkuVsk: 'kartona kasti',
@@ -638,6 +659,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info:
       'Šī tik tiešām ir skaista pudele kuru varētu nodot depozīta sistēmā!\n' +
       'Cik žēl, ka taromāts šajā UlmaņBota versijā neeksistē... :^)',
+    addedInVersion: '4.0',
     nameNomVsk: 'stikla pudele',
     nameNomDsk: 'stikla pudeles',
     nameAkuVsk: 'stikla pudeli',
@@ -655,6 +677,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info:
       'Vai tu esi redzējis skaistāku metāla gabalu par šo?!?!??!!\n\n' +
       'Metāllūžņi ir iekļauti dažās tirgus preču cenās, apdomā vai tik tiešām vēlies tos pārdot',
+    addedInVersion: '4.0',
     nameNomVsk: 'metāllūznis',
     nameNomDsk: 'metāllūžņi',
     nameAkuVsk: 'metāllūzni',
@@ -674,6 +697,7 @@ const itemList: { [key: ItemKey]: Item } = {
   // -- zivis --
   lidaka: item<BaseItem>({
     info: 'Uz šo zivi skatīties nav ieteicams kamēr esi darbā...',
+    addedInVersion: '4.0',
     nameNomVsk: 'līdaka',
     nameNomDsk: 'līdakas',
     nameAkuVsk: 'līdaku',
@@ -692,6 +716,7 @@ const itemList: { [key: ItemKey]: Item } = {
       'mmm... pusdienas\n\n' +
       `Šo zivi var iegūt izcepjot **${itemString('lidaka', null, true)}** ` +
       `ar **${itemString('gazes_plits', null, true)}**`,
+    addedInVersion: '4.3',
     nameNomVsk: 'cepta līdaka',
     nameNomDsk: 'ceptas līdakas',
     nameAkuVsk: 'ceptu līdaku',
@@ -707,6 +732,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   asaris: item<BaseItem>({
     info: 'Šī zivs novedīs tevi līdz asarām',
+    addedInVersion: '4.0',
     nameNomVsk: 'asaris',
     nameNomDsk: 'asari',
     nameAkuVsk: 'asari',
@@ -725,6 +751,7 @@ const itemList: { [key: ItemKey]: Item } = {
       'mmm... pusdienas\n\n' +
       `Šo zivi var iegūt izcepjot **${itemString('asaris', null, true)}** ` +
       `ar **${itemString('gazes_plits', null, true)}**`,
+    addedInVersion: '4.3',
     nameNomVsk: 'cepts asaris',
     nameNomDsk: 'cepti asari',
     nameAkuVsk: 'ceptu asari',
@@ -740,6 +767,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   lasis: item<BaseItem>({
     info: 'Tu labprāt šo zivi apēstu, bet nejaukais Discord čatbots tev to neļauj darīt',
+    addedInVersion: '4.0',
     nameNomVsk: 'lasis',
     nameNomDsk: 'laši',
     nameAkuVsk: 'lasi',
@@ -758,6 +786,7 @@ const itemList: { [key: ItemKey]: Item } = {
       'mmm... pusdienas\n\n' +
       `Šo zivi var iegūt izcepjot **${itemString('lasis', null, true)}** ` +
       `ar **${itemString('gazes_plits', null, true)}**`,
+    addedInVersion: '4.3',
     nameNomVsk: 'cepts lasis',
     nameNomDsk: 'cepti laši',
     nameAkuVsk: 'ceptu lasi',
@@ -780,6 +809,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info:
       'Uzgriez loto zivi un kā laimestu saņem... zivis\n' +
       'Loto zivij piemīt atribūts "Satur **x** zivis", kas nosaka cik zivis no loto zivs ir iespējams laimēt',
+    addedInVersion: '4.1',
     nameNomVsk: 'loto zivs',
     nameNomDsk: 'loto zivis',
     nameAkuVsk: 'loto zivi',
@@ -807,6 +837,7 @@ const itemList: { [key: ItemKey]: Item } = {
       `**"${statusList.juridisks}"** statusu uz \`${millisToReadableTime(JURIDISKA_ZIVS_STATUS)}\`, ` +
       `kas tevi atvieglos no iedošanas un maksāšanas nodokļa\n\n` +
       '_Tikai neapēd šīs zivs dārgo uzvalku_',
+    addedInVersion: '4.0',
     nameNomVsk: 'juridiskā zivs',
     nameNomDsk: 'juridiskās zivis',
     nameAkuVsk: 'juridisko zivi',
@@ -824,6 +855,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   divaina_zivs: item<UsableItem>({
     info: 'Šī zivs garšo nedaudz _dīvaini_, apēd (izmanto) to lai iegūtu vienu nejauši izvēlētu statusu',
+    addedInVersion: '4.0',
     nameNomVsk: 'dīvainā zivs',
     nameNomDsk: 'dīvainās zivis',
     nameAkuVsk: 'dīvaino zivi',
@@ -846,6 +878,7 @@ const itemList: { [key: ItemKey]: Item } = {
       `Apēdot (izmantojot) šo zivi tu saņemsi statusu **"${statusList.veiksmigs}"** ` +
       `uz \`${millisToReadableTime(PETNIEKZIVS_STATUS_TIME)}\`, ` +
       `kas palielina feniksa, ruletes un loto biļešu procentus`,
+    addedInVersion: '4.1',
     nameNomVsk: 'pētniekzivs',
     nameNomDsk: 'pētniekzivis',
     nameAkuVsk: 'pētniekzivi',
@@ -867,6 +900,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info:
       'Šis velosipēds nav braucošā stāvoklī, bet vismaz tu to vari pārdot!\n\n' +
       'Velosipēdu var iegūt to sataisot ar velosipēda detaļām (rāmis, riteņi, ķēde un stūre)',
+    addedInVersion: '4.0',
     nameNomVsk: 'velosipēds',
     nameNomDsk: 'velosipēdi',
     nameAkuVsk: 'velosipēdu',
@@ -882,6 +916,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   velo_ramis: item<UsableItem>({
     info: veloInfo,
+    addedInVersion: '4.0',
     nameNomVsk: 'velosipēda rāmis',
     nameNomDsk: 'velosipēda rāmji',
     nameAkuVsk: 'velosipēda rāmi',
@@ -899,6 +934,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   velo_ritenis: item<UsableItem>({
     info: veloInfo,
+    addedInVersion: '4.0',
     nameNomVsk: 'velosipēda ritenis',
     nameNomDsk: 'velosipēda riteņi',
     nameAkuVsk: 'velosipēda riteni',
@@ -916,6 +952,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   velo_kede: item<UsableItem>({
     info: veloInfo,
+    addedInVersion: '4.0',
     nameNomVsk: 'velosipēda ķēde',
     nameNomDsk: 'velosipēda ķēdes',
     nameAkuVsk: 'velosipēda ķēdi',
@@ -933,6 +970,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   velo_sture: item<UsableItem>({
     info: veloInfo,
+    addedInVersion: '4.0',
     nameNomVsk: 'velosipēda stūre',
     nameNomDsk: 'velosipēda stūres',
     nameAkuVsk: 'velosipēda stūri',
@@ -955,6 +993,7 @@ const itemList: { [key: ItemKey]: Item } = {
       `Strādāt ir grūti ja esi noguris, izdzer kafiju!\n\n` +
       'Kafija ir izmantojama, kad tev noteiktā dienā ir beigušās strādāšanas reizes\n' +
       'Komandai `/stradat` ir poga `izdzert kafiju` lai strādātu vēlreiz',
+    addedInVersion: '4.0',
     nameNomVsk: 'kafija',
     nameNomDsk: 'kafijas',
     nameAkuVsk: 'kafiju',
@@ -979,6 +1018,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info:
       'UlmaņBota veidotājs rakstot šo aprakstu aizmirsa kāpēc dižmakšķere eksistē...\n\n' +
       'Dižmakšķere var nocopēt tikai un vienīgi vērtīgas mantas, tajā skaitā visas mantas kas nopērkamas tirgū\n',
+    addedInVersion: '4.0',
     nameNomVsk: 'dižmakšķere',
     nameNomDsk: 'dižmakšķeres',
     nameAkuVsk: 'dižmakšķeri',
@@ -1003,6 +1043,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info:
       'Izmantojot smilšu pulksteni zvejošanas laiks maģiski tiks pārbīdīts uz priekšu ' +
       `par \`${millisToReadableTime(ZVEJA_SHIFT_TIME)}\``,
+    addedInVersion: '4.0',
     nameNomVsk: 'smilšu pulkstenis',
     nameNomDsk: 'smilšu pulksteņi',
     nameAkuVsk: 'smilšu pulksteni',
@@ -1023,6 +1064,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info: () =>
       `Ar šo mantu var nomainīt **${makeEmojiString(itemList.kakis.emoji!)} Kaķa** vārdu\n` +
       `Ja tev inventārā ir ${itemString('kaka_parsaucejs', null)}, izmantojot kaķi tev piedāvās nomainīt tā vārdu`,
+    addedInVersion: '4.2',
     nameNomVsk: 'kaķa pārsaucējs', // TODO: labāks nosaukums
     nameNomDsk: 'kaķa pārsaucēji',
     nameAkuVsk: 'kaķa pārsaucēju',
@@ -1045,6 +1087,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info:
       'Apēdot piparkūku tiks izlaists gaidīšanas laiks līdz nākamajai strādāšanas **un** ubagošanas reizei\n' +
       'Piparkūku var atrast ubagojot decembrī',
+    addedInVersion: '4.2',
     nameNomVsk: 'piparkūka',
     nameNomDsk: 'piparkūkas',
     nameAkuVsk: 'piparkūku',
@@ -1062,6 +1105,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   zivju_kaste: {
     info: 'Šī kaste satur zivis',
+    addedInVersion: '4.3',
     nameNomVsk: 'zivju kaste',
     nameNomDsk: 'zivju kastes',
     nameAkuVsk: 'zivju kasti',
@@ -1078,6 +1122,7 @@ const itemList: { [key: ItemKey]: Item } = {
   },
   nabagloto: item<UsableItem & LotoItem>({
     info: 'Slapja un netīra loto biļete kuru var atrast uz ietves malas, iespējams iegūt no ubagošanas (`/ubagot`)',
+    addedInVersion: '4.3',
     nameNomVsk: 'nabagLoto biļete',
     nameNomDsk: 'nabagLoto biļetes',
     nameAkuVsk: 'nabagLoto biļeti',
@@ -1096,6 +1141,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   ulmanloto: item<UsableItem & LotoItem>({
     info: 'Reta un ļoti ekskluzīva loto biļete kas garantēs lielu peļņu tās skrāpētājam',
+    addedInVersion: '4.3',
     nameNomVsk: 'ulmaņLoto biļete',
     nameNomDsk: 'ulmaņLoto biļetes',
     nameAkuVsk: 'ulmaņLoto biļeti',
@@ -1116,6 +1162,7 @@ const itemList: { [key: ItemKey]: Item } = {
 
   kruma_sekla: item<UsableItem>({
     info: '', //TODO,
+    addedInVersion: '4.3',
     nameNomVsk: 'sēkla',
     nameNomDsk: 'sēklas',
     nameAkuDsk: 'sēklu',
@@ -1131,6 +1178,7 @@ const itemList: { [key: ItemKey]: Item } = {
 
   avene: item<UsableItem>({
     info: '', //TODO
+    addedInVersion: '4.3',
     nameNomVsk: 'avene',
     nameNomDsk: 'avenes',
     nameAkuVsk: 'aveni',
@@ -1148,6 +1196,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   mellene: item<UsableItem>({
     info: '', //TODO
+    addedInVersion: '4.3',
     nameNomVsk: 'mellene',
     nameNomDsk: 'mellenes',
     nameAkuVsk: 'melleni',
@@ -1166,6 +1215,7 @@ const itemList: { [key: ItemKey]: Item } = {
 
   vinoga: item<UsableItem>({
     info: '', //TODO
+    addedInVersion: '4.3',
     nameNomVsk: 'vīnoga',
     nameNomDsk: 'vīnogas',
     nameAkuVsk: 'vīnogu',
@@ -1184,6 +1234,7 @@ const itemList: { [key: ItemKey]: Item } = {
 
   zemene: item<UsableItem>({
     info: '',
+    addedInVersion: '4.3',
     nameNomVsk: 'zemene',
     nameNomDsk: 'zemenes',
     nameAkuVsk: 'zemeni',
@@ -1202,6 +1253,7 @@ const itemList: { [key: ItemKey]: Item } = {
 
   janoga: item<UsableItem>({
     info: '',
+    addedInVersion: '4.3',
     nameNomVsk: 'jāņoga',
     nameNomDsk: 'jāņogas',
     nameAkuVsk: 'jāņogu',
@@ -1235,6 +1287,7 @@ const itemList: { [key: ItemKey]: Item } = {
       'Katrs ogu krūms, ko iegūsti būs ar nejauši izvēlētu ogu tipu\n' +
       '(Tas tādēļ, jo biji ierāvis kamēr to stādiji)\n' +
       'Katram krūmam arī ir limitēts maksimālo ogu skaits (arī tiek nejauši izvēlēts)', // TODO`
+    addedInVersion: '4.3',
     nameNomVsk: 'ogu krūms',
     nameNomDsk: 'ogu krūmi',
     nameAkuVsk: 'ogu krūmu',
@@ -1263,6 +1316,7 @@ const itemList: { [key: ItemKey]: Item } = {
 
   roltons: item<UsableItem>({
     info: 'Patiesi viena no visu laiku labākajām maltītēm',
+    addedInVersion: '4.3',
     nameNomVsk: 'roltons',
     nameNomDsk: 'roltoni',
     nameAkuVsk: 'roltonu',
@@ -1305,6 +1359,7 @@ const itemList: { [key: ItemKey]: Item } = {
   // -- brīvgriezieni --
   brivgriez10: item<UsableItem>({
     info: brivgriezInfo,
+    addedInVersion: '4.0',
     nameNomVsk: '10 latu brīvgrieziens',
     nameNomDsk: '10 latu brīvgriezieni',
     nameAkuVsk: '10 latu brīvgriezienu',
@@ -1322,6 +1377,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   brivgriez25: item<UsableItem>({
     info: brivgriezInfo,
+    addedInVersion: '4.0',
     nameNomVsk: '25 latu brīvgrieziens',
     nameNomDsk: '25 latu brīvgriezieni',
     nameAkuVsk: '25 latu brīvgriezienu',
@@ -1339,6 +1395,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   brivgriez50: item<UsableItem>({
     info: brivgriezInfo,
+    addedInVersion: '4.0',
     nameNomVsk: '50 latu brīvgrieziens',
     nameNomDsk: '50 latu brīvgriezieni',
     nameAkuVsk: '50 latu brīvgriezienu',
@@ -1356,6 +1413,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
   brivgriez100: item<UsableItem>({
     info: brivgriezInfo,
+    addedInVersion: '4.0',
     nameNomVsk: '100 latu brīvgrieziens',
     nameNomDsk: '100 latu brīvgriezieni',
     nameAkuVsk: '100 latu brīvgriezienu',
@@ -1378,6 +1436,7 @@ const itemList: { [key: ItemKey]: Item } = {
       `Salaveča cepuri var uzvilkt:\n` +
       ['petnieks', 'kakis'].map(key => `• **${itemString(key)}**\n`).join('') +
       `\nUzvelkot cepuri mainīsies mantas izskats (emoji), uzvilkt cepuri var izmantojot mantu kurai vēlies to uzvilkt`,
+    addedInVersion: '4.2',
     nameNomVsk: 'salaveča cepure',
     nameNomDsk: 'salaveča cepures',
     nameAkuVsk: 'salaveča cepuri',

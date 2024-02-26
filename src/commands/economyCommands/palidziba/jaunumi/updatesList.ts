@@ -2,14 +2,7 @@ import { APIEmbedField } from 'discord.js';
 import itemString from '../../../../embeds/helpers/itemString';
 import itemList from '../../../../items/itemList';
 
-const updatesList: Record<
-  string,
-  {
-    date: string;
-    description?: string;
-    fields: APIEmbedField[];
-  }
-> = {
+const updatesList = {
   '4.0': {
     date: '14.10.2022',
     description:
@@ -68,6 +61,7 @@ const updatesList: Record<
   },
   '4.1': {
     date: '29.10.2022',
+    description: '',
     fields: [
       {
         name: '__Jaunas mantas__',
@@ -120,6 +114,7 @@ const updatesList: Record<
   },
   '4.2': {
     date: '01.12.2022',
+    description: '',
     fields: [
       {
         name: `__Adventes kalendārs__`,
@@ -162,8 +157,18 @@ const updatesList: Record<
   },
   '4.3': {
     date: '???',
+    description: '',
     fields: [],
   },
-};
+} satisfies Record<
+  string,
+  {
+    date: string;
+    description: string;
+    fields: APIEmbedField[];
+  }
+>;
+
+export type VersionString = keyof typeof updatesList;
 
 export default updatesList;

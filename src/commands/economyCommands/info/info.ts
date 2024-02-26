@@ -16,6 +16,7 @@ import { ItemType, itemTypes } from '../inventars';
 import maksekeresData from '../zvejot/makskeresData';
 import allItemAutocomplete from './allItemAutocomplete';
 import { LotoOptions } from '../../../items/usableItems/loto';
+import updatesList from '../palidziba/jaunumi/updatesList';
 
 const info: Command = {
   description: 'Iegūt detalizētu informāciju par kādu mantu - vērtība, cena, tirgus cena, makšķeres informācija, utt.',
@@ -118,6 +119,9 @@ const info: Command = {
         inline: true,
       });
     }
+
+    // kurā versijā manta pievienota
+    fields[0].value += `\n\nPievienots versijā **${itemObj.addedInVersion}** (${updatesList[itemObj.addedInVersion].date})`;
 
     // loto biļešu info
     if (itemObj.categories.includes(ItemCategory.LOTO) && 'lotoOptions' in itemObj) {

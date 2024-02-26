@@ -11,7 +11,7 @@ import {
   MessageActionRowComponentBuilder,
   MessageActionRowComponentData,
 } from 'discord.js';
-import updatesList from '../commands/economyCommands/palidziba/jaunumi/updatesList';
+import updatesList, { VersionString } from '../commands/economyCommands/palidziba/jaunumi/updatesList';
 
 interface EmbedTemplateOptions {
   i: ChatInputCommandInteraction | ButtonInteraction;
@@ -29,7 +29,7 @@ interface EmbedTemplateOptions {
   )[];
 }
 
-export const ULMANBOTA_VERSIJA = '4.3';
+export const ULMANBOTA_VERSIJA: VersionString = '4.3';
 
 export default function embedTemplate(options: EmbedTemplateOptions): InteractionReplyOptions & { fetchReply: true } {
   return {

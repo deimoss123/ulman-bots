@@ -9,9 +9,9 @@ import buttonHandler from '../../../../embeds/buttonHandler';
 import commandColors from '../../../../embeds/commandColors';
 import embedTemplate, { ULMANBOTA_VERSIJA } from '../../../../embeds/embedTemplate';
 import intReply from '../../../../utils/intReply';
-import updatesList from './updatesList';
+import updatesList, { VersionString } from './updatesList';
 
-function embed(i: ChatInputCommandInteraction, selectedVersion: string) {
+function embed(i: ChatInputCommandInteraction, selectedVersion: VersionString) {
   const { date, description } = updatesList[selectedVersion];
   const fields = updatesList[selectedVersion].fields as EmbedField[];
 
@@ -24,14 +24,14 @@ function embed(i: ChatInputCommandInteraction, selectedVersion: string) {
   }).embeds;
 }
 
-function components(selectedVersion: string) {
+function components(selectedVersion: VersionString) {
   return [
     new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
       new StringSelectMenuBuilder().setCustomId('jaunumi_select').addOptions(
         Object.entries(updatesList)
           .map(([v, { date }]) => ({ label: v, description: date, value: v, default: selectedVersion === v }))
-          .reverse()
-      )
+          .reverse(),
+      ),
     ),
   ];
 }
@@ -54,7 +54,7 @@ export default async function jaunumi(i: ChatInputCommandInteraction) {
     async int => {
       const { customId, componentType } = int;
       if (customId === 'jaunumi_select' && componentType === ComponentType.StringSelect) {
-        selectedVersion = int.values[0];
+        selectedVersion = int.values[0] as VersionString;
         return {
           edit: {
             embeds: embed(i, selectedVersion),
@@ -63,6 +63,6 @@ export default async function jaunumi(i: ChatInputCommandInteraction) {
         };
       }
     },
-    300000
+    300000,
   );
 }
