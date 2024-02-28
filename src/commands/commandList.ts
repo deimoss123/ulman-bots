@@ -5,7 +5,7 @@ import maksat from './economyCommands/maksat';
 import _addItem from './devCommands/_addItem';
 import inventars from './economyCommands/inventars';
 import iedot from './economyCommands/iedot/iedot';
-import veikals from './economyCommands/veikals/veikals';
+import veikals from './economyCommands/veikals';
 import pirkt from './economyCommands/pirkt/pirkt';
 import pardot from './economyCommands/pardot/pardot';
 import izmantot from './economyCommands/izmantot/izmantot';
