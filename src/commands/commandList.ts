@@ -11,7 +11,7 @@ import pardot from './economyCommands/pardot/pardot';
 import izmantot from './economyCommands/izmantot/izmantot';
 import profils from './economyCommands/profils';
 import _addXP from './devCommands/_addXP';
-import vakances from './economyCommands/vakances/vakances';
+import vakances from './economyCommands/vakances';
 import stradat from './economyCommands/stradat/stradat';
 import ubagot from './economyCommands/ubagot';
 import feniks from './economyCommands/feniks/feniks';
@@ -26,6 +26,7 @@ import palidziba from './economyCommands/palidziba/palidziba';
 import rulete from './economyCommands/rulete/rulete';
 import pabalsts from './economyCommands/pabalsts';
 import izsole from './devCommands/izsole/izsole';
+import iestatit from './devCommands/iestatit/iestatit';
 // import kamPieder from './economyCommands/kamPieder/kamPieder';
 
 // komandu objektu saraksts
@@ -55,4 +56,4 @@ export const commandList: Command[] = [
   // kamPieder,
 ];
 
-export const devCommandList: Command[] = [_addLati, _addItem, _addXP, _clearCache, izsole];
+export const devCommandList: Command[] = [_addLati, _addItem, _addXP, _clearCache, izsole, iestatit];
