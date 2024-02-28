@@ -2,8 +2,7 @@ import {
   ActionRowData,
   APIActionRowComponent,
   APIMessageActionRowComponent,
-  ButtonInteraction,
-  ChatInputCommandInteraction,
+  BaseInteraction,
   EmbedField,
   GuildMember,
   InteractionReplyOptions,
@@ -14,7 +13,7 @@ import {
 import updatesList, { VersionString } from '../commands/economyCommands/palidziba/jaunumi/updatesList';
 
 interface EmbedTemplateOptions {
-  i: ChatInputCommandInteraction | ButtonInteraction;
+  i: BaseInteraction;
   content?: string;
   title?: string;
   description?: string;

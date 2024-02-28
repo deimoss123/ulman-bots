@@ -7,7 +7,7 @@ import userString from '../../embeds/helpers/userString';
 import embedTemplate from '../../embeds/embedTemplate';
 import levelsList, { MAX_LEVEL } from '../../levelingSystem/levelsList';
 import ephemeralReply from '../../embeds/ephemeralReply';
-import { JobPositions } from './vakances/vakances';
+import { JobPositions } from './vakances';
 import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
 import { UserStatusName } from '../../interfaces/UserProfile';
 import intReply from '../../utils/intReply';
@@ -88,9 +88,7 @@ const profils: Command = {
         title: `${targetText} profils`,
         description:
           `Profesija: **${
-            jobPosition
-              ? `<:${jobPosition}:${JobPositions[jobPosition]!.emojiId}> ` + `${JobPositions[jobPosition]!.name}`
-              : 'Bezdarbnieks'
+            jobPosition ? `${JobPositions[jobPosition]!.emoji} ${JobPositions[jobPosition]!.name}` : 'Bezdarbnieks'
           }**\n` +
           `Maksāšanas nodoklis: ${payTaxText}\n` +
           `Iedošanas nodoklis: ${giveTaxText}\n\n` +
@@ -105,7 +103,7 @@ const profils: Command = {
             inline: true,
           };
         }),
-      })
+      }),
     );
   },
 };

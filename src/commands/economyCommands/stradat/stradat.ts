@@ -11,7 +11,7 @@ import chance from '../../../items/helpers/chance';
 import setnieks from './darbi/setnieks';
 import veikala_darbinieks from './darbi/veikala_darbinieks';
 import automehanikis from './darbi/automehanikis';
-import { JobPositions } from '../vakances/vakances';
+import { JobPositions } from '../vakances';
 import latiString from '../../../embeds/helpers/latiString';
 import itemString from '../../../embeds/helpers/itemString';
 import itemList from '../../../items/itemList';
