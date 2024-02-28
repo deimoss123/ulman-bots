@@ -306,7 +306,7 @@ const itemList: { [key: ItemKey]: Item } = {
     info: () =>
       `Iecienītas brokastis, pusdienas un vakariņas (kaķim)\n` +
       // @ts-ignore
-      `Ar kaķu barību var pabarot **${itemString(this.default.kakis, null, true)}**`,
+      `Ar kaķu barību var pabarot **${itemString('kakis', null, true)}**`,
     addedInVersion: '4.1',
     nameNomVsk: 'kaķu barība',
     nameNomDsk: 'kaķu barības',
@@ -326,7 +326,7 @@ const itemList: { [key: ItemKey]: Item } = {
       text:
         `Tu pagaršoji kaķu barību (tā nebija garšīga)\n` +
         // @ts-ignore
-        `Ar kaķu barību var pabarot **${itemString(this.default.kakis, null, true)}**`,
+        `Ar kaķu barību var pabarot **${itemString('kakis', null, true)}**`,
     }),
   }),
 
