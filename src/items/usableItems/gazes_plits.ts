@@ -1,25 +1,24 @@
 import {
   ActionRowBuilder,
+  BaseInteraction,
   ButtonBuilder,
-  ButtonInteraction,
   ButtonStyle,
-  ChatInputCommandInteraction,
-  SelectMenuComponentOptionData,
+  ComponentType,
   StringSelectMenuBuilder,
-  time,
 } from 'discord.js';
 import findUser from '../../economy/findUser';
 import errorEmbed from '../../embeds/errorEmbed';
-import { UsableItem, UsableItemFunc } from '../../interfaces/Item';
-import UserProfile, { ItemInProfile } from '../../interfaces/UserProfile';
+import Item, { UsableItemFunc } from '../../interfaces/Item';
 import intReply from '../../utils/intReply';
-import itemList, { ItemKey } from '../itemList';
 import embedTemplate from '../../embeds/embedTemplate';
+import { Dialogs } from '../../utils/Dialogs';
+import itemList, { ItemKey } from '../itemList';
+import UserProfile from '../../interfaces/UserProfile';
 import itemString from '../../embeds/helpers/itemString';
-import commandColors from '../../embeds/commandColors';
-import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
 import capitalizeFirst from '../../embeds/helpers/capitalizeFirst';
-import buttonHandler from '../../embeds/buttonHandler';
+import commandColors from '../../embeds/commandColors';
+import { calcIevarijumsPrice } from './ievarijums';
+import { BerryProperties, berryProperties, propertiesLat } from './oga';
 
 interface CookableItem {
   input: ItemKey;
@@ -45,151 +44,277 @@ export const cookableItems: CookableItem[] = [
   },
 ];
 
-function getCookableItemsInInv({ items }: UserProfile): ItemInProfile[] {
-  const inputItems = cookableItems.map(({ input }) => input);
-  const cookableItemsInInv = items.filter(({ name }) => inputItems.includes(name));
-  return cookableItemsInInv;
+type BerryInInv = {
+  name: ItemKey;
+  amount: number;
+  itemObj: Item;
+};
+
+type State = {
+  user: UserProfile;
+
+  selectedMenu: null | 'cook' | 'boil';
+
+  boil: {
+    berriesInInv: BerryInInv[];
+    selectedBerry: ItemKey;
+    chosenBerries: Record<ItemKey, number>;
+    combinedProperties: Record<keyof BerryProperties, number>;
+  };
+};
+
+function makeCombinedProperties(chosenBerries: Record<ItemKey, number>) {
+  const combinedProperties: Record<keyof BerryProperties, number> = {
+    saldums: 0,
+    skabums: 0,
+    rugtums: 0,
+    slapjums: 0,
+  };
+
+  Object.keys(chosenBerries).forEach(berry => {
+    const properties = berryProperties[berry];
+    Object.keys(properties).forEach(prop => {
+      // @ts-ignore
+      combinedProperties[prop] += properties[prop] * chosenBerries[berry];
+    });
+  });
+
+  return combinedProperties;
 }
 
-function embed(
-  i: ChatInputCommandInteraction | ButtonInteraction,
-  cookingStatus: CookingStatus,
-  cookableItemsInInv: ItemInProfile[],
-  currTime: number
-) {
-  // prettier-ignore
-  const text = !cookingStatus
-    ? 'Šī gāzes plīts ir tukša...\n\n' + 
-      '_Ar komandu `/info` vari uzzināt kādas mantas ir iespējams uzcept_'
-    : cookingStatus.status === 'cooking'
-      ? `🔥 Cepjas: **${itemString(cookingStatus.item.input)}**\n` +
-        `Būs izcepies: **${time(new Date(cookingStatus.timeWhenDone), 't')}** ${time(new Date(cookingStatus.timeWhenDone), 'd')}\n` +
-        `Pēc: \`${millisToReadableTime(cookingStatus.timeWhenDone - currTime)}\``
-      : ''
-
-  return embedTemplate({
-    i,
-    title: `Izmantot: ${itemString('gazes_plits', null, true)}`,
-    description: text,
-    color: commandColors.izmantot,
-  }).embeds;
-}
-
-function components(cookingStatus: CookingStatus, cookableItemsInInv: ItemInProfile[], selectedItem: ItemKey = '') {
-  if (!cookingStatus) {
-    if (!cookableItemsInInv.length) {
-      return [
+function view(state: State, i: BaseInteraction) {
+  if (!state.selectedMenu) {
+    return embedTemplate({
+      i,
+      title: `Izmantot: ${itemString('gazes_plits')}`,
+      color: commandColors.izmantot,
+      description: 'Ko tu vēlies darīt?',
+      components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
+          new ButtonBuilder().setCustomId('plits_select_menu_cook').setLabel('Cept').setStyle(ButtonStyle.Primary),
           new ButtonBuilder()
-            .setCustomId('_')
-            .setStyle(ButtonStyle.Danger)
-            .setLabel('Tev nav cepjamu mantu')
-            .setDisabled(true)
+            .setCustomId('plits_select_menu_boil')
+            .setLabel('Vārīt ievārījumu')
+            .setStyle(ButtonStyle.Primary),
         ),
-      ];
+      ],
+    });
+  }
+
+  if (state.selectedMenu === 'boil') {
+    if (!state.boil.berriesInInv.length) {
+      return embedTemplate({
+        i,
+        color: commandColors.izmantot,
+        description: 'Tev inventārā nav ogu ko vārīt',
+      });
     }
 
-    const selectOptions: SelectMenuComponentOptionData[] = cookableItemsInInv.map(({ name, amount }) => {
-      const itemObj = itemList[name];
-      return {
-        value: name,
-        label:
-          `${capitalizeFirst(itemObj.nameNomVsk)} ` +
-          `(${millisToReadableTime(cookableItems.find(({ input }) => input === name)!.time)})`,
-        emoji: itemObj.emoji || '❓',
-        default: name === selectedItem,
-        description: `Tev ir ${amount}`,
-      };
-    });
+    let description = '';
 
-    selectOptions.sort((a, b) => itemList[b.value].value - itemList[a.value].value);
+    if (!Object.keys(state.boil.chosenBerries).length) {
+      description = 'No izvēlnes izvēlies ogas, kuras pievienot vārīšanai';
+    } else {
+      const { distance, value, normalizedDistance } = calcIevarijumsPrice(state.boil.combinedProperties);
+      description += `Distance: ${distance} \nVērtība: ${value} lati \nNormalized distance: ${normalizedDistance}`;
+    }
 
-    return [
+    const components: ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] = [
       new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
         new StringSelectMenuBuilder()
-          .setCustomId('gazes_plits_select_menu')
-          .setOptions(...selectOptions)
-          .setPlaceholder('Izvēlies ko cept')
+          .setCustomId('plits_select_berry')
+          .setPlaceholder('Izvēlies ogu')
+          .addOptions(
+            ...state.boil.berriesInInv // @ts-ignore jo stringu salīdzināšana
+              .toSorted((a, b) => a.name > b.name)
+              .map(({ name, itemObj, amount }) => ({
+                label: `${capitalizeFirst(itemObj.nameNomVsk)} (tev ir ${amount})`,
+                description:
+                  `Sald. ${berryProperties[name].saldums} | ` +
+                  `Skāb. ${berryProperties[name].skabums} | ` +
+                  `Rūgt. ${berryProperties[name].rugtums} | ` +
+                  `Slapj. ${berryProperties[name].slapjums}`,
+                value: name,
+                emoji: itemObj.emoji || '❓',
+                default: name === state.boil.selectedBerry,
+              })),
+          ),
       ),
-      new ActionRowBuilder<ButtonBuilder>().addComponents(
+    ];
+
+    if (state.boil.selectedBerry) {
+      const selectedBerryInInv = state.boil.berriesInInv.find(({ name }) => name === state.boil.selectedBerry)!;
+
+      const row = [
         new ButtonBuilder()
-          .setCustomId('gazes_plits_select_btn')
-          .setEmoji('🔥')
-          .setLabel('Sākt cept')
-          .setDisabled(!selectedItem)
-          .setStyle(!selectedItem ? ButtonStyle.Secondary : ButtonStyle.Primary)
-      ),
-    ];
+          .setCustomId('plits_add_berry')
+          .setLabel('Mest katlā')
+          .setStyle(ButtonStyle.Primary)
+          .setDisabled(selectedBerryInInv.amount <= state.boil.chosenBerries[state.boil.selectedBerry]),
+      ];
+
+      if (state.boil.chosenBerries[state.boil.selectedBerry] > 0) {
+        row.push(
+          new ButtonBuilder()
+            .setCustomId('plits_remove_berry')
+            .setLabel(`Izņemt ${selectedBerryInInv.itemObj.nameAkuDsk}`)
+            .setStyle(ButtonStyle.Danger),
+        );
+      }
+
+      if (Object.keys(state.boil.chosenBerries).length) {
+        row.push(
+          new ButtonBuilder()
+            .setCustomId('plits_remove_all_berries')
+            .setLabel('Izņemt visas ogas')
+            .setStyle(ButtonStyle.Danger),
+        );
+      }
+
+      components.push(new ActionRowBuilder<ButtonBuilder>().addComponents(row));
+    }
+
+    return embedTemplate({
+      i,
+      title: `${itemString('gazes_plits')} - Vārīt ievārījumu`,
+      color: commandColors.izmantot,
+      description,
+      fields: [
+        {
+          name: 'Izvēlētās ogas',
+          value: Object.entries(state.boil.chosenBerries) // @ts-ignore jo stringu salīdzināšana
+            .toSorted((a, b) => a[0] > b[0])
+            .map(([key, amount]) => `${itemString(key)}: ${amount}`)
+            .join('\n'),
+          inline: false,
+        },
+        {
+          name: 'Kombinētās īpašības',
+          value: Object.keys(state.boil.combinedProperties)
+            .map(
+              prop =>
+                // neliela TS putra
+                `${propertiesLat[prop as keyof BerryProperties]}: ` +
+                `${state.boil.combinedProperties[prop as keyof BerryProperties]}`,
+            )
+            .join('\n'),
+          inline: false,
+        },
+      ],
+      components,
+    });
   }
 
-  if (cookingStatus.status === 'cooking') {
-    return [
-      new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder().setCustomId('gazes_plits_cancel').setLabel('Atcelt cepšanu').setStyle(ButtonStyle.Danger)
-      ),
-    ];
+  // TODO: uztaisīt cepšanu
+  if (state.selectedMenu === 'cook') {
+    return embedTemplate({
+      i,
+      description: 'Cept',
+    });
   }
 
-  const itemObj = itemList[cookingStatus.item.output];
-
-  return [
-    new ActionRowBuilder<ButtonBuilder>().addComponents(
-      new ButtonBuilder()
-        .setCustomId('gazes_plits_collect')
-        .setLabel(`Saņemt ${itemObj.nameNomVsk}`)
-        .setEmoji(itemObj.emoji || '❓')
-        .setStyle(ButtonStyle.Success)
-    ),
-  ];
-}
-
-// prettier-ignore
-type CookingStatus = {
-  status: 'done',
-  item: CookableItem,
-} | {
-  status: 'cooking',
-  item: CookableItem,
-  timeWhenDone: number,
-} | null;
-
-function getCookingStatus(cookingItem: ItemKey, cookingStartedTime: number, currTime: number): CookingStatus {
-  if (!cookingItem) return null;
-
-  const cookableItem = cookableItems.find(({ input }) => input === cookingItem)!;
-  const timeWhenDone = cookingStartedTime + cookableItem.time;
-
-  return timeWhenDone < currTime
-    ? { status: 'done', item: cookableItem }
-    : { status: 'cooking', item: cookableItem, timeWhenDone };
+  // šim nekad nevajadzētu notikt, bet atgriežu, lai TS nebļauj
+  return embedTemplate({ i, description: 'ja tu redzi šo ziņu, tad kaut kas ir nogājis galīgi greizi' });
 }
 
 const gazes_plits: UsableItemFunc = async (userId, guildId, _, specialItem) => {
   return {
     custom: async i => {
       const user = await findUser(userId, guildId);
-      if (!user || !specialItem) return intReply(i, errorEmbed);
 
-      const currTime = Date.now();
+      if (!user || !specialItem) {
+        return intReply(i, errorEmbed);
+      }
 
-      const cookingItem = specialItem.attributes.cookingItem!;
-      const cookingStartedTime = specialItem.attributes.cookingStartedTime!;
+      const berriesInInv: BerryInInv[] = [];
 
-      let cookingStatus = getCookingStatus(cookingItem, cookingStartedTime, currTime);
-
-      let cookableItemsInInv = getCookableItemsInInv(user);
-      let selectedItem = '';
-
-      const msg = await intReply(i, {
-        embeds: embed(i, cookingStatus, cookableItemsInInv, currTime),
-        components: components(cookingStatus, cookableItemsInInv, selectedItem),
-        fetchReply: true,
+      Object.keys(berryProperties).forEach(berry => {
+        const inInv = user.items.find(({ name }) => name === berry);
+        if (inInv && inInv.amount > 0) {
+          berriesInInv.push({ name: berry, amount: inInv.amount, itemObj: itemList[berry] });
+        }
       });
 
-      if (!msg || (!cookingStatus && !cookableItemsInInv.length)) return;
+      const defaultState: State = {
+        user,
+        selectedMenu: null,
+        boil: {
+          berriesInInv,
+          selectedBerry: '',
+          chosenBerries: {},
+          combinedProperties: makeCombinedProperties({}),
+        },
+      };
 
-      buttonHandler(i, 'izmantot', msg, async int => {
-        //
+      const dialogs = new Dialogs(i, defaultState, view, 'izmantot_gazes_plits', { time: 60000 });
+
+      if (!(await dialogs.start())) {
+        return intReply(i, errorEmbed);
+      }
+
+      dialogs.onClick(async int => {
+        const { customId, componentType: type } = int;
+
+        // pirmā izvēlne ========================================
+        if (customId === 'plits_select_menu_cook' && type === ComponentType.Button) {
+          dialogs.state.selectedMenu = 'cook';
+          return { update: true };
+        }
+
+        if (customId === 'plits_select_menu_boil' && type === ComponentType.Button) {
+          dialogs.state.selectedMenu = 'boil';
+
+          if (!dialogs.state.boil.berriesInInv.length) {
+            return { update: true, end: true };
+          }
+
+          return { update: true };
+        }
+
+        // vārīšana ========================================
+        if (customId === 'plits_select_berry' && type === ComponentType.StringSelect) {
+          dialogs.state.boil.selectedBerry = int.values[0];
+          return { update: true };
+        }
+
+        if (customId === 'plits_add_berry' && type === ComponentType.Button) {
+          const selectedBerry = dialogs.state.boil.selectedBerry;
+          if (!selectedBerry) return { errror: true };
+
+          if (dialogs.state.boil.chosenBerries[selectedBerry]) {
+            dialogs.state.boil.chosenBerries[selectedBerry]++;
+          } else {
+            dialogs.state.boil.chosenBerries[selectedBerry] = 1;
+          }
+
+          dialogs.state.boil.combinedProperties = makeCombinedProperties(dialogs.state.boil.chosenBerries);
+
+          return { update: true };
+        }
+
+        if (customId === 'plits_remove_berry' && type === ComponentType.Button) {
+          const selectedBerry = dialogs.state.boil.selectedBerry;
+
+          if (!selectedBerry || !dialogs.state.boil.chosenBerries[selectedBerry]) {
+            return { errror: true };
+          }
+
+          delete dialogs.state.boil.chosenBerries[selectedBerry];
+          dialogs.state.boil.combinedProperties = makeCombinedProperties(dialogs.state.boil.chosenBerries);
+          // dialogs.state.boil.selectedBerry = '';
+
+          return { update: true };
+        }
+
+        if (customId === 'plits_remove_all_berries' && type === ComponentType.Button) {
+          dialogs.state.boil.chosenBerries = {};
+          dialogs.state.boil.combinedProperties = makeCombinedProperties({});
+          dialogs.state.boil.selectedBerry = '';
+
+          return { update: true };
+        }
+
+        return;
       });
     },
   };

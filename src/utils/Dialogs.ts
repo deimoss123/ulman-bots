@@ -102,6 +102,7 @@ export class Dialogs<T extends { [key: string]: any }> {
       await interaction.update(this.viewFunc(this.state, this.primaryInteraction));
       return true;
     } catch (e) {
+      console.error(e);
       return false;
     }
   }
@@ -112,6 +113,7 @@ export class Dialogs<T extends { [key: string]: any }> {
       await this.primaryInteraction.editReply(this.viewFunc(this.state, this.primaryInteraction));
       return true;
     } catch (e) {
+      console.error(e);
       return false;
     }
   }

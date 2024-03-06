@@ -37,6 +37,8 @@ import nabagloto, { nabagLotoOptions } from './usableItems/nabagloto';
 import ulmanloto, { ulmanlotoOptions } from './usableItems/ulmanloto';
 import gazes_plits from './usableItems/gazes_plits';
 import krumu_sekla from './usableItems/kruma_sekla';
+import ievarijums from './usableItems/ievarijums';
+import oga, { BerryProperties, ogaInfo } from './usableItems/oga';
 
 export type ItemKey = string;
 
@@ -596,7 +598,6 @@ const itemList: { [key: ItemKey]: Item } = {
     cookingItem: string,
     cookingStartedTime: number
   }> & TirgusItem>({
-
     info: '',
     addedInVersion: '4.3',
     nameNomVsk: 'gāzes plīts',
@@ -1177,7 +1178,7 @@ const itemList: { [key: ItemKey]: Item } = {
   }),
 
   avene: item<UsableItem>({
-    info: '', //TODO
+    info: ogaInfo('avene'),
     addedInVersion: '4.3',
     nameNomVsk: 'avene',
     nameNomDsk: 'avenes',
@@ -1186,16 +1187,16 @@ const itemList: { [key: ItemKey]: Item } = {
     isVirsiesuDzimte: false,
     emoji: {
       name: 'avene',
-      id: '1200949813966016662',
+      id: '1213615541584011315',
     },
     imgLink: null,
     categories: [ItemCategory.OTHER],
     value: 15,
     removedOnUse: false,
-    use: () => ({ text: 'avene' }),
+    use: oga('avene'),
   }),
   mellene: item<UsableItem>({
-    info: '', //TODO
+    info: ogaInfo('mellene'),
     addedInVersion: '4.3',
     nameNomVsk: 'mellene',
     nameNomDsk: 'mellenes',
@@ -1203,18 +1204,18 @@ const itemList: { [key: ItemKey]: Item } = {
     nameAkuDsk: 'mellenes',
     isVirsiesuDzimte: false,
     emoji: {
-      id: '1200946874383876176',
+      id: '1213615545551691826',
       name: 'mellene',
     },
     imgLink: null,
     categories: [ItemCategory.OTHER],
     value: 15,
     removedOnUse: false,
-    use: () => ({ text: 'mellene' }),
+    use: oga('mellene'),
   }),
 
   vinoga: item<UsableItem>({
-    info: '', //TODO
+    info: ogaInfo('vinoga'), //TODO
     addedInVersion: '4.3',
     nameNomVsk: 'vīnoga',
     nameNomDsk: 'vīnogas',
@@ -1222,18 +1223,18 @@ const itemList: { [key: ItemKey]: Item } = {
     nameAkuDsk: 'vīnogas',
     isVirsiesuDzimte: false,
     emoji: {
-      id: '1200948299755171991',
+      id: '1213615546978013254',
       name: 'vinoga',
     },
     imgLink: null,
     categories: [ItemCategory.OTHER],
     value: 15,
     removedOnUse: false,
-    use: () => ({ text: 'vīnoga' }),
+    use: oga('vinoga'),
   }),
 
   zemene: item<UsableItem>({
-    info: '',
+    info: ogaInfo('zemene'),
     addedInVersion: '4.3',
     nameNomVsk: 'zemene',
     nameNomDsk: 'zemenes',
@@ -1241,18 +1242,18 @@ const itemList: { [key: ItemKey]: Item } = {
     nameAkuDsk: 'zemenes',
     isVirsiesuDzimte: false,
     emoji: {
-      id: '1209986801213636608',
+      id: '1213615548349288458',
       name: 'zemene',
     },
     imgLink: null,
     categories: [ItemCategory.OTHER],
     value: 15,
     removedOnUse: false,
-    use: () => ({ text: 'zemene' }),
+    use: oga('zemene'),
   }),
 
   janoga: item<UsableItem>({
-    info: '',
+    info: ogaInfo('janoga'),
     addedInVersion: '4.3',
     nameNomVsk: 'jāņoga',
     nameNomDsk: 'jāņogas',
@@ -1260,14 +1261,14 @@ const itemList: { [key: ItemKey]: Item } = {
     nameAkuDsk: 'jāņogas',
     isVirsiesuDzimte: false,
     emoji: {
-      id: '1209988449860591636',
+      id: '1213615542989226045',
       name: 'janoga',
     },
     imgLink: null,
     categories: [ItemCategory.OTHER],
     value: 15,
     removedOnUse: false,
-    use: () => ({ text: 'jāņoga' }),
+    use: oga('janoga'),
   }),
 
   // prettier-ignore
@@ -1294,8 +1295,8 @@ const itemList: { [key: ItemKey]: Item } = {
     nameAkuDsk: 'ogu krūmus',
     isVirsiesuDzimte: true,
     emoji: {
-      name: 'krums',
-      id: '1200950098646020127',
+      name: 'ogu_krums',
+      id: '1213842076458819614',
     },
     imgLink: 'https://beanson.lv/images/krums.png',
     categories: [ItemCategory.OTHER],
@@ -1312,6 +1313,37 @@ const itemList: { [key: ItemKey]: Item } = {
     }),
     use: ogukrums,
     sortBy: { berryType: 1 },
+  }),
+
+  // prettier-ignore
+  ievarijums: item<AttributeItem<{
+    properties?: BerryProperties;
+    ogas?: Record<ItemKey, number>;
+    distance?: number;
+  }>>({
+    info: '', //TODO
+    addedInVersion: '4.3',
+    nameNomVsk: 'ievārījums',
+    nameNomDsk: 'ievārījumi',
+    nameAkuVsk: 'ievārījumu',
+    nameAkuDsk: 'ievārījumus',
+    isVirsiesuDzimte: true,
+    emoji: null,
+    imgLink: null,
+    categories: [ItemCategory.OTHER],
+    value: 15,
+    attributes: () => ({
+      properties: {
+        saldums: 0,
+        skabums: 0,
+        rugtums: 0,
+        slapjums: 0,
+      },
+      ogas: {},
+      distance: 0
+    }),
+    sortBy: { distance: 1 },
+    use: ievarijums
   }),
 
   roltons: item<UsableItem>({

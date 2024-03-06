@@ -125,7 +125,7 @@ function makeComponents() {
         .setCustomId('apliet_krumu')
         .setStyle(ButtonStyle.Primary)
         .setEmoji('💧')
-        .setLabel('Apliet Krūmu')
+        .setLabel('Apliet Krūmu'),
     ),
   ];
 }
@@ -152,7 +152,7 @@ const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
         if (!vajagApliet) {
           return intReply(
             i,
-            embedTemplate({ i, description: `Tavs krūms vēl nav izaudzis! **${izaugsanasProg}%**`, color })
+            embedTemplate({ i, description: `Tavs krūms vēl nav izaudzis! **${izaugsanasProg}%**`, color }),
           );
         }
         const msg = await intReply(i, {
@@ -196,8 +196,8 @@ const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
           i,
           smallEmbed(
             `Tavs ogu krūms vēl nav izaudzējis ogas...\n` + `Izaugs pēc \`${millisToReadableTime(cikNakamaOga)}\``,
-            0xff0000
-          )
+            0xff0000,
+          ),
         );
       }
 
@@ -235,7 +235,7 @@ const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
             },
           ],
           color,
-        })
+        }),
       );
     },
   };

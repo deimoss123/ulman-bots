@@ -1,5 +1,6 @@
 import { AkcijaId } from '../commands/economyCommands/akcijas/akcijasList';
 import { ItemKey } from '../items/itemList';
+import { BerryProperties } from '../items/usableItems/oga';
 
 export interface ItemInProfile {
   name: ItemKey;
@@ -50,6 +51,13 @@ export interface ItemAttributes {
   apliets?: number;
   iestadits?: number;
   apliesanasReizes?: number;
+
+  // gāzes plīts
+
+  // ievārījums
+  properties?: BerryProperties;
+  ogas?: Record<ItemKey, number>;
+  distance?: number;
 }
 
 export interface SpecialItemInProfile {
