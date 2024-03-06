@@ -20,19 +20,19 @@ const client = new Client({
 
 const mongoPromise = mongo();
 
-client.once('ready', async () => {
+client.once('ready', async bot => {
   await mongoPromise.then(() => console.log('Connected to MongoDB'));
 
   // User.watch().on('change', data => {
   //   console.log(data);
   // });
 
-  setBotPresence(client);
-  setInterval(() => setBotPresence(client), 3_600_000);
+  setBotPresence(bot);
+  setInterval(() => setBotPresence(bot), 3_600_000);
 
-  client.on('messageCreate', messageHandler);
+  bot.on('messageCreate', messageHandler);
 
-  client.on('interactionCreate', i => {
+  bot.on('interactionCreate', i => {
     if (i.isChatInputCommand()) commandHandler(i);
     else if (i.isAutocomplete()) autocompleteHandler(i);
     else if (i.isButton()) buttonInteractionHandler(i);
