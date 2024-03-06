@@ -1,5 +1,6 @@
 import { AkcijaId } from '../commands/economyCommands/akcijas/akcijasList';
 import { ItemKey } from '../items/itemList';
+import { GazesPlitsActionType } from '../items/usableItems/gazes_plits';
 import { BerryProperties } from '../items/usableItems/oga';
 
 export interface ItemInProfile {
@@ -41,8 +42,8 @@ export interface ItemAttributes {
   piespraudeNum?: number;
 
   // gāzes plīts
-  cookingItem?: ItemKey;
-  cookingStartedTime?: number;
+  // cookingItem?: ItemKey;
+  // cookingStartedTime?: number;
 
   // ogu krūmam
   berryType?: ItemKey;
@@ -53,6 +54,13 @@ export interface ItemAttributes {
   apliesanasReizes?: number;
 
   // gāzes plīts
+  actionType?: GazesPlitsActionType;
+  boilIevarijums?: {
+    boilStarttime: number;
+    boilDuration: number;
+    berries: Record<ItemKey, number>;
+    properties: BerryProperties;
+  };
 
   // ievārījums
   properties?: BerryProperties;

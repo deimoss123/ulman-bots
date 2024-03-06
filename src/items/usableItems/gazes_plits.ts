@@ -19,6 +19,12 @@ import capitalizeFirst from '../../embeds/helpers/capitalizeFirst';
 import commandColors from '../../embeds/commandColors';
 import { calcIevarijumsPrice } from './ievarijums';
 import { BerryProperties, berryProperties, propertiesLat } from './oga';
+import ephemeralReply from '../../embeds/ephemeralReply';
+import smallEmbed from '../../embeds/smallEmbed';
+import editItemAttribute from '../../economy/editItemAttribute';
+import addItems from '../../economy/addItems';
+
+export type GazesPlitsActionType = '' | 'cook' | 'boil_ievarijums' | 'boil_special_ievarijums';
 
 interface CookableItem {
   input: ItemKey;
@@ -80,6 +86,10 @@ function makeCombinedProperties(chosenBerries: Record<ItemKey, number>) {
   });
 
   return combinedProperties;
+}
+
+function getBoilDuration() {
+  return 60 * 1000; // 1 min
 }
 
 function view(state: State, i: BaseInteraction) {
@@ -172,6 +182,18 @@ function view(state: State, i: BaseInteraction) {
       }
 
       components.push(new ActionRowBuilder<ButtonBuilder>().addComponents(row));
+
+      const totalBerryCount = Object.values(state.boil.chosenBerries).reduce((a, b) => a + b, 0);
+
+      components.push(
+        new ActionRowBuilder<ButtonBuilder>().addComponents(
+          new ButtonBuilder()
+            .setCustomId('plits_boil_ievarijums')
+            .setLabel('Vārīt')
+            .setStyle(totalBerryCount < 3 ? ButtonStyle.Secondary : ButtonStyle.Success)
+            .setDisabled(totalBerryCount < 3),
+        ),
+      );
     }
 
     return embedTemplate({
@@ -312,6 +334,57 @@ const gazes_plits: UsableItemFunc = async (userId, guildId, _, specialItem) => {
           dialogs.state.boil.selectedBerry = '';
 
           return { update: true };
+        }
+
+        if (customId === 'plits_boil_ievarijums' && type === ComponentType.Button) {
+          const user = await findUser(userId, guildId);
+          if (!user) return { error: true };
+
+          // pārbaudam, vai plīts ir inventarā
+          const isPlitsInInv = user.specialItems.find(({ _id }) => _id === specialItem._id);
+          if (!isPlitsInInv) {
+            await intReply(int, ephemeralReply(`Kļūda: Šī **${itemString('gazes_plits')}** vairs nav tavā inventārā`));
+            return { end: true };
+          }
+
+          // pārbauda, vai izvēlētās ogas ir inventarā
+          let hasInInv = true;
+          for (const [key, amount] of Object.entries(dialogs.state.boil.chosenBerries)) {
+            const inInv = user.items.find(({ name }) => name === key);
+            if (!inInv || inInv.amount < amount) {
+              hasInInv = false;
+              break;
+            }
+          }
+
+          if (!hasInInv) {
+            await intReply(
+              int,
+              ephemeralReply(
+                'Kļūda: Tava inventāra saturs ir mainījies, tev nav nepieciešamo ogu, lai uzvārītu šo ievārījumu',
+              ),
+            );
+            return { end: true };
+          }
+
+          const itemsToRemove = Object.fromEntries(
+            Object.entries(dialogs.state.boil.chosenBerries).map(([key, amount]) => [key, -amount]),
+          );
+
+          await addItems(userId, guildId, itemsToRemove);
+
+          await editItemAttribute(userId, guildId, specialItem._id!, {
+            actionType: 'boil_ievarijums',
+            boilIevarijums: {
+              boilStarttime: Date.now(),
+              boilDuration: getBoilDuration(),
+              berries: dialogs.state.boil.chosenBerries,
+              properties: dialogs.state.boil.combinedProperties,
+            },
+          });
+
+          intReply(int, smallEmbed('Ievārījuma vārīšana uzsākta veiksmīgi!', commandColors.izmantot));
+          return { end: true };
         }
 
         return;

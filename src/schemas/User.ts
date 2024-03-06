@@ -51,6 +51,15 @@ export const ItemAttributesSchema = {
   apliesanasReizes: Number,
   apliets: Number, // unix millis
   iestadits: Number, // unix millis
+
+  // gāzes plīts
+  actionType: String,
+  boilIevarijums: {
+    boilStarttime: Number,
+    boilDuration: Number,
+    berries: {},
+    properties: {},
+  },
 };
 
 const userSchema = new Schema<UserProfile>({

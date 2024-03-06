@@ -7,7 +7,7 @@ export default async function editItemAttribute(
   userId: string,
   guildId: string,
   itemId: string,
-  newAttributes: ItemAttributes
+  newAttributes: ItemAttributes,
 ): Promise<{ user: UserProfile; newItem: SpecialItemInProfile } | void> {
   try {
     const user = await findUser(userId, guildId);
@@ -23,7 +23,7 @@ export default async function editItemAttribute(
     const res = (await User.findOneAndUpdate(
       { userId, guildId },
       { $set: { specialItems } },
-      { new: true }
+      { new: true },
     )) as UserProfile;
 
     userCache[guildId][userId] = res;

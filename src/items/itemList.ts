@@ -35,10 +35,10 @@ import itemString, { makeEmojiString } from '../embeds/helpers/itemString';
 import piparkuka from './usableItems/piparkuka';
 import nabagloto, { nabagLotoOptions } from './usableItems/nabagloto';
 import ulmanloto, { ulmanlotoOptions } from './usableItems/ulmanloto';
-import gazes_plits from './usableItems/gazes_plits';
-import krumu_sekla from './usableItems/kruma_sekla';
+import gazes_plits, { GazesPlitsActionType } from './usableItems/gazes_plits';
 import ievarijums from './usableItems/ievarijums';
 import oga, { BerryProperties, ogaInfo } from './usableItems/oga';
+import kruma_sekla from './usableItems/kruma_sekla';
 
 export type ItemKey = string;
 
@@ -595,10 +595,15 @@ const itemList: { [key: ItemKey]: Item } = {
 
   // prettier-ignore
   gazes_plits: item<AttributeItem<{
-    cookingItem: string,
-    cookingStartedTime: number
+    actionType: GazesPlitsActionType;
+    boilIevarijums?: {
+      boilStarttime: number;
+      boilDuration: number;
+      berries: Record<ItemKey, number>;
+      properties: BerryProperties;
+    };
   }> & TirgusItem>({
-    info: '',
+    info: '', // TODO 
     addedInVersion: '4.3',
     nameNomVsk: 'gāzes plīts',
     nameNomDsk: 'gāzes plītis',
@@ -614,10 +619,9 @@ const itemList: { [key: ItemKey]: Item } = {
     value: 50,
     tirgusPrice: { items: { metalluznis: 10 } },
     attributes: () => ({
-      cookingItem: '',
-      cookingStartedTime: 0,
+      actionType: ''
     }),
-    sortBy: { cookingItem: 1, cookingStartedTime: -1 },
+    sortBy: { actionType: -1 },
     use: gazes_plits,
   }),
 
@@ -1161,22 +1165,6 @@ const itemList: { [key: ItemKey]: Item } = {
     use: ulmanloto,
   }),
 
-  kruma_sekla: item<UsableItem>({
-    info: '', //TODO,
-    addedInVersion: '4.3',
-    nameNomVsk: 'sēkla',
-    nameNomDsk: 'sēklas',
-    nameAkuDsk: 'sēklu',
-    nameAkuVsk: 'sēklas',
-    isVirsiesuDzimte: false,
-    emoji: null,
-    imgLink: null,
-    categories: [ItemCategory.OTHER],
-    value: 10,
-    removedOnUse: true,
-    use: krumu_sekla,
-  }),
-
   avene: item<UsableItem>({
     info: ogaInfo('avene'),
     addedInVersion: '4.3',
@@ -1271,6 +1259,24 @@ const itemList: { [key: ItemKey]: Item } = {
     use: oga('janoga'),
   }),
 
+  kruma_sekla: item<UsableItem>({
+    info: () =>
+      `Ogu krūma sēklu var iestādīt, lai izaudzētu **${itemString('ogu_krums', null, true)}**\n` +
+      `Iestādot krūma sēklu, tiks izvēlēti nejauši ogu krūma atribūti, piemēram, ogas tips, augšanas laiks, utt.`,
+    addedInVersion: '4.3',
+    nameNomVsk: 'ogu kruma sēkla',
+    nameNomDsk: 'ogu krūma sēklas',
+    nameAkuVsk: 'ogu krūma sēklu',
+    nameAkuDsk: 'ogu krūma sēklas',
+    isVirsiesuDzimte: false,
+    emoji: null,
+    imgLink: null,
+    categories: [ItemCategory.OTHER],
+    value: 10,
+    removedOnUse: false,
+    use: kruma_sekla,
+  }),
+
   // prettier-ignore
   ogu_krums: item<AttributeItem<{
     berryType: string,
@@ -1281,7 +1287,6 @@ const itemList: { [key: ItemKey]: Item } = {
     iestadits: number,
     apliesanasReizes: number,
   }>>({
-
 
     info:
       'Kļūsti par īstu dārznieku.\n' +

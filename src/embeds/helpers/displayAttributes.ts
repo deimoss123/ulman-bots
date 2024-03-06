@@ -98,8 +98,37 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false) {
 
     patriota_piespraude: ({ piespraudeNum }) => wrap(`Nr. ${piespraudeNum}`, '', '**', inline),
 
-    gazes_plits: ({ cookingStartedTime, cookingItem }) => {
-      if (!cookingItem) return 'Gatava cepšanai!';
+    gazes_plits: attr => {
+      const { actionType } = attr;
+
+      if (actionType === 'boil_ievarijums') {
+        const boilIevarijums = attr.boilIevarijums!;
+
+        if (boilIevarijums.boilStarttime + boilIevarijums.boilDuration < currTime) {
+          return 'Ievārījums ir izvārīts!';
+        }
+
+        let str = 'Vāra ievārījumu...\n';
+
+        if (!inline) {
+          str +=
+            Object.entries(boilIevarijums.berries)
+              .map(
+                ([name, amount]) => `${amount} ${itemList[name].emoji ? makeEmojiString(itemList[name].emoji!) : '❓'}`,
+              )
+              .join(', ') + '\n';
+        }
+
+        const millis = millisToReadableTime(boilIevarijums.boilStarttime + boilIevarijums.boilDuration - currTime);
+
+        str += `Gatavs pēc: ${wrap(millis, '', '`', inline)}`;
+
+        return str;
+      }
+
+      return 'Tukšs!';
+
+      /*
       const { output, time } = cookableItems.find(({ input }) => input === cookingItem)!;
       const timeWhenDone = cookingStartedTime! + time;
       const isDoneCooking = timeWhenDone < currTime;
@@ -115,6 +144,7 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false) {
         (inline ? `, ` : '\n') +
         `Gatavs pēc: ${inline ? '' : '`'}${millisToReadableTime(timeWhenDone - currTime)}${inline ? '' : '`'}`
       );
+      */
     },
 
     // sita noladeta attributu uzradisana ir panemusi stundu no manas dzives (bumbotajs)
