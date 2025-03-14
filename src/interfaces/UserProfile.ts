@@ -136,6 +136,14 @@ interface UserStocks {
   transactions: UserStocksTransaction[];
 }
 
+interface UserProperties {
+  metalluznuNodosanasPunkts: {
+    lastTemp: number;
+    lastUpdateTime: number; // millis
+    currentLati: number;
+  };
+}
+
 interface UserProfile {
   userId: string;
   guildId: string;
@@ -165,6 +173,8 @@ interface UserProfile {
   tirgus: UserTirgus;
 
   stocks: UserStocks;
+
+  properties: UserProperties;
 }
 
 export default UserProfile;

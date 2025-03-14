@@ -1,15 +1,25 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, InferSchemaType } from 'mongoose';
 import UserProfile from '../interfaces/UserProfile';
 
-const ReqStringIndex = {
+const RequiredStringIndex = {
   type: String,
   required: true,
   index: true,
 };
 
-const NumZero = {
+const RequiredString = {
+  type: String,
+  required: true,
+};
+
+const NumberZero = {
   type: Number,
   default: 0,
+};
+
+const RequiredNumber = {
+  type: Number,
+  required: true,
 };
 
 const DailyCooldownSchema = {
@@ -63,11 +73,12 @@ export const ItemAttributesSchema = {
 };
 
 const userSchema = new Schema<UserProfile>({
-  userId: ReqStringIndex,
-  guildId: ReqStringIndex,
-  lati: NumZero,
-  xp: NumZero, // pāri palikušais xp
-  level: NumZero,
+  userId: RequiredStringIndex,
+  guildId: RequiredStringIndex,
+  lati: NumberZero,
+  xp: NumberZero, // pāri palikušais xp
+  level: NumberZero,
+
   jobPosition: {
     type: String,
     default: null,
@@ -82,11 +93,12 @@ const userSchema = new Schema<UserProfile>({
     type: Number,
     default: 50,
   },
+
   items: {
     type: [
       {
-        name: String, // mantas id (pudele, koka_makskere, ...)
-        amount: Number, // mantas daudzums
+        name: RequiredString, // mantas id (pudele, koka_makskere, ...)
+        amount: RequiredNumber, // mantas daudzums
       },
     ],
     default: [],
@@ -95,7 +107,7 @@ const userSchema = new Schema<UserProfile>({
   specialItems: {
     type: [
       {
-        name: String,
+        name: RequiredString,
         attributes: ItemAttributesSchema,
       },
     ],
@@ -106,6 +118,7 @@ const userSchema = new Schema<UserProfile>({
     type: Number,
     default: 0.1,
   },
+
   giveTax: {
     type: Number,
     default: 0.15,
@@ -137,10 +150,10 @@ const userSchema = new Schema<UserProfile>({
 
   status: {
     type: {
-      aizsargats: Number,
-      laupitajs: Number,
-      juridisks: Number,
-      veiksmigs: Number,
+      aizsargats: RequiredNumber,
+      laupitajs: RequiredNumber,
+      juridisks: RequiredNumber,
+      veiksmigs: RequiredNumber,
     },
     default: {
       aizsargats: 0,
@@ -154,11 +167,14 @@ const userSchema = new Schema<UserProfile>({
       type: Number,
       default: 6,
     },
+
     selectedRod: {
       type: String,
       default: null,
     },
-    usesLeft: NumZero,
+
+    usesLeft: NumberZero,
+
     lastCaughtFish: {
       type: {
         time: Number,
@@ -166,6 +182,7 @@ const userSchema = new Schema<UserProfile>({
       },
       default: null,
     },
+
     futureFishList: {
       type: [
         {
@@ -194,10 +211,10 @@ const userSchema = new Schema<UserProfile>({
 
   stocks: {
     owned: {
-      latvijasPiens: NumZero,
-      latvijasRadio: NumZero,
-      martinsonaVelo: NumZero,
-      bachaKazino: NumZero,
+      latvijasPiens: NumberZero,
+      latvijasRadio: NumberZero,
+      martinsonaVelo: NumberZero,
+      bachaKazino: NumberZero,
     },
     transactions: {
       type: [
@@ -210,6 +227,24 @@ const userSchema = new Schema<UserProfile>({
         },
       ],
       default: [],
+    },
+  },
+
+  properties: {
+    type: {
+      metalluznuNodosanasPunkts: {
+        lastTemp: Number,
+        lastUpdateTime: Number,
+        currentLati: Number,
+      },
+    },
+
+    default: {
+      metalluznuNodosanasPunkts: {
+        lastTemp: -9999,
+        lastUpdateTime: -1,
+        currentLati: 0,
+      },
     },
   },
 });
