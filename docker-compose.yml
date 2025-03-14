@@ -3,7 +3,7 @@ services:
     build:
       dockerfile: ./docker/mongo/Dockerfile
     command: ["--config", "/etc/mongo.conf", "--replSet", "rs0"]
-    restart: always
+    restart: unless-stopped 
     container_name: ulmanbots_mongo
     ports:
       - '127.0.0.1:27017:27017'
