@@ -10,14 +10,19 @@ type State = {
   count: number;
 };
 
+const enum ComponentId {
+  Skaitit = 'iestatit_skaitit',
+  Tests = 'iestatit_testa_poga',
+}
+
 function view(state: State, i: BaseInteraction) {
   return embedTemplate({
     i,
     description: `${state.text}\n${state.count}`,
     components: [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder().setCustomId('iestatit-skaitit').setLabel('+1').setStyle(ButtonStyle.Success),
-        new ButtonBuilder().setCustomId('iestatit-testa-poga').setLabel('Tests').setStyle(ButtonStyle.Primary),
+        new ButtonBuilder().setCustomId(ComponentId.Skaitit).setLabel('+1').setStyle(ButtonStyle.Success),
+        new ButtonBuilder().setCustomId(ComponentId.Tests).setLabel('Tests').setStyle(ButtonStyle.Primary),
       ),
     ],
   });
@@ -46,12 +51,12 @@ const iestatit: Command = {
       console.log('click');
       if (int.componentType !== ComponentType.Button) return;
 
-      if (int.customId === 'iestatit-skaitit') {
+      if (int.customId === ComponentId.Skaitit) {
         dialogs.state.count++;
         return { update: true };
       }
 
-      if (int.customId === 'iestatit-testa-poga') {
+      if (int.customId === ComponentId.Tests) {
         //
         return;
       }
