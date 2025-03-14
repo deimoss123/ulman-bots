@@ -1,4 +1,4 @@
-import { Schema, model, InferSchemaType } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import UserProfile from '../interfaces/UserProfile';
 
 const RequiredStringIndex = {
@@ -12,9 +12,16 @@ const RequiredString = {
   required: true,
 };
 
-const NumberZero = {
+const NumberDefaultZero = {
   type: Number,
   default: 0,
+};
+
+const IntegerDefaultZero = {
+  type: Number,
+  default: 0,
+  get: (v: number) => Math.floor(v),
+  set: (v: number) => Math.floor(v),
 };
 
 const RequiredNumber = {
@@ -39,22 +46,43 @@ export const dailyCooldownDefault = {
 };
 
 export const ItemAttributesSchema = {
+  // dīvainai burkāns, kodienu skaits
   timesUsed: Number,
+
+  // dīvainais burkāns un kaķis
   customName: String,
+
+  // makšķerēm izturība
   durability: Number,
+
+  // kafijas aparāts, pētnieks (unix millis)
   lastUsed: Number, // unix millis
+
+  // pētnieka atrastais brīvgrieziens
   foundItemKey: String,
+
+  // naudas maisam
   latiCollected: Number,
+
+  // loto zivij, "satur x zivis" atribūts
   holdsFishCount: Number,
+
+  // kaķis (unix millis)
   createdAt: Number, // unix millis
   fedUntil: Number, // unix millis
   isCooked: Boolean,
+
+  // cepure - kaķim un pētniekam
   hat: String,
+
+  // sūdīgs nosaukums, bet domāts patriotu piespraudei, numurs pēc kārtas
   piespraudeNum: Number,
+
+  // gāzes plīts
   cookingItem: String,
   cookingStartedTime: Number, // unix millis
 
-  // ogu krums
+  // ogu krūmam
   berryType: String,
   growthTime: Number, // unix millis
   maxBerries: Number,
@@ -72,12 +100,12 @@ export const ItemAttributesSchema = {
   },
 };
 
-const userSchema = new Schema<UserProfile>({
+export const userSchema = new Schema<UserProfile>({
   userId: RequiredStringIndex,
   guildId: RequiredStringIndex,
-  lati: NumberZero,
-  xp: NumberZero, // pāri palikušais xp
-  level: NumberZero,
+  lati: IntegerDefaultZero,
+  xp: IntegerDefaultZero, // pāri palikušais xp
+  level: IntegerDefaultZero,
 
   jobPosition: {
     type: String,
@@ -173,7 +201,7 @@ const userSchema = new Schema<UserProfile>({
       default: null,
     },
 
-    usesLeft: NumberZero,
+    usesLeft: NumberDefaultZero,
 
     lastCaughtFish: {
       type: {
@@ -211,10 +239,10 @@ const userSchema = new Schema<UserProfile>({
 
   stocks: {
     owned: {
-      latvijasPiens: NumberZero,
-      latvijasRadio: NumberZero,
-      martinsonaVelo: NumberZero,
-      bachaKazino: NumberZero,
+      latvijasPiens: NumberDefaultZero,
+      latvijasRadio: NumberDefaultZero,
+      martinsonaVelo: NumberDefaultZero,
+      bachaKazino: NumberDefaultZero,
     },
     transactions: {
       type: [
