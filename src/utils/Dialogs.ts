@@ -182,7 +182,7 @@ export class Dialogs<T extends { [key: string]: any }> {
 
       if (res.error) {
         await intReply(componentInteraction, errorEmbed);
-        return;
+        // return;
       }
 
       if (res.update) {

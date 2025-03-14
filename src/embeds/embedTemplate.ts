@@ -3,6 +3,7 @@ import {
   APIActionRowComponent,
   APIMessageActionRowComponent,
   BaseInteraction,
+  BaseMessageOptions,
   EmbedField,
   GuildMember,
   InteractionReplyOptions,
@@ -26,6 +27,7 @@ interface EmbedTemplateOptions {
     | ActionRowData<MessageActionRowComponentData | MessageActionRowComponentBuilder>
     | APIActionRowComponent<APIMessageActionRowComponent>
   )[];
+  files?: BaseMessageOptions['files'];
 }
 
 export const ULMANBOTA_VERSIJA: VersionString = '4.3';
@@ -52,6 +54,7 @@ export default function embedTemplate(options: EmbedTemplateOptions): Interactio
       },
     ],
     components: options.components ?? [],
+    files: options.files ?? [],
     fetchReply: true,
   };
 }
