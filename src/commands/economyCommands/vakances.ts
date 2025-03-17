@@ -64,6 +64,11 @@ type State = {
   currentJob: string | null;
 };
 
+const enum ComponentId {
+  Select = 'vakances_select',
+  ChangeProfession = 'vakances_change_profession',
+}
+
 function view({ user, chosenJob, currentJob }: State, i: BaseInteraction) {
   const options: SelectMenuComponentOptionData[] = Object.entries(JobPositions)
     .filter(([key, value]) => key !== currentJob && user.level >= value.minLevel)
@@ -89,14 +94,14 @@ function view({ user, chosenJob, currentJob }: State, i: BaseInteraction) {
     components: [
       new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
         new StringSelectMenuBuilder()
-          .setCustomId('vakances_select')
+          .setCustomId(ComponentId.Select)
           .setPlaceholder('Izvēlies vakanci')
           .setDisabled(!options.length)
           .addOptions(options.length ? options : [{ label: '-', value: '-' }]),
       ),
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
-          .setCustomId('vakances_button')
+          .setCustomId(ComponentId.ChangeProfession)
           .setLabel('Mainīt profesiju')
           .setStyle(chosenJob ? ButtonStyle.Primary : ButtonStyle.Secondary)
           .setDisabled(!chosenJob),
@@ -138,12 +143,12 @@ const vakances: Command = {
     dialogs.onClick(async int => {
       const { customId, componentType } = int;
 
-      if (customId === 'vakances_select' && componentType === ComponentType.StringSelect) {
+      if (customId === ComponentId.Select && componentType === ComponentType.StringSelect) {
         dialogs.state.chosenJob = int.values[0];
         return { update: true };
       }
 
-      if (customId === 'vakances_button' && componentType === ComponentType.Button) {
+      if (customId === ComponentId.ChangeProfession && componentType === ComponentType.Button) {
         if (!dialogs.state.chosenJob) return;
 
         await setJobPosition(userId, guildId, dialogs.state.chosenJob);

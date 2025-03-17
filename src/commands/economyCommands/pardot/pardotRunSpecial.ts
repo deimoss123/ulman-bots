@@ -38,6 +38,11 @@ type State = {
   soldValue: number;
 };
 
+const enum ComponentId {
+  Select = 'pardot_special_select',
+  Confirm = 'pardot_special_confirm',
+}
+
 function view(state: State, i: BaseInteraction) {
   if (state.didSell) {
     return soldEmbed(i, state.user, state.soldItems, state.soldValue, state.color);
@@ -48,7 +53,7 @@ function view(state: State, i: BaseInteraction) {
   const components = [
     new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
       new StringSelectMenuBuilder()
-        .setCustomId('pardot_special_select')
+        .setCustomId(ComponentId.Select)
         .setPlaceholder('Izvēlies ko pārdot')
         .setMinValues(1)
         .setMaxValues(itemsInInv.length)
@@ -80,7 +85,7 @@ function view(state: State, i: BaseInteraction) {
     ),
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
-        .setCustomId('pardot_special_confirm')
+        .setCustomId(ComponentId.Confirm)
         .setDisabled(!selectedIds.length)
         .setLabel('Pārdot')
         .setStyle(selectedIds.length ? ButtonStyle.Primary : ButtonStyle.Secondary),
@@ -170,10 +175,10 @@ export default async function pardotRunSpecial(
 
   dialogs.onClick(async (int, state) => {
     const { customId, componentType } = int;
-    if (customId === 'pardot_special_select' && componentType === ComponentType.StringSelect) {
+    if (customId === ComponentId.Select && componentType === ComponentType.StringSelect) {
       state.selectedIds = int.values;
       return { update: true };
-    } else if (customId === 'pardot_special_confirm' && componentType === ComponentType.Button) {
+    } else if (customId === ComponentId.Confirm && componentType === ComponentType.Button) {
       const user = await findUser(userId, guildId);
       if (!user) return { error: true };
 

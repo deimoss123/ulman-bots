@@ -30,10 +30,14 @@ type State = {
   itemsToUseLeft: number;
 };
 
+const enum ComponentId {
+  UseAgain = 'izmantot_velreiz',
+}
+
 function view(state: State, i: BaseInteraction) {
   const componentRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
-      .setCustomId('izmantot_velreiz')
+      .setCustomId(ComponentId.UseAgain)
       .setLabel(`Izmantot vēlreiz (${state.itemsToUseLeft})`)
       .setStyle(ButtonStyle.Primary)
       .setEmoji(state.itemToUse.emoji() || '❓'),
@@ -106,7 +110,7 @@ export default async function izmantotRun(
   if (!itemsToUseLeft || ('removedOnUse' in itemToUse && !itemToUse.removedOnUse)) return;
 
   dialogs.onClick(async int => {
-    if (int.customId === 'izmantot_velreiz' && int.componentType === ComponentType.Button) {
+    if (int.customId === ComponentId.UseAgain && int.componentType === ComponentType.Button) {
       izmantotRun(int, itemToUseKey, embedColor);
       return { end: true };
     }

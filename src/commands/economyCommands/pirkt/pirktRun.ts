@@ -1,5 +1,6 @@
 import {
   ActionRowBuilder,
+  BaseInteraction,
   ButtonBuilder,
   ButtonInteraction,
   ButtonStyle,
@@ -24,6 +25,13 @@ import checkUserSpecialItems from '../../../items/helpers/checkUserSpecialItems'
 import setStats from '../../../economy/stats/setStats';
 import getDiscounts from '../../../items/helpers/getDiscounts';
 import intReply from '../../../utils/intReply';
+
+type State = {
+
+}
+
+function view(state: State, i: BaseInteraction) {
+}
 
 export default async function pirktRun(
   i: ChatInputCommandInteraction | ButtonInteraction,

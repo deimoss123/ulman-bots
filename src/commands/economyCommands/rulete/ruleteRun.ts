@@ -49,6 +49,10 @@ type State = {
   isSpinning: boolean;
 };
 
+const enum ComponentId {
+  SpinAgain = 'rulete_spin_again',
+}
+
 function view(state: State, i: BaseInteraction) {
   const { num, color, didWin, multiplier } = state.rulRes;
 
@@ -65,7 +69,7 @@ function view(state: State, i: BaseInteraction) {
   const components = [
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
-        .setCustomId('rulete_spin_again')
+        .setCustomId(ComponentId.SpinAgain)
         .setDisabled(state.isSpinning || !canSpinAgain)
         .setStyle(state.isSpinning ? ButtonStyle.Secondary : canSpinAgain ? ButtonStyle.Primary : ButtonStyle.Danger)
         .setLabel(
@@ -200,7 +204,7 @@ export default async function ruleteRun(
   }, 1500);
 
   dialogs.onClick(async int => {
-    if (int.customId === 'rulete_spin_again' && int.componentType === ComponentType.Button) {
+    if (int.customId === ComponentId.SpinAgain && int.componentType === ComponentType.Button) {
       return {
         end: true,
         after: () => {

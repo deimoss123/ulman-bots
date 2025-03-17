@@ -16,7 +16,7 @@ import { KazinoLikme } from '../rulete/rulete';
 import calcSpin from './calcSpin';
 import { FENIKS_MIN_LIKME } from './feniks';
 import { Dialogs } from '../../../utils/Dialogs';
-import feniksView, { FeniksState } from './feniksView';
+import feniksView, { ComponentId, FeniksState, FreeSpinIds } from './feniksView';
 
 const DEFAULT_EMOJI_COUNT = 5;
 
@@ -144,43 +144,47 @@ export default async function feniksRun(
     return intReply(i, errorEmbed);
   }
 
-  setTimeout(async () => {
-    dialogs.state.isSpinning = false;
-    await dialogs.edit();
-    dialogs.setActive(false);
-  }, isFree ? 300 : 1500);
+  setTimeout(
+    async () => {
+      dialogs.state.isSpinning = false;
+      await dialogs.edit();
+      dialogs.setActive(false);
+    },
+    isFree ? 300 : 1500,
+  );
 
   dialogs.onClick(async int => {
     const { customId, componentType } = int;
 
     if (componentType !== ComponentType.Button) return;
 
-    if (customId === 'feniks_spin_again') {
+    if (customId === ComponentId.SpinAgain) {
       return {
         end: true,
         after: () => feniksRun(int, likme, false),
       };
     }
 
-    if (customId.startsWith('freespin_')) {
+    const freeSpinName = Object.entries(FreeSpinIds).find(([_, id]) => id === customId)?.[0];
+
+    if (freeSpinName) {
       const user = await findUser(userId, guildId);
       if (!user) return { error: true };
 
-      const itemName = customId.split('_')[1];
-      const itemObj = itemList[itemName];
+      const itemObj = itemList[freeSpinName];
 
-      const itemInInv = user.items.find(item => item.name === itemName);
+      const itemInInv = user.items.find(item => item.name === freeSpinName);
       if (!itemInInv || itemInInv.amount < 1) {
         await intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString(itemObj)}**`));
         return;
       }
 
-      const freeSpinLikme = itemName.split('brivgriez')[1];
+      const freeSpinLikme = freeSpinName.split('brivgriez')[1];
       if (!freeSpinLikme) return { error: true };
 
       return {
         end: true,
-        after: () => feniksRun(int, +freeSpinLikme, true, itemName),
+        after: () => feniksRun(int, +freeSpinLikme, true, freeSpinName),
       };
     }
   });

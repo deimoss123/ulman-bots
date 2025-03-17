@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import {
   ButtonInteraction,
   ChatInputCommandInteraction,
+  InteractionCallbackResponse,
   InteractionReplyOptions,
   InteractionResponse,
   Message,
@@ -17,8 +18,8 @@ type InteractionTypes =
 
 function intReply(
   interaction: InteractionTypes,
-  options: InteractionReplyOptions & { fetchReply: true }
-): Promise<Message | null>;
+  options: InteractionReplyOptions & { withResponse: true }
+): Promise<InteractionCallbackResponse | null>;
 function intReply(
   interaction: InteractionTypes,
   options: InteractionReplyOptions | string
@@ -26,8 +27,8 @@ function intReply(
 
 async function intReply(
   interaction: InteractionTypes,
-  options: (InteractionReplyOptions & { fetchReply: true }) | InteractionReplyOptions | string
-): Promise<InteractionResponse | Message | null> {
+  options: (InteractionReplyOptions & { withResponse: true }) | InteractionReplyOptions | string
+): Promise<InteractionResponse | InteractionCallbackResponse | null> {
   try {
     const res = await interaction.reply(options);
     return res;

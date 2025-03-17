@@ -73,7 +73,12 @@ type State = {
   selected: 'ja' | 'ne' | null;
 };
 
-function pardotVisuView(state: State, i: BaseInteraction): InteractionReplyOptions & { fetchReply: true } {
+const enum ComponentId {
+  Yes = 'pardot_visu_yes',
+  No = 'pardot_visu_no',
+}
+
+function pardotVisuView(state: State, i: BaseInteraction): InteractionReplyOptions & { withResponse: true } {
   if (state.selected === 'ja') {
     return pardotEmbed(i, state.user, state.itemsToSell, state.soldItemsValue);
   }
@@ -81,12 +86,12 @@ function pardotVisuView(state: State, i: BaseInteraction): InteractionReplyOptio
   const components = [
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
-        .setCustomId('pardot_visu_ja')
+        .setCustomId(ComponentId.Yes)
         .setLabel('Jā')
         .setStyle(state.selected ? ButtonStyle.Secondary : ButtonStyle.Primary)
         .setDisabled(!!state.selected),
       new ButtonBuilder()
-        .setCustomId('pardot_visu_ne')
+        .setCustomId(ComponentId.No)
         .setLabel('Nē')
         .setStyle(state.selected === 'ne' ? ButtonStyle.Success : ButtonStyle.Danger)
         .setDisabled(!!state.selected),
@@ -99,7 +104,7 @@ function pardotVisuView(state: State, i: BaseInteraction): InteractionReplyOptio
       description: 'Vai tiešām gribi pārdot **VISAS** savas mantas? (bīstami)',
       color: commandColors.pardot,
     }],
-    fetchReply: true,
+    withResponse: true,
     components,
   };
 }
@@ -169,7 +174,7 @@ export default async function pardotRun(
 
     if (componentType !== ComponentType.Button) return;
 
-    if (customId === 'pardot_visu_ne') {
+    if (customId === ComponentId.No) {
       state.selected = 'ne';
       return {
         update: true,
@@ -177,7 +182,7 @@ export default async function pardotRun(
       };
     }
 
-    if (customId === 'pardot_visu_ja') {
+    if (customId === ComponentId.Yes) {
       const user = await findUser(userId, guildId);
       if (!user) return { error: true };
 

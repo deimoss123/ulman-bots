@@ -52,6 +52,10 @@ export type IpasumiState = {
   ievarijumuStends: ievarijumuStends.State;
 };
 
+const enum ComponentId {
+  Select = 'ipasumi_select',
+}
+
 function ipasumiView(state: IpasumiState, i: BaseInteraction) {
   if (state.screen !== 'default') {
     return ALL_PROPERTIES[state.screen].view(state, i);
@@ -64,7 +68,7 @@ function ipasumiView(state: IpasumiState, i: BaseInteraction) {
     components: [
       new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
         new StringSelectMenuBuilder()
-          .setCustomId('select_ipasumi')
+          .setCustomId(ComponentId.Select)
           .setPlaceholder('Izvēlies īpašumu')
           .addOptions(
             Object.entries(ALL_PROPERTIES).map(([key, { name, emoji }]) => {

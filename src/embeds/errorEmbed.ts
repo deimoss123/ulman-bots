@@ -1,8 +1,9 @@
-import { InteractionReplyOptions } from "discord.js";
+import { InteractionReplyOptions, MessageFlags } from 'discord.js';
 
 const errorEmbed: InteractionReplyOptions = {
   content: 'UlmaņBota kļūda :(',
-  ephemeral: true,
+  flags: MessageFlags.Ephemeral,
 };
 
-export default errorEmbed
+export default errorEmbed;
+

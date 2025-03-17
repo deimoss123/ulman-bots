@@ -43,6 +43,12 @@ type State = {
   timeUntilReset: number;
 };
 
+const enum ComponentId {
+  Buy = 'veikals_pirkt',
+  SelectItem = 'veikals_select_item',
+  SelectAmount = 'veikals_select_amount',
+}
+
 function view({ user, shopItems, chosenItem, chosenAmount, resetTime, timeUntilReset }: State, i: BaseInteraction) {
   const fields = shopItems.map(item => {
     let name = itemString(item.key);
@@ -80,7 +86,7 @@ function view({ user, shopItems, chosenItem, chosenAmount, resetTime, timeUntilR
 
   const buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
-      .setCustomId('veikals_pirkt')
+      .setCustomId(ComponentId.Buy)
       .setLabel('Pirkt' + (totalCost ? ` (${latiString(totalCost)})` : ''))
       .setStyle(disableBuy ? ButtonStyle.Secondary : ButtonStyle.Primary)
       .setEmoji('911400812754915388')
@@ -90,7 +96,7 @@ function view({ user, shopItems, chosenItem, chosenAmount, resetTime, timeUntilR
   if (!canAfford) {
     buttonRow.addComponents(
       new ButtonBuilder()
-        .setCustomId('veikals_warn_1')
+        .setCustomId('_')
         .setLabel('Tev nepietiek naudas')
         .setStyle(ButtonStyle.Danger)
         .setEmoji('❕')
@@ -101,7 +107,7 @@ function view({ user, shopItems, chosenItem, chosenAmount, resetTime, timeUntilR
   if (!hasFreeInvSlots) {
     buttonRow.addComponents(
       new ButtonBuilder()
-        .setCustomId('veikals_warn_2')
+        .setCustomId('_1')
         .setLabel('Inventārā nepietiek vieta')
         .setStyle(ButtonStyle.Danger)
         .setEmoji('❕')
@@ -121,7 +127,7 @@ function view({ user, shopItems, chosenItem, chosenAmount, resetTime, timeUntilR
     components: [
       new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
         new StringSelectMenuBuilder()
-          .setCustomId('veikals_prece')
+          .setCustomId(ComponentId.SelectItem)
           .setPlaceholder(`Izvēlies preci, tev ir ${latiString(user.lati)}`)
           .addOptions(
             shopItems.map(({ key, itemObj, price }) => ({
@@ -135,7 +141,7 @@ function view({ user, shopItems, chosenItem, chosenAmount, resetTime, timeUntilR
       ),
       new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
         new StringSelectMenuBuilder()
-          .setCustomId('veikals_daudzums')
+          .setCustomId(ComponentId.SelectAmount)
           .setPlaceholder(`Daudzums: ${chosenAmount}`)
           .addOptions(amountMenuOptions),
       ),
@@ -184,17 +190,17 @@ const veikals: Command = {
     dialogs.onClick(async int => {
       const { customId, componentType: type } = int;
 
-      if (customId === 'veikals_prece' && type === ComponentType.StringSelect) {
+      if (customId === ComponentId.SelectItem && type === ComponentType.StringSelect) {
         dialogs.state.chosenItem = int.values[0];
         return { update: true };
       }
 
-      if (customId === 'veikals_daudzums' && type === ComponentType.StringSelect) {
+      if (customId === ComponentId.SelectAmount && type === ComponentType.StringSelect) {
         dialogs.state.chosenAmount = +int.values[0];
         return { update: true };
       }
 
-      if (customId === 'veikals_pirkt' && type === ComponentType.Button) {
+      if (customId === ComponentId.Buy && type === ComponentType.Button) {
         return {
           end: true,
           after: () => {

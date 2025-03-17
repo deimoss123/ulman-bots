@@ -4,8 +4,10 @@ import {
   ButtonInteraction,
   ChatInputCommandInteraction,
   ComponentType,
+  InteractionEditReplyOptions,
   InteractionReplyOptions,
   Message,
+  MessageFlags,
   ModalSubmitInteraction,
   StringSelectMenuBuilder,
   StringSelectMenuInteraction,
@@ -63,7 +65,7 @@ export class Dialogs<T extends { [key: string]: any }> {
     public state: T,
 
     // funkcija, kas atgriež embedus/pogas, atkarīga no state
-    private viewFunc: (state: T, interaction: InteractionType) => InteractionReplyOptions & { fetchReply: true },
+    private viewFunc: (state: T, interaction: InteractionType) => Omit<InteractionReplyOptions & { withResponse: true }, 'ephemeral'>,
 
     private name: string,
 
@@ -89,9 +91,9 @@ export class Dialogs<T extends { [key: string]: any }> {
   // atgriež statusu -> true = izdevās atbildēt, false = neizdevās
   public async start(): Promise<boolean> {
     const res = await intReply(this.primaryInteraction, this.viewFunc(this.state, this.primaryInteraction));
-    if (!res) return false;
+    if (!res || !res.resource?.message) return false;
 
-    this.primaryMsg = res;
+    this.primaryMsg = res.resource.message;
     return true;
   }
 
@@ -106,7 +108,6 @@ export class Dialogs<T extends { [key: string]: any }> {
       return false;
     }
   }
-
   // rediģē ziņu
   public async edit(): Promise<boolean> {
     try {
@@ -166,7 +167,7 @@ export class Dialogs<T extends { [key: string]: any }> {
       if (componentInteraction.user.id !== this.primaryInteraction.user.id) {
         intReply(componentInteraction, {
           content: 'Nav pieklājīgi spaidīt svešu cilvēku pogas :^)',
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
         });
         return;
       }

@@ -16,7 +16,7 @@ import { INCREASE_CAP_1 } from '../../../items/usableItems/mugursoma';
 import { INCREASE_CAP_2 } from '../../../items/usableItems/divaina_mugursoma';
 import intReply from '../../../utils/intReply';
 import emoji from '../../../utils/emoji';
-import { InventarsState, inventarsView } from './inventarsView';
+import { ComponentId, InventarsState, inventarsView } from './inventarsView';
 import { Dialogs } from '../../../utils/Dialogs';
 
 export type ItemType = 'not_usable' | 'usable' | 'special' | 'not_sellable';
@@ -225,23 +225,23 @@ const inventars: Command = {
       }
 
       switch (customId) {
-        case 'inv_first_page': {
+        case ComponentId.FirstPage: {
           dialogs.state.currentPage = 0;
           return { update: true };
         }
-        case 'inv_prev_page': {
+        case ComponentId.PrevPage: {
           if (dialogs.state.currentPage > 0) dialogs.state.currentPage--;
           return { update: true };
         }
-        case 'inv_next_page': {
+        case ComponentId.NextPage: {
           if (dialogs.state.currentPage < dialogs.state.totalPages - 1) dialogs.state.currentPage++;
           return { update: true };
         }
-        case 'inv_last_page': {
+        case ComponentId.LastPage: {
           dialogs.state.currentPage = dialogs.state.totalPages - 1;
           return { update: true };
         }
-        case 'inv_pardot_neizmantojamas': {
+        case ComponentId.SellUnusable: {
           dialogs.state.buttonsPressed.add('neizmantojamas');
 
           return {
@@ -249,7 +249,7 @@ const inventars: Command = {
             after: () => pardotRun(int, 'neizmantojamās'),
           };
         }
-        case 'inv_pardot_visas': {
+        case ComponentId.SellAll: {
           dialogs.state.buttonsPressed.add('visas');
 
           return {

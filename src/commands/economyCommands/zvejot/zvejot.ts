@@ -22,7 +22,7 @@ import intReply from '../../../utils/intReply';
 import maksekeresData from './makskeresData';
 import syncFishing from './syncFishing';
 import { Dialogs } from '../../../utils/Dialogs';
-import zvejotView, { ZvejotState } from './zvejotView';
+import zvejotView, { ComponentId, ZvejotState } from './zvejotView';
 import mongoTransaction from '../../../utils/mongoTransaction';
 
 export function calcRepairCost(itemKey: ItemKey, usesLeft: number) {
@@ -73,14 +73,14 @@ const zvejot: Command = {
 
     dialogs.onClick(async (int, state) => {
       switch (int.customId) {
-        case 'select_fishing_rod': {
+        case ComponentId.SelectFishingRod: {
           if (int.componentType !== ComponentType.StringSelect) return;
 
           [state.selectedFishingRod, state.selectedFishingRodId] = int.values[0].split(' ');
 
           return { update: true };
         }
-        case 'start_fishing_btn': {
+        case ComponentId.StartFishing: {
           if (int.componentType !== ComponentType.Button || !state.selectedFishingRod) return;
 
           const user = await findUser(userId, guildId);
@@ -111,7 +111,7 @@ const zvejot: Command = {
 
           return { update: true };
         }
-        case 'collect_fish_btn': {
+        case ComponentId.CollectFish: {
           if (int.componentType !== ComponentType.Button) return;
 
           const user = await syncFishing(userId, guildId);
@@ -172,7 +172,7 @@ const zvejot: Command = {
 
           return { edit: true };
         }
-        case 'remove_fishing_rod': {
+        case ComponentId.RemoveFishingRod: {
           if (int.componentType !== ComponentType.Button) return;
 
           const user = await syncFishing(userId, guildId);
@@ -223,7 +223,7 @@ const zvejot: Command = {
 
           return { edit: true };
         }
-        case 'fix_fishing_rod': {
+        case ComponentId.FixFishingRod: {
           if (int.componentType !== ComponentType.Button) return;
           const user = await syncFishing(userId, guildId);
           if (!user || !user.fishing.selectedRod) return { error: true };
@@ -272,7 +272,7 @@ const zvejot: Command = {
 
           return { edit: true };
         }
-        case 'refresh': {
+        case ComponentId.Refresh: {
           if (int.componentType !== ComponentType.Button) return;
 
           const user = await syncFishing(userId, guildId);

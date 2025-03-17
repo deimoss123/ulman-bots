@@ -139,14 +139,14 @@ const stradat: Command = {
         content: '\u200b',
         embeds: [stradatVelreizEmbed],
         components: [stradatVelreizRow],
-        fetchReply: true,
+        withResponse: true,
       });
     } else {
       interactionReply = await intReply(i, {
         content: '\u200b',
         embeds: [embed],
         components: [btnRow],
-        fetchReply: true,
+        withResponse: true,
       });
     }
 

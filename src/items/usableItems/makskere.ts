@@ -43,6 +43,10 @@ type State = {
   hasRepaired: boolean;
 };
 
+const enum ComponentId {
+  FixFishingRod = 'izmantot_makskere_fix_fishing_rod',
+}
+
 function view(state: State, i: BaseInteraction) {
   const itemObj = itemList[state.itemKey];
   const { repairable, maxDurability } = maksekeresData[state.itemKey];
@@ -54,7 +58,7 @@ function view(state: State, i: BaseInteraction) {
   const components = [
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
-        .setCustomId('fix_fishing_rod')
+        .setCustomId(ComponentId.FixFishingRod)
         .setLabel(
           repairable
             ? `Salabot ${itemObj.nameAkuVsk} - ${latiString(state.repairCost)}${!canAfford ? ' (nevari atļauties)' : ''}`
@@ -111,7 +115,7 @@ const makskere: UsableItemFunc = async (userId, guildId, itemKey, specialItem) =
 
       dialogs.onClick(async (int, state) => {
         if (!repairable) return;
-        if (int.customId !== 'fix_fishing_rod' || int.componentType !== ComponentType.Button) return;
+        if (int.customId !== ComponentId.FixFishingRod || int.componentType !== ComponentType.Button) return;
 
         const user = await findUser(userId, guildId);
         if (!user) return { error: true };

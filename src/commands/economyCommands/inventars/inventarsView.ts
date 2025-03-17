@@ -20,10 +20,20 @@ export type InventarsState = {
   buttonsPressed: Set<'visas' | 'neizmantojamas'>;
 };
 
+export const enum ComponentId {
+  SellAll = 'inv_pardot_visas',
+  SellUnusable = 'inv_pardot_neizmantojamas',
+
+  FirstPage = 'inv_first_page',
+  PrevPage = 'inv_prev_page',
+  NextPage = 'inv_next_page',
+  LastPage = 'inv_last_page',
+}
+
 function sellRow({ items }: UserProfile, buttonsPressed: Set<'visas' | 'neizmantojamas'>) {
   const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
-      .setCustomId('inv_pardot_visas')
+      .setCustomId(ComponentId.SellAll)
       .setLabel('Pārdot visas mantas')
       .setStyle(buttonsPressed.has('visas') ? ButtonStyle.Success : ButtonStyle.Primary)
       .setDisabled(buttonsPressed.has('visas')),
@@ -33,7 +43,7 @@ function sellRow({ items }: UserProfile, buttonsPressed: Set<'visas' | 'neizmant
   if (hasUnusableItems) {
     row.addComponents(
       new ButtonBuilder()
-        .setCustomId('inv_pardot_neizmantojamas')
+        .setCustomId(ComponentId.SellUnusable)
         .setLabel('Pārdot neizmantojamās mantas')
         .setStyle(buttonsPressed.has('neizmantojamas') ? ButtonStyle.Success : ButtonStyle.Primary)
         .setDisabled(buttonsPressed.has('neizmantojamas')),

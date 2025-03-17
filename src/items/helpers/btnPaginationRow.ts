@@ -7,11 +7,6 @@ export default function btnPaginationRow(cmd: string, currentPage: number, total
 
   return new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
-      .setCustomId('_')
-      .setLabel(`${currentPage + 1}/${totalPages}`)
-      .setStyle(ButtonStyle.Secondary)
-      .setDisabled(true),
-    new ButtonBuilder()
       .setCustomId(`${cmd}_first_page`)
       .setEmoji(emoji('icon_page_first'))
       .setDisabled(isFirstPage)
@@ -30,6 +25,11 @@ export default function btnPaginationRow(cmd: string, currentPage: number, total
       .setCustomId(`${cmd}_last_page`)
       .setEmoji(emoji('icon_page_last'))
       .setDisabled(isLastPage)
+      .setStyle(ButtonStyle.Secondary),
+    new ButtonBuilder()
+      .setCustomId('_')
+      .setLabel(`${currentPage + 1}/${totalPages}`)
       .setStyle(ButtonStyle.Secondary)
+      .setDisabled(true),
   );
 }

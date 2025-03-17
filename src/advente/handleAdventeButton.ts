@@ -1,4 +1,4 @@
-import { ButtonInteraction } from 'discord.js';
+import { ButtonInteraction, MessageFlags } from 'discord.js';
 import addItems from '../economy/addItems';
 import addLati from '../economy/addLati';
 import findUser from '../economy/findUser';
@@ -39,8 +39,8 @@ export default async function handleAdventeButton(i: ButtonInteraction) {
         i,
         ephemeralReply(
           `Tev nepietiek vietas inventārā lai saņemtu **${itemString(item, amount, true)}**\n` +
-            `Tev ir ${countFreeInvSlots(user)} brīvas vietas`
-        )
+            `Tev ir ${countFreeInvSlots(user)} brīvas vietas`,
+        ),
       );
     }
     const checkRes = checkUserSpecialItems(user, item, amount);
@@ -56,7 +56,7 @@ export default async function handleAdventeButton(i: ButtonInteraction) {
   await setUser(userId, guildId, { adventeClaimedDate: date.toLocaleDateString('en-GB') });
 
   intReply(i, {
-    ephemeral: true,
+    flags: MessageFlags.Ephemeral,
     embeds: [
       {
         title: `Adventes kalendārs - ${date.toLocaleDateString('en-GB')}`,

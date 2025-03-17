@@ -92,6 +92,17 @@ function getBoilDuration() {
   return 60 * 1000; // 1 min
 }
 
+const enum ComponentId {
+  SelectBoil = 'plits_select_menu_boil',
+  SelectCook = 'plits_select_menu_cook',
+
+  SelectBerry = 'plits_select_berry',
+  AddBerry = 'plits_add_berry',
+  RemoveBerry = 'plits_remove_berry',
+  RemoveAllBerries = 'plits_remove_all_berries',
+  Boil = 'plits_boil_ievarijums',
+}
+
 function view(state: State, i: BaseInteraction) {
   if (!state.selectedMenu) {
     return embedTemplate({
@@ -101,9 +112,9 @@ function view(state: State, i: BaseInteraction) {
       description: 'Ko tu vēlies darīt?',
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder().setCustomId('plits_select_menu_cook').setLabel('Cept').setStyle(ButtonStyle.Primary),
+          new ButtonBuilder().setCustomId(ComponentId.SelectCook).setLabel('Cept').setStyle(ButtonStyle.Primary),
           new ButtonBuilder()
-            .setCustomId('plits_select_menu_boil')
+            .setCustomId(ComponentId.SelectBoil)
             .setLabel('Vārīt ievārījumu')
             .setStyle(ButtonStyle.Primary),
         ),
@@ -132,7 +143,7 @@ function view(state: State, i: BaseInteraction) {
     const components: ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] = [
       new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
         new StringSelectMenuBuilder()
-          .setCustomId('plits_select_berry')
+          .setCustomId(ComponentId.SelectBerry)
           .setPlaceholder('Izvēlies ogu')
           .addOptions(
             ...state.boil.berriesInInv // @ts-ignore jo stringu salīdzināšana
@@ -157,7 +168,7 @@ function view(state: State, i: BaseInteraction) {
 
       const row = [
         new ButtonBuilder()
-          .setCustomId('plits_add_berry')
+          .setCustomId(ComponentId.AddBerry)
           .setLabel('Mest katlā')
           .setStyle(ButtonStyle.Primary)
           .setDisabled(selectedBerryInInv.amount <= state.boil.chosenBerries[state.boil.selectedBerry]),
@@ -166,7 +177,7 @@ function view(state: State, i: BaseInteraction) {
       if (state.boil.chosenBerries[state.boil.selectedBerry] > 0) {
         row.push(
           new ButtonBuilder()
-            .setCustomId('plits_remove_berry')
+            .setCustomId(ComponentId.RemoveBerry)
             .setLabel(`Izņemt ${selectedBerryInInv.itemObj.nameAkuDsk}`)
             .setStyle(ButtonStyle.Danger),
         );
@@ -175,7 +186,7 @@ function view(state: State, i: BaseInteraction) {
       if (Object.keys(state.boil.chosenBerries).length) {
         row.push(
           new ButtonBuilder()
-            .setCustomId('plits_remove_all_berries')
+            .setCustomId(ComponentId.RemoveAllBerries)
             .setLabel('Izņemt visas ogas')
             .setStyle(ButtonStyle.Danger),
         );
@@ -188,7 +199,7 @@ function view(state: State, i: BaseInteraction) {
       components.push(
         new ActionRowBuilder<ButtonBuilder>().addComponents(
           new ButtonBuilder()
-            .setCustomId('plits_boil_ievarijums')
+            .setCustomId(ComponentId.Boil)
             .setLabel('Vārīt')
             .setStyle(totalBerryCount < 3 ? ButtonStyle.Secondary : ButtonStyle.Success)
             .setDisabled(totalBerryCount < 3),
@@ -278,12 +289,12 @@ const gazes_plits: UsableItemFunc = async (userId, guildId, _, specialItem) => {
         const { customId, componentType: type } = int;
 
         // pirmā izvēlne ========================================
-        if (customId === 'plits_select_menu_cook' && type === ComponentType.Button) {
+        if (customId === ComponentId.SelectCook && type === ComponentType.Button) {
           dialogs.state.selectedMenu = 'cook';
           return { update: true };
         }
 
-        if (customId === 'plits_select_menu_boil' && type === ComponentType.Button) {
+        if (customId === ComponentId.SelectBoil && type === ComponentType.Button) {
           dialogs.state.selectedMenu = 'boil';
 
           if (!dialogs.state.boil.berriesInInv.length) {
@@ -294,12 +305,12 @@ const gazes_plits: UsableItemFunc = async (userId, guildId, _, specialItem) => {
         }
 
         // vārīšana ========================================
-        if (customId === 'plits_select_berry' && type === ComponentType.StringSelect) {
+        if (customId === ComponentId.SelectBerry && type === ComponentType.StringSelect) {
           dialogs.state.boil.selectedBerry = int.values[0];
           return { update: true };
         }
 
-        if (customId === 'plits_add_berry' && type === ComponentType.Button) {
+        if (customId === ComponentId.AddBerry && type === ComponentType.Button) {
           const selectedBerry = dialogs.state.boil.selectedBerry;
           if (!selectedBerry) return { errror: true };
 
@@ -314,7 +325,7 @@ const gazes_plits: UsableItemFunc = async (userId, guildId, _, specialItem) => {
           return { update: true };
         }
 
-        if (customId === 'plits_remove_berry' && type === ComponentType.Button) {
+        if (customId === ComponentId.RemoveBerry && type === ComponentType.Button) {
           const selectedBerry = dialogs.state.boil.selectedBerry;
 
           if (!selectedBerry || !dialogs.state.boil.chosenBerries[selectedBerry]) {
@@ -328,7 +339,7 @@ const gazes_plits: UsableItemFunc = async (userId, guildId, _, specialItem) => {
           return { update: true };
         }
 
-        if (customId === 'plits_remove_all_berries' && type === ComponentType.Button) {
+        if (customId === ComponentId.RemoveAllBerries && type === ComponentType.Button) {
           dialogs.state.boil.chosenBerries = {};
           dialogs.state.boil.combinedProperties = makeCombinedProperties({});
           dialogs.state.boil.selectedBerry = '';
@@ -336,7 +347,7 @@ const gazes_plits: UsableItemFunc = async (userId, guildId, _, specialItem) => {
           return { update: true };
         }
 
-        if (customId === 'plits_boil_ievarijums' && type === ComponentType.Button) {
+        if (customId === ComponentId.Boil && type === ComponentType.Button) {
           const user = await findUser(userId, guildId);
           if (!user) return { error: true };
 

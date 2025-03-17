@@ -32,7 +32,7 @@ interface EmbedTemplateOptions {
 
 export const ULMANBOTA_VERSIJA: VersionString = '4.3';
 
-export default function embedTemplate(options: EmbedTemplateOptions): InteractionReplyOptions & { fetchReply: true } {
+export default function embedTemplate(options: EmbedTemplateOptions): InteractionReplyOptions & { withResponse: true } {
   return {
     content: options.content,
     embeds: [
@@ -55,6 +55,6 @@ export default function embedTemplate(options: EmbedTemplateOptions): Interactio
     ],
     components: options.components ?? [],
     files: options.files ?? [],
-    fetchReply: true,
+    withResponse: true,
   };
 }

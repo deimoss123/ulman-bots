@@ -5,6 +5,7 @@ import {
   ButtonStyle,
   ChannelType,
   ChatInputCommandInteraction,
+  MessageFlags,
   PermissionsBitField,
 } from 'discord.js';
 import errorEmbed from '../embeds/errorEmbed';
@@ -50,7 +51,7 @@ export default async function commandHandler(i: ChatInputCommandInteraction) {
             color: 0x9d2235,
           },
         ],
-        ephemeral: true,
+        flags: [MessageFlags.Ephemeral],
         components: [
           new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder().setURL(url).setLabel('Doties uz ziņu').setStyle(ButtonStyle.Link)

@@ -17,6 +17,10 @@ type State = {
   selectedVersion: VersionString;
 };
 
+const enum ComponentId {
+  Select = 'jaunumi_select',
+}
+
 function view(state: State, i: BaseInteraction) {
   const { date, description, fields } = updatesList[state.selectedVersion]();
 
@@ -25,7 +29,7 @@ function view(state: State, i: BaseInteraction) {
   const components = [
     new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
       new StringSelectMenuBuilder()
-        .setCustomId('jaunumi_select')
+        .setCustomId(ComponentId.Select)
         .addOptions(
           updates
             .map(([v, { date }]) => ({ label: v, description: date, value: v, default: state.selectedVersion === v }))
@@ -52,7 +56,7 @@ export default async function jaunumi(i: ChatInputCommandInteraction) {
   }
 
   dialogs.onClick(async (int, state) => {
-    if (int.customId === 'jaunumi_select' && int.componentType === ComponentType.StringSelect) {
+    if (int.customId === ComponentId.Select && int.componentType === ComponentType.StringSelect) {
       state.selectedVersion = int.values[0] as VersionString;
       return {
         update: true,

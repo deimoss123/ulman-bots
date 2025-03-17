@@ -24,6 +24,22 @@ export type FeniksState = {
   isSpinning: boolean;
 };
 
+export const enum ComponentId {
+  SpinAgain = 'feniks_spin_again',
+
+  FreeSpin10 = 'feniks_freespin_10',
+  FreeSpin25 = 'feniks_freespin_25',
+  FreeSpin50 = 'feniks_freespin_50',
+  FreeSpin100 = 'feniks_freespin_100',
+}
+
+export const FreeSpinIds: Record<string, ComponentId> = {
+  brivgriez10: ComponentId.FreeSpin10,
+  brivgriez25: ComponentId.FreeSpin25,
+  brivgriez50: ComponentId.FreeSpin50,
+  brivgriez100: ComponentId.FreeSpin100,
+};
+
 export default function feniksView(state: FeniksState, i: BaseInteraction) {
   const emptyEmoji = emoji('blank');
   const arrow_1_left = emoji('icon_arrow_1_left');
@@ -67,7 +83,7 @@ export default function feniksView(state: FeniksState, i: BaseInteraction) {
 
   const buttons: ButtonBuilder[] = state.freeSpinsInInv.map(([name, amount]) =>
     new ButtonBuilder()
-      .setCustomId(`freespin_${name}`)
+      .setCustomId(FreeSpinIds[name] || '_')
       .setStyle(state.isSpinning ? ButtonStyle.Secondary : ButtonStyle.Primary)
       .setLabel(`${itemList[name].nameNomVsk} (${amount})`)
       .setEmoji(itemList[name].emoji() || '❓')

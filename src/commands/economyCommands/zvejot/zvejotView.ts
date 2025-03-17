@@ -57,12 +57,23 @@ export type ZvejotState = {
   selectedFishingRodId: string | null;
 };
 
+export const enum ComponentId {
+  CollectFish = 'zvejot_collect_fish_btn',
+  StartFishing = 'zvejot_start_fishing_btn',
+
+  SelectFishingRod = 'zvejot_select_fishing_rod',
+  RemoveFishingRod = 'zvejot_remove_fishing_rod',
+  FixFishingRod = 'zvejot_fix_fishing_rod',
+
+  Refresh = 'zvejot_refresh',
+}
+
 function components(state: ZvejotState): ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] {
   const { fishing, specialItems } = state.user;
   const { selectedRod, caughtFishes, usesLeft } = fishing;
 
   const collectFishButton = new ButtonBuilder()
-    .setCustomId('collect_fish_btn')
+    .setCustomId(ComponentId.CollectFish)
     .setLabel('Savākt copi')
     .setStyle(ButtonStyle.Success)
     .setEmoji(emoji('icon_zive'));
@@ -72,7 +83,7 @@ function components(state: ZvejotState): ActionRowBuilder<ButtonBuilder | String
     if (!rodsInInv.length) {
       const btnRow = [
         new ButtonBuilder()
-          .setCustomId('nuja')
+          .setCustomId('_')
           .setLabel('Tev nav nevienas makšķeres')
           .setStyle(ButtonStyle.Secondary)
           .setDisabled(true),
@@ -85,7 +96,7 @@ function components(state: ZvejotState): ActionRowBuilder<ButtonBuilder | String
 
     const btnRow = [
       new ButtonBuilder()
-        .setCustomId('start_fishing_btn')
+        .setCustomId(ComponentId.StartFishing)
         .setLabel('Sākt zvejot')
         .setStyle(state.selectedFishingRodId ? ButtonStyle.Primary : ButtonStyle.Secondary)
         .setDisabled(!state.selectedFishingRodId),
@@ -96,7 +107,7 @@ function components(state: ZvejotState): ActionRowBuilder<ButtonBuilder | String
     return [
       new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
         new StringSelectMenuBuilder()
-          .setCustomId('select_fishing_rod')
+          .setCustomId(ComponentId.SelectFishingRod)
           .setPlaceholder('Izvēlies makšķeri')
           .addOptions(
             rodsInInv
@@ -121,14 +132,18 @@ function components(state: ZvejotState): ActionRowBuilder<ButtonBuilder | String
 
   const buttons = [
     new ButtonBuilder()
-      .setCustomId('remove_fishing_rod')
+      .setCustomId(ComponentId.RemoveFishingRod)
       .setLabel('Noņemt makšķeri')
       .setStyle(ButtonStyle.Secondary)
       .setEmoji(itemList[selectedRod].emoji() || '❓'),
   ];
   if (state.user.guildId === process.env.DEV_SERVER_ID) {
     buttons.push(
-      new ButtonBuilder().setCustomId('refresh').setLabel('Atjaunot').setStyle(ButtonStyle.Secondary).setEmoji('🔄'),
+      new ButtonBuilder()
+        .setCustomId(ComponentId.Refresh)
+        .setLabel('Atjaunot')
+        .setStyle(ButtonStyle.Secondary)
+        .setEmoji('🔄'),
     );
   }
 
@@ -137,7 +152,7 @@ function components(state: ZvejotState): ActionRowBuilder<ButtonBuilder | String
   if (usesLeft < maxDurability) {
     buttons.unshift(
       new ButtonBuilder()
-        .setCustomId('fix_fishing_rod')
+        .setCustomId(ComponentId.FixFishingRod)
         .setLabel(
           repairable
             ? `Salabot makšķeri (${latiString(calcRepairCost(selectedRod, usesLeft))})`

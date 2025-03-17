@@ -80,13 +80,18 @@ type State = {
   hasGiven: boolean;
 };
 
+const enum ComponentId {
+  Select = 'iedot_special_select',
+  Confirm = 'iedot_special_confirm',
+}
+
 function view(state: State, i: BaseInteraction) {
   const selectedIds = state.selectedItems.map(item => item._id!);
 
   const components = [
     new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
       new StringSelectMenuBuilder()
-        .setCustomId('iedot_special_select')
+        .setCustomId(ComponentId.Select)
         .setDisabled(state.hasGiven)
         .setPlaceholder('Izvēlies ko iedot')
         .setMinValues(1)
@@ -125,7 +130,7 @@ function view(state: State, i: BaseInteraction) {
     ),
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
-        .setCustomId('iedot_special_confirm')
+        .setCustomId(ComponentId.Confirm)
         .setDisabled(state.hasGiven || !selectedIds.length || state.user.lati < state.totalTax)
         .setLabel(state.user.lati < state.totalTax ? 'Iedot (nepietiek naudas)' : 'Iedot')
         .setStyle(
@@ -252,7 +257,7 @@ export default async function iedotRunSpecial(
   dialogs.onClick(async (int, state) => {
     const { customId, componentType } = int;
 
-    if (customId === 'iedot_special_select' && componentType === ComponentType.StringSelect) {
+    if (customId === ComponentId.Select && componentType === ComponentType.StringSelect) {
       state.selectedItems = itemsInInv.filter(item => int.values.includes(item._id!));
 
       if (hasJuridisks || 'notSellable' in itemObj) {
@@ -268,7 +273,7 @@ export default async function iedotRunSpecial(
 
       return { update: true };
     } else if (
-      customId === 'iedot_special_confirm' &&
+      customId === ComponentId.Confirm &&
       componentType === ComponentType.Button &&
       state.selectedItems.length
     ) {

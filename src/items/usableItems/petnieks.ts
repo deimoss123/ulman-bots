@@ -107,6 +107,11 @@ type State = {
   attributes: ItemAttributes;
 };
 
+const enum ComponentId {
+  AddHat = 'petnieks_add_hat',
+  RemoveHat = 'petnieks_remove_hat',
+}
+
 function view(state: State, i: BaseInteraction) {
   const { hat } = state.attributes;
 
@@ -117,7 +122,7 @@ function view(state: State, i: BaseInteraction) {
     components.push(
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
-          .setCustomId(hat ? `petnieks_remove_hat` : 'petnieks_add_hat')
+          .setCustomId(hat ? ComponentId.RemoveHat : ComponentId.AddHat)
           .setEmoji(itemList.salaveca_cepure.emoji() || '❓')
           .setLabel(hat ? 'Novilkt cepuri' : 'Uzvilkt cepuri')
           .setStyle(ButtonStyle.Primary),
@@ -131,7 +136,7 @@ function view(state: State, i: BaseInteraction) {
 
   return embedTemplate({
     i,
-    content: (hatInInv || hat) ? '\u200b' : undefined,
+    content: hatInInv || hat ? '\u200b' : undefined,
     title: `Izmantot: ${itemString('petnieks', null, true, state.attributes)}`,
     description: state.text,
     color: commandColors.izmantot,
@@ -212,7 +217,7 @@ const petnieks: UsableItemFunc = async (userId, guildId, _, specialItem) => {
         state.user = user;
         state.attributes = petnieksInInv.attributes;
 
-        if (customId === 'petnieks_add_hat' && componentType === ComponentType.Button) {
+        if (customId === ComponentId.AddHat && componentType === ComponentType.Button) {
           if (!user.items.find(({ name }) => name === 'salaveca_cepure')) {
             intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString('salaveca_cepure')}**`));
             return { edit: true };
@@ -241,7 +246,7 @@ const petnieks: UsableItemFunc = async (userId, guildId, _, specialItem) => {
           return { edit: true };
         }
 
-        if (customId === 'petnieks_remove_hat' && componentType === ComponentType.Button) {
+        if (customId === ComponentId.RemoveHat && componentType === ComponentType.Button) {
           if (petnieksInInv.attributes.hat !== 'salaveca_cepure') {
             intReply(int, ephemeralReply('Kļūda, šim pētniekam nav uzvilkta cepure'));
             return { edit: true };

@@ -45,10 +45,16 @@ type State = {
   embedColor: number;
 };
 
+const enum ComponentId {
+  Confirm = 'izmantot_special_confirm',
+  UseMany = 'izmantot_special_many',
+  Select = 'izmantot_special_select'
+}
+
 function view(state: State, i: BaseInteraction) {
   const buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
-      .setCustomId('izmantot_special_confirm')
+      .setCustomId(ComponentId.Confirm)
       .setDisabled(!state.selectedId)
       .setLabel('Izmantot')
       .setStyle(state.selectedId ? ButtonStyle.Primary : ButtonStyle.Secondary),
@@ -60,7 +66,7 @@ function view(state: State, i: BaseInteraction) {
     if (usableItems.length) {
       buttonRow.addComponents(
         new ButtonBuilder()
-          .setCustomId('izmantot_special_many')
+          .setCustomId(ComponentId.UseMany)
           .setLabel(`Izmantot visus (${usableItems.length}/${state.itemsInInv.length})`)
           .setStyle(ButtonStyle.Primary),
       );
@@ -70,7 +76,7 @@ function view(state: State, i: BaseInteraction) {
   const components = [
     new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
       new StringSelectMenuBuilder()
-        .setCustomId('izmantot_special_select')
+        .setCustomId(ComponentId.Select)
         .setPlaceholder('Izvēlies kuru izmantot')
         .setOptions(
           state.itemsInInv
@@ -143,7 +149,7 @@ export default async function izmantotRunSpecial(
   dialogs.onClick(async (int, state) => {
     const { customId } = int;
 
-    if (customId === 'izmantot_special_select') {
+    if (customId === ComponentId.Select) {
       if (int.componentType !== ComponentType.StringSelect) return;
       state.selectedId = int.values[0]!;
       return { update: true };
@@ -151,7 +157,7 @@ export default async function izmantotRunSpecial(
 
     if (int.componentType !== ComponentType.Button) return;
 
-    if (customId === 'izmantot_special_confirm') {
+    if (customId === ComponentId.Confirm) {
       const user = await findUser(userId, guildId);
       if (!user) return { error: true };
 
@@ -178,7 +184,7 @@ export default async function izmantotRunSpecial(
       };
     }
 
-    if (customId === 'izmantot_special_many') {
+    if (customId === ComponentId.UseMany) {
       if (!itemObj.useMany) return;
 
       return {

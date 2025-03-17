@@ -103,6 +103,15 @@ type State = {
   selectedFood: ItemKey | null;
 };
 
+const enum ComponentId {
+  SelectFood = 'kakis_select_food',
+  Feed = 'kakis_feed',
+  ChangeName = 'kakis_change_name',
+
+  AddHat = 'kakis_add_hat',
+  RemoveHat = 'kakis_remove_hat',
+}
+
 function view(state: State, i: BaseInteraction) {
   const { createdAt, fedUntil, hat } = state.attributes;
   const isDead = fedUntil! < state.currTime;
@@ -130,7 +139,7 @@ function view(state: State, i: BaseInteraction) {
     buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
         .setLabel('Kaķis ir maksimāli piebarots')
-        .setCustomId('_')
+        .setCustomId('_1')
         .setStyle(ButtonStyle.Danger)
         .setDisabled(true),
     );
@@ -140,7 +149,7 @@ function view(state: State, i: BaseInteraction) {
     components.push(
       new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
         new StringSelectMenuBuilder()
-          .setCustomId('feed_cat_select')
+          .setCustomId(ComponentId.SelectFood)
           .setPlaceholder('Izvēlies ēdienu')
           .addOptions(
             foodInInv.map(({ name, amount }) => {
@@ -160,7 +169,7 @@ function view(state: State, i: BaseInteraction) {
     buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
         .setLabel(`Pabarot kaķi`)
-        .setCustomId('feed_cat_btn')
+        .setCustomId(ComponentId.Feed)
         .setStyle(state.selectedFood ? ButtonStyle.Success : ButtonStyle.Secondary)
         .setDisabled(!state.selectedFood),
     );
@@ -170,7 +179,7 @@ function view(state: State, i: BaseInteraction) {
   if (nameTagInInv) {
     const changeNameBtn = new ButtonBuilder()
       .setLabel('Mainīt kaķa vārdu')
-      .setCustomId(`cat_change_name`)
+      .setCustomId(ComponentId.ChangeName)
       .setStyle(ButtonStyle.Primary)
       .setEmoji(itemList.kaka_parsaucejs.emoji() || '❓');
 
@@ -182,7 +191,7 @@ function view(state: State, i: BaseInteraction) {
 
   if (hat || hatInInv) {
     const hatBtn = new ButtonBuilder()
-      .setCustomId(hat ? 'cat_remove_hat' : 'cat_add_hat')
+      .setCustomId(hat ? ComponentId.RemoveHat : ComponentId.AddHat)
       .setLabel(hat ? 'Novilkt cepuri' : 'Uzvilkt cepuri')
       .setEmoji(itemList.salaveca_cepure.emoji() || '❓')
       .setStyle(ButtonStyle.Primary);
@@ -313,14 +322,14 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => ({
         return useDifferentItemHandler(user, 'kakis', int);
       }
 
-      if (customId === 'feed_cat_select' && componentType === ComponentType.StringSelect) {
+      if (customId === ComponentId.SelectFood && componentType === ComponentType.StringSelect) {
         state.selectedFood = user.items.find(({ name }) => name === int.values[0]) ? int.values[0] : null;
         return { update: true };
       }
 
       if (componentType !== ComponentType.Button) return;
 
-      if (customId === 'feed_cat_btn') {
+      if (customId === ComponentId.Feed) {
         if (!state.selectedFood) return { error: true };
 
         const hasFood = state.user.items.find(({ name }) => name === state.selectedFood);
@@ -364,7 +373,7 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => ({
         };
       }
 
-      if (customId === 'cat_change_name') {
+      if (customId === ComponentId.ChangeName) {
         const nameTagInInv = user.items.find(({ name }) => name === 'kaka_parsaucejs');
         if (!nameTagInInv) {
           intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString('kaka_parsaucejs')}**`));
@@ -412,7 +421,7 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => ({
       }
 
       // totāli nav kopēts kods no pētnieka
-      if (customId === 'cat_add_hat') {
+      if (customId === ComponentId.AddHat) {
         if (!user.items.find(({ name }) => name === 'salaveca_cepure')) {
           intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString('salaveca_cepure')}**`));
           return { edit: true };
@@ -439,7 +448,7 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => ({
         return { edit: true };
       }
 
-      if (customId === 'cat_remove_hat') {
+      if (customId === ComponentId.RemoveHat) {
         if (catInInv.attributes.hat !== 'salaveca_cepure') {
           intReply(int, ephemeralReply('Kļūda, šim kaķim nav uzvilkta cepure'));
           return {};

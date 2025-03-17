@@ -10,6 +10,7 @@ import {
   ModalSubmitInteraction,
   StringSelectMenuBuilder,
   SelectMenuInteraction,
+  MessageFlags,
 } from 'discord.js';
 import interactionCache, { InteractionInCache } from '../utils/interactionCache';
 import intReply from '../utils/intReply';
@@ -31,7 +32,7 @@ export default async function buttonHandler(
   callback: (buttonInteraction: ButtonInteraction | SelectMenuInteraction) => Promise<CallbackReturn | void>,
   time = 30000,
   isActive = false,
-  refetchMessage = false
+  refetchMessage = false,
 ): Promise<void> {
   const collector = interactionMsg.createMessageComponentCollector<ComponentType.Button | ComponentType.StringSelect>({
     time,
@@ -60,7 +61,7 @@ export default async function buttonHandler(
     if (componentInteraction.user.id !== interaction.user.id) {
       intReply(componentInteraction, {
         content: 'Nav pieklājīgi spaidīt svešu cilvēku pogas :^)',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
       return;
     }
@@ -94,7 +95,7 @@ export default async function buttonHandler(
         const updateRes = await componentInteraction
           .update({
             ...(res.edit as InteractionUpdateOptions),
-            fetchReply: true,
+            withResponse: true,
           })
           .catch(() => null);
         if (updateRes) currentMessage = updateRes;
