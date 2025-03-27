@@ -1,4 +1,4 @@
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import { ApplicationCommandOptionType, ComponentType } from "discord.js";
 import findUser from "@/db/findUser";
 import errorEmbed from "@/utils/embeds/errorEmbed";
@@ -8,8 +8,8 @@ import countItems from "@/items/helpers/countItems";
 import commandColors from "@/utils/commandColors";
 import itemString from "@/utils/strings/itemString";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
-import UserProfile, { ItemAttributes, ItemInProfile } from "@/interfaces/UserProfile";
-import Item, { AttributeItem, NotSellableItem } from "@/interfaces/Item";
+import UserProfile, { ItemAttributes, ItemInProfile } from "@/types/UserProfile";
+import Item, { AttributeItem, NotSellableItem } from "@/types/Item";
 import { displayAttributes } from "@/utils/strings/displayAttributes";
 import pardotRun from "@/commands/pardot/pardotRun";
 import { INCREASE_CAP_1 } from "@/items/usableItems/mugursoma";

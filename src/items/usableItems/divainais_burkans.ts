@@ -19,7 +19,7 @@ import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import smallEmbed from "@/utils/embeds/smallEmbed";
-import { UsableItemFunc } from "@/interfaces/Item";
+import { UsableItemFunc } from "@/types/Item";
 import intReply from "@/utils/intReply";
 import itemList from "@/items/itemList";
 

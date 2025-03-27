@@ -1,8 +1,8 @@
 import { ChatInputCommandInteraction } from "discord.js";
 import commandColors from "@/utils/commandColors";
 import embedTemplate from "@/utils/embeds/embedTemplate";
-import StatsProfile from "@/interfaces/StatsProfile";
-import UserProfile from "@/interfaces/UserProfile";
+import StatsProfile from "@/types/StatsProfile";
+import UserProfile from "@/types/UserProfile";
 import { displayPlace } from "@/commands/statistika/statistika";
 import { SortDataProfileEntry } from "@/commands/top/sortData";
 import { TOP_USERS_PER_PAGE } from "@/commands/top/top";

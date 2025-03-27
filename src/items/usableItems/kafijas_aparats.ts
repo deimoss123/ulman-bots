@@ -8,7 +8,7 @@ import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
-import { UsableItemFunc, UseManyType } from "@/interfaces/Item";
+import { UsableItemFunc, UseManyType } from "@/types/Item";
 import intReply from "@/utils/intReply";
 import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
 import itemList from "@/items/itemList";

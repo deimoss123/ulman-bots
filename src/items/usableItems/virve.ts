@@ -1,6 +1,6 @@
 import findUser from "@/db/findUser";
 import setLati from "@/db/setLati";
-import { UsableItemFunc } from "@/interfaces/Item";
+import { UsableItemFunc } from "@/types/Item";
 
 const virve: UsableItemFunc = async (userId, guildId) => {
   const user = await findUser(userId, guildId);

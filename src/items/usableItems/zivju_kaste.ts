@@ -1,5 +1,5 @@
 import findUser from "@/db/findUser";
-import { UsableItemFunc } from "@/interfaces/Item";
+import { UsableItemFunc } from "@/types/Item";
 import { ItemKey } from "@/items/itemList";
 
 interface IZivs {

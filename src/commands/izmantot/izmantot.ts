@@ -1,4 +1,4 @@
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import commandColors from "@/utils/commandColors";
 import { ApplicationCommandOptionType } from "discord.js";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
@@ -7,7 +7,7 @@ import izmantotRun from "@/commands/izmantot/izmantotRun";
 import izmantotAutocomplete from "@/commands/izmantot/izmantotAutocomplete";
 import itemList from "@/items/itemList";
 import wrongKeyEmbed from "@/utils/embeds/wrongKeyEmbed";
-import { UsableItem } from "@/interfaces/Item";
+import { UsableItem } from "@/types/Item";
 import intReply from "@/utils/intReply";
 
 const izmantot: Command = {

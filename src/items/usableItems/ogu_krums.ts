@@ -9,12 +9,12 @@ import embedTemplate from "@/utils/embeds/embedTemplate";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
 import smallEmbed from "@/utils/embeds/smallEmbed";
-import { UsableItemFunc, item } from "@/interfaces/Item";
+import { UsableItemFunc, item } from "@/types/Item";
 import intReply from "@/utils/intReply";
 import itemList, { ItemKey } from "@/items/itemList";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import addItems from "@/db/addItems";
-import { SpecialItemInProfile } from "@/interfaces/UserProfile";
+import { SpecialItemInProfile } from "@/types/UserProfile";
 
 //ogu rekinasana
 //no currTime atnemt lastUsed un tad dalīt ar augasnas laiku un tad floorosu

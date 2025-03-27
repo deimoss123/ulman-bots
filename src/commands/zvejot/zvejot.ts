@@ -14,7 +14,7 @@ import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import xpAddedEmbed from "@/utils/embeds/xpAddedEmbed";
 import smallEmbed from "@/utils/embeds/smallEmbed";
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import checkUserSpecialItems from "@/items/helpers/checkUserSpecialItems";
 import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
 import itemList, { ItemKey } from "@/items/itemList";

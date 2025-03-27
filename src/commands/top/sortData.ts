@@ -1,9 +1,9 @@
-import UserProfile from "@/interfaces/UserProfile";
+import UserProfile from "@/types/UserProfile";
 import { ProjectionType } from "mongoose";
 import { getInvValue } from "@/commands/inventars/inventars";
 import latiString from "@/utils/strings/latiString";
 import levelsList, { MAX_LEVEL } from "@/levelingSystem/levelsList";
-import StatsProfile from "@/interfaces/StatsProfile";
+import StatsProfile from "@/types/StatsProfile";
 import { spinCountDisplayValue } from "@/commands/statistika/statsList";
 
 export interface SortDataProfileEntry<T extends UserProfile | StatsProfile> {

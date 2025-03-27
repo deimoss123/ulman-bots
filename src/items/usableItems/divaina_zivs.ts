@@ -1,8 +1,8 @@
 import { statusList } from "@/commands/profils";
 import addStatus from "@/db/addStatus";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
-import { UsableItemFunc } from "@/interfaces/Item";
-import { UserStatusName } from "@/interfaces/UserProfile";
+import { UsableItemFunc } from "@/types/Item";
+import { UserStatusName } from "@/types/UserProfile";
 import { JURIDISKA_ZIVS_STATUS } from "@/items/usableItems/juridiska_zivs";
 import { NAZIS_STATUS_TIME } from "@/items/usableItems/nazis";
 import { PETNIEKZIVS_STATUS_TIME } from "@/items/usableItems/petniekzivs";

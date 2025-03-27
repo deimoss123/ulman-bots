@@ -1,5 +1,5 @@
 import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle } from "discord.js";
-import UserProfile from "@/interfaces/UserProfile";
+import UserProfile from "@/types/UserProfile";
 import { KazinoLikme } from "@/commands/rulete/rulete";
 import { CalcSpinRes } from "@/commands/feniks/calcSpin";
 import emoji from "@/utils/emoji";

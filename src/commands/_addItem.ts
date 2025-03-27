@@ -1,4 +1,4 @@
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import { ApplicationCommandOptionType } from "discord.js";
 import embedTemplate from "@/utils/embeds/embedTemplate";
 import itemString from "@/utils/strings/itemString";

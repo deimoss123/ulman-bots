@@ -9,7 +9,7 @@ import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import smallEmbed from "@/utils/embeds/smallEmbed";
-import UserProfile from "@/interfaces/UserProfile";
+import UserProfile from "@/types/UserProfile";
 import itemList, { ItemCategory, ItemKey } from "@/items/itemList";
 import intReply from "@/utils/intReply";
 import { KazinoLikme } from "@/commands/rulete/rulete";

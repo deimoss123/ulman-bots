@@ -1,11 +1,11 @@
 import normalizeLatText from "@/utils/strings/normalizeLatText";
 import { AutocompleteInteraction } from "discord.js";
-import Item from "@/interfaces/Item";
+import Item from "@/types/Item";
 import itemList, { ItemKey } from "@/items/itemList";
 import findUser from "@/db/findUser";
 import findItemsByQuery from "@/items/helpers/findItemsByQuery";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
-import { ItemInProfile } from "@/interfaces/UserProfile";
+import { ItemInProfile } from "@/types/UserProfile";
 
 function mapItemsToChoices(itemInList: [string, Item]) {
   const [key, item] = itemInList;

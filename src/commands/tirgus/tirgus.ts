@@ -1,11 +1,11 @@
 import commandColors from "@/utils/commandColors";
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import buttonHandler from "@/utils/buttonHandler";
 import findUser from "@/db/findUser";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import tirgusEmbed from "@/commands/tirgus/tirgusEmbed";
-import UserProfile from "@/interfaces/UserProfile";
-import Item, { TirgusItem } from "@/interfaces/Item";
+import UserProfile from "@/types/UserProfile";
+import Item, { TirgusItem } from "@/types/Item";
 import itemList, { ItemCategory, ItemKey } from "@/items/itemList";
 import tirgusComponents from "@/commands/tirgus/tirgusComponents";
 import { ComponentType } from "discord.js";

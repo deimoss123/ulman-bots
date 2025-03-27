@@ -1,4 +1,4 @@
-import StatsProfile from "@/interfaces/StatsProfile";
+import StatsProfile from "@/types/StatsProfile";
 import Stats from "@/schemas/Stats";
 import { ClientSession, ProjectionType } from "mongoose";
 

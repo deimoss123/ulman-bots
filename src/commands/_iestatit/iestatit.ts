@@ -1,6 +1,6 @@
 import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
 import embedTemplate from "@/utils/embeds/embedTemplate";
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import { Dialogs } from "@/utils/dialogs";
 import intReply from "@/utils/intReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";

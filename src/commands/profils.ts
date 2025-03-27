@@ -1,4 +1,4 @@
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import commandColors from "@/utils/commandColors";
 import { ApplicationCommandOptionType, codeBlock } from "discord.js";
 import findUser from "@/db/findUser";
@@ -9,7 +9,7 @@ import levelsList, { MAX_LEVEL } from "@/levelingSystem/levelsList";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import { JobPositions } from "@/commands/vakances";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
-import { UserStatusName } from "@/interfaces/UserProfile";
+import { UserStatusName } from "@/types/UserProfile";
 import intReply from "@/utils/intReply";
 
 export const statusList: Record<UserStatusName, string> = {

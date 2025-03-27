@@ -1,7 +1,7 @@
 import addItems from "@/db/addItems";
 import findUser from "@/db/findUser";
 import setUser from "@/db/setUser";
-import { UsableItemFunc } from "@/interfaces/Item";
+import { UsableItemFunc } from "@/types/Item";
 
 const piparkuka: UsableItemFunc = async (userId, guildId) => {
   const user = await findUser(userId, guildId);

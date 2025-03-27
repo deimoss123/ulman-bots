@@ -1,5 +1,5 @@
 import { ClientSession } from "mongoose";
-import { UserStats } from "@/interfaces/StatsProfile";
+import { UserStats } from "@/types/StatsProfile";
 import Stats from "@/schemas/Stats";
 
 export default async function getStats(

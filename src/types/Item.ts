@@ -1,7 +1,7 @@
 import { APIMessageComponentEmoji, ButtonInteraction } from "discord.js";
 import { ItemCategory, ItemKey } from "@/items/itemList";
-import UsableItemReturn from "@/interfaces/UsableItemReturn";
-import { ItemAttributes, SpecialItemInProfile } from "@/interfaces/UserProfile";
+import UsableItemReturn from "@/types/UsableItemReturn";
+import { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
 import { LotoOptions } from "@/items/usableItems/loto";
 import { VersionString } from "@/commands/palidziba/jaunumi/updatesList";
 import emoji from "@/utils/emoji";

@@ -1,5 +1,5 @@
 import User from "@/schemas/User";
-import UserProfile from "@/interfaces/UserProfile";
+import UserProfile from "@/types/UserProfile";
 import userCache from "@/utils/userCache";
 import { ClientSession } from "mongoose";
 

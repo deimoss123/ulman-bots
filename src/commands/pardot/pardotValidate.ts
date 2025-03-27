@@ -1,5 +1,5 @@
-import UserProfile from "@/interfaces/UserProfile";
-import Item from "@/interfaces/Item";
+import UserProfile from "@/types/UserProfile";
+import Item from "@/types/Item";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import itemString from "@/utils/strings/itemString";
 import { ChatInputCommandInteraction } from "discord.js";

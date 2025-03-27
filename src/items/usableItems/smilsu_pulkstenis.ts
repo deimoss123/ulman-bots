@@ -1,7 +1,7 @@
 import syncFishing from "@/commands/zvejot/syncFishing";
 import addItems from "@/db/addItems";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
-import { UsableItemFunc } from "@/interfaces/Item";
+import { UsableItemFunc } from "@/types/Item";
 
 export const ZVEJA_SHIFT_TIME = 32_400_000; // 9h
 

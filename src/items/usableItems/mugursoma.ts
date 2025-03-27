@@ -3,7 +3,7 @@ import findUser from "@/db/findUser";
 import itemString from "@/utils/strings/itemString";
 import itemList from "@/items/itemList";
 import addItems from "@/db/addItems";
-import { UsableItemFunc } from "@/interfaces/Item";
+import { UsableItemFunc } from "@/types/Item";
 
 export const INCREASE_CAP_1 = 100;
 export const INV_INCREASE_AMOUNT_1 = 5;

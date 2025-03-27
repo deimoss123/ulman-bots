@@ -1,4 +1,4 @@
-import UserProfile from "@/interfaces/UserProfile";
+import UserProfile from "@/types/UserProfile";
 import countItems from "@/items/helpers/countItems";
 
 // saskaita cik brīvas vietas lietotāja inventārā

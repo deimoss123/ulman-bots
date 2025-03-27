@@ -1,5 +1,5 @@
 import { ClientSession } from "mongoose";
-import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/interfaces/UserProfile";
+import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
 import User from "@/schemas/User";
 import userCache from "@/utils/userCache";
 import findUser from "@/db/findUser";

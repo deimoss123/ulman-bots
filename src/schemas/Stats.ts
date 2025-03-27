@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import StatsProfile from "@/interfaces/StatsProfile";
+import StatsProfile from "@/types/StatsProfile";
 
 const reqString = {
   type: String,

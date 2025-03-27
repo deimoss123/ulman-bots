@@ -1,6 +1,6 @@
 import { APIMessageComponentEmoji } from "discord.js";
-import Item from "@/interfaces/Item";
-import { ItemAttributes } from "@/interfaces/UserProfile";
+import Item from "@/types/Item";
+import { ItemAttributes } from "@/types/UserProfile";
 import itemList, { ItemKey } from "@/items/itemList";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 

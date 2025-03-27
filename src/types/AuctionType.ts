@@ -1,4 +1,4 @@
-import { ItemAttributes } from "@/interfaces/UserProfile";
+import { ItemAttributes } from "@/types/UserProfile";
 
 interface AuctionType {
   _id: string;

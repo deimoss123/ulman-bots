@@ -2,7 +2,7 @@ import { ApplicationCommandOptionType } from "discord.js";
 import commandColors from "@/utils/commandColors";
 import embedTemplate from "@/utils/embeds/embedTemplate";
 import errorEmbed from "@/utils/embeds/errorEmbed";
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import intReply from "@/utils/intReply";
 import { commandList } from "@/utils/commandList";
 import jaunumi from "@/commands/palidziba/jaunumi/jaunumi";

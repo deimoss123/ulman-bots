@@ -10,7 +10,7 @@ import {
 } from "discord.js";
 import { IpasumiState } from "@/commands/ipasumi/ipasumi";
 import embedTemplate from "@/utils/embeds/embedTemplate";
-import UserProfile from "@/interfaces/UserProfile";
+import UserProfile from "@/types/UserProfile";
 import setUser from "@/db/setUser";
 import findUser from "@/db/findUser";
 import emoji from "@/utils/emoji";

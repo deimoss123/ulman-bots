@@ -1,5 +1,5 @@
 import itemString from "@/utils/strings/itemString";
-import UserProfile from "@/interfaces/UserProfile";
+import UserProfile from "@/types/UserProfile";
 import itemList, { ItemCategory, ItemKey } from "@/items/itemList";
 
 const FISHING_ROD_MAX_PER_USER = 15;

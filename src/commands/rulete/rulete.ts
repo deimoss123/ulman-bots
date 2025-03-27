@@ -1,5 +1,5 @@
 import commandColors from "@/utils/commandColors";
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import ruleteData, { RulPosition } from "@/commands/rulete/ruleteData";
 import ruleteRun from "@/commands/rulete/ruleteRun";
 

@@ -8,7 +8,7 @@ import Item, {
   ShopItem,
   TirgusItem,
   UsableItem,
-} from "@/interfaces/Item";
+} from "@/types/Item";
 import virve from "@/items/usableItems/virve";
 import divainais_burkans from "@/items/usableItems/divainais_burkans";
 import mugursoma, { INCREASE_CAP_1, INV_INCREASE_AMOUNT_1 } from "@/items/usableItems/mugursoma";

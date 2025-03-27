@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import UserProfile from "@/interfaces/UserProfile";
+import UserProfile from "@/types/UserProfile";
 
 const RequiredStringIndex = {
   type: String,

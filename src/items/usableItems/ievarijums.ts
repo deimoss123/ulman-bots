@@ -1,4 +1,4 @@
-import { UsableItemFunc } from "@/interfaces/Item";
+import { UsableItemFunc } from "@/types/Item";
 import { BerryProperties } from "@/items/usableItems/oga";
 
 /* 

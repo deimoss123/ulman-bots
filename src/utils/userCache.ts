@@ -1,4 +1,4 @@
-import UserProfile from "@/interfaces/UserProfile";
+import UserProfile from "@/types/UserProfile";
 import { Snowflake } from "discord.js";
 
 /*

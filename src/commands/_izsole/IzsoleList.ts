@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, EmbedField } from "discord.js";
 import embedTemplate from "@/utils/embeds/embedTemplate";
 import errorEmbed from "@/utils/embeds/errorEmbed";
-import AuctionType from "@/interfaces/AuctionType";
+import AuctionType from "@/types/AuctionType";
 import Auction from "@/schemas/Auction";
 import intReply from "@/utils/intReply";
 import { izsoleItemString } from "@/commands/_izsole/izsoleEmbeds";

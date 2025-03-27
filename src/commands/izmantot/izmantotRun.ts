@@ -18,7 +18,7 @@ import embedTemplate from "@/utils/embeds/embedTemplate";
 import ItemString from "@/utils/strings/itemString";
 import itemList from "@/items/itemList";
 import izmantotRunSpecial from "@/commands/izmantot/izmantotRunSpecial";
-import { UsableItem } from "@/interfaces/Item";
+import { UsableItem } from "@/types/Item";
 import intReply from "@/utils/intReply";
 import { Dialogs } from "@/utils/dialogs";
 

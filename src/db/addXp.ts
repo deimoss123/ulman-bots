@@ -1,5 +1,5 @@
 import User from "@/schemas/User";
-import UserProfile from "@/interfaces/UserProfile";
+import UserProfile from "@/types/UserProfile";
 import userCache from "@/utils/userCache";
 import findUser from "@/db/findUser";
 import levelsList, { LevelReward, MAX_LEVEL, MAX_LEVEL_REWARD_PER_XP } from "@/levelingSystem/levelsList";

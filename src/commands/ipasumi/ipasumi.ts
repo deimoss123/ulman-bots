@@ -1,8 +1,8 @@
 import { ActionRowBuilder, BaseInteraction, ComponentType, StringSelectMenuBuilder } from "discord.js";
 import findUser from "@/db/findUser";
 import errorEmbed from "@/utils/embeds/errorEmbed";
-import Command from "@/interfaces/Command";
-import UserProfile from "@/interfaces/UserProfile";
+import Command from "@/types/Command";
+import UserProfile from "@/types/UserProfile";
 import { Dialogs } from "@/utils/dialogs";
 import intReply from "@/utils/intReply";
 import embedTemplate from "@/utils/embeds/embedTemplate";

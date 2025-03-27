@@ -1,4 +1,4 @@
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import maks from "@/commands/maks";
 import _addLati from "@/commands/_addLati";
 import maksat from "@/commands/maksat";

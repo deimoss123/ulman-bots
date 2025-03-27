@@ -1,6 +1,6 @@
 import chance, { ChanceValue } from "@/items/helpers/chance";
 import itemList, { ItemKey } from "@/items/itemList";
-import { UsableItemFunc } from "@/interfaces/Item";
+import { UsableItemFunc } from "@/types/Item";
 import findUser from "@/db/findUser";
 import intReply from "@/utils/intReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";

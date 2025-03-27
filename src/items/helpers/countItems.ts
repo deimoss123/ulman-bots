@@ -1,4 +1,4 @@
-import { ItemInProfile } from "@/interfaces/UserProfile";
+import { ItemInProfile } from "@/types/UserProfile";
 
 // saskaita itemus iekš itemu masīva
 export default function countItems(items: ItemInProfile[]): number {

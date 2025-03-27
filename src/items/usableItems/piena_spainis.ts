@@ -2,8 +2,8 @@ import { statusList } from "@/commands/profils";
 import addItems from "@/db/addItems";
 import findUser from "@/db/findUser";
 import setUser from "@/db/setUser";
-import { UsableItemFunc } from "@/interfaces/Item";
-import { UserStatus } from "@/interfaces/UserProfile";
+import { UsableItemFunc } from "@/types/Item";
+import { UserStatus } from "@/types/UserProfile";
 
 const piena_spainis: UsableItemFunc = async (userId, guildId) => {
   const user = await findUser(userId, guildId);

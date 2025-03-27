@@ -1,5 +1,5 @@
 import latiString from "@/utils/strings/latiString";
-import { UserStats } from "@/interfaces/StatsProfile";
+import { UserStats } from "@/types/StatsProfile";
 
 export type StatsTypes = "veikals" | "paygive" | "stolen" | "feniks" | "rulete";
 interface StatsListEntry {

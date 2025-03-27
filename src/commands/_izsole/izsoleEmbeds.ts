@@ -9,8 +9,8 @@ import {
 import embedTemplate from "@/utils/embeds/embedTemplate";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
-import AuctionType from "@/interfaces/AuctionType";
-import { ItemAttributes } from "@/interfaces/UserProfile";
+import AuctionType from "@/types/AuctionType";
+import { ItemAttributes } from "@/types/UserProfile";
 import itemList, { ItemKey } from "@/items/itemList";
 
 const izsoleConfirmComponents = new ActionRowBuilder<ButtonBuilder>().addComponents(

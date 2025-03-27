@@ -1,4 +1,4 @@
-import UserProfile from "@/interfaces/UserProfile";
+import UserProfile from "@/types/UserProfile";
 import User from "@/schemas/User";
 import { ClientSession, ProjectionType } from "mongoose";
 

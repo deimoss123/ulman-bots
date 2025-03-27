@@ -22,7 +22,7 @@ import generateRulete, { GenerateRuleteRes } from "@/commands/rulete/generateRul
 import { KazinoLikme } from "@/commands/rulete/rulete";
 import { RulColors, RulPosition, rulPositions } from "@/commands/rulete/ruleteData";
 import emoji from "@/utils/emoji";
-import UserProfile from "@/interfaces/UserProfile";
+import UserProfile from "@/types/UserProfile";
 import mongoTransaction from "@/utils/mongoTransaction";
 import { Dialogs } from "@/utils/dialogs";
 

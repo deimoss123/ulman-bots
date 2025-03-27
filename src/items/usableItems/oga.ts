@@ -1,5 +1,5 @@
 import itemString from "@/utils/strings/itemString";
-import { UsableItemFunc } from "@/interfaces/Item";
+import { UsableItemFunc } from "@/types/Item";
 import { ItemKey } from "@/items/itemList";
 
 export type BerryProperties = {

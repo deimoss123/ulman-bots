@@ -8,7 +8,7 @@ import {
   time,
   underline,
 } from "discord.js";
-import UserProfile, { ItemAttributes, UserFishing } from "@/interfaces/UserProfile";
+import UserProfile, { ItemAttributes, UserFishing } from "@/types/UserProfile";
 import { countFish } from "@/commands/zvejot/syncFishing";
 import commandColors from "@/utils/commandColors";
 import embedTemplate from "@/utils/embeds/embedTemplate";
@@ -20,7 +20,7 @@ import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import emoji from "@/utils/emoji";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import { displayAttributes } from "@/utils/strings/displayAttributes";
-import { AttributeItem } from "@/interfaces/Item";
+import { AttributeItem } from "@/types/Item";
 import { calcRepairCost } from "@/commands/zvejot/zvejot";
 
 function zvejaEmojiString() {

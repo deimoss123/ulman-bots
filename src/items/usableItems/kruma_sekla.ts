@@ -1,7 +1,7 @@
 import addItems from "@/db/addItems";
 import findUser from "@/db/findUser";
 import itemString from "@/utils/strings/itemString";
-import { UsableItemFunc } from "@/interfaces/Item";
+import { UsableItemFunc } from "@/types/Item";
 import checkUserSpecialItems from "@/items/helpers/checkUserSpecialItems";
 
 const kruma_sekla: UsableItemFunc = async (userId, guildId) => {

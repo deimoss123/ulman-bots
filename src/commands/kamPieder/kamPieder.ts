@@ -1,7 +1,7 @@
 import { ApplicationCommandOptionType } from "discord.js";
 import commandColors from "@/utils/commandColors";
 import wrongKeyEmbed from "@/utils/embeds/wrongKeyEmbed";
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import itemList from "@/items/itemList";
 import intReply from "@/utils/intReply";
 import allItemAutocomplete from "@/commands/info/allItemAutocomplete";

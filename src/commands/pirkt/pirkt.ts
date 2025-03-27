@@ -1,4 +1,4 @@
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import { ApplicationCommandOptionType } from "discord.js";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import itemList, { ItemCategory } from "@/items/itemList";

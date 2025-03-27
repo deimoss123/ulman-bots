@@ -1,4 +1,4 @@
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import {
   ActionRowBuilder,
   BaseInteraction,
@@ -22,8 +22,8 @@ import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import midNightStr from "@/utils/strings/midnightStr";
 import getDiscounts from "@/items/helpers/getDiscounts";
 import intReply from "@/utils/intReply";
-import Item from "@/interfaces/Item";
-import UserProfile from "@/interfaces/UserProfile";
+import Item from "@/types/Item";
+import UserProfile from "@/types/UserProfile";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import { Dialogs } from "@/utils/dialogs";
 

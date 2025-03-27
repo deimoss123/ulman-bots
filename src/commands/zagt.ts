@@ -12,7 +12,7 @@ import { displayAttributes } from "@/utils/strings/displayAttributes";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import itemList from "@/items/itemList";
 import intReply from "@/utils/intReply";
 import { statusList } from "@/commands/profils";

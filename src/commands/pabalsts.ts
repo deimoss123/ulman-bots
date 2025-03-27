@@ -9,7 +9,7 @@ import errorEmbed from "@/utils/embeds/errorEmbed";
 import latiString from "@/utils/strings/latiString";
 import xpAddedEmbed from "@/utils/embeds/xpAddedEmbed";
 import smallEmbed from "@/utils/embeds/smallEmbed";
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import intReply from "@/utils/intReply";
 
 const okddInv = "<https://discord.gg/F4s5AwYTMy>";

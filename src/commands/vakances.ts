@@ -1,4 +1,4 @@
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import {
   ActionRowBuilder,
   BaseInteraction,
@@ -14,7 +14,7 @@ import errorEmbed from "@/utils/embeds/errorEmbed";
 import embedTemplate from "@/utils/embeds/embedTemplate";
 import intReply from "@/utils/intReply";
 import { Dialogs } from "@/utils/dialogs";
-import UserProfile from "@/interfaces/UserProfile";
+import UserProfile from "@/types/UserProfile";
 import smallEmbed from "@/utils/embeds/smallEmbed";
 import setJobPosition from "@/db/setJobPosition";
 

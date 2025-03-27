@@ -1,7 +1,7 @@
 import { statusList } from "@/commands/profils";
 import addStatus from "@/db/addStatus";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
-import { UsableItemFunc } from "@/interfaces/Item";
+import { UsableItemFunc } from "@/types/Item";
 
 export const RASENS_STATUS_TIME = 10_800_000; // 3h
 

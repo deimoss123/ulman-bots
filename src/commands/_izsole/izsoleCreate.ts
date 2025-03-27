@@ -13,7 +13,7 @@ import buttonHandler from "@/utils/buttonHandler";
 import embedTemplate from "@/utils/embeds/embedTemplate";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
-import { ItemAttributes } from "@/interfaces/UserProfile";
+import { ItemAttributes } from "@/types/UserProfile";
 import itemList from "@/items/itemList";
 import intReply from "@/utils/intReply";
 import { confirmNewIzsoleMsg, izsoleItemString } from "@/commands/_izsole/izsoleEmbeds";

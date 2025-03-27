@@ -1,5 +1,5 @@
 import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle, EmbedField, User } from "discord.js";
-import UserProfile from "@/interfaces/UserProfile";
+import UserProfile from "@/types/UserProfile";
 import { INV_PAGE_SIZE, ItemType, itemTypes } from "@/commands/inventars/inventars";
 import latiString from "@/utils/strings/latiString";
 import embedTemplate from "@/utils/embeds/embedTemplate";

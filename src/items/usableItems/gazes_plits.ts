@@ -8,12 +8,12 @@ import {
 } from "discord.js";
 import findUser from "@/db/findUser";
 import errorEmbed from "@/utils/embeds/errorEmbed";
-import Item, { UsableItemFunc } from "@/interfaces/Item";
+import Item, { UsableItemFunc } from "@/types/Item";
 import intReply from "@/utils/intReply";
 import embedTemplate from "@/utils/embeds/embedTemplate";
 import { Dialogs } from "@/utils/dialogs";
 import itemList, { ItemKey } from "@/items/itemList";
-import UserProfile from "@/interfaces/UserProfile";
+import UserProfile from "@/types/UserProfile";
 import itemString from "@/utils/strings/itemString";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import commandColors from "@/utils/commandColors";

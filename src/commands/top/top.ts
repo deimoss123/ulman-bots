@@ -1,6 +1,6 @@
 import getAllUsers from "@/db/getAllUsers";
 import commandColors from "@/utils/commandColors";
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import topData from "@/commands/top/topData";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import topEmbed from "@/commands/top/topEmbed";
@@ -8,8 +8,8 @@ import findUser from "@/db/findUser";
 import { SortDataProfileEntry, sortDataProfile, sortDataStats } from "@/commands/top/sortData";
 import getStatsMany from "@/db/stats/getStatsMany";
 import intReply from "@/utils/intReply";
-import StatsProfile from "@/interfaces/StatsProfile";
-import UserProfile from "@/interfaces/UserProfile";
+import StatsProfile from "@/types/StatsProfile";
+import UserProfile from "@/types/UserProfile";
 import buttonHandler from "@/utils/buttonHandler";
 import btnPaginationRow from "@/items/helpers/btnPaginationRow";
 import { ComponentType } from "discord.js";

@@ -1,7 +1,7 @@
 import { ClientSession } from "mongoose";
 import findUser from "@/db/findUser";
 import setFishing from "@/db/setFishing";
-import UserProfile, { FishObj, UserFishing } from "@/interfaces/UserProfile";
+import UserProfile, { FishObj, UserFishing } from "@/types/UserProfile";
 import chance from "@/items/helpers/chance";
 import maksekeresData, { FishChance } from "@/commands/zvejot/makskeresData";
 import { ZVEJOT_MIN_LEVEL } from "@/commands/zvejot/zvejot";

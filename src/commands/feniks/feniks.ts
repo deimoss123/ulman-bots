@@ -2,7 +2,7 @@ import { ApplicationCommandOptionType, ChatInputCommandInteraction, EmbedField }
 import commandColors from "@/utils/commandColors";
 import embedTemplate from "@/utils/embeds/embedTemplate";
 import errorEmbed from "@/utils/embeds/errorEmbed";
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import intReply from "@/utils/intReply";
 import { KazinoLikme } from "@/commands/rulete/rulete";
 import feniksLaimesti from "@/commands/feniks/feniksLaimesti";

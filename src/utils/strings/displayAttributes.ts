@@ -1,5 +1,5 @@
 import maksekeresData from "@/commands/zvejot/makskeresData";
-import { ItemAttributes, SpecialItemInProfile } from "@/interfaces/UserProfile";
+import { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
 import itemList, { ItemCategory, ItemKey } from "@/items/itemList";
 import { cookableItems } from "@/items/usableItems/gazes_plits";
 import { KAFIJAS_APARATS_COOLDOWN } from "@/items/usableItems/kafijas_aparats";

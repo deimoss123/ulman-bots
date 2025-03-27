@@ -1,4 +1,4 @@
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import { ApplicationCommandOptionType } from "discord.js";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import findUser from "@/db/findUser";
@@ -13,8 +13,8 @@ import wrongKeyEmbed from "@/utils/embeds/wrongKeyEmbed";
 import latiString from "@/utils/strings/latiString";
 import addLati from "@/db/addLati";
 import iedotRunSpecial, { noInvSpaceEmbed } from "@/commands/iedot/iedotRunSpecial";
-import Item from "@/interfaces/Item";
-import UserProfile from "@/interfaces/UserProfile";
+import Item from "@/types/Item";
+import UserProfile from "@/types/UserProfile";
 import setStats from "@/db/stats/setStats";
 import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
 import intReply from "@/utils/intReply";

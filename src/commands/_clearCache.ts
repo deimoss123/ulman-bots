@@ -1,4 +1,4 @@
-import Command from "@/interfaces/Command";
+import Command from "@/types/Command";
 import intReply from "@/utils/intReply";
 import { clearCache } from "@/utils/userCache";
 
