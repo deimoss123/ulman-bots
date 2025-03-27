@@ -3,7 +3,7 @@ import findAuctionById from "@/db/auction/findAuctionById";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import Command from "@/types/Command";
-import izsoleEmbed from "@/izsoles/izsoleEmbed";
+import izsoleEmbed from "@/commands/_izsole/izsoleEmbed";
 import intReply from "@/utils/intReply";
 import allItemAutocomplete from "@/commands/info/allItemAutocomplete";
 import izsoleCreate from "@/commands/_izsole/izsoleCreate";

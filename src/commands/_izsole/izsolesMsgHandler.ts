@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import findAuctionById from "@/db/auction/findAuctionById";
 import smallEmbed from "@/utils/embeds/smallEmbed";
-import izsoleEmbed from "@/izsoles/izsoleEmbed";
+import izsoleEmbed from "@/commands/_izsole/izsoleEmbed";
 import emoji from "@/utils/emoji";
 
 export default async function izsolesMsgHandler(msg: Message, apiCommand: string, content: string[]) {

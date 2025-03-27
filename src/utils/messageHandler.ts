@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 import adventeMsgHandler from "@/advente/adventeMsgHandler";
-import izsolesMsgHandler from "@/izsoles/izsolesMsgHandler";
+import izsolesMsgHandler from "@/commands/_izsole/izsolesMsgHandler";
 
 export default function messageHandler(msg: Message) {
   if (!msg.content || msg.channelId !== process.env.API_CHANNEL) return;
