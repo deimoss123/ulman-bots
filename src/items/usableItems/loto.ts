@@ -280,7 +280,7 @@ export default function loto(itemKey: ItemKey, options: LotoOptions): UsableItem
             end: true,
             after: async () => {
               // ahhh nepatīk šitais imports, lūdzu, neesi atmiņas noplūde
-              const izmantotRun = await import('../../commands/economyCommands/izmantot/izmantotRun');
+              const izmantotRun = await import('../../commands/izmantot/izmantotRun');
               izmantotRun.default(int, itemKey, 0);
             },
           };

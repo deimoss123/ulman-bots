@@ -2,7 +2,7 @@ import { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuInteraction 
 import UserProfile, { ItemAttributes } from '../interfaces/UserProfile';
 import itemList, { ItemKey } from '../items/itemList';
 import { AttributeItem } from '../interfaces/Item';
-import { attributeItemSort } from '../commands/economyCommands/inventars/inventars';
+import { attributeItemSort } from '../commands/inventars/inventars';
 import itemString, { itemStringCustom } from '../embeds/helpers/itemString';
 import { displayAttributes } from '../embeds/helpers/displayAttributes';
 import { DialogsOnClickCallbackReturn } from './Dialogs';

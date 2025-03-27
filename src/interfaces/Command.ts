@@ -2,6 +2,11 @@ import { AutocompleteInteraction, ChatInputApplicationCommandData, ChatInputComm
 
 // interfeiss bota komandu objektiem
 interface Command {
+  // komanda domāta izstrādei
+  // netiks reģistrēta kā globāla komanda
+  // tikai testa serverī un atļauts lietot tikai izstrādātājam
+  devOnly?: boolean;
+
   // palīdzības apraksts
   description: () => string;
 

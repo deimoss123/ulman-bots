@@ -1,4 +1,4 @@
-import { statusList } from '../../commands/economyCommands/profils';
+import { statusList } from '../../commands/profils';
 import addStatus from '../../economy/addStatus';
 import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
 import { UsableItemFunc } from '../../interfaces/Item';

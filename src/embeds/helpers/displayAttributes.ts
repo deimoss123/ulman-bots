@@ -1,4 +1,4 @@
-import maksekeresData from '../../commands/economyCommands/zvejot/makskeresData';
+import maksekeresData from '../../commands/zvejot/makskeresData';
 import { ItemAttributes, SpecialItemInProfile } from '../../interfaces/UserProfile';
 import itemList, { ItemCategory, ItemKey } from '../../items/itemList';
 import { cookableItems } from '../../items/usableItems/gazes_plits';
@@ -113,9 +113,7 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false) {
         if (!inline) {
           str +=
             Object.entries(boilIevarijums.berries)
-              .map(
-                ([name, amount]) => `${amount} ${itemList[name].emoji() || '❓'}`,
-              )
+              .map(([name, amount]) => `${amount} ${itemList[name].emoji() || '❓'}`)
               .join(', ') + '\n';
         }
 

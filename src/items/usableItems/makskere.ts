@@ -1,6 +1,6 @@
 import { ActionRowBuilder, BaseInteraction, bold, ButtonBuilder, ButtonStyle, ComponentType } from 'discord.js';
-import maksekeresData from '../../commands/economyCommands/zvejot/makskeresData';
-import { calcRepairCost } from '../../commands/economyCommands/zvejot/zvejot';
+import maksekeresData from '../../commands/zvejot/makskeresData';
+import { calcRepairCost } from '../../commands/zvejot/zvejot';
 import addLati from '../../economy/addLati';
 import editItemAttribute from '../../economy/editItemAttribute';
 import findUser from '../../economy/findUser';

@@ -1,4 +1,4 @@
-import feniksRun from '../../commands/economyCommands/feniks/feniksRun';
+import feniksRun from '../../commands/feniks/feniksRun';
 import { UsableItemFunc } from '../../interfaces/Item';
 
 export const brivgriezInfo = `Ko šeit uzrakstīt... nosaukums ir diezgan pašsaprotams :^)`;

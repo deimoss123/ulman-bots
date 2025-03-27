@@ -3,7 +3,7 @@ import { ItemCategory, ItemKey } from '../items/itemList';
 import UsableItemReturn from './UsableItemReturn';
 import { ItemAttributes, SpecialItemInProfile } from './UserProfile';
 import { LotoOptions } from '../items/usableItems/loto';
-import { VersionString } from '../commands/economyCommands/palidziba/jaunumi/updatesList';
+import { VersionString } from '../commands/palidziba/jaunumi/updatesList';
 import emoji from '../utils/emoji';
 
 // masīvs ar vismaz vienu vērtību
@@ -18,7 +18,6 @@ export type UsableItemFunc = (
   itemKey: ItemKey,
   specialItem?: SpecialItemInProfile,
 ) => Promise<UsableItemReturn> | UsableItemReturn;
-
 
 export interface BaseItem {
   // īss apraksts par mantu
@@ -35,7 +34,7 @@ export interface BaseItem {
   nameAkuDsk: string;
   // vai ir vīriešu dzimtes lietvārds
   isVirsiesuDzimte: boolean;
-  
+
   // emoji mantām
   emoji(): string;
 

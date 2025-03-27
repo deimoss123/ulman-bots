@@ -1,4 +1,4 @@
-import { statusList } from '../../commands/economyCommands/profils';
+import { statusList } from '../../commands/profils';
 import addItems from '../../economy/addItems';
 import findUser from '../../economy/findUser';
 import setUser from '../../economy/setUser';

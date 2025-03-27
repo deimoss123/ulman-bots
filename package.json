@@ -7,12 +7,12 @@
     "start": "bun src/index.ts",
     "dev": "bun --watch src/index.ts",
     "check": "tsc --noEmit",
-    "register": "bun src/registerGuildCommands.ts",
-    "register:global": "bun src/registerGlobalCommands.ts",
     "lint": "eslint . --ext .ts",
-    "updatedb": "bun src/utils/updatedb.ts",
-    "uploadEmojis": "bun src/uploadEmojis.ts",
-    "deleteEmojis": "bun src/deleteEmojis.ts"
+    "register": "bun src/scripts/registerGuildCommands.ts",
+    "register:global": "bun src/scripts/registerGlobalCommands.ts",
+    "updatedb": "bun src/scripts/updatedb.ts",
+    "uploadEmojis": "bun src/scripts/uploadEmojis.ts",
+    "deleteEmojis": "bun src/scripts/deleteEmojis.ts"
   },
   "keywords": [],
   "author": "",
