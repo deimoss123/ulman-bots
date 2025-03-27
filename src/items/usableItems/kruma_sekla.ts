@@ -1,5 +1,5 @@
-import addItems from "@/economy/addItems";
-import findUser from "@/economy/findUser";
+import addItems from "@/db/addItems";
+import findUser from "@/db/findUser";
 import itemString from "@/embeds/helpers/itemString";
 import { UsableItemFunc } from "@/interfaces/Item";
 import checkUserSpecialItems from "@/items/helpers/checkUserSpecialItems";

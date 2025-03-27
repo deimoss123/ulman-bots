@@ -9,9 +9,9 @@ import {
   TextInputBuilder,
   TextInputStyle,
 } from "discord.js";
-import addLati from "@/economy/addLati";
-import editItemAttribute from "@/economy/editItemAttribute";
-import findUser from "@/economy/findUser";
+import addLati from "@/db/addLati";
+import editItemAttribute from "@/db/editItemAttribute";
+import findUser from "@/db/findUser";
 import buttonHandler from "@/embeds/buttonHandler";
 import embedTemplate from "@/embeds/embedTemplate";
 import ephemeralReply from "@/embeds/ephemeralReply";

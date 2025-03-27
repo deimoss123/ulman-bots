@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import findAuctionById from "@/economy/auction/findAuctionById";
+import findAuctionById from "@/db/auction/findAuctionById";
 import smallEmbed from "@/embeds/smallEmbed";
 import izsoleEmbed from "@/izsoles/izsoleEmbed";
 import emoji from "@/utils/emoji";

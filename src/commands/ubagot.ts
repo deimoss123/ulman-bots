@@ -1,10 +1,10 @@
 import { ChatInputCommandInteraction } from "discord.js";
-import addDailyCooldown from "@/economy/addDailyCooldown";
-import addItems from "@/economy/addItems";
-import addLati from "@/economy/addLati";
-import addTimeCooldown from "@/economy/addTimeCooldown";
-import addXp from "@/economy/addXp";
-import findUser from "@/economy/findUser";
+import addDailyCooldown from "@/db/addDailyCooldown";
+import addItems from "@/db/addItems";
+import addLati from "@/db/addLati";
+import addTimeCooldown from "@/db/addTimeCooldown";
+import addXp from "@/db/addXp";
+import findUser from "@/db/findUser";
 import commandColors from "@/embeds/commandColors";
 import embedTemplate from "@/embeds/embedTemplate";
 import ephemeralReply from "@/embeds/ephemeralReply";

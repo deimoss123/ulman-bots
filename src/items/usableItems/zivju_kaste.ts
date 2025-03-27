@@ -1,4 +1,4 @@
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import { UsableItemFunc } from "@/interfaces/Item";
 import { ItemKey } from "@/items/itemList";
 

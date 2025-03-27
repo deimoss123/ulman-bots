@@ -1,4 +1,4 @@
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import User from "@/schemas/User";
 import UserProfile from "@/interfaces/UserProfile";
 import userCache from "@/utils/userCache";

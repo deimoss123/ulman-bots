@@ -1,7 +1,7 @@
 import { ActionRowBuilder, BaseInteraction, ComponentType, StringSelectMenuBuilder } from "discord.js";
-import addItems from "@/economy/addItems";
-import findUser from "@/economy/findUser";
-import removeItemsById from "@/economy/removeItemsById";
+import addItems from "@/db/addItems";
+import findUser from "@/db/findUser";
+import removeItemsById from "@/db/removeItemsById";
 import commandColors from "@/embeds/commandColors";
 import embedTemplate from "@/embeds/embedTemplate";
 import ephemeralReply from "@/embeds/ephemeralReply";

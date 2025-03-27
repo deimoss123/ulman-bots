@@ -8,7 +8,7 @@ import {
   ComponentType,
   StringSelectMenuBuilder,
 } from "discord.js";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import embedTemplate from "@/embeds/embedTemplate";
 import ephemeralReply from "@/embeds/ephemeralReply";
 import errorEmbed from "@/embeds/errorEmbed";

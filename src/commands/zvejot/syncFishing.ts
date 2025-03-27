@@ -1,6 +1,6 @@
 import { ClientSession } from "mongoose";
-import findUser from "@/economy/findUser";
-import setFishing from "@/economy/setFishing";
+import findUser from "@/db/findUser";
+import setFishing from "@/db/setFishing";
 import UserProfile, { FishObj, UserFishing } from "@/interfaces/UserProfile";
 import chance from "@/items/helpers/chance";
 import maksekeresData, { FishChance } from "@/commands/zvejot/makskeresData";

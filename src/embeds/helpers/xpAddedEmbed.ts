@@ -1,5 +1,5 @@
 import { bold, EmbedBuilder } from "discord.js";
-import { AddXpReturn } from "@/economy/addXp";
+import { AddXpReturn } from "@/db/addXp";
 import itemList from "@/items/itemList";
 import levelsList, { MAX_LEVEL } from "@/levelingSystem/levelsList";
 import itemString from "@/embeds/helpers/itemString";

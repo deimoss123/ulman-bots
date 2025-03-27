@@ -2,9 +2,9 @@ import Command from "@/interfaces/Command";
 import { ApplicationCommandOptionType } from "discord.js";
 import embedTemplate from "@/embeds/embedTemplate";
 import latiString from "@/embeds/helpers/latiString";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import errorEmbed from "@/embeds/errorEmbed";
-import addLati from "@/economy/addLati";
+import addLati from "@/db/addLati";
 import intReply from "@/utils/intReply";
 
 const _addLati: Command = {

@@ -1,18 +1,18 @@
 import Command from "@/interfaces/Command";
 import { ApplicationCommandOptionType } from "discord.js";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import embedTemplate from "@/embeds/embedTemplate";
 import latiString from "@/embeds/helpers/latiString";
 import errorEmbed from "@/embeds/errorEmbed";
-import addLati from "@/economy/addLati";
+import addLati from "@/db/addLati";
 import ephemeralReply from "@/embeds/ephemeralReply";
 import commandColors from "@/embeds/commandColors";
-import setStats from "@/economy/stats/setStats";
+import setStats from "@/db/stats/setStats";
 import intReply from "@/utils/intReply";
 import mongoTransaction from "@/utils/mongoTransaction";
-import addXp from "@/economy/addXp";
-import addSpecialItems from "@/economy/addSpecialItems";
-import editItemAttribute from "@/economy/editItemAttribute";
+import addXp from "@/db/addXp";
+import addSpecialItems from "@/db/addSpecialItems";
+import editItemAttribute from "@/db/editItemAttribute";
 
 const maksat: Command = {
   description: () =>

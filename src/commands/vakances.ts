@@ -9,14 +9,14 @@ import {
   StringSelectMenuBuilder,
 } from "discord.js";
 import commandColors from "@/embeds/commandColors";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import errorEmbed from "@/embeds/errorEmbed";
 import embedTemplate from "@/embeds/embedTemplate";
 import intReply from "@/utils/intReply";
 import { Dialogs } from "@/utils/Dialogs";
 import UserProfile from "@/interfaces/UserProfile";
 import smallEmbed from "@/embeds/smallEmbed";
-import setJobPosition from "@/economy/setJobPosition";
+import setJobPosition from "@/db/setJobPosition";
 
 interface JobPosData {
   name: string;

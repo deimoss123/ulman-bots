@@ -1,21 +1,21 @@
 import Command from "@/interfaces/Command";
 import { ApplicationCommandOptionType } from "discord.js";
 import ephemeralReply from "@/embeds/ephemeralReply";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import errorEmbed from "@/embeds/errorEmbed";
 import itemString from "@/embeds/helpers/itemString";
 import embedTemplate from "@/embeds/embedTemplate";
-import addItems from "@/economy/addItems";
+import addItems from "@/db/addItems";
 import commandColors from "@/embeds/commandColors";
 import iedotAutocomplete from "@/commands/iedot/iedotAutocomplete";
 import itemList from "@/items/itemList";
 import wrongKeyEmbed from "@/embeds/wrongKeyEmbed";
 import latiString from "@/embeds/helpers/latiString";
-import addLati from "@/economy/addLati";
+import addLati from "@/db/addLati";
 import iedotRunSpecial, { noInvSpaceEmbed } from "@/commands/iedot/iedotRunSpecial";
 import Item from "@/interfaces/Item";
 import UserProfile from "@/interfaces/UserProfile";
-import setStats from "@/economy/stats/setStats";
+import setStats from "@/db/stats/setStats";
 import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
 import intReply from "@/utils/intReply";
 

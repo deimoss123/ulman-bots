@@ -1,8 +1,8 @@
 import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
-import addItems from "@/economy/addItems";
-import editItemAttribute from "@/economy/editItemAttribute";
-import editMultipleItemAttributes from "@/economy/editMultipleItemAttributes";
-import findUser from "@/economy/findUser";
+import addItems from "@/db/addItems";
+import editItemAttribute from "@/db/editItemAttribute";
+import editMultipleItemAttributes from "@/db/editMultipleItemAttributes";
+import findUser from "@/db/findUser";
 import commandColors from "@/embeds/commandColors";
 import embedTemplate from "@/embeds/embedTemplate";
 import ephemeralReply from "@/embeds/ephemeralReply";

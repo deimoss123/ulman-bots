@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType } from "discord.js";
-import findAuctionById from "@/economy/auction/findAuctionById";
+import findAuctionById from "@/db/auction/findAuctionById";
 import ephemeralReply from "@/embeds/ephemeralReply";
 import errorEmbed from "@/embeds/errorEmbed";
 import Command from "@/interfaces/Command";

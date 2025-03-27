@@ -11,13 +11,13 @@ import {
 import { IpasumiState } from "@/commands/ipasumi/ipasumi";
 import embedTemplate from "@/embeds/embedTemplate";
 import UserProfile from "@/interfaces/UserProfile";
-import setUser from "@/economy/setUser";
-import findUser from "@/economy/findUser";
+import setUser from "@/db/setUser";
+import findUser from "@/db/findUser";
 import emoji from "@/utils/emoji";
 import { writeFile, readFile } from "fs/promises";
 import { Dialogs } from "@/utils/Dialogs";
 import mongoTransaction from "@/utils/mongoTransaction";
-import addLati from "@/economy/addLati";
+import addLati from "@/db/addLati";
 import intReply from "@/utils/intReply";
 import smallEmbed from "@/embeds/smallEmbed";
 import latiString from "@/embeds/helpers/latiString";

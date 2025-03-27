@@ -2,8 +2,8 @@
 //praktiski visu šo šizofrēniju ir veidojis bumbotajs (ar "mazu" deimosa palīdzību)
 
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
-import editItemAttribute from "@/economy/editItemAttribute";
-import findUser from "@/economy/findUser";
+import editItemAttribute from "@/db/editItemAttribute";
+import findUser from "@/db/findUser";
 import buttonHandler from "@/embeds/buttonHandler";
 import embedTemplate from "@/embeds/embedTemplate";
 import errorEmbed from "@/embeds/errorEmbed";
@@ -13,7 +13,7 @@ import { UsableItemFunc, item } from "@/interfaces/Item";
 import intReply from "@/utils/intReply";
 import itemList, { ItemKey } from "@/items/itemList";
 import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
-import addItems from "@/economy/addItems";
+import addItems from "@/db/addItems";
 import { SpecialItemInProfile } from "@/interfaces/UserProfile";
 
 //ogu rekinasana

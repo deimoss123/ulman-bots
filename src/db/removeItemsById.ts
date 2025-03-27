@@ -1,31 +1,25 @@
 import { ClientSession } from "mongoose";
 import UserProfile from "@/interfaces/UserProfile";
-import { ItemKey } from "@/items/itemList";
 import User from "@/schemas/User";
 import userCache from "@/utils/userCache";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 
-export default async function setTirgus(
+export default async function removeItemsById(
   userId: string,
   guildId: string,
-  itemKey: ItemKey,
+  itemIds: string[],
   session: ClientSession | null = null,
 ): Promise<UserProfile | undefined> {
   try {
     const user = await findUser(userId, guildId, session);
     if (!user) return;
 
-    const today = new Date().toLocaleDateString("en-GB");
-    if (user.tirgus.lastDayUsed !== today) {
-      user.tirgus.lastDayUsed = today;
-      user.tirgus.itemsBought = [];
-    }
-
-    user.tirgus.itemsBought.push(itemKey);
+    const { specialItems } = user;
+    const newItems = specialItems.filter((item) => !itemIds.includes(item._id!));
 
     const res = (await User.findOneAndUpdate(
       { userId, guildId },
-      { $set: { tirgus: user.tirgus } },
+      { $set: { specialItems: newItems } },
       { new: true },
     ).session(session)) as UserProfile;
 

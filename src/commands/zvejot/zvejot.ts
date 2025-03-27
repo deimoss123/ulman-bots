@@ -1,11 +1,11 @@
 import { bold, ComponentType, EmbedBuilder } from "discord.js";
-import addItems from "@/economy/addItems";
-import addLati from "@/economy/addLati";
-import addSpecialItems from "@/economy/addSpecialItems";
-import addXp, { AddXpReturn } from "@/economy/addXp";
-import findUser from "@/economy/findUser";
-import removeItemsById from "@/economy/removeItemsById";
-import setFishing from "@/economy/setFishing";
+import addItems from "@/db/addItems";
+import addLati from "@/db/addLati";
+import addSpecialItems from "@/db/addSpecialItems";
+import addXp, { AddXpReturn } from "@/db/addXp";
+import findUser from "@/db/findUser";
+import removeItemsById from "@/db/removeItemsById";
+import setFishing from "@/db/setFishing";
 import commandColors from "@/embeds/commandColors";
 import ephemeralReply from "@/embeds/ephemeralReply";
 import errorEmbed from "@/embeds/errorEmbed";

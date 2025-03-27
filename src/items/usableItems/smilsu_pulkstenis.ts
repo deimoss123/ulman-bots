@@ -1,5 +1,5 @@
 import syncFishing from "@/commands/zvejot/syncFishing";
-import addItems from "@/economy/addItems";
+import addItems from "@/db/addItems";
 import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
 import { UsableItemFunc } from "@/interfaces/Item";
 

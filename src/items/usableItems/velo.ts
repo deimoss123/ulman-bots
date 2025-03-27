@@ -7,9 +7,9 @@ import {
   ComponentType,
   EmbedBuilder,
 } from "discord.js";
-import addItems from "@/economy/addItems";
-import addXp from "@/economy/addXp";
-import findUser from "@/economy/findUser";
+import addItems from "@/db/addItems";
+import addXp from "@/db/addXp";
+import findUser from "@/db/findUser";
 import buttonHandler from "@/embeds/buttonHandler";
 import embedTemplate from "@/embeds/embedTemplate";
 import ephemeralReply from "@/embeds/ephemeralReply";

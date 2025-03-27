@@ -12,9 +12,9 @@ import errorEmbed from "@/embeds/errorEmbed";
 import interactionCache from "@/utils/interactionCache";
 import ephemeralReply from "@/embeds/ephemeralReply";
 import logCommand from "@/utils/logCommand";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
-import resetDailyCooldown from "@/economy/resetDailyCooldown";
+import resetDailyCooldown from "@/db/resetDailyCooldown";
 import smallEmbed from "@/embeds/smallEmbed";
 import intReply from "@/utils/intReply";
 

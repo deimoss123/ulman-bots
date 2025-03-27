@@ -1,24 +1,31 @@
 import { ClientSession } from "mongoose";
-import UserProfile, { UserFishing } from "@/interfaces/UserProfile";
+import UserProfile from "@/interfaces/UserProfile";
+import { ItemKey } from "@/items/itemList";
 import User from "@/schemas/User";
 import userCache from "@/utils/userCache";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 
-export default async function setFishing(
+export default async function setTirgus(
   userId: string,
   guildId: string,
-  fishing: Partial<UserFishing>,
+  itemKey: ItemKey,
   session: ClientSession | null = null,
 ): Promise<UserProfile | undefined> {
   try {
     const user = await findUser(userId, guildId, session);
     if (!user) return;
 
-    user.fishing = { ...user.fishing, ...fishing };
+    const today = new Date().toLocaleDateString("en-GB");
+    if (user.tirgus.lastDayUsed !== today) {
+      user.tirgus.lastDayUsed = today;
+      user.tirgus.itemsBought = [];
+    }
+
+    user.tirgus.itemsBought.push(itemKey);
 
     const res = (await User.findOneAndUpdate(
       { userId, guildId },
-      { $set: { fishing: user.fishing } },
+      { $set: { tirgus: user.tirgus } },
       { new: true },
     ).session(session)) as UserProfile;
 

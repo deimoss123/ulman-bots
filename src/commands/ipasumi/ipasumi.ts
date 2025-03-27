@@ -1,5 +1,5 @@
 import { ActionRowBuilder, BaseInteraction, ComponentType, StringSelectMenuBuilder } from "discord.js";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import errorEmbed from "@/embeds/errorEmbed";
 import Command from "@/interfaces/Command";
 import UserProfile from "@/interfaces/UserProfile";

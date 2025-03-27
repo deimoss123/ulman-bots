@@ -1,7 +1,7 @@
 import Command from "@/interfaces/Command";
 import commandColors from "@/embeds/commandColors";
 import { ApplicationCommandOptionType, codeBlock } from "discord.js";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import errorEmbed from "@/embeds/errorEmbed";
 import userString from "@/embeds/helpers/userString";
 import embedTemplate from "@/embeds/embedTemplate";

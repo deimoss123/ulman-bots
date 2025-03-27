@@ -2,7 +2,7 @@ import Command from "@/interfaces/Command";
 import { ApplicationCommandOptionType } from "discord.js";
 import errorEmbed from "@/embeds/errorEmbed";
 import embedTemplate from "@/embeds/embedTemplate";
-import addXp from "@/economy/addXp";
+import addXp from "@/db/addXp";
 import latiString from "@/embeds/helpers/latiString";
 import intReply from "@/utils/intReply";
 

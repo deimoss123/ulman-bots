@@ -1,5 +1,5 @@
 import { statusList } from "@/commands/profils";
-import addStatus from "@/economy/addStatus";
+import addStatus from "@/db/addStatus";
 import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
 import { UsableItemFunc } from "@/interfaces/Item";
 import { UserStatusName } from "@/interfaces/UserProfile";

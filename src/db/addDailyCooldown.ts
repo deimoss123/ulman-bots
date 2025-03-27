@@ -2,7 +2,7 @@ import { ClientSession } from "mongoose";
 import UserProfile from "@/interfaces/UserProfile";
 import User from "@/schemas/User";
 import userCache from "@/utils/userCache";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 
 export default async function addDailyCooldown(
   userId: string,

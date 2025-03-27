@@ -1,7 +1,7 @@
 import { statusList } from "@/commands/profils";
-import addItems from "@/economy/addItems";
-import findUser from "@/economy/findUser";
-import setUser from "@/economy/setUser";
+import addItems from "@/db/addItems";
+import findUser from "@/db/findUser";
+import setUser from "@/db/setUser";
 import { UsableItemFunc } from "@/interfaces/Item";
 import { UserStatus } from "@/interfaces/UserProfile";
 

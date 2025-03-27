@@ -1,8 +1,8 @@
 import { ButtonInteraction, MessageFlags } from "discord.js";
-import addItems from "@/economy/addItems";
-import addLati from "@/economy/addLati";
-import findUser from "@/economy/findUser";
-import setUser from "@/economy/setUser";
+import addItems from "@/db/addItems";
+import addLati from "@/db/addLati";
+import findUser from "@/db/findUser";
+import setUser from "@/db/setUser";
 import ephemeralReply from "@/embeds/ephemeralReply";
 import errorEmbed from "@/embeds/errorEmbed";
 import itemString from "@/embeds/helpers/itemString";

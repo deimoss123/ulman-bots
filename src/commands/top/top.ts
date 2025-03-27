@@ -1,12 +1,12 @@
-import getAllUsers from "@/economy/getAllUsers";
+import getAllUsers from "@/db/getAllUsers";
 import commandColors from "@/embeds/commandColors";
 import Command from "@/interfaces/Command";
 import topData from "@/commands/top/topData";
 import errorEmbed from "@/embeds/errorEmbed";
 import topEmbed from "@/commands/top/topEmbed";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import { SortDataProfileEntry, sortDataProfile, sortDataStats } from "@/commands/top/sortData";
-import getStatsMany from "@/economy/stats/getStatsMany";
+import getStatsMany from "@/db/stats/getStatsMany";
 import intReply from "@/utils/intReply";
 import StatsProfile from "@/interfaces/StatsProfile";
 import UserProfile from "@/interfaces/UserProfile";

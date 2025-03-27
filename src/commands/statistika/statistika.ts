@@ -1,7 +1,7 @@
 import { ApplicationCommandOptionType, EmbedField } from "discord.js";
-import findUser from "@/economy/findUser";
-import getAllUsers from "@/economy/getAllUsers";
-import getStatsMany from "@/economy/stats/getStatsMany";
+import findUser from "@/db/findUser";
+import getAllUsers from "@/db/getAllUsers";
+import getStatsMany from "@/db/stats/getStatsMany";
 import commandColors from "@/embeds/commandColors";
 import embedTemplate from "@/embeds/embedTemplate";
 import ephemeralReply from "@/embeds/ephemeralReply";

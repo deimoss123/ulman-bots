@@ -9,11 +9,11 @@ import {
   ComponentType,
   EmbedField,
 } from "discord.js";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import errorEmbed from "@/embeds/errorEmbed";
 import ephemeralReply from "@/embeds/ephemeralReply";
 import itemString from "@/embeds/helpers/itemString";
-import addItems from "@/economy/addItems";
+import addItems from "@/db/addItems";
 import embedTemplate from "@/embeds/embedTemplate";
 import ItemString from "@/embeds/helpers/itemString";
 import itemList from "@/items/itemList";

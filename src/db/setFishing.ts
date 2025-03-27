@@ -1,25 +1,24 @@
 import { ClientSession } from "mongoose";
-import UserProfile from "@/interfaces/UserProfile";
+import UserProfile, { UserFishing } from "@/interfaces/UserProfile";
 import User from "@/schemas/User";
 import userCache from "@/utils/userCache";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 
-export default async function removeItemsById(
+export default async function setFishing(
   userId: string,
   guildId: string,
-  itemIds: string[],
+  fishing: Partial<UserFishing>,
   session: ClientSession | null = null,
 ): Promise<UserProfile | undefined> {
   try {
     const user = await findUser(userId, guildId, session);
     if (!user) return;
 
-    const { specialItems } = user;
-    const newItems = specialItems.filter((item) => !itemIds.includes(item._id!));
+    user.fishing = { ...user.fishing, ...fishing };
 
     const res = (await User.findOneAndUpdate(
       { userId, guildId },
-      { $set: { specialItems: newItems } },
+      { $set: { fishing: user.fishing } },
       { new: true },
     ).session(session)) as UserProfile;
 

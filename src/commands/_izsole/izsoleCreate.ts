@@ -8,7 +8,7 @@ import {
   TextInputBuilder,
   TextInputStyle,
 } from "discord.js";
-import createAuction from "@/economy/auction/createAuction";
+import createAuction from "@/db/auction/createAuction";
 import buttonHandler from "@/embeds/buttonHandler";
 import embedTemplate from "@/embeds/embedTemplate";
 import ephemeralReply from "@/embeds/ephemeralReply";

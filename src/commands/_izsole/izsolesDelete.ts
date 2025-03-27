@@ -1,6 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, ComponentType } from "discord.js";
-import deleteAuction from "@/economy/auction/deleteAuction";
-import findAuctionById from "@/economy/auction/findAuctionById";
+import deleteAuction from "@/db/auction/deleteAuction";
+import findAuctionById from "@/db/auction/findAuctionById";
 import buttonHandler from "@/embeds/buttonHandler";
 import embedTemplate from "@/embeds/embedTemplate";
 import ephemeralReply from "@/embeds/ephemeralReply";

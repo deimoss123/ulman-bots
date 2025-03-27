@@ -1,6 +1,6 @@
 import Command from "@/interfaces/Command";
 import { ApplicationCommandOptionType } from "discord.js";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import embedTemplate from "@/embeds/embedTemplate";
 import errorEmbed from "@/embeds/errorEmbed";
 import latiString from "@/embeds/helpers/latiString";

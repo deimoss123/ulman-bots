@@ -7,11 +7,11 @@ import {
   ComponentType,
   StringSelectMenuBuilder,
 } from "discord.js";
-import addLati from "@/economy/addLati";
-import addSpecialItems from "@/economy/addSpecialItems";
-import findUser from "@/economy/findUser";
-import removeItemsById from "@/economy/removeItemsById";
-import setStats from "@/economy/stats/setStats";
+import addLati from "@/db/addLati";
+import addSpecialItems from "@/db/addSpecialItems";
+import findUser from "@/db/findUser";
+import removeItemsById from "@/db/removeItemsById";
+import setStats from "@/db/stats/setStats";
 import commandColors from "@/embeds/commandColors";
 import embedTemplate from "@/embeds/embedTemplate";
 import ephemeralReply from "@/embeds/ephemeralReply";

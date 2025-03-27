@@ -2,7 +2,7 @@ import normalizeLatText from "@/embeds/helpers/normalizeLatText";
 import { AutocompleteInteraction } from "discord.js";
 import Item from "@/interfaces/Item";
 import itemList, { ItemKey } from "@/items/itemList";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import findItemsByQuery from "@/items/helpers/findItemsByQuery";
 import capitalizeFirst from "@/embeds/helpers/capitalizeFirst";
 import { ItemInProfile } from "@/interfaces/UserProfile";

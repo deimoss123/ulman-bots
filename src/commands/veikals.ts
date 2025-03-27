@@ -13,7 +13,7 @@ import embedTemplate from "@/embeds/embedTemplate";
 import latiString from "@/embeds/helpers/latiString";
 import commandColors from "@/embeds/commandColors";
 import itemString from "@/embeds/helpers/itemString";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import pirktRun from "@/commands/pirkt/pirktRun";
 import errorEmbed from "@/embeds/errorEmbed";
 import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";

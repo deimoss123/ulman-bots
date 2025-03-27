@@ -1,6 +1,6 @@
-import addItems from "@/economy/addItems";
-import findUser from "@/economy/findUser";
-import increaseInvCap from "@/economy/increaseInvCap";
+import addItems from "@/db/addItems";
+import findUser from "@/db/findUser";
+import increaseInvCap from "@/db/increaseInvCap";
 import itemString from "@/embeds/helpers/itemString";
 import { UsableItemFunc } from "@/interfaces/Item";
 import itemList from "@/items/itemList";

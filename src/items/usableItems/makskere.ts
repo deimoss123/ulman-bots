@@ -1,9 +1,9 @@
 import { ActionRowBuilder, BaseInteraction, bold, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
 import maksekeresData from "@/commands/zvejot/makskeresData";
 import { calcRepairCost } from "@/commands/zvejot/zvejot";
-import addLati from "@/economy/addLati";
-import editItemAttribute from "@/economy/editItemAttribute";
-import findUser from "@/economy/findUser";
+import addLati from "@/db/addLati";
+import editItemAttribute from "@/db/editItemAttribute";
+import findUser from "@/db/findUser";
 import commandColors from "@/embeds/commandColors";
 import ephemeralReply from "@/embeds/ephemeralReply";
 import capitalizeFirst from "@/embeds/helpers/capitalizeFirst";

@@ -12,9 +12,9 @@ import {
   TextInputStyle,
   time,
 } from "discord.js";
-import addItems from "@/economy/addItems";
-import editItemAttribute from "@/economy/editItemAttribute";
-import findUser from "@/economy/findUser";
+import addItems from "@/db/addItems";
+import editItemAttribute from "@/db/editItemAttribute";
+import findUser from "@/db/findUser";
 import commandColors from "@/embeds/commandColors";
 import embedTemplate from "@/embeds/embedTemplate";
 import ephemeralReply from "@/embeds/ephemeralReply";

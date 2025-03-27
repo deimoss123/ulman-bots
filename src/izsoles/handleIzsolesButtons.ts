@@ -1,5 +1,5 @@
 import { ButtonInteraction } from "discord.js";
-import findAuctionById from "@/economy/auction/findAuctionById";
+import findAuctionById from "@/db/auction/findAuctionById";
 import errorEmbed from "@/embeds/errorEmbed";
 import intReply from "@/utils/intReply";
 

@@ -1,8 +1,8 @@
-import increaseInvCap from "@/economy/increaseInvCap";
-import findUser from "@/economy/findUser";
+import increaseInvCap from "@/db/increaseInvCap";
+import findUser from "@/db/findUser";
 import itemString from "@/embeds/helpers/itemString";
 import itemList from "@/items/itemList";
-import addItems from "@/economy/addItems";
+import addItems from "@/db/addItems";
 import { UsableItemFunc } from "@/interfaces/Item";
 
 export const INCREASE_CAP_1 = 100;

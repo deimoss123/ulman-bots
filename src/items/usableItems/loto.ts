@@ -1,7 +1,7 @@
 import chance, { ChanceValue } from "@/items/helpers/chance";
 import itemList, { ItemKey } from "@/items/itemList";
 import { UsableItemFunc } from "@/interfaces/Item";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import intReply from "@/utils/intReply";
 import errorEmbed from "@/embeds/errorEmbed";
 import embedTemplate from "@/embeds/embedTemplate";
@@ -15,8 +15,8 @@ import {
   ComponentEmojiResolvable,
   ComponentType,
 } from "discord.js";
-import addLati from "@/economy/addLati";
-import addItems from "@/economy/addItems";
+import addLati from "@/db/addLati";
+import addItems from "@/db/addItems";
 import smallEmbed from "@/embeds/smallEmbed";
 import commandColors from "@/embeds/commandColors";
 import emoji from "@/utils/emoji";

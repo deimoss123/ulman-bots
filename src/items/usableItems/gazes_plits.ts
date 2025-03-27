@@ -6,7 +6,7 @@ import {
   ComponentType,
   StringSelectMenuBuilder,
 } from "discord.js";
-import findUser from "@/economy/findUser";
+import findUser from "@/db/findUser";
 import errorEmbed from "@/embeds/errorEmbed";
 import Item, { UsableItemFunc } from "@/interfaces/Item";
 import intReply from "@/utils/intReply";
@@ -21,8 +21,8 @@ import { calcIevarijumsPrice } from "@/items/usableItems/ievarijums";
 import { BerryProperties, berryProperties, propertiesLat } from "@/items/usableItems/oga";
 import ephemeralReply from "@/embeds/ephemeralReply";
 import smallEmbed from "@/embeds/smallEmbed";
-import editItemAttribute from "@/economy/editItemAttribute";
-import addItems from "@/economy/addItems";
+import editItemAttribute from "@/db/editItemAttribute";
+import addItems from "@/db/addItems";
 
 export type GazesPlitsActionType = "" | "cook" | "boil_ievarijums" | "boil_special_ievarijums";
 
