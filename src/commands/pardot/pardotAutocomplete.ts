@@ -5,7 +5,7 @@ import itemList, { ItemKey } from "@/utils/itemList";
 import findUser from "@/db/findUser";
 import { ItemInProfile } from "@/types/UserProfile";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
-import findItemsByQuery from "@/items/helpers/findItemsByQuery";
+import findItemsByQuery from "@/utils/findItemsByQuery";
 import latiString from "@/utils/strings/latiString";
 
 function mapItemsToChoices(itemInList: [string, Item]) {

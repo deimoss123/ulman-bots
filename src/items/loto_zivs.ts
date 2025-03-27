@@ -1,8 +1,8 @@
 import addItems from "@/db/addItems";
 import findUser from "@/db/findUser";
 import removeItemsById from "@/db/removeItemsById";
-import chance, { ChanceRecord, ChanceObj } from "@/items/helpers/chance";
-import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
+import chance, { ChanceRecord, ChanceObj } from "@/utils/chance";
+import countFreeInvSlots from "@/utils/countFreeInvSlots";
 import { UsableItemFunc, item, AttributeItem, ItemCategory } from "@/types/Item";
 import UserProfile from "@/types/UserProfile";
 import commandColors from "@/utils/commandColors";

@@ -16,7 +16,7 @@ import iedotRunSpecial, { noInvSpaceEmbed } from "@/commands/iedot/iedotRunSpeci
 import Item from "@/types/Item";
 import UserProfile from "@/types/UserProfile";
 import setStats from "@/db/stats/setStats";
-import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
+import countFreeInvSlots from "@/utils/countFreeInvSlots";
 import intReply from "@/utils/intReply";
 
 export function cantPayTaxEmbed(itemToGive: Item, amountToGive: number, totalTax: number, user: UserProfile) {

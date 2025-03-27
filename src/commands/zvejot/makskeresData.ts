@@ -1,4 +1,4 @@
-import { ChanceValue } from "@/items/helpers/chance";
+import { ChanceValue } from "@/utils/chance";
 import { ItemKey } from "@/utils/itemList";
 
 export type FishChance = Record<

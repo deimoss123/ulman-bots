@@ -1,5 +1,5 @@
-import chance from "@/items/helpers/chance";
-import shuffleArray from "@/items/helpers/shuffleArray";
+import chance from "@/utils/chance";
+import shuffleArray from "@/utils/shuffleArray";
 import feniksLaimesti from "@/commands/feniks/feniksLaimesti";
 
 export interface CalcSpinRes {

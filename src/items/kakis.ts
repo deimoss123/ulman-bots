@@ -1,7 +1,7 @@
 import addItems from "@/db/addItems";
 import editItemAttribute from "@/db/editItemAttribute";
 import findUser from "@/db/findUser";
-import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
+import countFreeInvSlots from "@/utils/countFreeInvSlots";
 import { UsableItemFunc, item, AttributeItem, TirgusItem, ItemCategory } from "@/types/Item";
 import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
 import commandColors from "@/utils/commandColors";

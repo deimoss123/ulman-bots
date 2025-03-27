@@ -1,4 +1,4 @@
-import { ChanceValue } from "@/items/helpers/chance";
+import { ChanceValue } from "@/utils/chance";
 import emoji from "@/utils/emoji";
 
 export interface Laimests {

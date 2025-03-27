@@ -2,7 +2,7 @@ import addItems from "@/db/addItems";
 import editItemAttribute from "@/db/editItemAttribute";
 import editMultipleItemAttributes from "@/db/editMultipleItemAttributes";
 import findUser from "@/db/findUser";
-import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
+import countFreeInvSlots from "@/utils/countFreeInvSlots";
 import { UseManyType, UsableItemFunc, item, AttributeItem, TirgusItem, ItemCategory } from "@/types/Item";
 import commandColors from "@/utils/commandColors";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";

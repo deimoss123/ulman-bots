@@ -11,7 +11,7 @@ import intReply from "@/utils/intReply";
 import StatsProfile from "@/types/StatsProfile";
 import UserProfile from "@/types/UserProfile";
 import buttonHandler from "@/utils/buttonHandler";
-import btnPaginationRow from "@/items/helpers/btnPaginationRow";
+import btnPaginationRow from "@/utils/embeds/btnPaginationRow";
 import { ComponentType } from "discord.js";
 
 export const TOP_USERS_PER_PAGE = 10;

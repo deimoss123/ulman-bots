@@ -3,7 +3,7 @@ import Item from "@/types/Item";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import normalizeLatText from "@/utils/strings/normalizeLatText";
 import itemList from "@/utils/itemList";
-import findItemsByQuery from "@/items/helpers/findItemsByQuery";
+import findItemsByQuery from "@/utils/findItemsByQuery";
 
 function mapItemsToChoices(emoji: string) {
   return (itemInList: [string, Item]) => {

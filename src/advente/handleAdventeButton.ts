@@ -7,8 +7,8 @@ import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
-import checkUserSpecialItems from "@/items/helpers/checkUserSpecialItems";
-import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
+import checkUserSpecialItems from "@/utils/checkUserSpecialItems";
+import countFreeInvSlots from "@/utils/countFreeInvSlots";
 import intReply from "@/utils/intReply";
 import calendarRewards from "@/advente/calendarRewards";
 

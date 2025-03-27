@@ -3,7 +3,7 @@ import { AutocompleteInteraction } from "discord.js";
 import Item from "@/types/Item";
 import itemList, { ItemKey } from "@/utils/itemList";
 import findUser from "@/db/findUser";
-import findItemsByQuery from "@/items/helpers/findItemsByQuery";
+import findItemsByQuery from "@/utils/findItemsByQuery";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import { ItemInProfile } from "@/types/UserProfile";
 

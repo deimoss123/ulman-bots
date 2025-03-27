@@ -14,7 +14,7 @@ import itemString from "@/utils/strings/itemString";
 import addItems from "@/db/addItems";
 import addLati from "@/db/addLati";
 import smallEmbed from "@/utils/embeds/smallEmbed";
-import checkUserSpecialItems from "@/items/helpers/checkUserSpecialItems";
+import checkUserSpecialItems from "@/utils/checkUserSpecialItems";
 import setTirgus from "@/db/setTirgus";
 import midNightStr from "@/utils/strings/midnightStr";
 import axios from "axios";

@@ -4,7 +4,7 @@ import findUser from "@/db/findUser";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemList from "@/utils/itemList";
 import latiString from "@/utils/strings/latiString";
-import countItems from "@/items/helpers/countItems";
+import countItems from "@/utils/countItems";
 import commandColors from "@/utils/commandColors";
 import itemString from "@/utils/strings/itemString";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";

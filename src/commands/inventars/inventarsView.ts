@@ -5,7 +5,7 @@ import latiString from "@/utils/strings/latiString";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import userString from "@/utils/strings/userString";
 import commandColors from "@/utils/commandColors";
-import btnPaginationRow from "@/items/helpers/btnPaginationRow";
+import btnPaginationRow from "@/utils/embeds/btnPaginationRow";
 import itemList from "@/utils/itemList";
 
 export type InventarsState = {

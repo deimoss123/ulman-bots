@@ -1,4 +1,4 @@
-import chance, { ChanceValue } from "@/items/helpers/chance";
+import chance, { ChanceValue } from "@/utils/chance";
 import itemList, { ItemKey } from "@/utils/itemList";
 import { UsableItemFunc } from "@/types/Item";
 import findUser from "@/db/findUser";
@@ -6,7 +6,7 @@ import intReply from "@/utils/intReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import itemString from "@/utils/strings/itemString";
-import shuffleArray from "@/items/helpers/shuffleArray";
+import shuffleArray from "@/utils/shuffleArray";
 import {
   ActionRowBuilder,
   BaseInteraction,
