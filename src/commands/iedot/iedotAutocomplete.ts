@@ -1,9 +1,9 @@
 import { AutocompleteInteraction } from "discord.js";
-import normalizeLatText from "@/embeds/helpers/normalizeLatText";
+import normalizeLatText from "@/utils/strings/normalizeLatText";
 import findUser from "@/db/findUser";
 import Item from "@/interfaces/Item";
 import itemList, { ItemKey } from "@/items/itemList";
-import capitalizeFirst from "@/embeds/helpers/capitalizeFirst";
+import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import findItemsByQuery from "@/items/helpers/findItemsByQuery";
 import { ItemInProfile } from "@/interfaces/UserProfile";
 

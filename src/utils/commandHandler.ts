@@ -8,14 +8,14 @@ import {
   MessageFlags,
   PermissionsBitField,
 } from "discord.js";
-import errorEmbed from "@/embeds/errorEmbed";
+import errorEmbed from "@/utils/embeds/errorEmbed";
 import interactionCache from "@/utils/interactionCache";
-import ephemeralReply from "@/embeds/ephemeralReply";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import logCommand from "@/utils/logCommand";
 import findUser from "@/db/findUser";
-import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import resetDailyCooldown from "@/db/resetDailyCooldown";
-import smallEmbed from "@/embeds/smallEmbed";
+import smallEmbed from "@/utils/embeds/smallEmbed";
 import intReply from "@/utils/intReply";
 
 export default async function commandHandler(i: ChatInputCommandInteraction) {

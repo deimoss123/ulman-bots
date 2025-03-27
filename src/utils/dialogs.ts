@@ -14,7 +14,7 @@ import {
 } from "discord.js";
 import intReply from "@/utils/intReply";
 import chalk from "chalk";
-import errorEmbed from "@/embeds/errorEmbed";
+import errorEmbed from "@/utils/embeds/errorEmbed";
 import interactionCache, { InteractionInCache } from "@/utils/interactionCache";
 
 // apvienots tips visiem iespējamiem interactioniem, kam var izmantot šo klasi

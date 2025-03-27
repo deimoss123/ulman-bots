@@ -1,12 +1,12 @@
 import Command from "@/interfaces/Command";
 import { ApplicationCommandOptionType } from "discord.js";
 import findUser from "@/db/findUser";
-import embedTemplate from "@/embeds/embedTemplate";
-import latiString from "@/embeds/helpers/latiString";
-import errorEmbed from "@/embeds/errorEmbed";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import latiString from "@/utils/strings/latiString";
+import errorEmbed from "@/utils/embeds/errorEmbed";
 import addLati from "@/db/addLati";
-import ephemeralReply from "@/embeds/ephemeralReply";
-import commandColors from "@/embeds/commandColors";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
+import commandColors from "@/utils/commandColors";
 import setStats from "@/db/stats/setStats";
 import intReply from "@/utils/intReply";
 import mongoTransaction from "@/utils/mongoTransaction";

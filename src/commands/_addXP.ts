@@ -1,9 +1,9 @@
 import Command from "@/interfaces/Command";
 import { ApplicationCommandOptionType } from "discord.js";
-import errorEmbed from "@/embeds/errorEmbed";
-import embedTemplate from "@/embeds/embedTemplate";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import embedTemplate from "@/utils/embeds/embedTemplate";
 import addXp from "@/db/addXp";
-import latiString from "@/embeds/helpers/latiString";
+import latiString from "@/utils/strings/latiString";
 import intReply from "@/utils/intReply";
 
 const _addXP: Command = {

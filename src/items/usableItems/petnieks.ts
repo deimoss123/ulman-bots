@@ -3,20 +3,20 @@ import addItems from "@/db/addItems";
 import editItemAttribute from "@/db/editItemAttribute";
 import editMultipleItemAttributes from "@/db/editMultipleItemAttributes";
 import findUser from "@/db/findUser";
-import commandColors from "@/embeds/commandColors";
-import embedTemplate from "@/embeds/embedTemplate";
-import ephemeralReply from "@/embeds/ephemeralReply";
-import errorEmbed from "@/embeds/errorEmbed";
-import itemString from "@/embeds/helpers/itemString";
-import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
-import smallEmbed from "@/embeds/smallEmbed";
+import commandColors from "@/utils/commandColors";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import itemString from "@/utils/strings/itemString";
+import millisToReadableTime from "@/utils/strings/millisToReadableTime";
+import smallEmbed from "@/utils/embeds/smallEmbed";
 import { UsableItemFunc, UseManyType } from "@/interfaces/Item";
 import UserProfile, { ItemAttributes } from "@/interfaces/UserProfile";
 import intReply from "@/utils/intReply";
 import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
 import itemList, { ItemKey } from "@/items/itemList";
 import mongoTransaction from "@/utils/mongoTransaction";
-import { Dialogs } from "@/utils/Dialogs";
+import { Dialogs } from "@/utils/dialogs";
 import { useDifferentItemHandler, useDifferentItemSelectMenu } from "@/utils/useDifferentItem";
 
 export function getRandFreeSpin() {

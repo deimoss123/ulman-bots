@@ -1,4 +1,4 @@
-import itemString from "@/embeds/helpers/itemString";
+import itemString from "@/utils/strings/itemString";
 import UserProfile from "@/interfaces/UserProfile";
 import itemList, { ItemCategory, ItemKey } from "@/items/itemList";
 

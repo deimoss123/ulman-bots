@@ -3,12 +3,12 @@ import UserProfile, { ItemAttributes } from "@/interfaces/UserProfile";
 import itemList, { ItemKey } from "@/items/itemList";
 import { AttributeItem } from "@/interfaces/Item";
 import { attributeItemSort } from "@/commands/inventars/inventars";
-import itemString, { itemStringCustom } from "@/embeds/helpers/itemString";
-import { displayAttributes } from "@/embeds/helpers/displayAttributes";
-import { DialogsOnClickCallbackReturn } from "@/utils/Dialogs";
+import itemString, { itemStringCustom } from "@/utils/strings/itemString";
+import { displayAttributes } from "@/utils/strings/displayAttributes";
+import { DialogsOnClickCallbackReturn } from "@/utils/dialogs";
 import intReply from "@/utils/intReply";
-import ephemeralReply from "@/embeds/ephemeralReply";
-import commandColors from "@/embeds/commandColors";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
+import commandColors from "@/utils/commandColors";
 
 export function useDifferentItemSelectMenu(
   user: UserProfile,

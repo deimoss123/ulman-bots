@@ -8,14 +8,14 @@ import {
   SelectMenuComponentOptionData,
   StringSelectMenuBuilder,
 } from "discord.js";
-import commandColors from "@/embeds/commandColors";
+import commandColors from "@/utils/commandColors";
 import findUser from "@/db/findUser";
-import errorEmbed from "@/embeds/errorEmbed";
-import embedTemplate from "@/embeds/embedTemplate";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import embedTemplate from "@/utils/embeds/embedTemplate";
 import intReply from "@/utils/intReply";
-import { Dialogs } from "@/utils/Dialogs";
+import { Dialogs } from "@/utils/dialogs";
 import UserProfile from "@/interfaces/UserProfile";
-import smallEmbed from "@/embeds/smallEmbed";
+import smallEmbed from "@/utils/embeds/smallEmbed";
 import setJobPosition from "@/db/setJobPosition";
 
 interface JobPosData {

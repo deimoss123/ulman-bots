@@ -1,14 +1,14 @@
 import Command from "@/interfaces/Command";
-import commandColors from "@/embeds/commandColors";
+import commandColors from "@/utils/commandColors";
 import { ApplicationCommandOptionType, codeBlock } from "discord.js";
 import findUser from "@/db/findUser";
-import errorEmbed from "@/embeds/errorEmbed";
-import userString from "@/embeds/helpers/userString";
-import embedTemplate from "@/embeds/embedTemplate";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import userString from "@/utils/strings/userString";
+import embedTemplate from "@/utils/embeds/embedTemplate";
 import levelsList, { MAX_LEVEL } from "@/levelingSystem/levelsList";
-import ephemeralReply from "@/embeds/ephemeralReply";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import { JobPositions } from "@/commands/vakances";
-import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import { UserStatusName } from "@/interfaces/UserProfile";
 import intReply from "@/utils/intReply";
 

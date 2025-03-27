@@ -1,10 +1,10 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, ComponentType } from "discord.js";
 import deleteAuction from "@/db/auction/deleteAuction";
 import findAuctionById from "@/db/auction/findAuctionById";
-import buttonHandler from "@/embeds/buttonHandler";
-import embedTemplate from "@/embeds/embedTemplate";
-import ephemeralReply from "@/embeds/ephemeralReply";
-import errorEmbed from "@/embeds/errorEmbed";
+import buttonHandler from "@/utils/buttonHandler";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
+import errorEmbed from "@/utils/embeds/errorEmbed";
 import intReply from "@/utils/intReply";
 import { izsoleItemString } from "@/commands/_izsole/izsoleEmbeds";
 

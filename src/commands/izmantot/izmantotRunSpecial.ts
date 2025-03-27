@@ -9,18 +9,18 @@ import {
   StringSelectMenuBuilder,
 } from "discord.js";
 import findUser from "@/db/findUser";
-import embedTemplate from "@/embeds/embedTemplate";
-import ephemeralReply from "@/embeds/ephemeralReply";
-import errorEmbed from "@/embeds/errorEmbed";
-import { displayAttributes } from "@/embeds/helpers/displayAttributes";
-import itemString, { itemStringCustom } from "@/embeds/helpers/itemString";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import { displayAttributes } from "@/utils/strings/displayAttributes";
+import itemString, { itemStringCustom } from "@/utils/strings/itemString";
 import Item, { AttributeItem, NotSellableItem } from "@/interfaces/Item";
 import UsableItemReturn from "@/interfaces/UsableItemReturn";
 import { ItemAttributes, SpecialItemInProfile } from "@/interfaces/UserProfile";
 import itemList, { ItemKey } from "@/items/itemList";
 import intReply from "@/utils/intReply";
 import { attributeItemSort } from "@/commands/inventars/inventars";
-import { Dialogs } from "@/utils/Dialogs";
+import { Dialogs } from "@/utils/dialogs";
 
 function makeEmbed(
   i: ChatInputCommandInteraction | ButtonInteraction,

@@ -1,5 +1,5 @@
 import Item from "@/interfaces/Item";
-import normalizeLatText from "@/embeds/helpers/normalizeLatText";
+import normalizeLatText from "@/utils/strings/normalizeLatText";
 import { search } from "fast-fuzzy";
 
 export default function findItemsByQuery(query: string, itemsToQuery: [string, Item][]): [string, Item][] {

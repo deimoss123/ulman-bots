@@ -1,6 +1,6 @@
 import addItems from "@/db/addItems";
 import findUser from "@/db/findUser";
-import itemString from "@/embeds/helpers/itemString";
+import itemString from "@/utils/strings/itemString";
 import { UsableItemFunc } from "@/interfaces/Item";
 import checkUserSpecialItems from "@/items/helpers/checkUserSpecialItems";
 

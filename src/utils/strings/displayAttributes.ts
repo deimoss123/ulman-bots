@@ -5,10 +5,10 @@ import { cookableItems } from "@/items/usableItems/gazes_plits";
 import { KAFIJAS_APARATS_COOLDOWN } from "@/items/usableItems/kafijas_aparats";
 import { kakisFedState } from "@/items/usableItems/kakis";
 import { PETNIEKS_COOLDOWN } from "@/items/usableItems/petnieks";
-import capitalizeFirst from "@/embeds/helpers/capitalizeFirst";
-import itemString, { makeEmojiString } from "@/embeds/helpers/itemString";
-import latiString from "@/embeds/helpers/latiString";
-import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import capitalizeFirst from "@/utils/strings/capitalizeFirst";
+import itemString, { makeEmojiString } from "@/utils/strings/itemString";
+import latiString from "@/utils/strings/latiString";
+import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import { dabutOguInfo, dabutKrumaInfo } from "@/items/usableItems/ogu_krums";
 
 // palīgu funkcija, lai ietītu tekstu vienā no diviem stringiem

@@ -1,7 +1,7 @@
 import { ApplicationCommandOptionType, ChatInputCommandInteraction, EmbedField } from "discord.js";
-import commandColors from "@/embeds/commandColors";
-import embedTemplate from "@/embeds/embedTemplate";
-import errorEmbed from "@/embeds/errorEmbed";
+import commandColors from "@/utils/commandColors";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import errorEmbed from "@/utils/embeds/errorEmbed";
 import Command from "@/interfaces/Command";
 import intReply from "@/utils/intReply";
 import { KazinoLikme } from "@/commands/rulete/rulete";

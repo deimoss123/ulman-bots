@@ -1,10 +1,10 @@
 import { ApplicationCommandOptionType, EmbedField } from "discord.js";
-import commandColors from "@/embeds/commandColors";
-import embedTemplate from "@/embeds/embedTemplate";
-import errorEmbed from "@/embeds/errorEmbed";
-import itemString from "@/embeds/helpers/itemString";
-import latiString from "@/embeds/helpers/latiString";
-import wrongKeyEmbed from "@/embeds/wrongKeyEmbed";
+import commandColors from "@/utils/commandColors";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import itemString from "@/utils/strings/itemString";
+import latiString from "@/utils/strings/latiString";
+import wrongKeyEmbed from "@/utils/embeds/wrongKeyEmbed";
 import Command from "@/interfaces/Command";
 import Item, { TirgusItem } from "@/interfaces/Item";
 import getDiscounts from "@/items/helpers/getDiscounts";

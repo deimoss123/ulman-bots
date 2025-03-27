@@ -4,15 +4,15 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
 import editItemAttribute from "@/db/editItemAttribute";
 import findUser from "@/db/findUser";
-import buttonHandler from "@/embeds/buttonHandler";
-import embedTemplate from "@/embeds/embedTemplate";
-import errorEmbed from "@/embeds/errorEmbed";
-import itemString from "@/embeds/helpers/itemString";
-import smallEmbed from "@/embeds/smallEmbed";
+import buttonHandler from "@/utils/buttonHandler";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import itemString from "@/utils/strings/itemString";
+import smallEmbed from "@/utils/embeds/smallEmbed";
 import { UsableItemFunc, item } from "@/interfaces/Item";
 import intReply from "@/utils/intReply";
 import itemList, { ItemKey } from "@/items/itemList";
-import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import addItems from "@/db/addItems";
 import { SpecialItemInProfile } from "@/interfaces/UserProfile";
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, Message } from "discord.js";
-import smallEmbed from "@/embeds/smallEmbed";
+import smallEmbed from "@/utils/embeds/smallEmbed";
 import itemList from "@/items/itemList";
 import { ULMANBOTA_ROLE_ID } from "@/izsoles/izsoleEmbed";
 import calendarRewards from "@/advente/calendarRewards";

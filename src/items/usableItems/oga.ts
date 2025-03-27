@@ -1,4 +1,4 @@
-import itemString from "@/embeds/helpers/itemString";
+import itemString from "@/utils/strings/itemString";
 import { UsableItemFunc } from "@/interfaces/Item";
 import { ItemKey } from "@/items/itemList";
 

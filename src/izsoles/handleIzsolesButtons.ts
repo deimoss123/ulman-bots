@@ -1,6 +1,6 @@
 import { ButtonInteraction } from "discord.js";
 import findAuctionById from "@/db/auction/findAuctionById";
-import errorEmbed from "@/embeds/errorEmbed";
+import errorEmbed from "@/utils/embeds/errorEmbed";
 import intReply from "@/utils/intReply";
 
 export default async function handleIzsolesButtons(i: ButtonInteraction) {

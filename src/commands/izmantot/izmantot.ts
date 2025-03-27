@@ -1,12 +1,12 @@
 import Command from "@/interfaces/Command";
-import commandColors from "@/embeds/commandColors";
+import commandColors from "@/utils/commandColors";
 import { ApplicationCommandOptionType } from "discord.js";
-import ephemeralReply from "@/embeds/ephemeralReply";
-import itemString from "@/embeds/helpers/itemString";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
+import itemString from "@/utils/strings/itemString";
 import izmantotRun from "@/commands/izmantot/izmantotRun";
 import izmantotAutocomplete from "@/commands/izmantot/izmantotAutocomplete";
 import itemList from "@/items/itemList";
-import wrongKeyEmbed from "@/embeds/wrongKeyEmbed";
+import wrongKeyEmbed from "@/utils/embeds/wrongKeyEmbed";
 import { UsableItem } from "@/interfaces/Item";
 import intReply from "@/utils/intReply";
 

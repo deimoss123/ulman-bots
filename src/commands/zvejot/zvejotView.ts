@@ -10,16 +10,16 @@ import {
 } from "discord.js";
 import UserProfile, { ItemAttributes, UserFishing } from "@/interfaces/UserProfile";
 import { countFish } from "@/commands/zvejot/syncFishing";
-import commandColors from "@/embeds/commandColors";
-import embedTemplate from "@/embeds/embedTemplate";
-import itemString from "@/embeds/helpers/itemString";
-import latiString from "@/embeds/helpers/latiString";
+import commandColors from "@/utils/commandColors";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import itemString from "@/utils/strings/itemString";
+import latiString from "@/utils/strings/latiString";
 import maksekeresData from "@/commands/zvejot/makskeresData";
 import itemList, { ItemCategory } from "@/items/itemList";
-import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import emoji from "@/utils/emoji";
-import capitalizeFirst from "@/embeds/helpers/capitalizeFirst";
-import { displayAttributes } from "@/embeds/helpers/displayAttributes";
+import capitalizeFirst from "@/utils/strings/capitalizeFirst";
+import { displayAttributes } from "@/utils/strings/displayAttributes";
 import { AttributeItem } from "@/interfaces/Item";
 import { calcRepairCost } from "@/commands/zvejot/zvejot";
 

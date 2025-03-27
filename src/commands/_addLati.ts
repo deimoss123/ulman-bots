@@ -1,9 +1,9 @@
 import Command from "@/interfaces/Command";
 import { ApplicationCommandOptionType } from "discord.js";
-import embedTemplate from "@/embeds/embedTemplate";
-import latiString from "@/embeds/helpers/latiString";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import latiString from "@/utils/strings/latiString";
 import findUser from "@/db/findUser";
-import errorEmbed from "@/embeds/errorEmbed";
+import errorEmbed from "@/utils/embeds/errorEmbed";
 import addLati from "@/db/addLati";
 import intReply from "@/utils/intReply";
 

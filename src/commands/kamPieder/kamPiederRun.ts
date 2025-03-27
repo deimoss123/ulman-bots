@@ -1,5 +1,5 @@
 import { APIEmbedField, ButtonInteraction, ChatInputCommandInteraction } from "discord.js";
-import errorEmbed from "@/embeds/errorEmbed";
+import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemList, { ItemKey } from "@/items/itemList";
 import User from "@/schemas/User";
 import intReply from "@/utils/intReply";

@@ -1,6 +1,6 @@
 import { statusList } from "@/commands/profils";
 import addStatus from "@/db/addStatus";
-import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import { UsableItemFunc } from "@/interfaces/Item";
 
 export const JURIDISKA_ZIVS_STATUS = 259_200_000; //72h

@@ -1,6 +1,6 @@
 import { statusList } from "@/commands/profils";
 import addStatus from "@/db/addStatus";
-import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import { UsableItemFunc } from "@/interfaces/Item";
 import { UserStatusName } from "@/interfaces/UserProfile";
 import { JURIDISKA_ZIVS_STATUS } from "@/items/usableItems/juridiska_zivs";

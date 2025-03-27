@@ -1,11 +1,11 @@
 import Command from "@/interfaces/Command";
 import { ApplicationCommandOptionType } from "discord.js";
 import findUser from "@/db/findUser";
-import embedTemplate from "@/embeds/embedTemplate";
-import errorEmbed from "@/embeds/errorEmbed";
-import latiString from "@/embeds/helpers/latiString";
-import userString from "@/embeds/helpers/userString";
-import commandColors from "@/embeds/commandColors";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import latiString from "@/utils/strings/latiString";
+import userString from "@/utils/strings/userString";
+import commandColors from "@/utils/commandColors";
 import intReply from "@/utils/intReply";
 
 const maks: Command = {

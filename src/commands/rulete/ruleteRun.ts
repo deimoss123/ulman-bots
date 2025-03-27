@@ -10,12 +10,12 @@ import {
 import addLati from "@/db/addLati";
 import findUser from "@/db/findUser";
 import setStats from "@/db/stats/setStats";
-import commandColors from "@/embeds/commandColors";
-import embedTemplate from "@/embeds/embedTemplate";
-import ephemeralReply from "@/embeds/ephemeralReply";
-import errorEmbed from "@/embeds/errorEmbed";
-import itemString from "@/embeds/helpers/itemString";
-import latiString from "@/embeds/helpers/latiString";
+import commandColors from "@/utils/commandColors";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import itemString from "@/utils/strings/itemString";
+import latiString from "@/utils/strings/latiString";
 import itemList from "@/items/itemList";
 import intReply from "@/utils/intReply";
 import generateRulete, { GenerateRuleteRes } from "@/commands/rulete/generateRulete";
@@ -24,7 +24,7 @@ import { RulColors, RulPosition, rulPositions } from "@/commands/rulete/ruleteDa
 import emoji from "@/utils/emoji";
 import UserProfile from "@/interfaces/UserProfile";
 import mongoTransaction from "@/utils/mongoTransaction";
-import { Dialogs } from "@/utils/Dialogs";
+import { Dialogs } from "@/utils/dialogs";
 
 const colorsLat: Record<RulColors, string> = {
   black: "melns",

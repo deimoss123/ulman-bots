@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType } from "discord.js";
-import commandColors from "@/embeds/commandColors";
-import wrongKeyEmbed from "@/embeds/wrongKeyEmbed";
+import commandColors from "@/utils/commandColors";
+import wrongKeyEmbed from "@/utils/embeds/wrongKeyEmbed";
 import Command from "@/interfaces/Command";
 import itemList from "@/items/itemList";
 import intReply from "@/utils/intReply";

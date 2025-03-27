@@ -1,9 +1,9 @@
 import Command from "@/interfaces/Command";
 import { ApplicationCommandOptionType } from "discord.js";
-import embedTemplate from "@/embeds/embedTemplate";
-import itemString from "@/embeds/helpers/itemString";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import itemString from "@/utils/strings/itemString";
 import addItem from "@/db/addItems";
-import wrongKeyEmbed from "@/embeds/wrongKeyEmbed";
+import wrongKeyEmbed from "@/utils/embeds/wrongKeyEmbed";
 import itemList from "@/items/itemList";
 import intReply from "@/utils/intReply";
 import allItemAutocomplete from "@/commands/info/allItemAutocomplete";

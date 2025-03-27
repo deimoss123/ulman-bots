@@ -9,10 +9,10 @@ import {
   TextInputStyle,
 } from "discord.js";
 import createAuction from "@/db/auction/createAuction";
-import buttonHandler from "@/embeds/buttonHandler";
-import embedTemplate from "@/embeds/embedTemplate";
-import ephemeralReply from "@/embeds/ephemeralReply";
-import errorEmbed from "@/embeds/errorEmbed";
+import buttonHandler from "@/utils/buttonHandler";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
+import errorEmbed from "@/utils/embeds/errorEmbed";
 import { ItemAttributes } from "@/interfaces/UserProfile";
 import itemList from "@/items/itemList";
 import intReply from "@/utils/intReply";

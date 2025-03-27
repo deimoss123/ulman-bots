@@ -1,12 +1,12 @@
 import { ActionRowBuilder, BaseInteraction, ComponentType, StringSelectMenuBuilder } from "discord.js";
 import findUser from "@/db/findUser";
-import errorEmbed from "@/embeds/errorEmbed";
+import errorEmbed from "@/utils/embeds/errorEmbed";
 import Command from "@/interfaces/Command";
 import UserProfile from "@/interfaces/UserProfile";
-import { Dialogs } from "@/utils/Dialogs";
+import { Dialogs } from "@/utils/dialogs";
 import intReply from "@/utils/intReply";
-import embedTemplate from "@/embeds/embedTemplate";
-import capitalizeFirst from "@/embeds/helpers/capitalizeFirst";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import * as metalluznuNodosanasPunkts from "@/commands/ipasumi/metalluznuNodosanasPunkts";
 import * as ievarijumuStends from "@/commands/ipasumi/ievarijumuStends";
 

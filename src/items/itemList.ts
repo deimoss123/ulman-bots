@@ -34,13 +34,13 @@ import smilsu_pulkstenis, { ZVEJA_SHIFT_TIME } from "@/items/usableItems/smilsu_
 import nazis, { NAZIS_STATUS_TIME } from "@/items/usableItems/nazis";
 import zemenu_rasens, { RASENS_STATUS_TIME } from "@/items/usableItems/zemenu_rasens";
 import { statusList } from "@/commands/profils";
-import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import piena_spainis from "@/items/usableItems/piena_spainis";
 import divaina_zivs from "@/items/usableItems/divaina_zivs";
 import loto_zivs, { generateFishCount } from "@/items/usableItems/loto_zivs";
 import petniekzivs, { PETNIEKZIVS_STATUS_TIME } from "@/items/usableItems/petniekzivs";
 import kakis, { foodDataPercentage, kakisFedState, kakisFoodData, KAKIS_MAX_FEED } from "@/items/usableItems/kakis";
-import itemString from "@/embeds/helpers/itemString";
+import itemString from "@/utils/strings/itemString";
 import piparkuka from "@/items/usableItems/piparkuka";
 import nabagloto, { nabagLotoOptions } from "@/items/usableItems/nabagloto";
 import ulmanloto, { ulmanlotoOptions } from "@/items/usableItems/ulmanloto";

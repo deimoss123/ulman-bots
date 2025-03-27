@@ -1,6 +1,6 @@
 import { statusList } from "@/commands/profils";
 import addStatus from "@/db/addStatus";
-import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import { UsableItemFunc } from "@/interfaces/Item";
 
 export const NAZIS_STATUS_TIME = 3_600_000; // 1h

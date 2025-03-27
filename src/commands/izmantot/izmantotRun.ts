@@ -10,17 +10,17 @@ import {
   EmbedField,
 } from "discord.js";
 import findUser from "@/db/findUser";
-import errorEmbed from "@/embeds/errorEmbed";
-import ephemeralReply from "@/embeds/ephemeralReply";
-import itemString from "@/embeds/helpers/itemString";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
+import itemString from "@/utils/strings/itemString";
 import addItems from "@/db/addItems";
-import embedTemplate from "@/embeds/embedTemplate";
-import ItemString from "@/embeds/helpers/itemString";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import ItemString from "@/utils/strings/itemString";
 import itemList from "@/items/itemList";
 import izmantotRunSpecial from "@/commands/izmantot/izmantotRunSpecial";
 import { UsableItem } from "@/interfaces/Item";
 import intReply from "@/utils/intReply";
-import { Dialogs } from "@/utils/Dialogs";
+import { Dialogs } from "@/utils/dialogs";
 
 type State = {
   color: ColorResolvable;

@@ -11,19 +11,19 @@ import addLati from "@/db/addLati";
 import findUser from "@/db/findUser";
 import removeItemsById from "@/db/removeItemsById";
 import setStats from "@/db/stats/setStats";
-import embedTemplate from "@/embeds/embedTemplate";
-import ephemeralReply from "@/embeds/ephemeralReply";
-import errorEmbed from "@/embeds/errorEmbed";
-import { displayAttributes } from "@/embeds/helpers/displayAttributes";
-import itemString, { itemStringCustom } from "@/embeds/helpers/itemString";
-import latiString from "@/embeds/helpers/latiString";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import { displayAttributes } from "@/utils/strings/displayAttributes";
+import itemString, { itemStringCustom } from "@/utils/strings/itemString";
+import latiString from "@/utils/strings/latiString";
 import { AttributeItem } from "@/interfaces/Item";
 import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/interfaces/UserProfile";
 import itemList, { ItemKey } from "@/items/itemList";
 import intReply from "@/utils/intReply";
 import { attributeItemSort } from "@/commands/inventars/inventars";
 import { PIRKT_PARDOT_NODOKLIS } from "@/commands/pardot/pardot";
-import { Dialogs } from "@/utils/Dialogs";
+import { Dialogs } from "@/utils/dialogs";
 import mongoTransaction from "@/utils/mongoTransaction";
 
 type State = {

@@ -3,9 +3,9 @@ import itemList, { ItemKey } from "@/items/itemList";
 import { UsableItemFunc } from "@/interfaces/Item";
 import findUser from "@/db/findUser";
 import intReply from "@/utils/intReply";
-import errorEmbed from "@/embeds/errorEmbed";
-import embedTemplate from "@/embeds/embedTemplate";
-import itemString from "@/embeds/helpers/itemString";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import itemString from "@/utils/strings/itemString";
 import shuffleArray from "@/items/helpers/shuffleArray";
 import {
   ActionRowBuilder,
@@ -17,11 +17,11 @@ import {
 } from "discord.js";
 import addLati from "@/db/addLati";
 import addItems from "@/db/addItems";
-import smallEmbed from "@/embeds/smallEmbed";
-import commandColors from "@/embeds/commandColors";
+import smallEmbed from "@/utils/embeds/smallEmbed";
+import commandColors from "@/utils/commandColors";
 import emoji from "@/utils/emoji";
-import { Dialogs } from "@/utils/Dialogs";
-import ephemeralReply from "@/embeds/ephemeralReply";
+import { Dialogs } from "@/utils/dialogs";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function testLaimesti(options: LotoOptions, count: number) {

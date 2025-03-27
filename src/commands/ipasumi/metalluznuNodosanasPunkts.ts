@@ -9,18 +9,18 @@ import {
   StringSelectMenuInteraction,
 } from "discord.js";
 import { IpasumiState } from "@/commands/ipasumi/ipasumi";
-import embedTemplate from "@/embeds/embedTemplate";
+import embedTemplate from "@/utils/embeds/embedTemplate";
 import UserProfile from "@/interfaces/UserProfile";
 import setUser from "@/db/setUser";
 import findUser from "@/db/findUser";
 import emoji from "@/utils/emoji";
 import { writeFile, readFile } from "fs/promises";
-import { Dialogs } from "@/utils/Dialogs";
+import { Dialogs } from "@/utils/dialogs";
 import mongoTransaction from "@/utils/mongoTransaction";
 import addLati from "@/db/addLati";
 import intReply from "@/utils/intReply";
-import smallEmbed from "@/embeds/smallEmbed";
-import latiString from "@/embeds/helpers/latiString";
+import smallEmbed from "@/utils/embeds/smallEmbed";
+import latiString from "@/utils/strings/latiString";
 import { Canvas, createCanvas, GlobalFonts, SKRSContext2D } from "@napi-rs/canvas";
 import { join } from "path";
 

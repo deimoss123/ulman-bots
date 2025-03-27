@@ -14,7 +14,7 @@ import {
 } from "discord.js";
 import interactionCache, { InteractionInCache } from "@/utils/interactionCache";
 import intReply from "@/utils/intReply";
-import errorEmbed from "@/embeds/errorEmbed";
+import errorEmbed from "@/utils/embeds/errorEmbed";
 
 export interface CallbackReturn {
   edit?: InteractionUpdateOptions | MessagePayload;

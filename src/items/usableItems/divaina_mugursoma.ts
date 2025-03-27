@@ -1,7 +1,7 @@
 import addItems from "@/db/addItems";
 import findUser from "@/db/findUser";
 import increaseInvCap from "@/db/increaseInvCap";
-import itemString from "@/embeds/helpers/itemString";
+import itemString from "@/utils/strings/itemString";
 import { UsableItemFunc } from "@/interfaces/Item";
 import itemList from "@/items/itemList";
 import { INCREASE_CAP_1 } from "@/items/usableItems/mugursoma";

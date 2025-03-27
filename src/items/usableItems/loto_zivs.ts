@@ -2,11 +2,11 @@ import { ActionRowBuilder, BaseInteraction, ComponentType, StringSelectMenuBuild
 import addItems from "@/db/addItems";
 import findUser from "@/db/findUser";
 import removeItemsById from "@/db/removeItemsById";
-import commandColors from "@/embeds/commandColors";
-import embedTemplate from "@/embeds/embedTemplate";
-import ephemeralReply from "@/embeds/ephemeralReply";
-import errorEmbed from "@/embeds/errorEmbed";
-import itemString from "@/embeds/helpers/itemString";
+import commandColors from "@/utils/commandColors";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import itemString from "@/utils/strings/itemString";
 import { UsableItemFunc } from "@/interfaces/Item";
 import intReply from "@/utils/intReply";
 import chance, { ChanceObj, ChanceRecord } from "@/items/helpers/chance";
@@ -15,7 +15,7 @@ import itemList, { ItemKey } from "@/items/itemList";
 import UserProfile from "@/interfaces/UserProfile";
 import emoji from "@/utils/emoji";
 import mongoTransaction from "@/utils/mongoTransaction";
-import { Dialogs } from "@/utils/Dialogs";
+import { Dialogs } from "@/utils/dialogs";
 import { useDifferentItemHandler, useDifferentItemSelectMenu } from "@/utils/useDifferentItem";
 
 const fishCountChance: ChanceRecord = {

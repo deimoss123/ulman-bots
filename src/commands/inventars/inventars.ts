@@ -1,23 +1,23 @@
 import Command from "@/interfaces/Command";
 import { ApplicationCommandOptionType, ComponentType } from "discord.js";
 import findUser from "@/db/findUser";
-import errorEmbed from "@/embeds/errorEmbed";
+import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemList from "@/items/itemList";
-import latiString from "@/embeds/helpers/latiString";
+import latiString from "@/utils/strings/latiString";
 import countItems from "@/items/helpers/countItems";
-import commandColors from "@/embeds/commandColors";
-import itemString from "@/embeds/helpers/itemString";
-import ephemeralReply from "@/embeds/ephemeralReply";
+import commandColors from "@/utils/commandColors";
+import itemString from "@/utils/strings/itemString";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import UserProfile, { ItemAttributes, ItemInProfile } from "@/interfaces/UserProfile";
 import Item, { AttributeItem, NotSellableItem } from "@/interfaces/Item";
-import { displayAttributes } from "@/embeds/helpers/displayAttributes";
+import { displayAttributes } from "@/utils/strings/displayAttributes";
 import pardotRun from "@/commands/pardot/pardotRun";
 import { INCREASE_CAP_1 } from "@/items/usableItems/mugursoma";
 import { INCREASE_CAP_2 } from "@/items/usableItems/divaina_mugursoma";
 import intReply from "@/utils/intReply";
 import emoji from "@/utils/emoji";
 import { ComponentId, InventarsState, inventarsView } from "@/commands/inventars/inventarsView";
-import { Dialogs } from "@/utils/Dialogs";
+import { Dialogs } from "@/utils/dialogs";
 
 export type ItemType = "not_usable" | "usable" | "special" | "not_sellable";
 

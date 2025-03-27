@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction } from "discord.js";
-import commandColors from "@/embeds/commandColors";
-import embedTemplate from "@/embeds/embedTemplate";
+import commandColors from "@/utils/commandColors";
+import embedTemplate from "@/utils/embeds/embedTemplate";
 import StatsProfile from "@/interfaces/StatsProfile";
 import UserProfile from "@/interfaces/UserProfile";
 import { displayPlace } from "@/commands/statistika/statistika";

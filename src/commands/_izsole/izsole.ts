@@ -1,7 +1,7 @@
 import { ApplicationCommandOptionType } from "discord.js";
 import findAuctionById from "@/db/auction/findAuctionById";
-import ephemeralReply from "@/embeds/ephemeralReply";
-import errorEmbed from "@/embeds/errorEmbed";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
+import errorEmbed from "@/utils/embeds/errorEmbed";
 import Command from "@/interfaces/Command";
 import izsoleEmbed from "@/izsoles/izsoleEmbed";
 import intReply from "@/utils/intReply";

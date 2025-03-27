@@ -1,9 +1,9 @@
 import UserProfile from "@/interfaces/UserProfile";
 import Item from "@/interfaces/Item";
-import ephemeralReply from "@/embeds/ephemeralReply";
-import itemString from "@/embeds/helpers/itemString";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
+import itemString from "@/utils/strings/itemString";
 import { ChatInputCommandInteraction } from "discord.js";
-import wrongKeyEmbed from "@/embeds/wrongKeyEmbed";
+import wrongKeyEmbed from "@/utils/embeds/wrongKeyEmbed";
 import itemList from "@/items/itemList";
 import pardotRunSpecial from "@/commands/pardot/pardotRunSpecial";
 import { emptyInvEmbed } from "@/commands/pardot/pardot";

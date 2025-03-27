@@ -6,9 +6,9 @@ import {
   InteractionReplyOptions,
   time,
 } from "discord.js";
-import embedTemplate from "@/embeds/embedTemplate";
-import itemString from "@/embeds/helpers/itemString";
-import latiString from "@/embeds/helpers/latiString";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import itemString from "@/utils/strings/itemString";
+import latiString from "@/utils/strings/latiString";
 import AuctionType from "@/interfaces/AuctionType";
 import { ItemAttributes } from "@/interfaces/UserProfile";
 import itemList, { ItemKey } from "@/items/itemList";

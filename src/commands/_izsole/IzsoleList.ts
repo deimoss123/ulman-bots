@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, EmbedField } from "discord.js";
-import embedTemplate from "@/embeds/embedTemplate";
-import errorEmbed from "@/embeds/errorEmbed";
+import embedTemplate from "@/utils/embeds/embedTemplate";
+import errorEmbed from "@/utils/embeds/errorEmbed";
 import AuctionType from "@/interfaces/AuctionType";
 import Auction from "@/schemas/Auction";
 import intReply from "@/utils/intReply";

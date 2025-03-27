@@ -1,4 +1,4 @@
-import latiString from "@/embeds/helpers/latiString";
+import latiString from "@/utils/strings/latiString";
 import { UserStats } from "@/interfaces/StatsProfile";
 
 export type StatsTypes = "veikals" | "paygive" | "stolen" | "feniks" | "rulete";
