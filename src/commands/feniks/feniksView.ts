@@ -7,7 +7,7 @@ import latiString from "@/utils/strings/latiString";
 import feniksLaimesti from "@/commands/feniks/feniksLaimesti";
 import commandColors from "@/utils/commandColors";
 import mainEmbed from "@/utils/embeds/mainEmbed";
-import itemList, { ItemKey } from "@/items/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
 
 export type FeniksState = {
   likme: KazinoLikme;

@@ -1,6 +1,6 @@
 import { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
 import UserProfile, { ItemAttributes } from "@/types/UserProfile";
-import itemList, { ItemKey } from "@/items/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
 import { AttributeItem } from "@/types/Item";
 import { attributeItemSort } from "@/commands/inventars/inventars";
 import itemString, { itemStringCustom } from "@/utils/strings/itemString";

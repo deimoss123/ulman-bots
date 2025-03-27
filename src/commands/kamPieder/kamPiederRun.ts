@@ -1,6 +1,6 @@
 import { APIEmbedField, ButtonInteraction, ChatInputCommandInteraction } from "discord.js";
 import errorEmbed from "@/utils/embeds/errorEmbed";
-import itemList, { ItemKey } from "@/items/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
 import User from "@/schemas/User";
 import intReply from "@/utils/intReply";
 import kamPiederEmbed from "@/commands/kamPieder/kamPiederEmbed";
@@ -17,7 +17,7 @@ export default async function kamPiederRun(i: ChatInputCommandInteraction | Butt
   const itemObj = itemList[itemKey];
 
   // parastās mantas (bez atribūtiem)
-  if (!("attributes" in itemObj)) {
+  if (!("defaultAttributes" in itemObj)) {
     const users = (await User.find(
       { guildId, items: { $elemMatch: { name: itemKey } } },
       { userId: 1, items: { $elemMatch: { name: itemKey } } },

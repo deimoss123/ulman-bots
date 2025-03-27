@@ -16,7 +16,7 @@ import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
 import addLati from "@/db/addLati";
 import addItems from "@/db/addItems";
 import mainEmbed from "@/utils/embeds/mainEmbed";
-import itemList from "@/items/itemList";
+import itemList from "@/utils/itemList";
 import buttonHandler from "@/utils/buttonHandler";
 import izmantotRun from "@/commands/izmantot/izmantotRun";
 import getItemPrice from "@/items/helpers/getItemPrice";
@@ -68,7 +68,7 @@ export default async function pirktRun(
     );
   }
 
-  if ("attributes" in itemToBuy) {
+  if ("defaultAttributes" in itemToBuy) {
     const checkRes = checkUserSpecialItems(user, itemToBuyKey, amountToBuy);
     if (!checkRes.valid) {
       return intReply(i, ephemeralReply(`Neizdevās nopirkt, jo ${checkRes.reason}`));
@@ -86,7 +86,7 @@ export default async function pirktRun(
   const userAfter = await addItems(userId, guildId, { [itemToBuyKey]: amountToBuy });
   if (!userAfter) return intReply(i, errorEmbed);
 
-  if ("attributes" in itemToBuy) {
+  if ("defaultAttributes" in itemToBuy) {
     const resSpecialItems = userAfter.specialItems.filter((item) => item.name === itemToBuyKey);
 
     return intReply(

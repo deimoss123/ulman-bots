@@ -11,7 +11,7 @@ import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import AuctionType from "@/types/AuctionType";
 import { ItemAttributes } from "@/types/UserProfile";
-import itemList, { ItemKey } from "@/items/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
 
 const izsoleConfirmComponents = new ActionRowBuilder<ButtonBuilder>().addComponents(
   new ButtonBuilder().setCustomId("izsole_create_yes").setLabel("Jā").setStyle(ButtonStyle.Primary),

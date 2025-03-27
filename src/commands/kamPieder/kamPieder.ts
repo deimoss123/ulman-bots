@@ -2,7 +2,7 @@ import { ApplicationCommandOptionType } from "discord.js";
 import commandColors from "@/utils/commandColors";
 import wrongKeyEmbed from "@/utils/embeds/wrongKeyEmbed";
 import Command from "@/types/Command";
-import itemList from "@/items/itemList";
+import itemList from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 import allItemAutocomplete from "@/commands/info/allItemAutocomplete";
 import kamPiederRun from "@/commands/kamPieder/kamPiederRun";

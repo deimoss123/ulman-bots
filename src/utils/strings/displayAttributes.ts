@@ -1,15 +1,16 @@
 import maksekeresData from "@/commands/zvejot/makskeresData";
 import { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
-import itemList, { ItemCategory, ItemKey } from "@/items/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
 import { cookableItems } from "@/items/usableItems/gazes_plits";
-import { KAFIJAS_APARATS_COOLDOWN } from "@/items/usableItems/kafijas_aparats";
-import { kakisFedState } from "@/items/usableItems/kakis";
-import { PETNIEKS_COOLDOWN } from "@/items/usableItems/petnieks";
+import { KAFIJAS_APARATS_COOLDOWN } from "@/items/kafijas_aparats";
+import { kakisFedState } from "@/items/kakis";
+import { PETNIEKS_COOLDOWN } from "@/items/petnieks";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import itemString, { makeEmojiString } from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
-import { dabutOguInfo, dabutKrumaInfo } from "@/items/usableItems/ogu_krums";
+import { dabutOguInfo, dabutKrumaInfo } from "@/items/ogu_krums";
+import { ItemCategory } from "@/types/Item";
 
 // palīgu funkcija, lai ietītu tekstu vienā no diviem stringiem
 // pēdējais parametrs nosaka kurā wrappot, šis vnk uztaisa īsāku un lasāmāku (?) kodu

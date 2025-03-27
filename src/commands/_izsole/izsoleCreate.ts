@@ -14,7 +14,7 @@ import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import { ItemAttributes } from "@/types/UserProfile";
-import itemList from "@/items/itemList";
+import itemList from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 import { confirmNewIzsoleMsg, izsoleItemString } from "@/commands/_izsole/izsoleEmbeds";
 
@@ -67,13 +67,13 @@ export default async function izsoleCreate(i: ChatInputCommandInteraction) {
   let attributes: ItemAttributes | null = null;
   let interaction: ChatInputCommandInteraction | ModalSubmitInteraction = i;
 
-  if ("attributes" in itemObj) {
+  if ("defaultAttributes" in itemObj) {
     await i.showModal(
       new ModalBuilder()
         .setCustomId(`izsole_new_modal_${itemKey}`)
         .setTitle(`Atribūti - ${itemObj.nameNomVsk}`)
         .addComponents(
-          ...Object.keys(itemObj.attributes).map((key) =>
+          ...Object.keys(itemObj.defaultAttributes).map((key) =>
             new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
               new TextInputBuilder().setCustomId(key).setLabel(key).setStyle(TextInputStyle.Short),
             ),
@@ -87,7 +87,7 @@ export default async function izsoleCreate(i: ChatInputCommandInteraction) {
     if (!modalRes) return;
 
     attributes = Object.fromEntries(
-      Object.entries(itemObj.attributes).map(([key, attr]) => {
+      Object.entries(itemObj.defaultAttributes).map(([key, attr]) => {
         const value = modalRes.fields.getTextInputValue(key);
         return [key, typeof attr === "string" ? value : +value];
       }),

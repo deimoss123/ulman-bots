@@ -10,13 +10,14 @@ import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import smallEmbed from "@/utils/embeds/smallEmbed";
 import UserProfile from "@/types/UserProfile";
-import itemList, { ItemCategory, ItemKey } from "@/items/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 import { KazinoLikme } from "@/commands/rulete/rulete";
 import calcSpin from "@/commands/feniks/calcSpin";
 import { FENIKS_MIN_LIKME } from "@/commands/feniks/feniks";
 import { Dialogs } from "@/utils/dialogs";
 import feniksView, { ComponentId, FeniksState, FreeSpinIds } from "@/commands/feniks/feniksView";
+import { ItemCategory } from "@/types/Item";
 
 const DEFAULT_EMOJI_COUNT = 5;
 

@@ -4,7 +4,7 @@ import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import itemString from "@/utils/strings/itemString";
 import { ChatInputCommandInteraction } from "discord.js";
 import wrongKeyEmbed from "@/utils/embeds/wrongKeyEmbed";
-import itemList from "@/items/itemList";
+import itemList from "@/utils/itemList";
 import pardotRunSpecial from "@/commands/pardot/pardotRunSpecial";
 import { emptyInvEmbed } from "@/commands/pardot/pardot";
 import intReply from "@/utils/intReply";
@@ -40,7 +40,7 @@ async function pardotValidate(
 
   const { items, specialItems } = user;
 
-  if ("attributes" in itemToSell) {
+  if ("defaultAttributes" in itemToSell) {
     const specialItemsInv = specialItems.filter((item) => item.name === itemToSellKey);
     if (!specialItemsInv.length) {
       await intReply(i, ephemeralReply(`Tavā inventārā nav **${itemString(itemToSell)}**`));

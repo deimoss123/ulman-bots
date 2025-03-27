@@ -22,7 +22,7 @@ import Item, { AttributeItem } from "@/types/Item";
 import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
 import checkUserSpecialItems from "@/items/helpers/checkUserSpecialItems";
 import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
-import itemList, { ItemKey } from "@/items/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 import { attributeItemSort } from "@/commands/inventars/inventars";
 import { cantPayTaxEmbed } from "@/commands/iedot/iedot";

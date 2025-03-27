@@ -4,7 +4,7 @@ import mainEmbed from "@/utils/embeds/mainEmbed";
 import itemString from "@/utils/strings/itemString";
 import addItem from "@/db/addItems";
 import wrongKeyEmbed from "@/utils/embeds/wrongKeyEmbed";
-import itemList from "@/items/itemList";
+import itemList from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 import allItemAutocomplete from "@/commands/info/allItemAutocomplete";
 

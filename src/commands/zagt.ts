@@ -13,7 +13,7 @@ import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import Command from "@/types/Command";
-import itemList from "@/items/itemList";
+import itemList from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 import { statusList } from "@/commands/profils";
 import emoji from "@/utils/emoji";

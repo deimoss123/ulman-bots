@@ -19,7 +19,7 @@ import itemString, { itemStringCustom } from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import { AttributeItem } from "@/types/Item";
 import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
-import itemList, { ItemKey } from "@/items/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 import { attributeItemSort } from "@/commands/inventars/inventars";
 import { PIRKT_PARDOT_NODOKLIS } from "@/commands/pardot/pardot";

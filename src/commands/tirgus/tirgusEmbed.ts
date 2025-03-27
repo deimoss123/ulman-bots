@@ -5,7 +5,7 @@ import itemString from "@/utils/strings/itemString";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import Item, { TirgusItem } from "@/types/Item";
 import UserProfile from "@/types/UserProfile";
-import itemList, { ItemKey } from "@/items/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
 import { calcReqItems } from "@/commands/tirgus/tirgus";
 import emoji from "@/utils/emoji";
 

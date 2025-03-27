@@ -1,7 +1,7 @@
-import { AkcijaId } from "@/commands/economyCommands/akcijas/akcijasList";
-import { ItemKey } from "@/items/itemList";
-import { GazesPlitsActionType } from "@/items/usableItems/gazes_plits";
-import { BerryProperties } from "@/items/usableItems/oga";
+import { AkcijaId } from "@/commands/akcijas/akcijasList";
+import { ItemKey } from "@/utils/itemList";
+import { GazesPlitsActionType } from "@/items/gazes_plits";
+import { BerryProperties } from "@/items/shared/oga";
 
 export interface ItemInProfile {
   name: ItemKey;

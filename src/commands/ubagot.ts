@@ -17,7 +17,7 @@ import Command from "@/types/Command";
 import { DailyCooldowns } from "@/types/UserProfile";
 import chance, { ChanceValue } from "@/items/helpers/chance";
 import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
-import itemList, { ItemKey } from "@/items/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 
 interface UbagotRes {

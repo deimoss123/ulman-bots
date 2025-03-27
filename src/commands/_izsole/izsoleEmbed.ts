@@ -2,7 +2,7 @@ import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonStyle, time } from "di
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import AuctionType from "@/types/AuctionType";
-import itemList from "@/items/itemList";
+import itemList from "@/utils/itemList";
 import emoji from "@/utils/emoji";
 
 export const ULMANBOTA_ROLE_ID = "905377993633955930";

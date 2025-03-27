@@ -5,8 +5,8 @@ import findUser from "@/db/findUser";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import tirgusEmbed from "@/commands/tirgus/tirgusEmbed";
 import UserProfile from "@/types/UserProfile";
-import Item, { TirgusItem } from "@/types/Item";
-import itemList, { ItemCategory, ItemKey } from "@/items/itemList";
+import Item, { ItemCategory, TirgusItem } from "@/types/Item";
+import itemList, { ItemKey } from "@/utils/itemList";
 import tirgusComponents from "@/commands/tirgus/tirgusComponents";
 import { ComponentType } from "discord.js";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
@@ -147,7 +147,7 @@ const tirgus: Command = {
           };
         }
 
-        if ("attributes" in itemObj) {
+        if ("defaultAttributes" in itemObj) {
           const specialRes = checkUserSpecialItems(newUser, selectedListing);
           if (!specialRes.valid) {
             return {

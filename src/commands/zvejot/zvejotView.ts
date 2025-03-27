@@ -15,12 +15,12 @@ import mainEmbed from "@/utils/embeds/mainEmbed";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import maksekeresData from "@/commands/zvejot/makskeresData";
-import itemList, { ItemCategory } from "@/items/itemList";
+import itemList from "@/utils/itemList";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import emoji from "@/utils/emoji";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import { displayAttributes } from "@/utils/strings/displayAttributes";
-import { AttributeItem } from "@/types/Item";
+import { AttributeItem, ItemCategory } from "@/types/Item";
 import { calcRepairCost } from "@/commands/zvejot/zvejot";
 
 function zvejaEmojiString() {

@@ -6,15 +6,15 @@ import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import wrongKeyEmbed from "@/utils/embeds/wrongKeyEmbed";
 import Command from "@/types/Command";
-import Item, { TirgusItem } from "@/types/Item";
+import Item, { ItemCategory, TirgusItem } from "@/types/Item";
 import getDiscounts from "@/items/helpers/getDiscounts";
 import getItemPrice from "@/items/helpers/getItemPrice";
-import itemList, { ItemCategory } from "@/items/itemList";
+import itemList from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 import { ItemType, itemTypes } from "@/commands/inventars/inventars";
 import maksekeresData from "@/commands/zvejot/makskeresData";
 import allItemAutocomplete from "@/commands/info/allItemAutocomplete";
-import { LotoOptions } from "@/items/usableItems/loto";
+import { LotoOptions } from "@/items/shared/loto";
 import updatesList from "@/commands/palidziba/jaunumi/updatesList";
 import emoji from "@/utils/emoji";
 
@@ -47,7 +47,7 @@ const info: Command = {
     const itemType: ItemType =
       "notSellable" in itemObj
         ? "not_sellable"
-        : "attributes" in itemObj
+        : "defaultAttributes" in itemObj
           ? "special"
           : "use" in itemObj
             ? "usable"

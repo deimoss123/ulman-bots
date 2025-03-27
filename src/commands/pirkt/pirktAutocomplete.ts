@@ -1,11 +1,12 @@
 import { AutocompleteInteraction } from "discord.js";
-import itemList, { ItemCategory } from "@/items/itemList";
+import itemList from "@/utils/itemList";
 import getItemPrice from "@/items/helpers/getItemPrice";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import latiString from "@/utils/strings/latiString";
 import findItemsByQuery from "@/items/helpers/findItemsByQuery";
 import normalizeLatText from "@/utils/strings/normalizeLatText";
 import getDiscounts from "@/items/helpers/getDiscounts";
+import { ItemCategory } from "@/types/Item";
 
 export default async function pirktAutocomplete(interaction: AutocompleteInteraction): Promise<void> {
   // lietotāja ievadītais teksts

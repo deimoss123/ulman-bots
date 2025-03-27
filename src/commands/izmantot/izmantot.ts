@@ -5,7 +5,7 @@ import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import itemString from "@/utils/strings/itemString";
 import izmantotRun from "@/commands/izmantot/izmantotRun";
 import izmantotAutocomplete from "@/commands/izmantot/izmantotAutocomplete";
-import itemList from "@/items/itemList";
+import itemList from "@/utils/itemList";
 import wrongKeyEmbed from "@/utils/embeds/wrongKeyEmbed";
 import { UsableItem } from "@/types/Item";
 import intReply from "@/utils/intReply";

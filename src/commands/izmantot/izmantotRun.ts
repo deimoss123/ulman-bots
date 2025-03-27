@@ -16,7 +16,7 @@ import itemString from "@/utils/strings/itemString";
 import addItems from "@/db/addItems";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import ItemString from "@/utils/strings/itemString";
-import itemList from "@/items/itemList";
+import itemList from "@/utils/itemList";
 import izmantotRunSpecial from "@/commands/izmantot/izmantotRunSpecial";
 import { UsableItem } from "@/types/Item";
 import intReply from "@/utils/intReply";
@@ -68,7 +68,11 @@ export default async function izmantotRun(
   const { items, specialItems } = user;
   const itemToUse = itemList[itemToUseKey];
 
-  if ("attributes" in itemToUse) {
+  console.log(itemToUse);
+  console.log(itemToUseKey);
+  console.log(user.items);
+
+  if ("defaultAttributes" in itemToUse) {
     const specialItemsInInv = specialItems.filter(({ name }) => name === itemToUseKey);
     if (!specialItemsInInv.length) {
       return intReply(i, ephemeralReply(`Tavā inventārā nav **${itemString(itemToUse)}**`));

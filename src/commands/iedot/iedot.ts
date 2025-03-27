@@ -8,7 +8,7 @@ import mainEmbed from "@/utils/embeds/mainEmbed";
 import addItems from "@/db/addItems";
 import commandColors from "@/utils/commandColors";
 import iedotAutocomplete from "@/commands/iedot/iedotAutocomplete";
-import itemList from "@/items/itemList";
+import itemList from "@/utils/itemList";
 import wrongKeyEmbed from "@/utils/embeds/wrongKeyEmbed";
 import latiString from "@/utils/strings/latiString";
 import addLati from "@/db/addLati";
@@ -92,7 +92,7 @@ const iedot: Command = {
     const { items, specialItems, status } = user;
     const hasJuridisks = status.juridisks > Date.now();
 
-    if ("attributes" in itemToGive) {
+    if ("defaultAttributes" in itemToGive) {
       const specialItemInv = specialItems.filter(({ name }) => name === itemToGiveKey);
       if (!specialItemInv.length) {
         return intReply(i, ephemeralReply(`Tavā inventārā nav ${itemString(itemToGive)}`));

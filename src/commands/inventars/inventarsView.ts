@@ -6,7 +6,7 @@ import mainEmbed from "@/utils/embeds/mainEmbed";
 import userString from "@/utils/strings/userString";
 import commandColors from "@/utils/commandColors";
 import btnPaginationRow from "@/items/helpers/btnPaginationRow";
-import itemList from "@/items/itemList";
+import itemList from "@/utils/itemList";
 
 export type InventarsState = {
   targetDiscordUser: User;

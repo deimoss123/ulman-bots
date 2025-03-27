@@ -1,7 +1,7 @@
 import { APIMessageComponentEmoji } from "discord.js";
 import Item from "@/types/Item";
 import { ItemAttributes } from "@/types/UserProfile";
-import itemList, { ItemKey } from "@/items/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 
 export function makeEmojiString(emoji: APIMessageComponentEmoji) {

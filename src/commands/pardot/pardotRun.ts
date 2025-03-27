@@ -22,7 +22,7 @@ import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import Item from "@/types/Item";
 import UserProfile, { ItemAttributes } from "@/types/UserProfile";
-import itemList, { ItemKey } from "@/items/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
 import { emptyInvEmbed, PIRKT_PARDOT_NODOKLIS } from "@/commands/pardot/pardot";
 import removeItemsById from "@/db/removeItemsById";
 import intReply from "@/utils/intReply";

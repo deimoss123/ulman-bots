@@ -1,10 +1,21 @@
-import { APIMessageComponentEmoji, ButtonInteraction } from "discord.js";
-import { ItemCategory, ItemKey } from "@/items/itemList";
+import { ButtonInteraction } from "discord.js";
+import { ItemKey } from "@/utils/itemList";
 import UsableItemReturn from "@/types/UsableItemReturn";
 import { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
-import { LotoOptions } from "@/items/usableItems/loto";
+import { LotoOptions } from "@/items/shared/loto";
 import { VersionString } from "@/commands/palidziba/jaunumi/updatesList";
-import emoji from "@/utils/emoji";
+
+export const enum ItemCategory {
+  ATKRITUMI,
+  VEIKALS,
+  ZIVIS,
+  MAKSKERE,
+  BRIVGRIEZIENS,
+  TIRGUS,
+  ADVENTE_2022,
+  LOTO,
+  OTHER,
+}
 
 // masīvs ar vismaz vienu vērtību
 interface categories extends Array<ItemCategory> {
@@ -36,7 +47,7 @@ export interface BaseItem {
   isVirsiesuDzimte: boolean;
 
   // emoji mantām
-  emoji(): string;
+  emoji: () => string;
 
   // bildes links
   imgLink: string | null;
@@ -85,8 +96,8 @@ export type UseManyType = {
 };
 
 export interface AttributeItem<A extends Partial<ItemAttributes>> extends Omit<UsableItem, "removedOnUse"> {
-  // mantu atribūti, piemēram kaķa vecums vai burkāna nosaukums
-  attributes: (currTime: number) => A;
+  // noklusējuma mantu atribūti, piemēram kaķa vecums vai burkāna nosaukums
+  defaultAttributes: (currTime: number) => A;
   // pēc kādiem atribūtiem kārtot mantas inventārā un izvēlnēs
   // 1 ir no lielākā uz mazāko, -1 ir no mazākā uz lielāko
   sortBy: Partial<Record<keyof A, 1 | -1>>;

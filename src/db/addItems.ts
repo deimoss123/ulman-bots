@@ -2,7 +2,7 @@ import findUser from "@/db/findUser";
 import User from "@/schemas/User";
 import UserProfile from "@/types/UserProfile";
 import userCache from "@/utils/userCache";
-import itemList, { ItemKey } from "@/items/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
 import { ClientSession } from "mongoose";
 
 export default async function addItems(
@@ -25,11 +25,11 @@ export default async function addItems(
       const itemObj = itemList[itemToAdd];
 
       // pārbauda vai manta ir ar atribūtiem
-      if ("attributes" in itemObj) {
+      if ("defaultAttributes" in itemObj) {
         for (let i = 0; i < amountToAdd; i++) {
           specialItems.push({
             name: itemToAdd,
-            attributes: itemObj.attributes(currTime),
+            attributes: itemObj.defaultAttributes(currTime),
           });
         }
 

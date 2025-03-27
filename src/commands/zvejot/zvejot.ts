@@ -17,7 +17,7 @@ import smallEmbed from "@/utils/embeds/smallEmbed";
 import Command from "@/types/Command";
 import checkUserSpecialItems from "@/items/helpers/checkUserSpecialItems";
 import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
-import itemList, { ItemKey } from "@/items/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 import maksekeresData from "@/commands/zvejot/makskeresData";
 import syncFishing from "@/commands/zvejot/syncFishing";
@@ -135,7 +135,9 @@ const zvejot: Command = {
             return { edit: true };
           }
 
-          const specialItemsToAdd = Object.entries(fishesToAdd).filter(([name]) => "attributes" in itemList[name]);
+          const specialItemsToAdd = Object.entries(fishesToAdd).filter(
+            ([name]) => "defaultAttributes" in itemList[name],
+          );
           if (specialItemsToAdd.length) {
             for (const [name, amount] of specialItemsToAdd) {
               const checkRes = checkUserSpecialItems(user, name, amount);

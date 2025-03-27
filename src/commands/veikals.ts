@@ -8,7 +8,7 @@ import {
   SelectMenuComponentOptionData,
   StringSelectMenuBuilder,
 } from "discord.js";
-import itemList, { ItemCategory, ItemKey } from "@/items/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import latiString from "@/utils/strings/latiString";
 import commandColors from "@/utils/commandColors";
@@ -22,7 +22,7 @@ import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import midNightStr from "@/utils/strings/midnightStr";
 import getDiscounts from "@/items/helpers/getDiscounts";
 import intReply from "@/utils/intReply";
-import Item from "@/types/Item";
+import Item, { ItemCategory } from "@/types/Item";
 import UserProfile from "@/types/UserProfile";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import { Dialogs } from "@/utils/dialogs";

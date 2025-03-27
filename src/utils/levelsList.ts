@@ -1,4 +1,4 @@
-import { ItemKey } from "@/items/itemList";
+import { ItemKey } from "@/utils/itemList";
 
 export interface TaxDiscount {
   payTax?: number;

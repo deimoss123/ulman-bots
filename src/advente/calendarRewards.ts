@@ -1,4 +1,4 @@
-import { ItemKey } from "@/items/itemList";
+import { ItemKey } from "@/utils/itemList";
 
 const calendarRewards: Record<string, { item: ItemKey; amount: number } | { lati: number }> = {
   "1": { item: "metalluznis", amount: 3 },

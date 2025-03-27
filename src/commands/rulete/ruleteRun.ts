@@ -16,7 +16,7 @@ import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
-import itemList from "@/items/itemList";
+import itemList from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 import generateRulete, { GenerateRuleteRes } from "@/commands/rulete/generateRulete";
 import { KazinoLikme } from "@/commands/rulete/rulete";

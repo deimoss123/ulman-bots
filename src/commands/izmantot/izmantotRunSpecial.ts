@@ -17,7 +17,7 @@ import itemString, { itemStringCustom } from "@/utils/strings/itemString";
 import Item, { AttributeItem, NotSellableItem } from "@/types/Item";
 import UsableItemReturn from "@/types/UsableItemReturn";
 import { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
-import itemList, { ItemKey } from "@/items/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 import { attributeItemSort } from "@/commands/inventars/inventars";
 import { Dialogs } from "@/utils/dialogs";

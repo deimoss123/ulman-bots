@@ -2,7 +2,7 @@ import { APIEmbedField, ButtonInteraction, ChatInputCommandInteraction, EmbedFie
 import commandColors from "@/utils/commandColors";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import itemString from "@/utils/strings/itemString";
-import { ItemKey } from "@/items/itemList";
+import { ItemKey } from "@/utils/itemList";
 
 export default function kamPiederEmbed(
   i: ChatInputCommandInteraction | ButtonInteraction,

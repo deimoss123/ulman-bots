@@ -14,7 +14,7 @@ import automehanikis from "@/commands/stradat/darbi/automehanikis";
 import { JobPositions } from "@/commands/vakances";
 import latiString from "@/utils/strings/latiString";
 import itemString from "@/utils/strings/itemString";
-import itemList from "@/items/itemList";
+import itemList from "@/utils/itemList";
 import addXp from "@/db/addXp";
 import xpAddedEmbed from "@/utils/embeds/xpAddedEmbed";
 import addLati from "@/db/addLati";

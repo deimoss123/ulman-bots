@@ -2,7 +2,7 @@ import { AutocompleteInteraction } from "discord.js";
 import Item from "@/types/Item";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import normalizeLatText from "@/utils/strings/normalizeLatText";
-import itemList from "@/items/itemList";
+import itemList from "@/utils/itemList";
 import findItemsByQuery from "@/items/helpers/findItemsByQuery";
 
 function mapItemsToChoices(emoji: string) {
