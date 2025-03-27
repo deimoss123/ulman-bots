@@ -1,10 +1,10 @@
 import { APIEmbedField, ButtonInteraction, ChatInputCommandInteraction } from 'discord.js';
-import errorEmbed from '../../embeds/errorEmbed';
-import itemList, { ItemKey } from '../../items/itemList';
-import User from '../../schemas/User';
-import intReply from '../../utils/intReply';
-import kamPiederEmbed from './kamPiederEmbed';
-import emoji from '../../utils/emoji';
+import errorEmbed from '@/embeds/errorEmbed';
+import itemList, { ItemKey } from '@/items/itemList';
+import User from '@/schemas/User';
+import intReply from '@/utils/intReply';
+import kamPiederEmbed from '@/commands/kamPieder/kamPiederEmbed';
+import emoji from '@/utils/emoji';
 
 const FIELD_COUNT = 15;
 

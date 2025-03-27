@@ -1,12 +1,12 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, ComponentType } from 'discord.js';
-import deleteAuction from '../../economy/auction/deleteAuction';
-import findAuctionById from '../../economy/auction/findAuctionById';
-import buttonHandler from '../../embeds/buttonHandler';
-import embedTemplate from '../../embeds/embedTemplate';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import errorEmbed from '../../embeds/errorEmbed';
-import intReply from '../../utils/intReply';
-import { izsoleItemString } from './izsoleEmbeds';
+import deleteAuction from '@/economy/auction/deleteAuction';
+import findAuctionById from '@/economy/auction/findAuctionById';
+import buttonHandler from '@/embeds/buttonHandler';
+import embedTemplate from '@/embeds/embedTemplate';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import errorEmbed from '@/embeds/errorEmbed';
+import intReply from '@/utils/intReply';
+import { izsoleItemString } from '@/commands/_izsole/izsoleEmbeds';
 
 const deleteConfirmComponents = [
   new ActionRowBuilder<ButtonBuilder>().addComponents(

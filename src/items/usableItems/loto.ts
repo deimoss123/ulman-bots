@@ -1,12 +1,12 @@
-import chance, { ChanceValue } from '../helpers/chance';
-import itemList, { ItemKey } from '../itemList';
-import { UsableItemFunc } from '../../interfaces/Item';
-import findUser from '../../economy/findUser';
-import intReply from '../../utils/intReply';
-import errorEmbed from '../../embeds/errorEmbed';
-import embedTemplate from '../../embeds/embedTemplate';
-import itemString from '../../embeds/helpers/itemString';
-import shuffleArray from '../helpers/shuffleArray';
+import chance, { ChanceValue } from '@/items/helpers/chance';
+import itemList, { ItemKey } from '@/items/itemList';
+import { UsableItemFunc } from '@/interfaces/Item';
+import findUser from '@/economy/findUser';
+import intReply from '@/utils/intReply';
+import errorEmbed from '@/embeds/errorEmbed';
+import embedTemplate from '@/embeds/embedTemplate';
+import itemString from '@/embeds/helpers/itemString';
+import shuffleArray from '@/items/helpers/shuffleArray';
 import {
   ActionRowBuilder,
   BaseInteraction,
@@ -15,13 +15,13 @@ import {
   ComponentEmojiResolvable,
   ComponentType,
 } from 'discord.js';
-import addLati from '../../economy/addLati';
-import addItems from '../../economy/addItems';
-import smallEmbed from '../../embeds/smallEmbed';
-import commandColors from '../../embeds/commandColors';
-import emoji from '../../utils/emoji';
-import { Dialogs } from '../../utils/Dialogs';
-import ephemeralReply from '../../embeds/ephemeralReply';
+import addLati from '@/economy/addLati';
+import addItems from '@/economy/addItems';
+import smallEmbed from '@/embeds/smallEmbed';
+import commandColors from '@/embeds/commandColors';
+import emoji from '@/utils/emoji';
+import { Dialogs } from '@/utils/Dialogs';
+import ephemeralReply from '@/embeds/ephemeralReply';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function testLaimesti(options: LotoOptions, count: number) {
@@ -280,7 +280,7 @@ export default function loto(itemKey: ItemKey, options: LotoOptions): UsableItem
             end: true,
             after: async () => {
               // ahhh nepatīk šitais imports, lūdzu, neesi atmiņas noplūde
-              const izmantotRun = await import('../../commands/izmantot/izmantotRun');
+              const izmantotRun = await import('@/commands/izmantot/izmantotRun');
               izmantotRun.default(int, itemKey, 0);
             },
           };

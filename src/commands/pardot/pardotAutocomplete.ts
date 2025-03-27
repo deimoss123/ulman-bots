@@ -1,12 +1,12 @@
 import { AutocompleteInteraction } from 'discord.js';
-import normalizeLatText from '../../embeds/helpers/normalizeLatText';
-import Item from '../../interfaces/Item';
-import itemList, { ItemKey } from '../../items/itemList';
-import findUser from '../../economy/findUser';
-import { ItemInProfile } from '../../interfaces/UserProfile';
-import capitalizeFirst from '../../embeds/helpers/capitalizeFirst';
-import findItemsByQuery from '../../items/helpers/findItemsByQuery';
-import latiString from '../../embeds/helpers/latiString';
+import normalizeLatText from '@/embeds/helpers/normalizeLatText';
+import Item from '@/interfaces/Item';
+import itemList, { ItemKey } from '@/items/itemList';
+import findUser from '@/economy/findUser';
+import { ItemInProfile } from '@/interfaces/UserProfile';
+import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
+import findItemsByQuery from '@/items/helpers/findItemsByQuery';
+import latiString from '@/embeds/helpers/latiString';
 
 function mapItemsToChoices(itemInList: [string, Item]) {
   const [key, item] = itemInList;

@@ -1,5 +1,5 @@
-import { ChanceValue } from '../../items/helpers/chance';
-import { ItemKey } from '../../items/itemList';
+import { ChanceValue } from '@/items/helpers/chance';
+import { ItemKey } from '@/items/itemList';
 
 export type FishChance = Record<
   ItemKey,
@@ -10,7 +10,7 @@ export type FishChance = Record<
 >;
 
 export async function calculateMakskeresData() {
-  const itemList = (await import('../../items/itemList')).default;
+  const itemList = (await import('@/items/itemList')).default;
 
   for (const [key, data] of Object.entries(maksekeresData)) {
     const { fishChances, maxDurability, repairable } = data;

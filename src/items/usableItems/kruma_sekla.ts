@@ -1,8 +1,8 @@
-import addItems from '../../economy/addItems';
-import findUser from '../../economy/findUser';
-import itemString from '../../embeds/helpers/itemString';
-import { UsableItemFunc } from '../../interfaces/Item';
-import checkUserSpecialItems from '../helpers/checkUserSpecialItems';
+import addItems from '@/economy/addItems';
+import findUser from '@/economy/findUser';
+import itemString from '@/embeds/helpers/itemString';
+import { UsableItemFunc } from '@/interfaces/Item';
+import checkUserSpecialItems from '@/items/helpers/checkUserSpecialItems';
 
 const kruma_sekla: UsableItemFunc = async (userId, guildId) => {
   const user = await findUser(userId, guildId);

@@ -1,14 +1,14 @@
 import { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuInteraction } from 'discord.js';
-import UserProfile, { ItemAttributes } from '../interfaces/UserProfile';
-import itemList, { ItemKey } from '../items/itemList';
-import { AttributeItem } from '../interfaces/Item';
-import { attributeItemSort } from '../commands/inventars/inventars';
-import itemString, { itemStringCustom } from '../embeds/helpers/itemString';
-import { displayAttributes } from '../embeds/helpers/displayAttributes';
-import { DialogsOnClickCallbackReturn } from './Dialogs';
-import intReply from './intReply';
-import ephemeralReply from '../embeds/ephemeralReply';
-import commandColors from '../embeds/commandColors';
+import UserProfile, { ItemAttributes } from '@/interfaces/UserProfile';
+import itemList, { ItemKey } from '@/items/itemList';
+import { AttributeItem } from '@/interfaces/Item';
+import { attributeItemSort } from '@/commands/inventars/inventars';
+import itemString, { itemStringCustom } from '@/embeds/helpers/itemString';
+import { displayAttributes } from '@/embeds/helpers/displayAttributes';
+import { DialogsOnClickCallbackReturn } from '@/utils/Dialogs';
+import intReply from '@/utils/intReply';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import commandColors from '@/embeds/commandColors';
 
 export function useDifferentItemSelectMenu(
   user: UserProfile,

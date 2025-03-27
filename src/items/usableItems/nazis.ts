@@ -1,7 +1,7 @@
-import { statusList } from '../../commands/profils';
-import addStatus from '../../economy/addStatus';
-import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
-import { UsableItemFunc } from '../../interfaces/Item';
+import { statusList } from '@/commands/profils';
+import addStatus from '@/economy/addStatus';
+import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
+import { UsableItemFunc } from '@/interfaces/Item';
 
 export const NAZIS_STATUS_TIME = 3_600_000; // 1h
 

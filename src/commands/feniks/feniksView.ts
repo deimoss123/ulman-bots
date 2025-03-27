@@ -1,13 +1,13 @@
 import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle } from 'discord.js';
-import UserProfile from '../../interfaces/UserProfile';
-import { KazinoLikme } from '../rulete/rulete';
-import { CalcSpinRes } from './calcSpin';
-import emoji from '../../utils/emoji';
-import latiString from '../../embeds/helpers/latiString';
-import feniksLaimesti from './feniksLaimesti';
-import commandColors from '../../embeds/commandColors';
-import embedTemplate from '../../embeds/embedTemplate';
-import itemList, { ItemKey } from '../../items/itemList';
+import UserProfile from '@/interfaces/UserProfile';
+import { KazinoLikme } from '@/commands/rulete/rulete';
+import { CalcSpinRes } from '@/commands/feniks/calcSpin';
+import emoji from '@/utils/emoji';
+import latiString from '@/embeds/helpers/latiString';
+import feniksLaimesti from '@/commands/feniks/feniksLaimesti';
+import commandColors from '@/embeds/commandColors';
+import embedTemplate from '@/embeds/embedTemplate';
+import itemList, { ItemKey } from '@/items/itemList';
 
 export type FeniksState = {
   likme: KazinoLikme;

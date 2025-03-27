@@ -12,25 +12,25 @@ import {
   TextInputStyle,
   time,
 } from 'discord.js';
-import addItems from '../../economy/addItems';
-import editItemAttribute from '../../economy/editItemAttribute';
-import findUser from '../../economy/findUser';
-import commandColors from '../../embeds/commandColors';
-import embedTemplate from '../../embeds/embedTemplate';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import errorEmbed from '../../embeds/errorEmbed';
-import capitalizeFirst from '../../embeds/helpers/capitalizeFirst';
-import itemString from '../../embeds/helpers/itemString';
-import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
-import smallEmbed from '../../embeds/smallEmbed';
-import { UsableItemFunc } from '../../interfaces/Item';
-import UserProfile, { ItemAttributes, SpecialItemInProfile } from '../../interfaces/UserProfile';
-import intReply from '../../utils/intReply';
-import countFreeInvSlots from '../helpers/countFreeInvSlots';
-import itemList, { ItemKey } from '../itemList';
-import { Dialogs } from '../../utils/Dialogs';
-import mongoTransaction from '../../utils/mongoTransaction';
-import { useDifferentItemHandler, useDifferentItemSelectMenu } from '../../utils/useDifferentItem';
+import addItems from '@/economy/addItems';
+import editItemAttribute from '@/economy/editItemAttribute';
+import findUser from '@/economy/findUser';
+import commandColors from '@/embeds/commandColors';
+import embedTemplate from '@/embeds/embedTemplate';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import errorEmbed from '@/embeds/errorEmbed';
+import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
+import itemString from '@/embeds/helpers/itemString';
+import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
+import smallEmbed from '@/embeds/smallEmbed';
+import { UsableItemFunc } from '@/interfaces/Item';
+import UserProfile, { ItemAttributes, SpecialItemInProfile } from '@/interfaces/UserProfile';
+import intReply from '@/utils/intReply';
+import countFreeInvSlots from '@/items/helpers/countFreeInvSlots';
+import itemList, { ItemKey } from '@/items/itemList';
+import { Dialogs } from '@/utils/Dialogs';
+import mongoTransaction from '@/utils/mongoTransaction';
+import { useDifferentItemHandler, useDifferentItemSelectMenu } from '@/utils/useDifferentItem';
 
 export const kakisFedState: {
   time: number;

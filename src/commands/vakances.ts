@@ -1,4 +1,4 @@
-import Command from '../interfaces/Command';
+import Command from '@/interfaces/Command';
 import {
   ActionRowBuilder,
   BaseInteraction,
@@ -8,15 +8,15 @@ import {
   SelectMenuComponentOptionData,
   StringSelectMenuBuilder,
 } from 'discord.js';
-import commandColors from '../embeds/commandColors';
-import findUser from '../economy/findUser';
-import errorEmbed from '../embeds/errorEmbed';
-import embedTemplate from '../embeds/embedTemplate';
-import intReply from '../utils/intReply';
-import { Dialogs } from '../utils/Dialogs';
-import UserProfile from '../interfaces/UserProfile';
-import smallEmbed from '../embeds/smallEmbed';
-import setJobPosition from '../economy/setJobPosition';
+import commandColors from '@/embeds/commandColors';
+import findUser from '@/economy/findUser';
+import errorEmbed from '@/embeds/errorEmbed';
+import embedTemplate from '@/embeds/embedTemplate';
+import intReply from '@/utils/intReply';
+import { Dialogs } from '@/utils/Dialogs';
+import UserProfile from '@/interfaces/UserProfile';
+import smallEmbed from '@/embeds/smallEmbed';
+import setJobPosition from '@/economy/setJobPosition';
 
 interface JobPosData {
   name: string;

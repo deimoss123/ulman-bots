@@ -1,6 +1,6 @@
-import chance from '../../items/helpers/chance';
-import shuffleArray from '../../items/helpers/shuffleArray';
-import feniksLaimesti from './feniksLaimesti';
+import chance from '@/items/helpers/chance';
+import shuffleArray from '@/items/helpers/shuffleArray';
+import feniksLaimesti from '@/commands/feniks/feniksLaimesti';
 
 export interface CalcSpinRes {
   emojiGroups: {

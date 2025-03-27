@@ -1,5 +1,5 @@
-import UserProfile from '../interfaces/UserProfile';
-import User from '../schemas/User';
+import UserProfile from '@/interfaces/UserProfile';
+import User from '@/schemas/User';
 import { ClientSession, ProjectionType } from 'mongoose';
 
 export default async function getAllUsers(

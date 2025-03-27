@@ -1,7 +1,7 @@
-import { statusList } from '../../commands/profils';
-import addStatus from '../../economy/addStatus';
-import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
-import { UsableItemFunc } from '../../interfaces/Item';
+import { statusList } from '@/commands/profils';
+import addStatus from '@/economy/addStatus';
+import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
+import { UsableItemFunc } from '@/interfaces/Item';
 
 export const RASENS_STATUS_TIME = 10_800_000; // 3h
 

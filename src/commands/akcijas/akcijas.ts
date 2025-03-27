@@ -12,7 +12,7 @@ import AkcijaType from '../../../interfaces/AkcijaType';
 import Command from '../../../interfaces/Command';
 import Akcija from '../../../schemas/Akcija';
 import intReply from '../../../utils/intReply';
-import akcijasList, { AkcijaChartTimes, AkcijaId } from './akcijasList';
+import akcijasList, { AkcijaChartTimes, AkcijaId } from '@/commands/akcijas/akcijasList';
 
 const chartTimes: AkcijaChartTimes[] = ['2h', '8h', '24h', '7d'];
 

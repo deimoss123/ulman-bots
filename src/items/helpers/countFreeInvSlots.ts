@@ -1,5 +1,5 @@
-import UserProfile from '../../interfaces/UserProfile';
-import countItems from './countItems';
+import UserProfile from '@/interfaces/UserProfile';
+import countItems from '@/items/helpers/countItems';
 
 // saskaita cik brīvas vietas lietotāja inventārā
 export default function countFreeInvSlots(user: UserProfile): number {

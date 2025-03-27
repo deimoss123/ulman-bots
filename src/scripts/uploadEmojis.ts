@@ -1,7 +1,7 @@
 import { APIUser, REST } from 'discord.js';
 import fs from 'fs';
 import path from 'path';
-import validateEnv from '../utils/validateEnv';
+import validateEnv from '@/utils/validateEnv';
 import { RESTGetAPIApplicationEmojisResult, Routes } from 'discord-api-types/v10';
 import chalk from 'chalk';
 import { readFile } from 'fs/promises';

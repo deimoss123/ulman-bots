@@ -1,4 +1,4 @@
-import { RulColors, ruleteOrder, RulPosition, rulPositions } from './ruleteData';
+import { RulColors, ruleteOrder, RulPosition, rulPositions } from '@/commands/rulete/ruleteData';
 
 export interface GenerateRuleteRes {
   num: number;

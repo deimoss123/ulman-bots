@@ -1,6 +1,6 @@
-import findUser from '../../economy/findUser';
-import setLati from '../../economy/setLati';
-import { UsableItemFunc } from '../../interfaces/Item';
+import findUser from '@/economy/findUser';
+import setLati from '@/economy/setLati';
+import { UsableItemFunc } from '@/interfaces/Item';
 
 const virve: UsableItemFunc = async (userId, guildId) => {
   const user = await findUser(userId, guildId);

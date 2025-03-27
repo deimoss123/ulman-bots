@@ -1,12 +1,12 @@
-import { statusList } from '../../commands/profils';
-import addStatus from '../../economy/addStatus';
-import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
-import { UsableItemFunc } from '../../interfaces/Item';
-import { UserStatusName } from '../../interfaces/UserProfile';
-import { JURIDISKA_ZIVS_STATUS } from './juridiska_zivs';
-import { NAZIS_STATUS_TIME } from './nazis';
-import { PETNIEKZIVS_STATUS_TIME } from './petniekzivs';
-import { RASENS_STATUS_TIME } from './zemenu_rasens';
+import { statusList } from '@/commands/profils';
+import addStatus from '@/economy/addStatus';
+import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
+import { UsableItemFunc } from '@/interfaces/Item';
+import { UserStatusName } from '@/interfaces/UserProfile';
+import { JURIDISKA_ZIVS_STATUS } from '@/items/usableItems/juridiska_zivs';
+import { NAZIS_STATUS_TIME } from '@/items/usableItems/nazis';
+import { PETNIEKZIVS_STATUS_TIME } from '@/items/usableItems/petniekzivs';
+import { RASENS_STATUS_TIME } from '@/items/usableItems/zemenu_rasens';
 
 const divainaZivsStatuses: Record<UserStatusName, number> = {
   aizsargats: RASENS_STATUS_TIME / 2,

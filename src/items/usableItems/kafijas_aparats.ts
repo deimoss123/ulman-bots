@@ -1,17 +1,17 @@
-import addItems from '../../economy/addItems';
-import editItemAttribute from '../../economy/editItemAttribute';
-import editMultipleItemAttributes from '../../economy/editMultipleItemAttributes';
-import findUser from '../../economy/findUser';
-import commandColors from '../../embeds/commandColors';
-import embedTemplate from '../../embeds/embedTemplate';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import errorEmbed from '../../embeds/errorEmbed';
-import itemString from '../../embeds/helpers/itemString';
-import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
-import { UsableItemFunc, UseManyType } from '../../interfaces/Item';
-import intReply from '../../utils/intReply';
-import countFreeInvSlots from '../helpers/countFreeInvSlots';
-import itemList from '../itemList';
+import addItems from '@/economy/addItems';
+import editItemAttribute from '@/economy/editItemAttribute';
+import editMultipleItemAttributes from '@/economy/editMultipleItemAttributes';
+import findUser from '@/economy/findUser';
+import commandColors from '@/embeds/commandColors';
+import embedTemplate from '@/embeds/embedTemplate';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import errorEmbed from '@/embeds/errorEmbed';
+import itemString from '@/embeds/helpers/itemString';
+import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
+import { UsableItemFunc, UseManyType } from '@/interfaces/Item';
+import intReply from '@/utils/intReply';
+import countFreeInvSlots from '@/items/helpers/countFreeInvSlots';
+import itemList from '@/items/itemList';
 
 // 24 stundas
 export const KAFIJAS_APARATS_COOLDOWN = 86_400_000;

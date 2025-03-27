@@ -1,13 +1,13 @@
-import Command from '../../interfaces/Command';
+import Command from '@/interfaces/Command';
 import { ApplicationCommandOptionType } from 'discord.js';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import itemList, { ItemCategory } from '../../items/itemList';
-import itemString from '../../embeds/helpers/itemString';
-import commandColors from '../../embeds/commandColors';
-import pirktRun from './pirktRun';
-import pirktAutocomplete from './pirktAutocomplete';
-import wrongKeyEmbed from '../../embeds/wrongKeyEmbed';
-import intReply from '../../utils/intReply';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import itemList, { ItemCategory } from '@/items/itemList';
+import itemString from '@/embeds/helpers/itemString';
+import commandColors from '@/embeds/commandColors';
+import pirktRun from '@/commands/pirkt/pirktRun';
+import pirktAutocomplete from '@/commands/pirkt/pirktAutocomplete';
+import wrongKeyEmbed from '@/embeds/wrongKeyEmbed';
+import intReply from '@/utils/intReply';
 
 const pirkt: Command = {
   description: () =>

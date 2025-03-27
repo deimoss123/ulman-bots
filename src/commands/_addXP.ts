@@ -1,10 +1,10 @@
-import Command from '../interfaces/Command';
+import Command from '@/interfaces/Command';
 import { ApplicationCommandOptionType } from 'discord.js';
-import errorEmbed from '../embeds/errorEmbed';
-import embedTemplate from '../embeds/embedTemplate';
-import addXp from '../economy/addXp';
-import latiString from '../embeds/helpers/latiString';
-import intReply from '../utils/intReply';
+import errorEmbed from '@/embeds/errorEmbed';
+import embedTemplate from '@/embeds/embedTemplate';
+import addXp from '@/economy/addXp';
+import latiString from '@/embeds/helpers/latiString';
+import intReply from '@/utils/intReply';
 
 const _addXP: Command = {
   devOnly: true,

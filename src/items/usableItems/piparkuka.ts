@@ -1,7 +1,7 @@
-import addItems from '../../economy/addItems';
-import findUser from '../../economy/findUser';
-import setUser from '../../economy/setUser';
-import { UsableItemFunc } from '../../interfaces/Item';
+import addItems from '@/economy/addItems';
+import findUser from '@/economy/findUser';
+import setUser from '@/economy/setUser';
+import { UsableItemFunc } from '@/interfaces/Item';
 
 const piparkuka: UsableItemFunc = async (userId, guildId) => {
   const user = await findUser(userId, guildId);

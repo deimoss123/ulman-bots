@@ -1,9 +1,9 @@
 import { bold, EmbedBuilder } from 'discord.js';
-import { AddXpReturn } from '../../economy/addXp';
-import itemList from '../../items/itemList';
-import levelsList, { MAX_LEVEL } from '../../levelingSystem/levelsList';
-import itemString from './itemString';
-import latiString from './latiString';
+import { AddXpReturn } from '@/economy/addXp';
+import itemList from '@/items/itemList';
+import levelsList, { MAX_LEVEL } from '@/levelingSystem/levelsList';
+import itemString from '@/embeds/helpers/itemString';
+import latiString from '@/embeds/helpers/latiString';
 
 const DEFAULT_COLOR = 0x2e3035;
 const LEVEL_INCREASE_COLOR = 0xbb4ae8;

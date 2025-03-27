@@ -1,5 +1,5 @@
-import { ChanceValue } from '../items/helpers/chance';
-import { ItemKey } from '../items/itemList';
+import { ChanceValue } from '@/items/helpers/chance';
+import { ItemKey } from '@/items/itemList';
 
 type MinLati = number;
 type MaxLati = number;

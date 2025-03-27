@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, Message } from 'discord.js';
-import smallEmbed from '../embeds/smallEmbed';
-import itemList from '../items/itemList';
-import { ULMANBOTA_ROLE_ID } from '../izsoles/izsoleEmbed';
-import calendarRewards from './calendarRewards';
-import generateCalendarImage from './generateCalendarImage';
-import emoji from '../utils/emoji';
+import smallEmbed from '@/embeds/smallEmbed';
+import itemList from '@/items/itemList';
+import { ULMANBOTA_ROLE_ID } from '@/izsoles/izsoleEmbed';
+import calendarRewards from '@/advente/calendarRewards';
+import generateCalendarImage from '@/advente/generateCalendarImage';
+import emoji from '@/utils/emoji';
 
 export default async function adventeMsgHandler(msg: Message, apiCommand: string, content: string[]) {
   if (!process.env.ADVENTE_CHANNEL) return;

@@ -1,6 +1,6 @@
 import { BaseInteraction, ButtonInteraction, StringSelectMenuInteraction } from 'discord.js';
-import { IpasumiState } from './ipasumi';
-import embedTemplate from '../../embeds/embedTemplate';
+import { IpasumiState } from '@/commands/ipasumi/ipasumi';
+import embedTemplate from '@/embeds/embedTemplate';
 
 type State = {};
 

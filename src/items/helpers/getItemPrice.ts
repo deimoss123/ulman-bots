@@ -1,4 +1,4 @@
-import itemList, { DiscountedItems } from '../itemList';
+import itemList, { DiscountedItems } from '@/items/itemList';
 
 // atgriež lietas cenu un atlaidi ja tāda ir
 export default function getItemPrice(itemKey: string, discounts: DiscountedItems) {

@@ -1,12 +1,12 @@
 import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle, EmbedField, User } from 'discord.js';
-import UserProfile from '../../interfaces/UserProfile';
-import { INV_PAGE_SIZE, ItemType, itemTypes } from './inventars';
-import latiString from '../../embeds/helpers/latiString';
-import embedTemplate from '../../embeds/embedTemplate';
-import userString from '../../embeds/helpers/userString';
-import commandColors from '../../embeds/commandColors';
-import btnPaginationRow from '../../items/helpers/btnPaginationRow';
-import itemList from '../../items/itemList';
+import UserProfile from '@/interfaces/UserProfile';
+import { INV_PAGE_SIZE, ItemType, itemTypes } from '@/commands/inventars/inventars';
+import latiString from '@/embeds/helpers/latiString';
+import embedTemplate from '@/embeds/embedTemplate';
+import userString from '@/embeds/helpers/userString';
+import commandColors from '@/embeds/commandColors';
+import btnPaginationRow from '@/items/helpers/btnPaginationRow';
+import itemList from '@/items/itemList';
 
 export type InventarsState = {
   targetDiscordUser: User;

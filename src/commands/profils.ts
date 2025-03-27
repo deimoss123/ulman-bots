@@ -1,16 +1,16 @@
-import Command from '../interfaces/Command';
-import commandColors from '../embeds/commandColors';
+import Command from '@/interfaces/Command';
+import commandColors from '@/embeds/commandColors';
 import { ApplicationCommandOptionType, codeBlock } from 'discord.js';
-import findUser from '../economy/findUser';
-import errorEmbed from '../embeds/errorEmbed';
-import userString from '../embeds/helpers/userString';
-import embedTemplate from '../embeds/embedTemplate';
-import levelsList, { MAX_LEVEL } from '../levelingSystem/levelsList';
-import ephemeralReply from '../embeds/ephemeralReply';
-import { JobPositions } from './vakances';
-import millisToReadableTime from '../embeds/helpers/millisToReadableTime';
-import { UserStatusName } from '../interfaces/UserProfile';
-import intReply from '../utils/intReply';
+import findUser from '@/economy/findUser';
+import errorEmbed from '@/embeds/errorEmbed';
+import userString from '@/embeds/helpers/userString';
+import embedTemplate from '@/embeds/embedTemplate';
+import levelsList, { MAX_LEVEL } from '@/levelingSystem/levelsList';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import { JobPositions } from '@/commands/vakances';
+import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
+import { UserStatusName } from '@/interfaces/UserProfile';
+import intReply from '@/utils/intReply';
 
 export const statusList: Record<UserStatusName, string> = {
   aizsargats: 'Aizsargāts',

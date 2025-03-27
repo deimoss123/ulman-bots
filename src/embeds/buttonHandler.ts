@@ -12,9 +12,9 @@ import {
   SelectMenuInteraction,
   MessageFlags,
 } from 'discord.js';
-import interactionCache, { InteractionInCache } from '../utils/interactionCache';
-import intReply from '../utils/intReply';
-import errorEmbed from './errorEmbed';
+import interactionCache, { InteractionInCache } from '@/utils/interactionCache';
+import intReply from '@/utils/intReply';
+import errorEmbed from '@/embeds/errorEmbed';
 
 export interface CallbackReturn {
   edit?: InteractionUpdateOptions | MessagePayload;

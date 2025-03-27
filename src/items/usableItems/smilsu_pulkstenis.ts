@@ -1,7 +1,7 @@
-import syncFishing from '../../commands/zvejot/syncFishing';
-import addItems from '../../economy/addItems';
-import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
-import { UsableItemFunc } from '../../interfaces/Item';
+import syncFishing from '@/commands/zvejot/syncFishing';
+import addItems from '@/economy/addItems';
+import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
+import { UsableItemFunc } from '@/interfaces/Item';
 
 export const ZVEJA_SHIFT_TIME = 32_400_000; // 9h
 

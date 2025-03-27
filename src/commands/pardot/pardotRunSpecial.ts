@@ -7,24 +7,24 @@ import {
   ComponentType,
   StringSelectMenuBuilder,
 } from 'discord.js';
-import addLati from '../../economy/addLati';
-import findUser from '../../economy/findUser';
-import removeItemsById from '../../economy/removeItemsById';
-import setStats from '../../economy/stats/setStats';
-import embedTemplate from '../../embeds/embedTemplate';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import errorEmbed from '../../embeds/errorEmbed';
-import { displayAttributes } from '../../embeds/helpers/displayAttributes';
-import itemString, { itemStringCustom } from '../../embeds/helpers/itemString';
-import latiString from '../../embeds/helpers/latiString';
-import { AttributeItem } from '../../interfaces/Item';
-import UserProfile, { ItemAttributes, SpecialItemInProfile } from '../../interfaces/UserProfile';
-import itemList, { ItemKey } from '../../items/itemList';
-import intReply from '../../utils/intReply';
-import { attributeItemSort } from '../inventars/inventars';
-import { PIRKT_PARDOT_NODOKLIS } from './pardot';
-import { Dialogs } from '../../utils/Dialogs';
-import mongoTransaction from '../../utils/mongoTransaction';
+import addLati from '@/economy/addLati';
+import findUser from '@/economy/findUser';
+import removeItemsById from '@/economy/removeItemsById';
+import setStats from '@/economy/stats/setStats';
+import embedTemplate from '@/embeds/embedTemplate';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import errorEmbed from '@/embeds/errorEmbed';
+import { displayAttributes } from '@/embeds/helpers/displayAttributes';
+import itemString, { itemStringCustom } from '@/embeds/helpers/itemString';
+import latiString from '@/embeds/helpers/latiString';
+import { AttributeItem } from '@/interfaces/Item';
+import UserProfile, { ItemAttributes, SpecialItemInProfile } from '@/interfaces/UserProfile';
+import itemList, { ItemKey } from '@/items/itemList';
+import intReply from '@/utils/intReply';
+import { attributeItemSort } from '@/commands/inventars/inventars';
+import { PIRKT_PARDOT_NODOKLIS } from '@/commands/pardot/pardot';
+import { Dialogs } from '@/utils/Dialogs';
+import mongoTransaction from '@/utils/mongoTransaction';
 
 type State = {
   user: UserProfile;

@@ -1,8 +1,8 @@
 import { APIMessageComponentEmoji } from 'discord.js';
-import Item from '../../interfaces/Item';
-import { ItemAttributes } from '../../interfaces/UserProfile';
-import itemList, { ItemKey } from '../../items/itemList';
-import capitalizeFirst from './capitalizeFirst';
+import Item from '@/interfaces/Item';
+import { ItemAttributes } from '@/interfaces/UserProfile';
+import itemList, { ItemKey } from '@/items/itemList';
+import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
 
 export function makeEmojiString(emoji: APIMessageComponentEmoji) {
   return `<${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}>`;

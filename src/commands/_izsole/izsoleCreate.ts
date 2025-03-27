@@ -8,15 +8,15 @@ import {
   TextInputBuilder,
   TextInputStyle,
 } from 'discord.js';
-import createAuction from '../../economy/auction/createAuction';
-import buttonHandler from '../../embeds/buttonHandler';
-import embedTemplate from '../../embeds/embedTemplate';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import errorEmbed from '../../embeds/errorEmbed';
-import { ItemAttributes } from '../../interfaces/UserProfile';
-import itemList from '../../items/itemList';
-import intReply from '../../utils/intReply';
-import { confirmNewIzsoleMsg, izsoleItemString } from './izsoleEmbeds';
+import createAuction from '@/economy/auction/createAuction';
+import buttonHandler from '@/embeds/buttonHandler';
+import embedTemplate from '@/embeds/embedTemplate';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import errorEmbed from '@/embeds/errorEmbed';
+import { ItemAttributes } from '@/interfaces/UserProfile';
+import itemList from '@/items/itemList';
+import intReply from '@/utils/intReply';
+import { confirmNewIzsoleMsg, izsoleItemString } from '@/commands/_izsole/izsoleEmbeds';
 
 function millisFromStr(str: string): number | null {
   const [dayMonth, minutesSeconds] = str.trim().split(' ');

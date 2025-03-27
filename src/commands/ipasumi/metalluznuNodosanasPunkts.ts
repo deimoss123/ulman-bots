@@ -8,19 +8,19 @@ import {
   resolveColor,
   StringSelectMenuInteraction,
 } from 'discord.js';
-import { IpasumiState } from './ipasumi';
-import embedTemplate from '../../embeds/embedTemplate';
-import UserProfile from '../../interfaces/UserProfile';
-import setUser from '../../economy/setUser';
-import findUser from '../../economy/findUser';
-import emoji from '../../utils/emoji';
+import { IpasumiState } from '@/commands/ipasumi/ipasumi';
+import embedTemplate from '@/embeds/embedTemplate';
+import UserProfile from '@/interfaces/UserProfile';
+import setUser from '@/economy/setUser';
+import findUser from '@/economy/findUser';
+import emoji from '@/utils/emoji';
 import { writeFile, readFile } from 'fs/promises';
-import { Dialogs } from '../../utils/Dialogs';
-import mongoTransaction from '../../utils/mongoTransaction';
-import addLati from '../../economy/addLati';
-import intReply from '../../utils/intReply';
-import smallEmbed from '../../embeds/smallEmbed';
-import latiString from '../../embeds/helpers/latiString';
+import { Dialogs } from '@/utils/Dialogs';
+import mongoTransaction from '@/utils/mongoTransaction';
+import addLati from '@/economy/addLati';
+import intReply from '@/utils/intReply';
+import smallEmbed from '@/embeds/smallEmbed';
+import latiString from '@/embeds/helpers/latiString';
 import { Canvas, createCanvas, GlobalFonts, SKRSContext2D } from '@napi-rs/canvas';
 import { join } from 'path';
 

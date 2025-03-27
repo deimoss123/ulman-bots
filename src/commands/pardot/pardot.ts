@@ -1,17 +1,17 @@
-import Command from '../../interfaces/Command';
+import Command from '@/interfaces/Command';
 import { ApplicationCommandOptionType } from 'discord.js';
-import findUser from '../../economy/findUser';
-import errorEmbed from '../../embeds/errorEmbed';
-import pardotValidate from './pardotValidate';
-import commandColors from '../../embeds/commandColors';
-import pardotAutocomplete from './pardotAutocomplete';
-import pardotRun, { pardotEmbed } from './pardotRun';
-import addItems from '../../economy/addItems';
-import addLati from '../../economy/addLati';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import setStats from '../../economy/stats/setStats';
-import intReply from '../../utils/intReply';
-import mongoTransaction from '../../utils/mongoTransaction';
+import findUser from '@/economy/findUser';
+import errorEmbed from '@/embeds/errorEmbed';
+import pardotValidate from '@/commands/pardot/pardotValidate';
+import commandColors from '@/embeds/commandColors';
+import pardotAutocomplete from '@/commands/pardot/pardotAutocomplete';
+import pardotRun, { pardotEmbed } from '@/commands/pardot/pardotRun';
+import addItems from '@/economy/addItems';
+import addLati from '@/economy/addLati';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import setStats from '@/economy/stats/setStats';
+import intReply from '@/utils/intReply';
+import mongoTransaction from '@/utils/mongoTransaction';
 
 export const PIRKT_PARDOT_NODOKLIS = 0.05;
 

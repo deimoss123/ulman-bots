@@ -1,10 +1,10 @@
 import { ClientSession } from 'mongoose';
-import findUser from '../../economy/findUser';
-import setFishing from '../../economy/setFishing';
-import UserProfile, { FishObj, UserFishing } from '../../interfaces/UserProfile';
-import chance from '../../items/helpers/chance';
-import maksekeresData, { FishChance } from './makskeresData';
-import { ZVEJOT_MIN_LEVEL } from './zvejot';
+import findUser from '@/economy/findUser';
+import setFishing from '@/economy/setFishing';
+import UserProfile, { FishObj, UserFishing } from '@/interfaces/UserProfile';
+import chance from '@/items/helpers/chance';
+import maksekeresData, { FishChance } from '@/commands/zvejot/makskeresData';
+import { ZVEJOT_MIN_LEVEL } from '@/commands/zvejot/zvejot';
 
 const ONE_HOUR = 3_600_000;
 

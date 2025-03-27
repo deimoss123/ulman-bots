@@ -1,9 +1,9 @@
 import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle, ComponentType } from 'discord.js';
-import embedTemplate from '../../embeds/embedTemplate';
-import Command from '../../interfaces/Command';
-import { Dialogs } from '../../utils/Dialogs';
-import intReply from '../../utils/intReply';
-import errorEmbed from '../../embeds/errorEmbed';
+import embedTemplate from '@/embeds/embedTemplate';
+import Command from '@/interfaces/Command';
+import { Dialogs } from '@/utils/Dialogs';
+import intReply from '@/utils/intReply';
+import errorEmbed from '@/embeds/errorEmbed';
 
 type State = {
   text: string;

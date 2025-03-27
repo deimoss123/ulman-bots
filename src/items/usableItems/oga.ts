@@ -1,6 +1,6 @@
-import itemString from '../../embeds/helpers/itemString';
-import { UsableItemFunc } from '../../interfaces/Item';
-import { ItemKey } from '../itemList';
+import itemString from '@/embeds/helpers/itemString';
+import { UsableItemFunc } from '@/interfaces/Item';
+import { ItemKey } from '@/items/itemList';
 
 export type BerryProperties = {
   saldums: number;

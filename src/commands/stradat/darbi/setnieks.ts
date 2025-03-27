@@ -1,4 +1,4 @@
-import StradatInteractions from '../../../interfaces/StradatInteraction';
+import StradatInteractions from '@/interfaces/StradatInteraction';
 
 const setnieks: StradatInteractions = {
   pietura: {

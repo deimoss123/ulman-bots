@@ -9,18 +9,18 @@ import {
   ComponentType,
   EmbedField,
 } from 'discord.js';
-import findUser from '../../economy/findUser';
-import errorEmbed from '../../embeds/errorEmbed';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import itemString from '../../embeds/helpers/itemString';
-import addItems from '../../economy/addItems';
-import embedTemplate from '../../embeds/embedTemplate';
-import ItemString from '../../embeds/helpers/itemString';
-import itemList from '../../items/itemList';
-import izmantotRunSpecial from './izmantotRunSpecial';
-import { UsableItem } from '../../interfaces/Item';
-import intReply from '../../utils/intReply';
-import { Dialogs } from '../../utils/Dialogs';
+import findUser from '@/economy/findUser';
+import errorEmbed from '@/embeds/errorEmbed';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import itemString from '@/embeds/helpers/itemString';
+import addItems from '@/economy/addItems';
+import embedTemplate from '@/embeds/embedTemplate';
+import ItemString from '@/embeds/helpers/itemString';
+import itemList from '@/items/itemList';
+import izmantotRunSpecial from '@/commands/izmantot/izmantotRunSpecial';
+import { UsableItem } from '@/interfaces/Item';
+import intReply from '@/utils/intReply';
+import { Dialogs } from '@/utils/Dialogs';
 
 type State = {
   color: ColorResolvable;

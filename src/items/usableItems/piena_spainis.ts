@@ -1,9 +1,9 @@
-import { statusList } from '../../commands/profils';
-import addItems from '../../economy/addItems';
-import findUser from '../../economy/findUser';
-import setUser from '../../economy/setUser';
-import { UsableItemFunc } from '../../interfaces/Item';
-import { UserStatus } from '../../interfaces/UserProfile';
+import { statusList } from '@/commands/profils';
+import addItems from '@/economy/addItems';
+import findUser from '@/economy/findUser';
+import setUser from '@/economy/setUser';
+import { UsableItemFunc } from '@/interfaces/Item';
+import { UserStatus } from '@/interfaces/UserProfile';
 
 const piena_spainis: UsableItemFunc = async (userId, guildId) => {
   const user = await findUser(userId, guildId);

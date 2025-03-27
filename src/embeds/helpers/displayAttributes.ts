@@ -1,15 +1,15 @@
-import maksekeresData from '../../commands/zvejot/makskeresData';
-import { ItemAttributes, SpecialItemInProfile } from '../../interfaces/UserProfile';
-import itemList, { ItemCategory, ItemKey } from '../../items/itemList';
-import { cookableItems } from '../../items/usableItems/gazes_plits';
-import { KAFIJAS_APARATS_COOLDOWN } from '../../items/usableItems/kafijas_aparats';
-import { kakisFedState } from '../../items/usableItems/kakis';
-import { PETNIEKS_COOLDOWN } from '../../items/usableItems/petnieks';
-import capitalizeFirst from './capitalizeFirst';
-import itemString, { makeEmojiString } from './itemString';
-import latiString from './latiString';
-import millisToReadableTime from './millisToReadableTime';
-import { dabutOguInfo, dabutKrumaInfo } from '../../items/usableItems/ogu_krums';
+import maksekeresData from '@/commands/zvejot/makskeresData';
+import { ItemAttributes, SpecialItemInProfile } from '@/interfaces/UserProfile';
+import itemList, { ItemCategory, ItemKey } from '@/items/itemList';
+import { cookableItems } from '@/items/usableItems/gazes_plits';
+import { KAFIJAS_APARATS_COOLDOWN } from '@/items/usableItems/kafijas_aparats';
+import { kakisFedState } from '@/items/usableItems/kakis';
+import { PETNIEKS_COOLDOWN } from '@/items/usableItems/petnieks';
+import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
+import itemString, { makeEmojiString } from '@/embeds/helpers/itemString';
+import latiString from '@/embeds/helpers/latiString';
+import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
+import { dabutOguInfo, dabutKrumaInfo } from '@/items/usableItems/ogu_krums';
 
 // palīgu funkcija, lai ietītu tekstu vienā no diviem stringiem
 // pēdējais parametrs nosaka kurā wrappot, šis vnk uztaisa īsāku un lasāmāku (?) kodu

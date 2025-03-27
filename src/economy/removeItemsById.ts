@@ -1,8 +1,8 @@
 import { ClientSession } from 'mongoose';
-import UserProfile from '../interfaces/UserProfile';
-import User from '../schemas/User';
-import userCache from '../utils/userCache';
-import findUser from './findUser';
+import UserProfile from '@/interfaces/UserProfile';
+import User from '@/schemas/User';
+import userCache from '@/utils/userCache';
+import findUser from '@/economy/findUser';
 
 export default async function removeItemsById(
   userId: string,

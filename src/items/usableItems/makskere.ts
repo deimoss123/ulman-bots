@@ -1,24 +1,24 @@
 import { ActionRowBuilder, BaseInteraction, bold, ButtonBuilder, ButtonStyle, ComponentType } from 'discord.js';
-import maksekeresData from '../../commands/zvejot/makskeresData';
-import { calcRepairCost } from '../../commands/zvejot/zvejot';
-import addLati from '../../economy/addLati';
-import editItemAttribute from '../../economy/editItemAttribute';
-import findUser from '../../economy/findUser';
-import commandColors from '../../embeds/commandColors';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import capitalizeFirst from '../../embeds/helpers/capitalizeFirst';
-import { displayAttributes } from '../../embeds/helpers/displayAttributes';
-import itemString from '../../embeds/helpers/itemString';
-import latiString from '../../embeds/helpers/latiString';
-import smallEmbed from '../../embeds/smallEmbed';
-import { AttributeItem, UsableItemFunc } from '../../interfaces/Item';
-import intReply from '../../utils/intReply';
-import itemList, { ItemKey } from '../itemList';
-import UserProfile, { ItemAttributes, SpecialItemInProfile } from '../../interfaces/UserProfile';
-import embedTemplate from '../../embeds/embedTemplate';
-import { Dialogs } from '../../utils/Dialogs';
-import errorEmbed from '../../embeds/errorEmbed';
-import mongoTransaction from '../../utils/mongoTransaction';
+import maksekeresData from '@/commands/zvejot/makskeresData';
+import { calcRepairCost } from '@/commands/zvejot/zvejot';
+import addLati from '@/economy/addLati';
+import editItemAttribute from '@/economy/editItemAttribute';
+import findUser from '@/economy/findUser';
+import commandColors from '@/embeds/commandColors';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
+import { displayAttributes } from '@/embeds/helpers/displayAttributes';
+import itemString from '@/embeds/helpers/itemString';
+import latiString from '@/embeds/helpers/latiString';
+import smallEmbed from '@/embeds/smallEmbed';
+import { AttributeItem, UsableItemFunc } from '@/interfaces/Item';
+import intReply from '@/utils/intReply';
+import itemList, { ItemKey } from '@/items/itemList';
+import UserProfile, { ItemAttributes, SpecialItemInProfile } from '@/interfaces/UserProfile';
+import embedTemplate from '@/embeds/embedTemplate';
+import { Dialogs } from '@/utils/Dialogs';
+import errorEmbed from '@/embeds/errorEmbed';
+import mongoTransaction from '@/utils/mongoTransaction';
 
 export function makskereCustomValue(itemKey: string): AttributeItem<ItemAttributes>['customValue'] {
   return ({ durability }) => {

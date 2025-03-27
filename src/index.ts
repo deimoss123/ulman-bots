@@ -1,13 +1,13 @@
 import { Client, GatewayIntentBits } from 'discord.js';
-import validateEnv from './utils/validateEnv';
-import mongo from './utils/mongo';
-import autocompleteHandler from './utils/autocompleteHandler';
+import validateEnv from '@/utils/validateEnv';
+import mongo from '@/utils/mongo';
+import autocompleteHandler from '@/utils/autocompleteHandler';
 import chalk from 'chalk';
-import setBotPresence from './utils/setBotPresence';
-import buttonInteractionHandler from './utils/buttonInteractionHandler';
-import messageHandler from './utils/messageHandler';
-import { loadEmojis } from './utils/emoji';
-import commandHandler from './utils/commandHandler';
+import setBotPresence from '@/utils/setBotPresence';
+import buttonInteractionHandler from '@/utils/buttonInteractionHandler';
+import messageHandler from '@/utils/messageHandler';
+import { loadEmojis } from '@/utils/emoji';
+import commandHandler from '@/utils/commandHandler';
 
 process.env.TZ = 'Europe/Riga';
 

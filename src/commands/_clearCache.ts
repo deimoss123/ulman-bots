@@ -1,6 +1,6 @@
-import Command from '../interfaces/Command';
-import intReply from '../utils/intReply';
-import { clearCache } from '../utils/userCache';
+import Command from '@/interfaces/Command';
+import intReply from '@/utils/intReply';
+import { clearCache } from '@/utils/userCache';
 
 const _clearCache: Command = {
   devOnly: true,

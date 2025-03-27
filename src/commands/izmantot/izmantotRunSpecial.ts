@@ -8,19 +8,19 @@ import {
   ComponentType,
   StringSelectMenuBuilder,
 } from 'discord.js';
-import findUser from '../../economy/findUser';
-import embedTemplate from '../../embeds/embedTemplate';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import errorEmbed from '../../embeds/errorEmbed';
-import { displayAttributes } from '../../embeds/helpers/displayAttributes';
-import itemString, { itemStringCustom } from '../../embeds/helpers/itemString';
-import Item, { AttributeItem, NotSellableItem } from '../../interfaces/Item';
-import UsableItemReturn from '../../interfaces/UsableItemReturn';
-import { ItemAttributes, SpecialItemInProfile } from '../../interfaces/UserProfile';
-import itemList, { ItemKey } from '../../items/itemList';
-import intReply from '../../utils/intReply';
-import { attributeItemSort } from '../inventars/inventars';
-import { Dialogs } from '../../utils/Dialogs';
+import findUser from '@/economy/findUser';
+import embedTemplate from '@/embeds/embedTemplate';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import errorEmbed from '@/embeds/errorEmbed';
+import { displayAttributes } from '@/embeds/helpers/displayAttributes';
+import itemString, { itemStringCustom } from '@/embeds/helpers/itemString';
+import Item, { AttributeItem, NotSellableItem } from '@/interfaces/Item';
+import UsableItemReturn from '@/interfaces/UsableItemReturn';
+import { ItemAttributes, SpecialItemInProfile } from '@/interfaces/UserProfile';
+import itemList, { ItemKey } from '@/items/itemList';
+import intReply from '@/utils/intReply';
+import { attributeItemSort } from '@/commands/inventars/inventars';
+import { Dialogs } from '@/utils/Dialogs';
 
 function makeEmbed(
   i: ChatInputCommandInteraction | ButtonInteraction,

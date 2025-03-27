@@ -1,12 +1,12 @@
 import { ApplicationCommandOptionType, ChatInputCommandInteraction, EmbedField } from 'discord.js';
-import commandColors from '../../embeds/commandColors';
-import embedTemplate from '../../embeds/embedTemplate';
-import errorEmbed from '../../embeds/errorEmbed';
-import Command from '../../interfaces/Command';
-import intReply from '../../utils/intReply';
-import { KazinoLikme } from '../rulete/rulete';
-import feniksLaimesti from './feniksLaimesti';
-import feniksRun from './feniksRun';
+import commandColors from '@/embeds/commandColors';
+import embedTemplate from '@/embeds/embedTemplate';
+import errorEmbed from '@/embeds/errorEmbed';
+import Command from '@/interfaces/Command';
+import intReply from '@/utils/intReply';
+import { KazinoLikme } from '@/commands/rulete/rulete';
+import feniksLaimesti from '@/commands/feniks/feniksLaimesti';
+import feniksRun from '@/commands/feniks/feniksRun';
 
 export const FENIKS_MIN_LIKME = 20;
 

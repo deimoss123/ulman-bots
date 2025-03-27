@@ -1,16 +1,16 @@
 import { ApplicationCommandOptionType, EmbedField } from 'discord.js';
-import findUser from '../../economy/findUser';
-import getAllUsers from '../../economy/getAllUsers';
-import getStatsMany from '../../economy/stats/getStatsMany';
-import commandColors from '../../embeds/commandColors';
-import embedTemplate from '../../embeds/embedTemplate';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import errorEmbed from '../../embeds/errorEmbed';
-import Command from '../../interfaces/Command';
-import StatsProfile, { UserStats } from '../../interfaces/StatsProfile';
-import intReply from '../../utils/intReply';
-import { sortDataProfile } from '../top/sortData';
-import statsList, { StatsTypes } from './statsList';
+import findUser from '@/economy/findUser';
+import getAllUsers from '@/economy/getAllUsers';
+import getStatsMany from '@/economy/stats/getStatsMany';
+import commandColors from '@/embeds/commandColors';
+import embedTemplate from '@/embeds/embedTemplate';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import errorEmbed from '@/embeds/errorEmbed';
+import Command from '@/interfaces/Command';
+import StatsProfile, { UserStats } from '@/interfaces/StatsProfile';
+import intReply from '@/utils/intReply';
+import { sortDataProfile } from '@/commands/top/sortData';
+import statsList, { StatsTypes } from '@/commands/statistika/statsList';
 
 export function displayPlace(index: number): string {
   return `\`${index + 1}#\``;

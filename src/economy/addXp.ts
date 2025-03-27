@@ -1,9 +1,9 @@
-import User from '../schemas/User';
-import UserProfile from '../interfaces/UserProfile';
-import userCache from '../utils/userCache';
-import findUser from './findUser';
-import levelsList, { LevelReward, MAX_LEVEL, MAX_LEVEL_REWARD_PER_XP } from '../levelingSystem/levelsList';
-import addItems from './addItems';
+import User from '@/schemas/User';
+import UserProfile from '@/interfaces/UserProfile';
+import userCache from '@/utils/userCache';
+import findUser from '@/economy/findUser';
+import levelsList, { LevelReward, MAX_LEVEL, MAX_LEVEL_REWARD_PER_XP } from '@/levelingSystem/levelsList';
+import addItems from '@/economy/addItems';
 import { ClientSession } from 'mongoose';
 
 interface CalcLevelReturn {

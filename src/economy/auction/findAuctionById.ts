@@ -1,5 +1,5 @@
-import AuctionType from '../../interfaces/AuctionType';
-import Auction from '../../schemas/Auction';
+import AuctionType from '@/interfaces/AuctionType';
+import Auction from '@/schemas/Auction';
 
 export default async function findAuctionById(id: string): Promise<AuctionType | void> {
   try {

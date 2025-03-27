@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
-import emoji from '../../utils/emoji';
+import emoji from '@/utils/emoji';
 
 export default function btnPaginationRow(cmd: string, currentPage: number, totalPages: number) {
   const isFirstPage = currentPage === 0;

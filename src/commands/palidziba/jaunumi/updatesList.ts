@@ -1,6 +1,6 @@
 import { APIEmbedField } from 'discord.js';
-import itemString from '../../../embeds/helpers/itemString';
-import itemList from '../../../items/itemList';
+import itemString from '@/embeds/helpers/itemString';
+import itemList from '@/items/itemList';
 
 const updatesList = {
   '4.0': () => ({

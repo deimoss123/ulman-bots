@@ -1,8 +1,8 @@
 import { ClientSession } from 'mongoose';
-import UserProfile from '../interfaces/UserProfile';
-import Stats from '../schemas/Stats';
-import User from '../schemas/User';
-import userCache from '../utils/userCache';
+import UserProfile from '@/interfaces/UserProfile';
+import Stats from '@/schemas/Stats';
+import User from '@/schemas/User';
+import userCache from '@/utils/userCache';
 
 export default async function findUser(
   userId: string,

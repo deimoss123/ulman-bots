@@ -8,47 +8,47 @@ import Item, {
   ShopItem,
   TirgusItem,
   UsableItem,
-} from '../interfaces/Item';
-import virve from './usableItems/virve';
-import divainais_burkans from './usableItems/divainais_burkans';
-import mugursoma, { INCREASE_CAP_1, INV_INCREASE_AMOUNT_1 } from './usableItems/mugursoma';
-import latloto, { latlotoOptions } from './usableItems/latloto';
-import dizloto, { dizlotoOptions } from './usableItems/dizloto';
+} from '@/interfaces/Item';
+import virve from '@/items/usableItems/virve';
+import divainais_burkans from '@/items/usableItems/divainais_burkans';
+import mugursoma, { INCREASE_CAP_1, INV_INCREASE_AMOUNT_1 } from '@/items/usableItems/mugursoma';
+import latloto, { latlotoOptions } from '@/items/usableItems/latloto';
+import dizloto, { dizlotoOptions } from '@/items/usableItems/dizloto';
 import ogukrums, {
   getRandomApliesanasReizes,
   getRandomGrowthTime,
   getRandomMaxOgas,
   getRandomOga,
-} from './usableItems/ogu_krums';
-import kafija from './usableItems/kafija';
-import kafijas_aparats, { kafijasAparatsUseMany } from './usableItems/kafijas_aparats';
-import velo, { veloInfo } from './usableItems/velo';
-import divaina_mugursoma, { INCREASE_CAP_2, INV_NCREASE_AMOUNT_2 } from './usableItems/divaina_mugursoma';
-import petnieks, { getRandFreeSpin, petnieksUseMany } from './usableItems/petnieks';
-import juridiska_zivs, { JURIDISKA_ZIVS_STATUS } from './usableItems/juridiska_zivs';
-import maksekeresData from '../commands/zvejot/makskeresData';
-import makskere, { makskereCustomValue } from './usableItems/makskere';
-import naudas_maiss from './usableItems/naudas_maiss';
-import brivgrieziens, { brivgriezInfo } from './usableItems/brivgrieziens';
-import smilsu_pulkstenis, { ZVEJA_SHIFT_TIME } from './usableItems/smilsu_pulkstenis';
-import nazis, { NAZIS_STATUS_TIME } from './usableItems/nazis';
-import zemenu_rasens, { RASENS_STATUS_TIME } from './usableItems/zemenu_rasens';
-import { statusList } from '../commands/profils';
-import millisToReadableTime from '../embeds/helpers/millisToReadableTime';
-import piena_spainis from './usableItems/piena_spainis';
-import divaina_zivs from './usableItems/divaina_zivs';
-import loto_zivs, { generateFishCount } from './usableItems/loto_zivs';
-import petniekzivs, { PETNIEKZIVS_STATUS_TIME } from './usableItems/petniekzivs';
-import kakis, { foodDataPercentage, kakisFedState, kakisFoodData, KAKIS_MAX_FEED } from './usableItems/kakis';
-import itemString from '../embeds/helpers/itemString';
-import piparkuka from './usableItems/piparkuka';
-import nabagloto, { nabagLotoOptions } from './usableItems/nabagloto';
-import ulmanloto, { ulmanlotoOptions } from './usableItems/ulmanloto';
-import gazes_plits, { GazesPlitsActionType } from './usableItems/gazes_plits';
-import ievarijums from './usableItems/ievarijums';
-import oga, { BerryProperties, ogaInfo } from './usableItems/oga';
-import kruma_sekla from './usableItems/kruma_sekla';
-import emoji from '../utils/emoji';
+} from '@/items/usableItems/ogu_krums';
+import kafija from '@/items/usableItems/kafija';
+import kafijas_aparats, { kafijasAparatsUseMany } from '@/items/usableItems/kafijas_aparats';
+import velo, { veloInfo } from '@/items/usableItems/velo';
+import divaina_mugursoma, { INCREASE_CAP_2, INV_NCREASE_AMOUNT_2 } from '@/items/usableItems/divaina_mugursoma';
+import petnieks, { getRandFreeSpin, petnieksUseMany } from '@/items/usableItems/petnieks';
+import juridiska_zivs, { JURIDISKA_ZIVS_STATUS } from '@/items/usableItems/juridiska_zivs';
+import maksekeresData from '@/commands/zvejot/makskeresData';
+import makskere, { makskereCustomValue } from '@/items/usableItems/makskere';
+import naudas_maiss from '@/items/usableItems/naudas_maiss';
+import brivgrieziens, { brivgriezInfo } from '@/items/usableItems/brivgrieziens';
+import smilsu_pulkstenis, { ZVEJA_SHIFT_TIME } from '@/items/usableItems/smilsu_pulkstenis';
+import nazis, { NAZIS_STATUS_TIME } from '@/items/usableItems/nazis';
+import zemenu_rasens, { RASENS_STATUS_TIME } from '@/items/usableItems/zemenu_rasens';
+import { statusList } from '@/commands/profils';
+import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
+import piena_spainis from '@/items/usableItems/piena_spainis';
+import divaina_zivs from '@/items/usableItems/divaina_zivs';
+import loto_zivs, { generateFishCount } from '@/items/usableItems/loto_zivs';
+import petniekzivs, { PETNIEKZIVS_STATUS_TIME } from '@/items/usableItems/petniekzivs';
+import kakis, { foodDataPercentage, kakisFedState, kakisFoodData, KAKIS_MAX_FEED } from '@/items/usableItems/kakis';
+import itemString from '@/embeds/helpers/itemString';
+import piparkuka from '@/items/usableItems/piparkuka';
+import nabagloto, { nabagLotoOptions } from '@/items/usableItems/nabagloto';
+import ulmanloto, { ulmanlotoOptions } from '@/items/usableItems/ulmanloto';
+import gazes_plits, { GazesPlitsActionType } from '@/items/usableItems/gazes_plits';
+import ievarijums from '@/items/usableItems/ievarijums';
+import oga, { BerryProperties, ogaInfo } from '@/items/usableItems/oga';
+import kruma_sekla from '@/items/usableItems/kruma_sekla';
+import emoji from '@/utils/emoji';
 
 export type ItemKey = string;
 

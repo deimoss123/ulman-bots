@@ -1,8 +1,8 @@
 import { Message } from 'discord.js';
-import findAuctionById from '../economy/auction/findAuctionById';
-import smallEmbed from '../embeds/smallEmbed';
-import izsoleEmbed from './izsoleEmbed';
-import emoji from '../utils/emoji';
+import findAuctionById from '@/economy/auction/findAuctionById';
+import smallEmbed from '@/embeds/smallEmbed';
+import izsoleEmbed from '@/izsoles/izsoleEmbed';
+import emoji from '@/utils/emoji';
 
 export default async function izsolesMsgHandler(msg: Message, apiCommand: string, content: string[]) {
   if (!process.env.AUCTION_CHANNEL) return;

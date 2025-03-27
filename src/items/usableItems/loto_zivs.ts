@@ -1,22 +1,22 @@
 import { ActionRowBuilder, BaseInteraction, ComponentType, StringSelectMenuBuilder } from 'discord.js';
-import addItems from '../../economy/addItems';
-import findUser from '../../economy/findUser';
-import removeItemsById from '../../economy/removeItemsById';
-import commandColors from '../../embeds/commandColors';
-import embedTemplate from '../../embeds/embedTemplate';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import errorEmbed from '../../embeds/errorEmbed';
-import itemString from '../../embeds/helpers/itemString';
-import { UsableItemFunc } from '../../interfaces/Item';
-import intReply from '../../utils/intReply';
-import chance, { ChanceObj, ChanceRecord } from '../helpers/chance';
-import countFreeInvSlots from '../helpers/countFreeInvSlots';
-import itemList, { ItemKey } from '../itemList';
-import UserProfile from '../../interfaces/UserProfile';
-import emoji from '../../utils/emoji';
-import mongoTransaction from '../../utils/mongoTransaction';
-import { Dialogs } from '../../utils/Dialogs';
-import { useDifferentItemHandler, useDifferentItemSelectMenu } from '../../utils/useDifferentItem';
+import addItems from '@/economy/addItems';
+import findUser from '@/economy/findUser';
+import removeItemsById from '@/economy/removeItemsById';
+import commandColors from '@/embeds/commandColors';
+import embedTemplate from '@/embeds/embedTemplate';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import errorEmbed from '@/embeds/errorEmbed';
+import itemString from '@/embeds/helpers/itemString';
+import { UsableItemFunc } from '@/interfaces/Item';
+import intReply from '@/utils/intReply';
+import chance, { ChanceObj, ChanceRecord } from '@/items/helpers/chance';
+import countFreeInvSlots from '@/items/helpers/countFreeInvSlots';
+import itemList, { ItemKey } from '@/items/itemList';
+import UserProfile from '@/interfaces/UserProfile';
+import emoji from '@/utils/emoji';
+import mongoTransaction from '@/utils/mongoTransaction';
+import { Dialogs } from '@/utils/Dialogs';
+import { useDifferentItemHandler, useDifferentItemSelectMenu } from '@/utils/useDifferentItem';
 
 const fishCountChance: ChanceRecord = {
   3: { chance: '*' }, // 0.25

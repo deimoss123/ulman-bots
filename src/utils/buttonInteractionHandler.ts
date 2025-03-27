@@ -1,6 +1,6 @@
 import { ButtonInteraction } from 'discord.js';
-import handleAdventeButton from '../advente/handleAdventeButton';
-import handleIzsolesButtons from '../izsoles/handleIzsolesButtons';
+import handleAdventeButton from '@/advente/handleAdventeButton';
+import handleIzsolesButtons from '@/izsoles/handleIzsolesButtons';
 
 export default async function buttonInteractionHandler(i: ButtonInteraction) {
   const { customId } = i;

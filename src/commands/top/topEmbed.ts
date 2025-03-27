@@ -1,12 +1,12 @@
 import { ChatInputCommandInteraction } from 'discord.js';
-import commandColors from '../../embeds/commandColors';
-import embedTemplate from '../../embeds/embedTemplate';
-import StatsProfile from '../../interfaces/StatsProfile';
-import UserProfile from '../../interfaces/UserProfile';
-import { displayPlace } from '../statistika/statistika';
-import { SortDataProfileEntry } from './sortData';
-import { TOP_USERS_PER_PAGE } from './top';
-import emoji from '../../utils/emoji';
+import commandColors from '@/embeds/commandColors';
+import embedTemplate from '@/embeds/embedTemplate';
+import StatsProfile from '@/interfaces/StatsProfile';
+import UserProfile from '@/interfaces/UserProfile';
+import { displayPlace } from '@/commands/statistika/statistika';
+import { SortDataProfileEntry } from '@/commands/top/sortData';
+import { TOP_USERS_PER_PAGE } from '@/commands/top/top';
+import emoji from '@/utils/emoji';
 
 export default function topEmbed<T extends UserProfile | StatsProfile>(
   i: ChatInputCommandInteraction,

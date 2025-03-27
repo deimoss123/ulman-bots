@@ -1,8 +1,8 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } from 'discord.js';
-import capitalizeFirst from '../../embeds/helpers/capitalizeFirst';
-import UserProfile from '../../interfaces/UserProfile';
-import itemList, { ItemKey } from '../../items/itemList';
-import { calcReqItems } from './tirgus';
+import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
+import UserProfile from '@/interfaces/UserProfile';
+import itemList, { ItemKey } from '@/items/itemList';
+import { calcReqItems } from '@/commands/tirgus/tirgus';
 
 export default function tirgusComponents(
   listings: ItemKey[],

@@ -1,5 +1,5 @@
-import emoji from '../../utils/emoji';
-import loto, { LotoOptions } from './loto';
+import emoji from '@/utils/emoji';
+import loto, { LotoOptions } from '@/items/usableItems/loto';
 
 export const dizlotoOptions: LotoOptions = {
   rows: 3,

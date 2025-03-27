@@ -8,20 +8,20 @@ import {
   time,
   underline,
 } from 'discord.js';
-import UserProfile, { ItemAttributes, UserFishing } from '../../interfaces/UserProfile';
-import { countFish } from './syncFishing';
-import commandColors from '../../embeds/commandColors';
-import embedTemplate from '../../embeds/embedTemplate';
-import itemString from '../../embeds/helpers/itemString';
-import latiString from '../../embeds/helpers/latiString';
-import maksekeresData from './makskeresData';
-import itemList, { ItemCategory } from '../../items/itemList';
-import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
-import emoji from '../../utils/emoji';
-import capitalizeFirst from '../../embeds/helpers/capitalizeFirst';
-import { displayAttributes } from '../../embeds/helpers/displayAttributes';
-import { AttributeItem } from '../../interfaces/Item';
-import { calcRepairCost } from './zvejot';
+import UserProfile, { ItemAttributes, UserFishing } from '@/interfaces/UserProfile';
+import { countFish } from '@/commands/zvejot/syncFishing';
+import commandColors from '@/embeds/commandColors';
+import embedTemplate from '@/embeds/embedTemplate';
+import itemString from '@/embeds/helpers/itemString';
+import latiString from '@/embeds/helpers/latiString';
+import maksekeresData from '@/commands/zvejot/makskeresData';
+import itemList, { ItemCategory } from '@/items/itemList';
+import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
+import emoji from '@/utils/emoji';
+import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
+import { displayAttributes } from '@/embeds/helpers/displayAttributes';
+import { AttributeItem } from '@/interfaces/Item';
+import { calcRepairCost } from '@/commands/zvejot/zvejot';
 
 function zvejaEmojiString() {
   return (

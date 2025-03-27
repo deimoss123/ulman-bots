@@ -1,13 +1,13 @@
 import { ChatInputCommandInteraction } from 'discord.js';
-import commandColors from '../../embeds/commandColors';
-import embedTemplate from '../../embeds/embedTemplate';
-import itemString from '../../embeds/helpers/itemString';
-import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
-import Item, { TirgusItem } from '../../interfaces/Item';
-import UserProfile from '../../interfaces/UserProfile';
-import itemList, { ItemKey } from '../../items/itemList';
-import { calcReqItems } from './tirgus';
-import emoji from '../../utils/emoji';
+import commandColors from '@/embeds/commandColors';
+import embedTemplate from '@/embeds/embedTemplate';
+import itemString from '@/embeds/helpers/itemString';
+import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
+import Item, { TirgusItem } from '@/interfaces/Item';
+import UserProfile from '@/interfaces/UserProfile';
+import itemList, { ItemKey } from '@/items/itemList';
+import { calcReqItems } from '@/commands/tirgus/tirgus';
+import emoji from '@/utils/emoji';
 
 function mapPrice(itemObj: Item, user: UserProfile): string {
   const tirgusPrice = (itemObj as Item & TirgusItem).tirgusPrice;

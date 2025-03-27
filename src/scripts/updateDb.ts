@@ -1,5 +1,5 @@
-import User from '../schemas/User';
-import mongo from '../utils/mongo';
+import User from '@/schemas/User';
+import mongo from '@/utils/mongo';
 import 'dotenv/config';
 
 // sūdīga funkcija lai atjaunotu datubāzi ar jaunajiem mantu atribūtiem

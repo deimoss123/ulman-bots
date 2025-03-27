@@ -1,9 +1,9 @@
 import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonStyle, time } from 'discord.js';
-import itemString from '../embeds/helpers/itemString';
-import latiString from '../embeds/helpers/latiString';
-import AuctionType from '../interfaces/AuctionType';
-import itemList from '../items/itemList';
-import emoji from '../utils/emoji';
+import itemString from '@/embeds/helpers/itemString';
+import latiString from '@/embeds/helpers/latiString';
+import AuctionType from '@/interfaces/AuctionType';
+import itemList from '@/items/itemList';
+import emoji from '@/utils/emoji';
 
 export const ULMANBOTA_ROLE_ID = '905377993633955930';
 

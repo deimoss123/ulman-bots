@@ -1,12 +1,12 @@
-import Command from '../interfaces/Command';
+import Command from '@/interfaces/Command';
 import { ApplicationCommandOptionType } from 'discord.js';
-import embedTemplate from '../embeds/embedTemplate';
-import itemString from '../embeds/helpers/itemString';
-import addItem from '../economy/addItems';
-import wrongKeyEmbed from '../embeds/wrongKeyEmbed';
-import itemList from '../items/itemList';
-import intReply from '../utils/intReply';
-import allItemAutocomplete from './info/allItemAutocomplete';
+import embedTemplate from '@/embeds/embedTemplate';
+import itemString from '@/embeds/helpers/itemString';
+import addItem from '@/economy/addItems';
+import wrongKeyEmbed from '@/embeds/wrongKeyEmbed';
+import itemList from '@/items/itemList';
+import intReply from '@/utils/intReply';
+import allItemAutocomplete from '@/commands/info/allItemAutocomplete';
 
 const _addItem: Command = {
   devOnly: true,

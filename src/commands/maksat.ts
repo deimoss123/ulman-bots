@@ -1,18 +1,18 @@
-import Command from '../interfaces/Command';
+import Command from '@/interfaces/Command';
 import { ApplicationCommandOptionType } from 'discord.js';
-import findUser from '../economy/findUser';
-import embedTemplate from '../embeds/embedTemplate';
-import latiString from '../embeds/helpers/latiString';
-import errorEmbed from '../embeds/errorEmbed';
-import addLati from '../economy/addLati';
-import ephemeralReply from '../embeds/ephemeralReply';
-import commandColors from '../embeds/commandColors';
-import setStats from '../economy/stats/setStats';
-import intReply from '../utils/intReply';
-import mongoTransaction from '../utils/mongoTransaction';
-import addXp from '../economy/addXp';
-import addSpecialItems from '../economy/addSpecialItems';
-import editItemAttribute from '../economy/editItemAttribute';
+import findUser from '@/economy/findUser';
+import embedTemplate from '@/embeds/embedTemplate';
+import latiString from '@/embeds/helpers/latiString';
+import errorEmbed from '@/embeds/errorEmbed';
+import addLati from '@/economy/addLati';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import commandColors from '@/embeds/commandColors';
+import setStats from '@/economy/stats/setStats';
+import intReply from '@/utils/intReply';
+import mongoTransaction from '@/utils/mongoTransaction';
+import addXp from '@/economy/addXp';
+import addSpecialItems from '@/economy/addSpecialItems';
+import editItemAttribute from '@/economy/editItemAttribute';
 
 const maksat: Command = {
   description: () =>

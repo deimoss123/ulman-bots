@@ -1,23 +1,23 @@
-import Command from '../../interfaces/Command';
+import Command from '@/interfaces/Command';
 import { ApplicationCommandOptionType } from 'discord.js';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import findUser from '../../economy/findUser';
-import errorEmbed from '../../embeds/errorEmbed';
-import itemString from '../../embeds/helpers/itemString';
-import embedTemplate from '../../embeds/embedTemplate';
-import addItems from '../../economy/addItems';
-import commandColors from '../../embeds/commandColors';
-import iedotAutocomplete from './iedotAutocomplete';
-import itemList from '../../items/itemList';
-import wrongKeyEmbed from '../../embeds/wrongKeyEmbed';
-import latiString from '../../embeds/helpers/latiString';
-import addLati from '../../economy/addLati';
-import iedotRunSpecial, { noInvSpaceEmbed } from './iedotRunSpecial';
-import Item from '../../interfaces/Item';
-import UserProfile from '../../interfaces/UserProfile';
-import setStats from '../../economy/stats/setStats';
-import countFreeInvSlots from '../../items/helpers/countFreeInvSlots';
-import intReply from '../../utils/intReply';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import findUser from '@/economy/findUser';
+import errorEmbed from '@/embeds/errorEmbed';
+import itemString from '@/embeds/helpers/itemString';
+import embedTemplate from '@/embeds/embedTemplate';
+import addItems from '@/economy/addItems';
+import commandColors from '@/embeds/commandColors';
+import iedotAutocomplete from '@/commands/iedot/iedotAutocomplete';
+import itemList from '@/items/itemList';
+import wrongKeyEmbed from '@/embeds/wrongKeyEmbed';
+import latiString from '@/embeds/helpers/latiString';
+import addLati from '@/economy/addLati';
+import iedotRunSpecial, { noInvSpaceEmbed } from '@/commands/iedot/iedotRunSpecial';
+import Item from '@/interfaces/Item';
+import UserProfile from '@/interfaces/UserProfile';
+import setStats from '@/economy/stats/setStats';
+import countFreeInvSlots from '@/items/helpers/countFreeInvSlots';
+import intReply from '@/utils/intReply';
 
 export function cantPayTaxEmbed(itemToGive: Item, amountToGive: number, totalTax: number, user: UserProfile) {
   return ephemeralReply(

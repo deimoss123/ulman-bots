@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { DiscountedItems } from '../itemList';
+import { DiscountedItems } from '@/items/itemList';
 
 export default async function getDiscounts(): Promise<DiscountedItems | null> {
   try {

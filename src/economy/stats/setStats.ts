@@ -1,6 +1,6 @@
 import { ClientSession } from 'mongoose';
-import { UserStats } from '../../interfaces/StatsProfile';
-import Stats from '../../schemas/Stats';
+import { UserStats } from '@/interfaces/StatsProfile';
+import Stats from '@/schemas/Stats';
 
 type StatsParam = Partial<Record<keyof UserStats, number | `=${number}`>>;
 

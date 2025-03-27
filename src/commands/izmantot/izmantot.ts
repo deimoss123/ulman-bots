@@ -1,14 +1,14 @@
-import Command from '../../interfaces/Command';
-import commandColors from '../../embeds/commandColors';
+import Command from '@/interfaces/Command';
+import commandColors from '@/embeds/commandColors';
 import { ApplicationCommandOptionType } from 'discord.js';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import itemString from '../../embeds/helpers/itemString';
-import izmantotRun from './izmantotRun';
-import izmantotAutocomplete from './izmantotAutocomplete';
-import itemList from '../../items/itemList';
-import wrongKeyEmbed from '../../embeds/wrongKeyEmbed';
-import { UsableItem } from '../../interfaces/Item';
-import intReply from '../../utils/intReply';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import itemString from '@/embeds/helpers/itemString';
+import izmantotRun from '@/commands/izmantot/izmantotRun';
+import izmantotAutocomplete from '@/commands/izmantot/izmantotAutocomplete';
+import itemList from '@/items/itemList';
+import wrongKeyEmbed from '@/embeds/wrongKeyEmbed';
+import { UsableItem } from '@/interfaces/Item';
+import intReply from '@/utils/intReply';
 
 const izmantot: Command = {
   description: () =>

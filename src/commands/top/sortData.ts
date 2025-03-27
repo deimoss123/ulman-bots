@@ -1,10 +1,10 @@
-import UserProfile from '../../interfaces/UserProfile';
+import UserProfile from '@/interfaces/UserProfile';
 import { ProjectionType } from 'mongoose';
-import { getInvValue } from '../inventars/inventars';
-import latiString from '../../embeds/helpers/latiString';
-import levelsList, { MAX_LEVEL } from '../../levelingSystem/levelsList';
-import StatsProfile from '../../interfaces/StatsProfile';
-import { spinCountDisplayValue } from '../statistika/statsList';
+import { getInvValue } from '@/commands/inventars/inventars';
+import latiString from '@/embeds/helpers/latiString';
+import levelsList, { MAX_LEVEL } from '@/levelingSystem/levelsList';
+import StatsProfile from '@/interfaces/StatsProfile';
+import { spinCountDisplayValue } from '@/commands/statistika/statsList';
 
 export interface SortDataProfileEntry<T extends UserProfile | StatsProfile> {
   projection: ProjectionType<T>;

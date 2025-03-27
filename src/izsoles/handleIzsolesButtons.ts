@@ -1,7 +1,7 @@
 import { ButtonInteraction } from 'discord.js';
-import findAuctionById from '../economy/auction/findAuctionById';
-import errorEmbed from '../embeds/errorEmbed';
-import intReply from '../utils/intReply';
+import findAuctionById from '@/economy/auction/findAuctionById';
+import errorEmbed from '@/embeds/errorEmbed';
+import intReply from '@/utils/intReply';
 
 export default async function handleIzsolesButtons(i: ButtonInteraction) {
   const [, auctionId, increaseAmount, totalAmount] = i.customId.split('-') as

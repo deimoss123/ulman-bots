@@ -1,7 +1,7 @@
-import commandColors from '../../embeds/commandColors';
-import Command from '../../interfaces/Command';
-import ruleteData, { RulPosition } from './ruleteData';
-import ruleteRun from './ruleteRun';
+import commandColors from '@/embeds/commandColors';
+import Command from '@/interfaces/Command';
+import ruleteData, { RulPosition } from '@/commands/rulete/ruleteData';
+import ruleteRun from '@/commands/rulete/ruleteRun';
 
 export type KazinoLikme = 'viss' | 'virve' | number;
 

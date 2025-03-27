@@ -1,6 +1,6 @@
 import { model, Schema } from 'mongoose';
-import { AkcijaChartTimes } from '../commands/economyCommands/akcijas/akcijasList';
-import AkcijaType from '../interfaces/AkcijaType';
+import { AkcijaChartTimes } from '@/commands/economyCommands/akcijas/akcijasList';
+import AkcijaType from '@/interfaces/AkcijaType';
 
 const reqStr = {
   type: String,

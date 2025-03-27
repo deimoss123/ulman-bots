@@ -7,24 +7,24 @@ import {
   ChatInputCommandInteraction,
   ComponentType,
 } from 'discord.js';
-import addLati from '../../economy/addLati';
-import findUser from '../../economy/findUser';
-import setStats from '../../economy/stats/setStats';
-import commandColors from '../../embeds/commandColors';
-import embedTemplate from '../../embeds/embedTemplate';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import errorEmbed from '../../embeds/errorEmbed';
-import itemString from '../../embeds/helpers/itemString';
-import latiString from '../../embeds/helpers/latiString';
-import itemList from '../../items/itemList';
-import intReply from '../../utils/intReply';
-import generateRulete, { GenerateRuleteRes } from './generateRulete';
-import { KazinoLikme } from './rulete';
-import { RulColors, RulPosition, rulPositions } from './ruleteData';
-import emoji from '../../utils/emoji';
-import UserProfile from '../../interfaces/UserProfile';
-import mongoTransaction from '../../utils/mongoTransaction';
-import { Dialogs } from '../../utils/Dialogs';
+import addLati from '@/economy/addLati';
+import findUser from '@/economy/findUser';
+import setStats from '@/economy/stats/setStats';
+import commandColors from '@/embeds/commandColors';
+import embedTemplate from '@/embeds/embedTemplate';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import errorEmbed from '@/embeds/errorEmbed';
+import itemString from '@/embeds/helpers/itemString';
+import latiString from '@/embeds/helpers/latiString';
+import itemList from '@/items/itemList';
+import intReply from '@/utils/intReply';
+import generateRulete, { GenerateRuleteRes } from '@/commands/rulete/generateRulete';
+import { KazinoLikme } from '@/commands/rulete/rulete';
+import { RulColors, RulPosition, rulPositions } from '@/commands/rulete/ruleteData';
+import emoji from '@/utils/emoji';
+import UserProfile from '@/interfaces/UserProfile';
+import mongoTransaction from '@/utils/mongoTransaction';
+import { Dialogs } from '@/utils/Dialogs';
 
 const colorsLat: Record<RulColors, string> = {
   black: 'melns',

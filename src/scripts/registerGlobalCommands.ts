@@ -1,8 +1,8 @@
 import { Client, GatewayIntentBits } from 'discord.js';
-import { commandList } from '../utils/commandList';
-import validateEnv from '../utils/validateEnv';
+import { commandList } from '@/utils/commandList';
+import validateEnv from '@/utils/validateEnv';
 import chalk from 'chalk';
-import { getPalidzibaChoices } from '../commands/palidziba/palidziba';
+import { getPalidzibaChoices } from '@/commands/palidziba/palidziba';
 
 async function registerGuildCommands(client: Client) {
   client

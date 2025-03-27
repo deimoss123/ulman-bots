@@ -1,11 +1,11 @@
 import { ApplicationCommandOptionType } from 'discord.js';
-import commandColors from '../../embeds/commandColors';
-import embedTemplate from '../../embeds/embedTemplate';
-import errorEmbed from '../../embeds/errorEmbed';
-import Command from '../../interfaces/Command';
-import intReply from '../../utils/intReply';
-import { commandList } from '../../utils/commandList';
-import jaunumi from './jaunumi/jaunumi';
+import commandColors from '@/embeds/commandColors';
+import embedTemplate from '@/embeds/embedTemplate';
+import errorEmbed from '@/embeds/errorEmbed';
+import Command from '@/interfaces/Command';
+import intReply from '@/utils/intReply';
+import { commandList } from '@/utils/commandList';
+import jaunumi from '@/commands/palidziba/jaunumi/jaunumi';
 
 export function getPalidzibaChoices() {
   return commandList

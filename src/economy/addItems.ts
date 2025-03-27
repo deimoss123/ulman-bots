@@ -1,8 +1,8 @@
-import findUser from './findUser';
-import User from '../schemas/User';
-import UserProfile from '../interfaces/UserProfile';
-import userCache from '../utils/userCache';
-import itemList, { ItemKey } from '../items/itemList';
+import findUser from '@/economy/findUser';
+import User from '@/schemas/User';
+import UserProfile from '@/interfaces/UserProfile';
+import userCache from '@/utils/userCache';
+import itemList, { ItemKey } from '@/items/itemList';
 import { ClientSession } from 'mongoose';
 
 export default async function addItems(

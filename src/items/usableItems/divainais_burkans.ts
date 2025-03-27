@@ -9,19 +9,19 @@ import {
   TextInputBuilder,
   TextInputStyle,
 } from 'discord.js';
-import addLati from '../../economy/addLati';
-import editItemAttribute from '../../economy/editItemAttribute';
-import findUser from '../../economy/findUser';
-import buttonHandler from '../../embeds/buttonHandler';
-import embedTemplate from '../../embeds/embedTemplate';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import errorEmbed from '../../embeds/errorEmbed';
-import itemString from '../../embeds/helpers/itemString';
-import latiString from '../../embeds/helpers/latiString';
-import smallEmbed from '../../embeds/smallEmbed';
-import { UsableItemFunc } from '../../interfaces/Item';
-import intReply from '../../utils/intReply';
-import itemList from '../itemList';
+import addLati from '@/economy/addLati';
+import editItemAttribute from '@/economy/editItemAttribute';
+import findUser from '@/economy/findUser';
+import buttonHandler from '@/embeds/buttonHandler';
+import embedTemplate from '@/embeds/embedTemplate';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import errorEmbed from '@/embeds/errorEmbed';
+import itemString from '@/embeds/helpers/itemString';
+import latiString from '@/embeds/helpers/latiString';
+import smallEmbed from '@/embeds/smallEmbed';
+import { UsableItemFunc } from '@/interfaces/Item';
+import intReply from '@/utils/intReply';
+import itemList from '@/items/itemList';
 
 const BURKANS_CHANGE_NAME_COST = 250;
 

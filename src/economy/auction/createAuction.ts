@@ -1,7 +1,7 @@
 import axios from 'axios';
-import AuctionType from '../../interfaces/AuctionType';
-import { ItemAttributes } from '../../interfaces/UserProfile';
-import Auction from '../../schemas/Auction';
+import AuctionType from '@/interfaces/AuctionType';
+import { ItemAttributes } from '@/interfaces/UserProfile';
+import Auction from '@/schemas/Auction';
 
 export default async function createAuction(
   clientId: string,

@@ -1,12 +1,12 @@
-import Command from '../interfaces/Command';
+import Command from '@/interfaces/Command';
 import { ApplicationCommandOptionType } from 'discord.js';
-import findUser from '../economy/findUser';
-import embedTemplate from '../embeds/embedTemplate';
-import errorEmbed from '../embeds/errorEmbed';
-import latiString from '../embeds/helpers/latiString';
-import userString from '../embeds/helpers/userString';
-import commandColors from '../embeds/commandColors';
-import intReply from '../utils/intReply';
+import findUser from '@/economy/findUser';
+import embedTemplate from '@/embeds/embedTemplate';
+import errorEmbed from '@/embeds/errorEmbed';
+import latiString from '@/embeds/helpers/latiString';
+import userString from '@/embeds/helpers/userString';
+import commandColors from '@/embeds/commandColors';
+import intReply from '@/utils/intReply';
 
 const maks: Command = {
   description: () => 'Apskatīties savu vai kāda lietotāja maku (latu daudzumu)',

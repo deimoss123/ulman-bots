@@ -1,14 +1,14 @@
 import { ActionRowBuilder, BaseInteraction, ComponentType, StringSelectMenuBuilder } from 'discord.js';
-import findUser from '../../economy/findUser';
-import errorEmbed from '../../embeds/errorEmbed';
-import Command from '../../interfaces/Command';
-import UserProfile from '../../interfaces/UserProfile';
-import { Dialogs } from '../../utils/Dialogs';
-import intReply from '../../utils/intReply';
-import embedTemplate from '../../embeds/embedTemplate';
-import capitalizeFirst from '../../embeds/helpers/capitalizeFirst';
-import * as metalluznuNodosanasPunkts from './metalluznuNodosanasPunkts';
-import * as ievarijumuStends from './ievarijumuStends';
+import findUser from '@/economy/findUser';
+import errorEmbed from '@/embeds/errorEmbed';
+import Command from '@/interfaces/Command';
+import UserProfile from '@/interfaces/UserProfile';
+import { Dialogs } from '@/utils/Dialogs';
+import intReply from '@/utils/intReply';
+import embedTemplate from '@/embeds/embedTemplate';
+import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
+import * as metalluznuNodosanasPunkts from '@/commands/ipasumi/metalluznuNodosanasPunkts';
+import * as ievarijumuStends from '@/commands/ipasumi/ievarijumuStends';
 
 const ALL_PROPERTIES = {
   metalluznuNodosanasPunkts: {

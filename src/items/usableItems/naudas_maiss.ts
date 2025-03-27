@@ -1,4 +1,4 @@
-import { UsableItemFunc } from '../../interfaces/Item';
+import { UsableItemFunc } from '@/interfaces/Item';
 
 const naudas_maiss: UsableItemFunc = () => ({
   text:

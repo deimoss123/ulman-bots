@@ -7,24 +7,24 @@ import {
   ChatInputCommandInteraction,
   ComponentType,
 } from 'discord.js';
-import findUser from '../../economy/findUser';
-import errorEmbed from '../../embeds/errorEmbed';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import itemString from '../../embeds/helpers/itemString';
-import latiString from '../../embeds/helpers/latiString';
-import countFreeInvSlots from '../../items/helpers/countFreeInvSlots';
-import addLati from '../../economy/addLati';
-import addItems from '../../economy/addItems';
-import embedTemplate from '../../embeds/embedTemplate';
-import itemList from '../../items/itemList';
-import buttonHandler from '../../embeds/buttonHandler';
-import izmantotRun from '../izmantot/izmantotRun';
-import getItemPrice from '../../items/helpers/getItemPrice';
-import { PIRKT_PARDOT_NODOKLIS } from '../pardot/pardot';
-import checkUserSpecialItems from '../../items/helpers/checkUserSpecialItems';
-import setStats from '../../economy/stats/setStats';
-import getDiscounts from '../../items/helpers/getDiscounts';
-import intReply from '../../utils/intReply';
+import findUser from '@/economy/findUser';
+import errorEmbed from '@/embeds/errorEmbed';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import itemString from '@/embeds/helpers/itemString';
+import latiString from '@/embeds/helpers/latiString';
+import countFreeInvSlots from '@/items/helpers/countFreeInvSlots';
+import addLati from '@/economy/addLati';
+import addItems from '@/economy/addItems';
+import embedTemplate from '@/embeds/embedTemplate';
+import itemList from '@/items/itemList';
+import buttonHandler from '@/embeds/buttonHandler';
+import izmantotRun from '@/commands/izmantot/izmantotRun';
+import getItemPrice from '@/items/helpers/getItemPrice';
+import { PIRKT_PARDOT_NODOKLIS } from '@/commands/pardot/pardot';
+import checkUserSpecialItems from '@/items/helpers/checkUserSpecialItems';
+import setStats from '@/economy/stats/setStats';
+import getDiscounts from '@/items/helpers/getDiscounts';
+import intReply from '@/utils/intReply';
 
 type State = {};
 

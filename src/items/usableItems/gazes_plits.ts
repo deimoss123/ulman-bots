@@ -6,23 +6,23 @@ import {
   ComponentType,
   StringSelectMenuBuilder,
 } from 'discord.js';
-import findUser from '../../economy/findUser';
-import errorEmbed from '../../embeds/errorEmbed';
-import Item, { UsableItemFunc } from '../../interfaces/Item';
-import intReply from '../../utils/intReply';
-import embedTemplate from '../../embeds/embedTemplate';
-import { Dialogs } from '../../utils/Dialogs';
-import itemList, { ItemKey } from '../itemList';
-import UserProfile from '../../interfaces/UserProfile';
-import itemString from '../../embeds/helpers/itemString';
-import capitalizeFirst from '../../embeds/helpers/capitalizeFirst';
-import commandColors from '../../embeds/commandColors';
-import { calcIevarijumsPrice } from './ievarijums';
-import { BerryProperties, berryProperties, propertiesLat } from './oga';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import smallEmbed from '../../embeds/smallEmbed';
-import editItemAttribute from '../../economy/editItemAttribute';
-import addItems from '../../economy/addItems';
+import findUser from '@/economy/findUser';
+import errorEmbed from '@/embeds/errorEmbed';
+import Item, { UsableItemFunc } from '@/interfaces/Item';
+import intReply from '@/utils/intReply';
+import embedTemplate from '@/embeds/embedTemplate';
+import { Dialogs } from '@/utils/Dialogs';
+import itemList, { ItemKey } from '@/items/itemList';
+import UserProfile from '@/interfaces/UserProfile';
+import itemString from '@/embeds/helpers/itemString';
+import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
+import commandColors from '@/embeds/commandColors';
+import { calcIevarijumsPrice } from '@/items/usableItems/ievarijums';
+import { BerryProperties, berryProperties, propertiesLat } from '@/items/usableItems/oga';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import smallEmbed from '@/embeds/smallEmbed';
+import editItemAttribute from '@/economy/editItemAttribute';
+import addItems from '@/economy/addItems';
 
 export type GazesPlitsActionType = '' | 'cook' | 'boil_ievarijums' | 'boil_special_ievarijums';
 

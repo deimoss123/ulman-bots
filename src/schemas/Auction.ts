@@ -1,6 +1,6 @@
 import { model, Schema, SchemaDefinitionProperty } from 'mongoose';
-import AuctionType from '../interfaces/AuctionType';
-import { ItemAttributesSchema } from './User';
+import AuctionType from '@/interfaces/AuctionType';
+import { ItemAttributesSchema } from '@/schemas/User';
 
 const reqStr: SchemaDefinitionProperty = {
   type: String,

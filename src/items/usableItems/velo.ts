@@ -7,20 +7,20 @@ import {
   ComponentType,
   EmbedBuilder,
 } from 'discord.js';
-import addItems from '../../economy/addItems';
-import addXp from '../../economy/addXp';
-import findUser from '../../economy/findUser';
-import buttonHandler from '../../embeds/buttonHandler';
-import embedTemplate from '../../embeds/embedTemplate';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import errorEmbed from '../../embeds/errorEmbed';
-import itemString from '../../embeds/helpers/itemString';
-import xpAddedEmbed from '../../embeds/helpers/xpAddedEmbed';
-import { UsableItemFunc } from '../../interfaces/Item';
-import { ItemInProfile } from '../../interfaces/UserProfile';
-import intReply from '../../utils/intReply';
-import itemList, { ItemKey } from '../itemList';
-import emoji from '../../utils/emoji';
+import addItems from '@/economy/addItems';
+import addXp from '@/economy/addXp';
+import findUser from '@/economy/findUser';
+import buttonHandler from '@/embeds/buttonHandler';
+import embedTemplate from '@/embeds/embedTemplate';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import errorEmbed from '@/embeds/errorEmbed';
+import itemString from '@/embeds/helpers/itemString';
+import xpAddedEmbed from '@/embeds/helpers/xpAddedEmbed';
+import { UsableItemFunc } from '@/interfaces/Item';
+import { ItemInProfile } from '@/interfaces/UserProfile';
+import intReply from '@/utils/intReply';
+import itemList, { ItemKey } from '@/items/itemList';
+import emoji from '@/utils/emoji';
 
 const VELO_XP = 10;
 

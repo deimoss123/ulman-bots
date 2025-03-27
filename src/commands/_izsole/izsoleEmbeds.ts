@@ -6,12 +6,12 @@ import {
   InteractionReplyOptions,
   time,
 } from 'discord.js';
-import embedTemplate from '../../embeds/embedTemplate';
-import itemString from '../../embeds/helpers/itemString';
-import latiString from '../../embeds/helpers/latiString';
-import AuctionType from '../../interfaces/AuctionType';
-import { ItemAttributes } from '../../interfaces/UserProfile';
-import itemList, { ItemKey } from '../../items/itemList';
+import embedTemplate from '@/embeds/embedTemplate';
+import itemString from '@/embeds/helpers/itemString';
+import latiString from '@/embeds/helpers/latiString';
+import AuctionType from '@/interfaces/AuctionType';
+import { ItemAttributes } from '@/interfaces/UserProfile';
+import itemList, { ItemKey } from '@/items/itemList';
 
 const izsoleConfirmComponents = new ActionRowBuilder<ButtonBuilder>().addComponents(
   new ButtonBuilder().setCustomId('izsole_create_yes').setLabel('Jā').setStyle(ButtonStyle.Primary),

@@ -1,6 +1,6 @@
-import findUser from '../../economy/findUser';
-import { UsableItemFunc } from '../../interfaces/Item';
-import { ItemKey } from '../itemList';
+import findUser from '@/economy/findUser';
+import { UsableItemFunc } from '@/interfaces/Item';
+import { ItemKey } from '@/items/itemList';
 
 interface IZivs {
   attributes: {

@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
     "outDir": "./dist",
     "types": ["bun-types"],
     "lib": ["esnext"],
@@ -13,10 +12,12 @@
     "esModuleInterop": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
-  "paths": {
-    "*": ["src/types/environment.d.ts"]
-  },
-  "exclude": ["node_modules"]
+  "include": ["src/**/*", "src/types/**/*.d.ts"], // Explicitly include source and type definition files
+  "exclude": ["node_modules", "dist"] // Ensure dist is excluded if you ever set noEmit to false
 }

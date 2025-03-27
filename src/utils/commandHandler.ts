@@ -1,4 +1,4 @@
-import { commandList } from '../utils/commandList';
+import { commandList } from '@/utils/commandList';
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -8,15 +8,15 @@ import {
   MessageFlags,
   PermissionsBitField,
 } from 'discord.js';
-import errorEmbed from '../embeds/errorEmbed';
-import interactionCache from '../utils/interactionCache';
-import ephemeralReply from '../embeds/ephemeralReply';
-import logCommand from '../utils/logCommand';
-import findUser from '../economy/findUser';
-import millisToReadableTime from '../embeds/helpers/millisToReadableTime';
-import resetDailyCooldown from '../economy/resetDailyCooldown';
-import smallEmbed from '../embeds/smallEmbed';
-import intReply from '../utils/intReply';
+import errorEmbed from '@/embeds/errorEmbed';
+import interactionCache from '@/utils/interactionCache';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import logCommand from '@/utils/logCommand';
+import findUser from '@/economy/findUser';
+import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
+import resetDailyCooldown from '@/economy/resetDailyCooldown';
+import smallEmbed from '@/embeds/smallEmbed';
+import intReply from '@/utils/intReply';
 
 export default async function commandHandler(i: ChatInputCommandInteraction) {
   if (!i.inGuild() || !i.guild) {

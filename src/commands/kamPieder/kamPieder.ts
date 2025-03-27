@@ -1,11 +1,11 @@
 import { ApplicationCommandOptionType } from 'discord.js';
-import commandColors from '../../embeds/commandColors';
-import wrongKeyEmbed from '../../embeds/wrongKeyEmbed';
-import Command from '../../interfaces/Command';
-import itemList from '../../items/itemList';
-import intReply from '../../utils/intReply';
-import allItemAutocomplete from '../info/allItemAutocomplete';
-import kamPiederRun from './kamPiederRun';
+import commandColors from '@/embeds/commandColors';
+import wrongKeyEmbed from '@/embeds/wrongKeyEmbed';
+import Command from '@/interfaces/Command';
+import itemList from '@/items/itemList';
+import intReply from '@/utils/intReply';
+import allItemAutocomplete from '@/commands/info/allItemAutocomplete';
+import kamPiederRun from '@/commands/kamPieder/kamPiederRun';
 
 const kamPieder: Command = {
   description: () => 'Redzēt kuriem lietotājiem pieder noteikta manta',

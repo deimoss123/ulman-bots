@@ -1,16 +1,16 @@
 import { ButtonInteraction, MessageFlags } from 'discord.js';
-import addItems from '../economy/addItems';
-import addLati from '../economy/addLati';
-import findUser from '../economy/findUser';
-import setUser from '../economy/setUser';
-import ephemeralReply from '../embeds/ephemeralReply';
-import errorEmbed from '../embeds/errorEmbed';
-import itemString from '../embeds/helpers/itemString';
-import latiString from '../embeds/helpers/latiString';
-import checkUserSpecialItems from '../items/helpers/checkUserSpecialItems';
-import countFreeInvSlots from '../items/helpers/countFreeInvSlots';
-import intReply from '../utils/intReply';
-import calendarRewards from './calendarRewards';
+import addItems from '@/economy/addItems';
+import addLati from '@/economy/addLati';
+import findUser from '@/economy/findUser';
+import setUser from '@/economy/setUser';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import errorEmbed from '@/embeds/errorEmbed';
+import itemString from '@/embeds/helpers/itemString';
+import latiString from '@/embeds/helpers/latiString';
+import checkUserSpecialItems from '@/items/helpers/checkUserSpecialItems';
+import countFreeInvSlots from '@/items/helpers/countFreeInvSlots';
+import intReply from '@/utils/intReply';
+import calendarRewards from '@/advente/calendarRewards';
 
 export default async function handleAdventeButton(i: ButtonInteraction) {
   const date = new Date();

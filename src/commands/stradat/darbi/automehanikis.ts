@@ -1,4 +1,4 @@
-import StradatInteractions from '../../../interfaces/StradatInteraction';
+import StradatInteractions from '@/interfaces/StradatInteraction';
 
 const automehanikis: StradatInteractions = {
   atputa: {

@@ -1,14 +1,14 @@
 import { ApplicationCommandOptionType } from 'discord.js';
-import findAuctionById from '../../economy/auction/findAuctionById';
-import ephemeralReply from '../../embeds/ephemeralReply';
-import errorEmbed from '../../embeds/errorEmbed';
-import Command from '../../interfaces/Command';
-import izsoleEmbed from '../../izsoles/izsoleEmbed';
-import intReply from '../../utils/intReply';
-import allItemAutocomplete from '../info/allItemAutocomplete';
-import izsoleCreate from './izsoleCreate';
-import izsoleList from './IzsoleList';
-import izsolesDelete from './izsolesDelete';
+import findAuctionById from '@/economy/auction/findAuctionById';
+import ephemeralReply from '@/embeds/ephemeralReply';
+import errorEmbed from '@/embeds/errorEmbed';
+import Command from '@/interfaces/Command';
+import izsoleEmbed from '@/izsoles/izsoleEmbed';
+import intReply from '@/utils/intReply';
+import allItemAutocomplete from '@/commands/info/allItemAutocomplete';
+import izsoleCreate from '@/commands/_izsole/izsoleCreate';
+import izsoleList from '@/commands/_izsole/IzsoleList';
+import izsolesDelete from '@/commands/_izsole/izsolesDelete';
 
 const izsole: Command = {
   devOnly: true,

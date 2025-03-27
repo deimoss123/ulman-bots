@@ -1,6 +1,6 @@
-import itemString from '../../embeds/helpers/itemString';
-import UserProfile from '../../interfaces/UserProfile';
-import itemList, { ItemCategory, ItemKey } from '../itemList';
+import itemString from '@/embeds/helpers/itemString';
+import UserProfile from '@/interfaces/UserProfile';
+import itemList, { ItemCategory, ItemKey } from '@/items/itemList';
 
 const FISHING_ROD_MAX_PER_USER = 15;
 const SPECIAL_ITEM_MAX_PER_USER = 20;

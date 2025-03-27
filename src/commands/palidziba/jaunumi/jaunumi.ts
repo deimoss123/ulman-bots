@@ -6,12 +6,12 @@ import {
   EmbedField,
   StringSelectMenuBuilder,
 } from 'discord.js';
-import commandColors from '../../../embeds/commandColors';
-import embedTemplate, { ULMANBOTA_VERSIJA } from '../../../embeds/embedTemplate';
-import intReply from '../../../utils/intReply';
-import updatesList, { VersionString } from './updatesList';
-import { Dialogs } from '../../../utils/Dialogs';
-import errorEmbed from '../../../embeds/errorEmbed';
+import commandColors from '@/embeds/commandColors';
+import embedTemplate, { ULMANBOTA_VERSIJA } from '@/embeds/embedTemplate';
+import intReply from '@/utils/intReply';
+import updatesList, { VersionString } from '@/commands/palidziba/jaunumi/updatesList';
+import { Dialogs } from '@/utils/Dialogs';
+import errorEmbed from '@/embeds/errorEmbed';
 
 type State = {
   selectedVersion: VersionString;

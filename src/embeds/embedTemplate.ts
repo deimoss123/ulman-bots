@@ -11,7 +11,7 @@ import {
   MessageActionRowComponentBuilder,
   MessageActionRowComponentData,
 } from 'discord.js';
-import updatesList, { VersionString } from '../commands/palidziba/jaunumi/updatesList';
+import updatesList, { VersionString } from '@/commands/palidziba/jaunumi/updatesList';
 
 interface EmbedTemplateOptions {
   i: BaseInteraction;

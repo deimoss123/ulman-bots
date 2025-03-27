@@ -2,19 +2,19 @@
 //praktiski visu šo šizofrēniju ir veidojis bumbotajs (ar "mazu" deimosa palīdzību)
 
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } from 'discord.js';
-import editItemAttribute from '../../economy/editItemAttribute';
-import findUser from '../../economy/findUser';
-import buttonHandler from '../../embeds/buttonHandler';
-import embedTemplate from '../../embeds/embedTemplate';
-import errorEmbed from '../../embeds/errorEmbed';
-import itemString from '../../embeds/helpers/itemString';
-import smallEmbed from '../../embeds/smallEmbed';
-import { UsableItemFunc, item } from '../../interfaces/Item';
-import intReply from '../../utils/intReply';
-import itemList, { ItemKey } from '../itemList';
-import millisToReadableTime from '../../embeds/helpers/millisToReadableTime';
-import addItems from '../../economy/addItems';
-import { SpecialItemInProfile } from '../../interfaces/UserProfile';
+import editItemAttribute from '@/economy/editItemAttribute';
+import findUser from '@/economy/findUser';
+import buttonHandler from '@/embeds/buttonHandler';
+import embedTemplate from '@/embeds/embedTemplate';
+import errorEmbed from '@/embeds/errorEmbed';
+import itemString from '@/embeds/helpers/itemString';
+import smallEmbed from '@/embeds/smallEmbed';
+import { UsableItemFunc, item } from '@/interfaces/Item';
+import intReply from '@/utils/intReply';
+import itemList, { ItemKey } from '@/items/itemList';
+import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
+import addItems from '@/economy/addItems';
+import { SpecialItemInProfile } from '@/interfaces/UserProfile';
 
 //ogu rekinasana
 //no currTime atnemt lastUsed un tad dalīt ar augasnas laiku un tad floorosu

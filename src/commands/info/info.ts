@@ -1,22 +1,22 @@
 import { ApplicationCommandOptionType, EmbedField } from 'discord.js';
-import commandColors from '../../embeds/commandColors';
-import embedTemplate from '../../embeds/embedTemplate';
-import errorEmbed from '../../embeds/errorEmbed';
-import itemString from '../../embeds/helpers/itemString';
-import latiString from '../../embeds/helpers/latiString';
-import wrongKeyEmbed from '../../embeds/wrongKeyEmbed';
-import Command from '../../interfaces/Command';
-import Item, { TirgusItem } from '../../interfaces/Item';
-import getDiscounts from '../../items/helpers/getDiscounts';
-import getItemPrice from '../../items/helpers/getItemPrice';
-import itemList, { ItemCategory } from '../../items/itemList';
-import intReply from '../../utils/intReply';
-import { ItemType, itemTypes } from '../inventars/inventars';
-import maksekeresData from '../zvejot/makskeresData';
-import allItemAutocomplete from './allItemAutocomplete';
-import { LotoOptions } from '../../items/usableItems/loto';
-import updatesList from '../palidziba/jaunumi/updatesList';
-import emoji from '../../utils/emoji';
+import commandColors from '@/embeds/commandColors';
+import embedTemplate from '@/embeds/embedTemplate';
+import errorEmbed from '@/embeds/errorEmbed';
+import itemString from '@/embeds/helpers/itemString';
+import latiString from '@/embeds/helpers/latiString';
+import wrongKeyEmbed from '@/embeds/wrongKeyEmbed';
+import Command from '@/interfaces/Command';
+import Item, { TirgusItem } from '@/interfaces/Item';
+import getDiscounts from '@/items/helpers/getDiscounts';
+import getItemPrice from '@/items/helpers/getItemPrice';
+import itemList, { ItemCategory } from '@/items/itemList';
+import intReply from '@/utils/intReply';
+import { ItemType, itemTypes } from '@/commands/inventars/inventars';
+import maksekeresData from '@/commands/zvejot/makskeresData';
+import allItemAutocomplete from '@/commands/info/allItemAutocomplete';
+import { LotoOptions } from '@/items/usableItems/loto';
+import updatesList from '@/commands/palidziba/jaunumi/updatesList';
+import emoji from '@/utils/emoji';
 
 const info: Command = {
   description: () =>
