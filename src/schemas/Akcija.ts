@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { AkcijaChartTimes } from "@/commands/economyCommands/akcijas/akcijasList";
+import { AkcijaChartTimes } from "@/commands/akcijas/akcijasList";
 import AkcijaType from "@/types/AkcijaType";
 
 const reqStr = {

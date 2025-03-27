@@ -1,7 +1,7 @@
 import maksekeresData from "@/commands/zvejot/makskeresData";
 import { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
 import itemList, { ItemKey } from "@/utils/itemList";
-import { cookableItems } from "@/items/usableItems/gazes_plits";
+import { cookableItems } from "@/items/gazes_plits";
 import { KAFIJAS_APARATS_COOLDOWN } from "@/items/kafijas_aparats";
 import { kakisFedState } from "@/items/kakis";
 import { PETNIEKS_COOLDOWN } from "@/items/petnieks";
