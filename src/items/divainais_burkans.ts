@@ -11,6 +11,7 @@ import smallEmbed from "@/utils/embeds/smallEmbed";
 import emoji from "@/utils/emoji";
 import intReply from "@/utils/intReply";
 import mongoTransaction from "@/utils/mongoTransaction";
+import daudzskaitlis from "@/utils/strings/daudzkaitlis";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import {
@@ -47,7 +48,7 @@ function view({ user, attributes }: State, i: BaseInteraction) {
     description:
       "Tu nokodies dīvaino burkānu, **mmmm** tas bija ļoti garšīgs\n" +
       `Šis burkāns ir nokosts **${attributes.timesUsed}** ` +
-      `reiz${attributes.timesUsed! % 10 === 1 && attributes.timesUsed! % 100 !== 11 ? "i" : "es"}`,
+      daudzskaitlis(attributes.timesUsed!, "reizi", "reizes"),
     components: [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()

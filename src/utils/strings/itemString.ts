@@ -3,6 +3,7 @@ import Item from "@/types/Item";
 import { ItemAttributes } from "@/types/UserProfile";
 import itemList, { ItemKey } from "@/utils/itemList";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
+import daudzskaitlis from "@/utils/strings/daudzkaitlis";
 
 export function makeEmojiString(emoji: APIMessageComponentEmoji) {
   return `<${emoji.animated ? "a" : ""}:${emoji.name}:${emoji.id}>`;
@@ -37,6 +38,8 @@ export default function itemString(
   const emojiStr = emoji || "❓";
 
   let name = "";
+
+  // TODO: šo vajadzētu pārvietot uz pašām mantām
   if (customName) {
     switch (item.nameNomVsk) {
       case "dīvainais burkāns":
@@ -54,15 +57,11 @@ export default function itemString(
       : `${emojiStr} ${capitalizeFirst(name || item.nameNomVsk)}`;
   }
 
-  let result: string;
-
-  // vienskaitlis
-  if (amount % 10 === 1 && amount % 100 !== 11 && amount !== 0) {
-    result = akuzativs ? item.nameAkuVsk : item.nameNomVsk;
-  } else {
-    // daudzskaitlis
-    result = akuzativs ? item.nameAkuDsk : item.nameNomDsk;
-  }
+  const result = daudzskaitlis(
+    amount,
+    akuzativs ? item.nameAkuVsk : item.nameNomVsk,
+    akuzativs ? item.nameAkuDsk : item.nameNomDsk,
+  );
 
   return `${emojiStr} ${amount} ${capitalizeFirst(name || result)}`;
 }

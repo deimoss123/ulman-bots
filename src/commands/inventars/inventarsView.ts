@@ -7,6 +7,7 @@ import userString from "@/utils/strings/userString";
 import commandColors from "@/utils/commandColors";
 import btnPaginationRow from "@/utils/embeds/btnPaginationRow";
 import itemList from "@/utils/itemList";
+import daudzskaitlis from "@/utils/strings/daudzkaitlis";
 
 export type InventarsState = {
   targetDiscordUser: User;
@@ -79,7 +80,7 @@ export function inventarsView(state: InventarsState, i: BaseInteraction) {
     description:
       items.length + specialItems.length
         ? `**${state.itemCount}** ` +
-          (state.itemCount % 10 === 1 && state.itemCount % 100 !== 11 ? "manta" : "mantas") +
+          daudzskaitlis(state.itemCount, "manta", "mantas") +
           ` no **${itemCap}**\n` +
           `Inventāra vērtība: ${latiString(state.totalInvValue, false, true)}\n\n` +
           state.itemTypesInInv.map((t) => `-# ${itemTypes[t].emoji()} - ${itemTypes[t].textCompact}\n`).join("") +

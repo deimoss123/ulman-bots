@@ -11,6 +11,7 @@ import latiString from "@/utils/strings/latiString";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import { dabutOguInfo, dabutKrumaInfo } from "@/items/ogu_krums";
 import { ItemCategory } from "@/types/Item";
+import daudzskaitlis from "@/utils/strings/daudzkaitlis";
 
 // palīgu funkcija, lai ietītu tekstu vienā no diviem stringiem
 // pēdējais parametrs nosaka kurā wrappot, šis vnk uztaisa īsāku un lasāmāku (?) kodu
@@ -27,9 +28,7 @@ export function displayAttributes(item: SpecialItemInProfile, inline = false) {
 
   const attributesLat: Record<ItemKey, (attributes: Required<ItemAttributes>) => string> = {
     divainais_burkans: ({ timesUsed }) =>
-      // `Nokosts ${inline ? '' : '**'}${timesUsed}${inline ? '' : '**'} ` +
-      `Nokosts ${wrap(timesUsed, "", "**", inline)} ` +
-      `reiz${timesUsed % 10 === 1 && timesUsed % 100 !== 11 ? "i" : "es"}`,
+      `Nokosts ${wrap(timesUsed, "", "**", inline)} ${daudzskaitlis(timesUsed, "reizi", "reizes")}`,
 
     kafijas_aparats: ({ lastUsed }) => {
       if (currTime - lastUsed >= KAFIJAS_APARATS_COOLDOWN) {

@@ -1,11 +1,8 @@
+import daudzskaitlis from "@/utils/strings/daudzkaitlis";
+
 export default function latiString(lati: number, akuzativs = false, bold = false): string {
-  const latiStr = bold ? `**${Math.floor(lati)}**` : Math.floor(lati);
+  const count = bold ? `**${Math.floor(lati)}**` : Math.floor(lati);
+  const text = daudzskaitlis(lati, akuzativs ? "latu" : "lats", akuzativs ? "latus" : "lati");
 
-  // vienskaitlis
-  if (lati % 10 === 1 && lati % 100 !== 11) {
-    return akuzativs ? `${latiStr} latu` : `${latiStr} lats`;
-  }
-
-  // daudzskaitlis
-  return akuzativs ? `${latiStr} latus` : `${latiStr} lati`;
+  return `${count} ${text}`;
 }
