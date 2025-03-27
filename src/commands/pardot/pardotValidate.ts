@@ -1,13 +1,13 @@
-import UserProfile from '@/interfaces/UserProfile';
-import Item from '@/interfaces/Item';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import itemString from '@/embeds/helpers/itemString';
-import { ChatInputCommandInteraction } from 'discord.js';
-import wrongKeyEmbed from '@/embeds/wrongKeyEmbed';
-import itemList from '@/items/itemList';
-import pardotRunSpecial from '@/commands/pardot/pardotRunSpecial';
-import { emptyInvEmbed } from '@/commands/pardot/pardot';
-import intReply from '@/utils/intReply';
+import UserProfile from "@/interfaces/UserProfile";
+import Item from "@/interfaces/Item";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import itemString from "@/embeds/helpers/itemString";
+import { ChatInputCommandInteraction } from "discord.js";
+import wrongKeyEmbed from "@/embeds/wrongKeyEmbed";
+import itemList from "@/items/itemList";
+import pardotRunSpecial from "@/commands/pardot/pardotRunSpecial";
+import { emptyInvEmbed } from "@/commands/pardot/pardot";
+import intReply from "@/utils/intReply";
 
 interface PardotValidateReturn {
   key: string;
@@ -22,7 +22,7 @@ async function pardotValidate(
   amountToSell: number,
   embedColor: number,
 ): Promise<PardotValidateReturn | undefined> {
-  if (itemToSellKey === 'no-items-inv') {
+  if (itemToSellKey === "no-items-inv") {
     await intReply(i, emptyInvEmbed());
     return;
   }
@@ -33,15 +33,15 @@ async function pardotValidate(
     return;
   }
 
-  if ('notSellable' in itemToSell) {
+  if ("notSellable" in itemToSell) {
     await intReply(i, ephemeralReply(`**${itemString(itemToSell, null, true)}** nevar pārdot`));
     return;
   }
 
   const { items, specialItems } = user;
 
-  if ('attributes' in itemToSell) {
-    const specialItemsInv = specialItems.filter(item => item.name === itemToSellKey);
+  if ("attributes" in itemToSell) {
+    const specialItemsInv = specialItems.filter((item) => item.name === itemToSellKey);
     if (!specialItemsInv.length) {
       await intReply(i, ephemeralReply(`Tavā inventārā nav **${itemString(itemToSell)}**`));
       return;

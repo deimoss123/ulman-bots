@@ -11,26 +11,26 @@ import {
   TextInputBuilder,
   TextInputStyle,
   time,
-} from 'discord.js';
-import addItems from '@/economy/addItems';
-import editItemAttribute from '@/economy/editItemAttribute';
-import findUser from '@/economy/findUser';
-import commandColors from '@/embeds/commandColors';
-import embedTemplate from '@/embeds/embedTemplate';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import errorEmbed from '@/embeds/errorEmbed';
-import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
-import itemString from '@/embeds/helpers/itemString';
-import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
-import smallEmbed from '@/embeds/smallEmbed';
-import { UsableItemFunc } from '@/interfaces/Item';
-import UserProfile, { ItemAttributes, SpecialItemInProfile } from '@/interfaces/UserProfile';
-import intReply from '@/utils/intReply';
-import countFreeInvSlots from '@/items/helpers/countFreeInvSlots';
-import itemList, { ItemKey } from '@/items/itemList';
-import { Dialogs } from '@/utils/Dialogs';
-import mongoTransaction from '@/utils/mongoTransaction';
-import { useDifferentItemHandler, useDifferentItemSelectMenu } from '@/utils/useDifferentItem';
+} from "discord.js";
+import addItems from "@/economy/addItems";
+import editItemAttribute from "@/economy/editItemAttribute";
+import findUser from "@/economy/findUser";
+import commandColors from "@/embeds/commandColors";
+import embedTemplate from "@/embeds/embedTemplate";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import errorEmbed from "@/embeds/errorEmbed";
+import capitalizeFirst from "@/embeds/helpers/capitalizeFirst";
+import itemString from "@/embeds/helpers/itemString";
+import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import smallEmbed from "@/embeds/smallEmbed";
+import { UsableItemFunc } from "@/interfaces/Item";
+import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/interfaces/UserProfile";
+import intReply from "@/utils/intReply";
+import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
+import itemList, { ItemKey } from "@/items/itemList";
+import { Dialogs } from "@/utils/Dialogs";
+import mongoTransaction from "@/utils/mongoTransaction";
+import { useDifferentItemHandler, useDifferentItemSelectMenu } from "@/utils/useDifferentItem";
 
 export const kakisFedState: {
   time: number;
@@ -38,27 +38,27 @@ export const kakisFedState: {
 }[] = [
   {
     time: 216_000_000, // 60h
-    name: 'Aptaukojies 😎',
+    name: "Aptaukojies 😎",
   },
   {
     time: 172_800_000, // 48h
-    name: 'Pieēdies 😋',
+    name: "Pieēdies 😋",
   },
   {
     time: 129_600_000, // 36h
-    name: 'Labi paēdis 😃',
+    name: "Labi paēdis 😃",
   },
   {
     time: 86_400_000, // 24h
-    name: 'Apmierināts 🙂',
+    name: "Apmierināts 🙂",
   },
   {
     time: 43_200_000, // 12h
-    name: 'Izsalcis 🥺',
+    name: "Izsalcis 🥺",
   },
   {
     time: 0,
-    name: 'ĻOTI IZSALCIS 😡',
+    name: "ĻOTI IZSALCIS 😡",
   },
 ];
 
@@ -90,8 +90,8 @@ function catFedPercentage(fedUntil: number, currTime: number) {
 
 function deadTime(createdAt: number, fedUntil: number) {
   return (
-    `**${time(new Date(createdAt), 't')}** ${time(new Date(createdAt), 'd')} **―** ` +
-    `**${time(new Date(fedUntil), 't')}** ${time(new Date(fedUntil), 'd')}`
+    `**${time(new Date(createdAt), "t")}** ${time(new Date(createdAt), "d")} **―** ` +
+    `**${time(new Date(fedUntil), "t")}** ${time(new Date(fedUntil), "d")}`
   );
 }
 
@@ -104,12 +104,12 @@ type State = {
 };
 
 const enum ComponentId {
-  SelectFood = 'kakis_select_food',
-  Feed = 'kakis_feed',
-  ChangeName = 'kakis_change_name',
+  SelectFood = "kakis_select_food",
+  Feed = "kakis_feed",
+  ChangeName = "kakis_change_name",
 
-  AddHat = 'kakis_add_hat',
-  RemoveHat = 'kakis_remove_hat',
+  AddHat = "kakis_add_hat",
+  RemoveHat = "kakis_remove_hat",
 }
 
 function view(state: State, i: BaseInteraction) {
@@ -128,18 +128,18 @@ function view(state: State, i: BaseInteraction) {
   if (!foodInInv.length && !buttonRow && !isDead) {
     buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
-        .setLabel('Tev nav ar ko pabarot kaķi')
-        .setCustomId('_')
+        .setLabel("Tev nav ar ko pabarot kaķi")
+        .setCustomId("_")
         .setStyle(ButtonStyle.Danger)
         .setDisabled(true),
     );
   }
 
-  if (catFedPercentage(fedUntil!, state.currTime) === '100%' && !buttonRow && !isDead) {
+  if (catFedPercentage(fedUntil!, state.currTime) === "100%" && !buttonRow && !isDead) {
     buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
-        .setLabel('Kaķis ir maksimāli piebarots')
-        .setCustomId('_1')
+        .setLabel("Kaķis ir maksimāli piebarots")
+        .setCustomId("_1")
         .setStyle(ButtonStyle.Danger)
         .setDisabled(true),
     );
@@ -150,7 +150,7 @@ function view(state: State, i: BaseInteraction) {
       new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
         new StringSelectMenuBuilder()
           .setCustomId(ComponentId.SelectFood)
-          .setPlaceholder('Izvēlies ēdienu')
+          .setPlaceholder("Izvēlies ēdienu")
           .addOptions(
             foodInInv.map(({ name, amount }) => {
               // const { nameNomVsk, emoji } = itemList[name];
@@ -158,7 +158,7 @@ function view(state: State, i: BaseInteraction) {
                 label: `${capitalizeFirst(itemList[name].nameNomVsk)} ${foodDataPercentage(name)}`,
                 description: `Tev ir ${amount}`,
                 value: name,
-                emoji: itemList[name].emoji() || '❓',
+                emoji: itemList[name].emoji() || "❓",
                 default: name === state.selectedFood,
               };
             }),
@@ -175,25 +175,25 @@ function view(state: State, i: BaseInteraction) {
     );
   }
 
-  const nameTagInInv = state.user.items.find(({ name }) => name === 'kaka_parsaucejs');
+  const nameTagInInv = state.user.items.find(({ name }) => name === "kaka_parsaucejs");
   if (nameTagInInv) {
     const changeNameBtn = new ButtonBuilder()
-      .setLabel('Mainīt kaķa vārdu')
+      .setLabel("Mainīt kaķa vārdu")
       .setCustomId(ComponentId.ChangeName)
       .setStyle(ButtonStyle.Primary)
-      .setEmoji(itemList.kaka_parsaucejs.emoji() || '❓');
+      .setEmoji(itemList.kaka_parsaucejs.emoji() || "❓");
 
     if (buttonRow) buttonRow.addComponents(changeNameBtn);
     else buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(changeNameBtn);
   }
 
-  const hatInInv = state.user.items.find(({ name }) => name === 'salaveca_cepure');
+  const hatInInv = state.user.items.find(({ name }) => name === "salaveca_cepure");
 
   if (hat || hatInInv) {
     const hatBtn = new ButtonBuilder()
       .setCustomId(hat ? ComponentId.RemoveHat : ComponentId.AddHat)
-      .setLabel(hat ? 'Novilkt cepuri' : 'Uzvilkt cepuri')
-      .setEmoji(itemList.salaveca_cepure.emoji() || '❓')
+      .setLabel(hat ? "Novilkt cepuri" : "Uzvilkt cepuri")
+      .setEmoji(itemList.salaveca_cepure.emoji() || "❓")
       .setStyle(ButtonStyle.Primary);
 
     if (buttonRow) buttonRow.addComponents(hatBtn);
@@ -202,19 +202,19 @@ function view(state: State, i: BaseInteraction) {
 
   if (buttonRow) components.push(buttonRow);
 
-  if (state.user.specialItems.filter(({ name }) => name === 'kakis').length > 1) {
-    components.push(useDifferentItemSelectMenu(state.user, 'kakis', state.itemId));
+  if (state.user.specialItems.filter(({ name }) => name === "kakis").length > 1) {
+    components.push(useDifferentItemSelectMenu(state.user, "kakis", state.itemId));
   }
 
   return embedTemplate({
     i,
-    content: '\u200b',
+    content: "\u200b",
     color: commandColors.izmantot,
-    title: `Izmantot: ${itemString(itemList.kakis, null, true, state.attributes)} ${isDead ? '(miris)' : ''}`,
+    title: `Izmantot: ${itemString(itemList.kakis, null, true, state.attributes)} ${isDead ? "(miris)" : ""}`,
     description: isDead
       ? `🪦 ${deadTime(createdAt!, fedUntil!)}`
       : `Vecums: **${millisToReadableTime(state.currTime - createdAt!)}**\n` +
-        `Garastāvoklis: **${kakisFedState.find(s => fedUntil! - state.currTime > s.time)?.name}** ` +
+        `Garastāvoklis: **${kakisFedState.find((s) => fedUntil! - state.currTime > s.time)?.name}** ` +
         `(${catFedPercentage(fedUntil!, state.currTime)})`,
     components,
   });
@@ -230,13 +230,13 @@ async function handleCatModal(
     return;
   }
 
-  const nameTagInInv = user.items.find(({ name }) => name === 'kaka_parsaucejs');
+  const nameTagInInv = user.items.find(({ name }) => name === "kaka_parsaucejs");
   if (!nameTagInInv) {
-    intReply(i, ephemeralReply(`Tavā inventārā nav **${itemString('kaka_parsaucejs')}**`));
+    intReply(i, ephemeralReply(`Tavā inventārā nav **${itemString("kaka_parsaucejs")}**`));
     return;
   }
 
-  const split = i.customId.split('_');
+  const split = i.customId.split("_");
   const catId = split[split.length - 2];
   const modalCurrTime = +split[split.length - 1];
 
@@ -244,16 +244,16 @@ async function handleCatModal(
     return;
   }
 
-  const newName = i.fields.getTextInputValue('cat_modal_input').trim();
+  const newName = i.fields.getTextInputValue("cat_modal_input").trim();
 
-  const catPrev = user.specialItems.find(item => item._id === catId);
+  const catPrev = user.specialItems.find((item) => item._id === catId);
   if (!catPrev) {
     intReply(i, errorEmbed);
     return;
   }
 
   if (newName === catPrev.attributes.customName) {
-    intReply(i, ephemeralReply('Jaunajam kaķa vārdam ir jāatšķiras no vecā'));
+    intReply(i, ephemeralReply("Jaunajam kaķa vārdam ir jāatšķiras no vecā"));
     return;
   }
 
@@ -273,9 +273,9 @@ async function handleCatModal(
   intReply(
     i,
     smallEmbed(
-      'Kaķa vārds veiksmīgi nomainīts\n' +
-        `No: ${itemString('kakis', null, false, catPrev.attributes)}\n` +
-        `Uz: **${itemString('kakis', null, false, newItem.attributes)}**`,
+      "Kaķa vārds veiksmīgi nomainīts\n" +
+        `No: ${itemString("kakis", null, false, catPrev.attributes)}\n` +
+        `Uz: **${itemString("kakis", null, false, newItem.attributes)}**`,
       0xffffff,
     ),
   );
@@ -296,7 +296,7 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => ({
       selectedFood: null,
     };
 
-    const dialogs = new Dialogs(i, initialState, view, 'izmantot', { time: 60000 });
+    const dialogs = new Dialogs(i, initialState, view, "izmantot", { time: 60000 });
 
     if (!(await dialogs.start())) {
       return intReply(i, errorEmbed);
@@ -318,8 +318,8 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => ({
       state.currTime = Date.now();
       state.attributes = catInInv.attributes;
 
-      if (customId === 'use_different' && componentType === ComponentType.StringSelect) {
-        return useDifferentItemHandler(user, 'kakis', int);
+      if (customId === "use_different" && componentType === ComponentType.StringSelect) {
+        return useDifferentItemHandler(user, "kakis", int);
       }
 
       if (customId === ComponentId.SelectFood && componentType === ComponentType.StringSelect) {
@@ -341,7 +341,7 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => ({
         }
 
         if (catInInv.attributes!.fedUntil! < state.currTime) {
-          intReply(int, 'Tu nevari pabarot šo kaķi, jo tas tikko nomira :(');
+          intReply(int, "Tu nevari pabarot šo kaķi, jo tas tikko nomira :(");
           return { edit: true, end: true };
         }
 
@@ -374,9 +374,9 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => ({
       }
 
       if (customId === ComponentId.ChangeName) {
-        const nameTagInInv = user.items.find(({ name }) => name === 'kaka_parsaucejs');
+        const nameTagInInv = user.items.find(({ name }) => name === "kaka_parsaucejs");
         if (!nameTagInInv) {
-          intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString('kaka_parsaucejs')}**`));
+          intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString("kaka_parsaucejs")}**`));
           return { edit: true };
         }
 
@@ -385,12 +385,12 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => ({
         await int.showModal(
           new ModalBuilder()
             .setCustomId(modalId)
-            .setTitle('Mainīt kaķa nosaukumu')
+            .setTitle("Mainīt kaķa nosaukumu")
             .addComponents(
               new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
                 new TextInputBuilder()
-                  .setCustomId('cat_modal_input')
-                  .setLabel('Jaunais nosaukums')
+                  .setCustomId("cat_modal_input")
+                  .setLabel("Jaunais nosaukums")
                   .setStyle(TextInputStyle.Short)
                   .setMinLength(1)
                   .setMaxLength(10),
@@ -400,7 +400,7 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => ({
 
         try {
           const modalInt = await int.awaitModalSubmit({
-            filter: i => i.customId == modalId,
+            filter: (i) => i.customId == modalId,
             time: 50000,
           });
 
@@ -422,8 +422,8 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => ({
 
       // totāli nav kopēts kods no pētnieka
       if (customId === ComponentId.AddHat) {
-        if (!user.items.find(({ name }) => name === 'salaveca_cepure')) {
-          intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString('salaveca_cepure')}**`));
+        if (!user.items.find(({ name }) => name === "salaveca_cepure")) {
+          intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString("salaveca_cepure")}**`));
           return { edit: true };
         }
 
@@ -443,25 +443,25 @@ const kakis: UsableItemFunc = async (userId, guildId, _, specialItem) => ({
         state.attributes = newItem.attributes;
         state.currTime = Date.now();
 
-        intReply(int, smallEmbed(`Tu kaķim uzvilki **${itemString('salaveca_cepure', null, true)}**`, color));
+        intReply(int, smallEmbed(`Tu kaķim uzvilki **${itemString("salaveca_cepure", null, true)}**`, color));
 
         return { edit: true };
       }
 
       if (customId === ComponentId.RemoveHat) {
-        if (catInInv.attributes.hat !== 'salaveca_cepure') {
-          intReply(int, ephemeralReply('Kļūda, šim kaķim nav uzvilkta cepure'));
+        if (catInInv.attributes.hat !== "salaveca_cepure") {
+          intReply(int, ephemeralReply("Kļūda, šim kaķim nav uzvilkta cepure"));
           return {};
         }
 
         if (!countFreeInvSlots(user)) {
-          intReply(int, ephemeralReply('Tu nevari kaķim novilkt cepuri, jo tev nav brīvu vietu inventārā'));
+          intReply(int, ephemeralReply("Tu nevari kaķim novilkt cepuri, jo tev nav brīvu vietu inventārā"));
           return {};
         }
 
-        const { ok, values } = await mongoTransaction(session => [
+        const { ok, values } = await mongoTransaction((session) => [
           () => addItems(userId, guildId, { salaveca_cepure: 1 }, session),
-          () => editItemAttribute(userId, guildId, catInInv._id!, { ...catInInv.attributes, hat: '' }, session),
+          () => editItemAttribute(userId, guildId, catInInv._id!, { ...catInInv.attributes, hat: "" }, session),
         ]);
 
         if (!ok) return { error: true };

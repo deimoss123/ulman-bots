@@ -1,70 +1,70 @@
-import StradatInteractions from '@/interfaces/StradatInteraction';
+import StradatInteractions from "@/interfaces/StradatInteraction";
 
 const veikala_darbinieks: StradatInteractions = {
   kase: {
-    chance: '*',
-    text: 'Tu apkalpo klientus pie kases',
+    chance: "*",
+    text: "Tu apkalpo klientus pie kases",
     options: [
       {
-        label: 'Skenēt preces',
-        customId: 'kase_skenet',
+        label: "Skenēt preces",
+        customId: "kase_skenet",
         result: {
           a: {
-            chance: '*',
-            text: 'Tu noskenēji preces un saņēmi algu',
+            chance: "*",
+            text: "Tu noskenēji preces un saņēmi algu",
             reward: { lati: [15, 25] },
           },
         },
       },
       {
         label: 'Paprasīt "Paldies" karti',
-        customId: 'kase_paldies_karte',
+        customId: "kase_paldies_karte",
         result: {
           a: {
-            chance: '*',
+            chance: "*",
             text: 'Pircējam nebija "Paldies" karte',
             reward: { lati: [15, 25] },
           },
           b: {
-            chance: '*',
+            chance: "*",
             text: 'Pircējs izvilka "Paldies" karti un to iedeva tev',
             reward: { lati: [15, 25] },
           },
           c: {
-            chance: '*',
+            chance: "*",
             text: 'Pircējs tev paskaidroja ka jūs pašlaik atrodaties veikalā "Rimi"',
             reward: { lati: [15, 25] },
           },
         },
       },
       {
-        label: 'No kases aparāta nozagt naudu',
-        customId: 'kase_zagt',
+        label: "No kases aparāta nozagt naudu",
+        customId: "kase_zagt",
         result: {
           a: {
             chance: 0.3,
-            text: 'Tev izdevās nozagt nedaudz naudu',
+            text: "Tev izdevās nozagt nedaudz naudu",
             reward: { lati: [50, 70] },
           },
           b: {
-            chance: '*',
-            text: 'Tevi pieķēra un aizsūtīja mājās',
+            chance: "*",
+            text: "Tevi pieķēra un aizsūtīja mājās",
             reward: null,
           },
         },
       },
       {
-        label: 'Nozagt Latloto biļeti',
-        customId: 'kase_latloto',
+        label: "Nozagt Latloto biļeti",
+        customId: "kase_latloto",
         result: {
           a: {
             chance: 0.2,
-            text: 'Tev izdevās nozagt latloto biļeti',
+            text: "Tev izdevās nozagt latloto biļeti",
             reward: { items: { latloto: 1 } },
           },
           b: {
-            chance: '*',
-            text: 'Tevi pieķēra un aizsūtīja mājās',
+            chance: "*",
+            text: "Tevi pieķēra un aizsūtīja mājās",
             reward: null,
           },
         },
@@ -72,37 +72,37 @@ const veikala_darbinieks: StradatInteractions = {
     ],
   },
   plaukti: {
-    chance: '*',
-    text: 'Tev šodien ir jākrāmē veikala plaukti',
+    chance: "*",
+    text: "Tev šodien ir jākrāmē veikala plaukti",
     options: [
       {
-        label: 'Ielikt plauktā preces',
-        customId: 'plaukti_preces',
+        label: "Ielikt plauktā preces",
+        customId: "plaukti_preces",
         result: {
           a: {
-            chance: '*',
-            text: 'Tu ieliki plauktā preces un saņēmi algu',
+            chance: "*",
+            text: "Tu ieliki plauktā preces un saņēmi algu",
             reward: { lati: [15, 25] },
           },
         },
       },
       {
-        label: 'No plaukta censties kaut ko nozagt',
-        customId: 'plaukti_zagt',
+        label: "No plaukta censties kaut ko nozagt",
+        customId: "plaukti_zagt",
         result: {
           a: {
-            chance: '*',
-            text: 'Tevi pieķēra un aizsūtīja mājās',
+            chance: "*",
+            text: "Tevi pieķēra un aizsūtīja mājās",
             reward: null,
           },
           b: {
             chance: 0.2,
-            text: 'No plaukta tev izdevās nozagt rasenu',
+            text: "No plaukta tev izdevās nozagt rasenu",
             reward: { items: { zemenu_rasens: 1 } },
           },
           c: {
             chance: 0.1,
-            text: 'No plaukta tev izdevās nozagt nazi',
+            text: "No plaukta tev izdevās nozagt nazi",
             reward: { items: { nazis: 1 } },
           },
         },
@@ -111,31 +111,31 @@ const veikala_darbinieks: StradatInteractions = {
   },
   partraukums: {
     chance: 0.2,
-    text: 'Tu pašlaik esi pusdienu pārtraukumā, šeit arī stāv kafijas aparāts',
+    text: "Tu pašlaik esi pusdienu pārtraukumā, šeit arī stāv kafijas aparāts",
     options: [
       {
-        label: 'Godīgi paēst pusdienas',
-        customId: 'partraukums_paest',
+        label: "Godīgi paēst pusdienas",
+        customId: "partraukums_paest",
         result: {
           a: {
-            chance: '*',
-            text: 'Pusdienās tu apēdi burkānu salātus kas bija **mmmm** garšīgi',
+            chance: "*",
+            text: "Pusdienās tu apēdi burkānu salātus kas bija **mmmm** garšīgi",
             reward: null,
           },
         },
       },
       {
-        label: 'Nozagt kafiju no aparāta',
-        customId: 'partraukums_kafija',
+        label: "Nozagt kafiju no aparāta",
+        customId: "partraukums_kafija",
         result: {
           a: {
             chance: 0.5,
-            text: 'Tev izdevās nozagt kafiju, bet kolēģis uz tevi dīvaini paskatījās',
+            text: "Tev izdevās nozagt kafiju, bet kolēģis uz tevi dīvaini paskatījās",
             reward: { items: { kafija: 1 } },
           },
           b: {
-            chance: '*',
-            text: 'Tu centies nozagt kafiju, bet nervozi to izlēji uz grīdas',
+            chance: "*",
+            text: "Tu centies nozagt kafiju, bet nervozi to izlēji uz grīdas",
             reward: null,
           },
         },
@@ -144,26 +144,26 @@ const veikala_darbinieks: StradatInteractions = {
   },
   tualete: {
     chance: 0.2,
-    text: 'Priekšniekam šodien ir slikts garastāvoklis un tev ir licis tīrīt darbinieku tualetes',
+    text: "Priekšniekam šodien ir slikts garastāvoklis un tev ir licis tīrīt darbinieku tualetes",
     options: [
       {
-        label: 'Tīrīt tualeti',
-        customId: 'tualete_tirit',
+        label: "Tīrīt tualeti",
+        customId: "tualete_tirit",
         result: {
           a: {
-            chance: '*',
-            text: 'Tu nelaimīgs iztīrīji tualetes podu',
+            chance: "*",
+            text: "Tu nelaimīgs iztīrīji tualetes podu",
             reward: { lati: [20, 30] },
           },
         },
       },
       {
         label: 'Pateikt priekšniekam "nē"',
-        customId: 'tualete_atteikties',
+        customId: "tualete_atteikties",
         result: {
           a: {
-            chance: '*',
-            text: 'Priekšnieks tevi aizsūtīja mājās',
+            chance: "*",
+            text: "Priekšnieks tevi aizsūtīja mājās",
             reward: null,
           },
         },

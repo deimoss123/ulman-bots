@@ -8,19 +8,19 @@ import {
   ColorResolvable,
   ComponentType,
   EmbedField,
-} from 'discord.js';
-import findUser from '@/economy/findUser';
-import errorEmbed from '@/embeds/errorEmbed';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import itemString from '@/embeds/helpers/itemString';
-import addItems from '@/economy/addItems';
-import embedTemplate from '@/embeds/embedTemplate';
-import ItemString from '@/embeds/helpers/itemString';
-import itemList from '@/items/itemList';
-import izmantotRunSpecial from '@/commands/izmantot/izmantotRunSpecial';
-import { UsableItem } from '@/interfaces/Item';
-import intReply from '@/utils/intReply';
-import { Dialogs } from '@/utils/Dialogs';
+} from "discord.js";
+import findUser from "@/economy/findUser";
+import errorEmbed from "@/embeds/errorEmbed";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import itemString from "@/embeds/helpers/itemString";
+import addItems from "@/economy/addItems";
+import embedTemplate from "@/embeds/embedTemplate";
+import ItemString from "@/embeds/helpers/itemString";
+import itemList from "@/items/itemList";
+import izmantotRunSpecial from "@/commands/izmantot/izmantotRunSpecial";
+import { UsableItem } from "@/interfaces/Item";
+import intReply from "@/utils/intReply";
+import { Dialogs } from "@/utils/Dialogs";
 
 type State = {
   color: ColorResolvable;
@@ -31,7 +31,7 @@ type State = {
 };
 
 const enum ComponentId {
-  UseAgain = 'izmantot_velreiz',
+  UseAgain = "izmantot_velreiz",
 }
 
 function view(state: State, i: BaseInteraction) {
@@ -40,7 +40,7 @@ function view(state: State, i: BaseInteraction) {
       .setCustomId(ComponentId.UseAgain)
       .setLabel(`Izmantot vēlreiz (${state.itemsToUseLeft})`)
       .setStyle(ButtonStyle.Primary)
-      .setEmoji(state.itemToUse.emoji() || '❓'),
+      .setEmoji(state.itemToUse.emoji() || "❓"),
   );
 
   return embedTemplate({
@@ -50,7 +50,7 @@ function view(state: State, i: BaseInteraction) {
     description: state.description,
     fields: state.fields,
     components:
-      state.itemsToUseLeft && 'removedOnUse' in state.itemToUse && state.itemToUse.removedOnUse ? [componentRow] : [],
+      state.itemsToUseLeft && "removedOnUse" in state.itemToUse && state.itemToUse.removedOnUse ? [componentRow] : [],
   });
 }
 
@@ -68,7 +68,7 @@ export default async function izmantotRun(
   const { items, specialItems } = user;
   const itemToUse = itemList[itemToUseKey];
 
-  if ('attributes' in itemToUse) {
+  if ("attributes" in itemToUse) {
     const specialItemsInInv = specialItems.filter(({ name }) => name === itemToUseKey);
     if (!specialItemsInInv.length) {
       return intReply(i, ephemeralReply(`Tavā inventārā nav **${itemString(itemToUse)}**`));
@@ -81,7 +81,7 @@ export default async function izmantotRun(
     return intReply(i, ephemeralReply(`Tavā inventārā nav **${itemString(itemToUse)}**`));
   }
 
-  if ('removedOnUse' in itemToUse && itemToUse.removedOnUse) {
+  if ("removedOnUse" in itemToUse && itemToUse.removedOnUse) {
     const resUser = await addItems(userId, guildId, { [itemToUseKey]: -1 });
     if (!resUser) return intReply(i, errorEmbed);
   }
@@ -90,8 +90,8 @@ export default async function izmantotRun(
 
   const res = await (itemToUse as UsableItem).use(userId, guildId, itemToUseKey);
 
-  if ('error' in res) return intReply(i, errorEmbed);
-  if ('custom' in res) return res.custom(i, embedColor);
+  if ("error" in res) return intReply(i, errorEmbed);
+  if ("custom" in res) return res.custom(i, embedColor);
 
   const initialState: State = {
     color: (res.color || embedColor) as ColorResolvable,
@@ -101,15 +101,15 @@ export default async function izmantotRun(
     itemsToUseLeft,
   };
 
-  const dialogs = new Dialogs(i, initialState, view, 'izmantot');
+  const dialogs = new Dialogs(i, initialState, view, "izmantot");
 
   if (!(await dialogs.start())) {
     return intReply(i, errorEmbed);
   }
 
-  if (!itemsToUseLeft || ('removedOnUse' in itemToUse && !itemToUse.removedOnUse)) return;
+  if (!itemsToUseLeft || ("removedOnUse" in itemToUse && !itemToUse.removedOnUse)) return;
 
-  dialogs.onClick(async int => {
+  dialogs.onClick(async (int) => {
     if (int.customId === ComponentId.UseAgain && int.componentType === ComponentType.Button) {
       izmantotRun(int, itemToUseKey, embedColor);
       return { end: true };

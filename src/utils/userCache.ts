@@ -1,5 +1,5 @@
-import UserProfile from '@/interfaces/UserProfile';
-import { Snowflake } from 'discord.js';
+import UserProfile from "@/interfaces/UserProfile";
+import { Snowflake } from "discord.js";
 
 /*
 User cache glabā lietotāju ekonomijas informāciju

@@ -1,7 +1,7 @@
 const hours24 = 86_400_000;
 
 export default function millisToReadableTime(millis: number): string {
-  if (millis <= 1000) return '1s';
+  if (millis <= 1000) return "1s";
 
   const res: string[] = [];
 
@@ -21,5 +21,5 @@ export default function millisToReadableTime(millis: number): string {
   if (!d && m) res.push(`${m}m`);
   if (!d && !h && s) res.push(`${s}s`);
 
-  return res.join(' ');
+  return res.join(" ");
 }

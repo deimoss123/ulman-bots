@@ -1,9 +1,9 @@
-import { AutocompleteInteraction } from 'discord.js';
-import Item from '@/interfaces/Item';
-import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
-import normalizeLatText from '@/embeds/helpers/normalizeLatText';
-import itemList from '@/items/itemList';
-import findItemsByQuery from '@/items/helpers/findItemsByQuery';
+import { AutocompleteInteraction } from "discord.js";
+import Item from "@/interfaces/Item";
+import capitalizeFirst from "@/embeds/helpers/capitalizeFirst";
+import normalizeLatText from "@/embeds/helpers/normalizeLatText";
+import itemList from "@/items/itemList";
+import findItemsByQuery from "@/items/helpers/findItemsByQuery";
 
 function mapItemsToChoices(emoji: string) {
   return (itemInList: [string, Item]) => {
@@ -24,7 +24,7 @@ function allItemAutocomplete(emoji: string) {
     const allChoices = Object.entries(itemList);
 
     const queriedChoices = findItemsByQuery(focusedValue, allChoices);
-    interaction.respond(queriedChoices.map(mapItemsToChoices(emoji))).catch(_ => _);
+    interaction.respond(queriedChoices.map(mapItemsToChoices(emoji))).catch((_) => _);
   };
 }
 

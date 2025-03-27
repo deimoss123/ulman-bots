@@ -1,32 +1,32 @@
 export type UserStats = Record<
   // veikals
-  | 'spentShop'
-  | 'soldShop'
-  | 'taxPaid'
+  | "spentShop"
+  | "soldShop"
+  | "taxPaid"
   // maksāt/iedot
-  | 'paidLati'
-  | 'receivedLati'
-  | 'itemsGiven'
-  | 'itemsReceived'
+  | "paidLati"
+  | "receivedLati"
+  | "itemsGiven"
+  | "itemsReceived"
   // zagšana
-  | 'stolenLati'
-  | 'lostStealingLati'
-  | 'stolenFromBanka'
+  | "stolenLati"
+  | "lostStealingLati"
+  | "stolenFromBanka"
   // zveja
-  | 'caughtFishCount'
-  | 'timeSpentFishing'
+  | "caughtFishCount"
+  | "timeSpentFishing"
   // feniks
-  | 'fenkaBiggestWin'
-  | 'fenkaBiggestBet'
-  | 'fenkaSpent'
-  | 'fenkaWon'
-  | 'fenkaSpinCount'
+  | "fenkaBiggestWin"
+  | "fenkaBiggestBet"
+  | "fenkaSpent"
+  | "fenkaWon"
+  | "fenkaSpinCount"
   // rulete
-  | 'rulBiggestWin'
-  | 'rulBiggestBet'
-  | 'rulSpent'
-  | 'rulWon'
-  | 'rulSpinCount',
+  | "rulBiggestWin"
+  | "rulBiggestBet"
+  | "rulSpent"
+  | "rulWon"
+  | "rulSpinCount",
   number
 >;
 

@@ -7,31 +7,31 @@ import {
   StringSelectMenuBuilder,
   time,
   underline,
-} from 'discord.js';
-import UserProfile, { ItemAttributes, UserFishing } from '@/interfaces/UserProfile';
-import { countFish } from '@/commands/zvejot/syncFishing';
-import commandColors from '@/embeds/commandColors';
-import embedTemplate from '@/embeds/embedTemplate';
-import itemString from '@/embeds/helpers/itemString';
-import latiString from '@/embeds/helpers/latiString';
-import maksekeresData from '@/commands/zvejot/makskeresData';
-import itemList, { ItemCategory } from '@/items/itemList';
-import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
-import emoji from '@/utils/emoji';
-import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
-import { displayAttributes } from '@/embeds/helpers/displayAttributes';
-import { AttributeItem } from '@/interfaces/Item';
-import { calcRepairCost } from '@/commands/zvejot/zvejot';
+} from "discord.js";
+import UserProfile, { ItemAttributes, UserFishing } from "@/interfaces/UserProfile";
+import { countFish } from "@/commands/zvejot/syncFishing";
+import commandColors from "@/embeds/commandColors";
+import embedTemplate from "@/embeds/embedTemplate";
+import itemString from "@/embeds/helpers/itemString";
+import latiString from "@/embeds/helpers/latiString";
+import maksekeresData from "@/commands/zvejot/makskeresData";
+import itemList, { ItemCategory } from "@/items/itemList";
+import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import emoji from "@/utils/emoji";
+import capitalizeFirst from "@/embeds/helpers/capitalizeFirst";
+import { displayAttributes } from "@/embeds/helpers/displayAttributes";
+import { AttributeItem } from "@/interfaces/Item";
+import { calcRepairCost } from "@/commands/zvejot/zvejot";
 
 function zvejaEmojiString() {
   return (
-    emoji('icon_udenszive') +
-    emoji('icon_cope_1') +
-    emoji('icon_cope_2') +
-    emoji('icon_cope_3') +
-    emoji('icon_cope_4') +
-    emoji('icon_cope_5') +
-    emoji('icon_udenszive')
+    emoji("icon_udenszive") +
+    emoji("icon_cope_1") +
+    emoji("icon_cope_2") +
+    emoji("icon_cope_3") +
+    emoji("icon_cope_4") +
+    emoji("icon_cope_5") +
+    emoji("icon_udenszive")
   );
 }
 
@@ -39,16 +39,16 @@ function tipsString({ selectedRod, usesLeft, caughtFishes, maxCapacity }: UserFi
   const arr: string[] = [];
 
   if (!selectedRod) {
-    arr.push('tu neesi izvēlējies makšķeri');
+    arr.push("tu neesi izvēlējies makšķeri");
   } else if (!usesLeft) {
-    arr.push('tev ir jāsalabo makšķere');
+    arr.push("tev ir jāsalabo makšķere");
   }
 
   if (countFish(caughtFishes) >= maxCapacity) {
-    arr.push('tev ir pilns copes inventārs');
+    arr.push("tev ir pilns copes inventārs");
   }
 
-  return arr.length ? arr.map(a => `- ${a}\n`).join('') + '\u200B' : '';
+  return arr.length ? arr.map((a) => `- ${a}\n`).join("") + "\u200B" : "";
 }
 
 export type ZvejotState = {
@@ -58,14 +58,14 @@ export type ZvejotState = {
 };
 
 export const enum ComponentId {
-  CollectFish = 'zvejot_collect_fish_btn',
-  StartFishing = 'zvejot_start_fishing_btn',
+  CollectFish = "zvejot_collect_fish_btn",
+  StartFishing = "zvejot_start_fishing_btn",
 
-  SelectFishingRod = 'zvejot_select_fishing_rod',
-  RemoveFishingRod = 'zvejot_remove_fishing_rod',
-  FixFishingRod = 'zvejot_fix_fishing_rod',
+  SelectFishingRod = "zvejot_select_fishing_rod",
+  RemoveFishingRod = "zvejot_remove_fishing_rod",
+  FixFishingRod = "zvejot_fix_fishing_rod",
 
-  Refresh = 'zvejot_refresh',
+  Refresh = "zvejot_refresh",
 }
 
 function components(state: ZvejotState): ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] {
@@ -74,17 +74,17 @@ function components(state: ZvejotState): ActionRowBuilder<ButtonBuilder | String
 
   const collectFishButton = new ButtonBuilder()
     .setCustomId(ComponentId.CollectFish)
-    .setLabel('Savākt copi')
+    .setLabel("Savākt copi")
     .setStyle(ButtonStyle.Success)
-    .setEmoji(emoji('icon_zive'));
+    .setEmoji(emoji("icon_zive"));
 
   if (!selectedRod) {
-    const rodsInInv = specialItems.filter(item => itemList[item.name].categories.includes(ItemCategory.MAKSKERE));
+    const rodsInInv = specialItems.filter((item) => itemList[item.name].categories.includes(ItemCategory.MAKSKERE));
     if (!rodsInInv.length) {
       const btnRow = [
         new ButtonBuilder()
-          .setCustomId('_')
-          .setLabel('Tev nav nevienas makšķeres')
+          .setCustomId("_")
+          .setLabel("Tev nav nevienas makšķeres")
           .setStyle(ButtonStyle.Secondary)
           .setDisabled(true),
       ];
@@ -97,7 +97,7 @@ function components(state: ZvejotState): ActionRowBuilder<ButtonBuilder | String
     const btnRow = [
       new ButtonBuilder()
         .setCustomId(ComponentId.StartFishing)
-        .setLabel('Sākt zvejot')
+        .setLabel("Sākt zvejot")
         .setStyle(state.selectedFishingRodId ? ButtonStyle.Primary : ButtonStyle.Secondary)
         .setDisabled(!state.selectedFishingRodId),
     ];
@@ -108,7 +108,7 @@ function components(state: ZvejotState): ActionRowBuilder<ButtonBuilder | String
       new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
         new StringSelectMenuBuilder()
           .setCustomId(ComponentId.SelectFishingRod)
-          .setPlaceholder('Izvēlies makšķeri')
+          .setPlaceholder("Izvēlies makšķeri")
           .addOptions(
             rodsInInv
               .slice(0, 25)
@@ -117,10 +117,10 @@ function components(state: ZvejotState): ActionRowBuilder<ButtonBuilder | String
                 const itemB = itemList[b.name] as AttributeItem<ItemAttributes>;
                 return itemB.customValue!(b.attributes) - itemA.customValue!(a.attributes);
               })
-              .map(item => ({
+              .map((item) => ({
                 label: capitalizeFirst(itemList[item.name].nameNomVsk),
                 value: `${item.name} ${item._id}`,
-                emoji: itemList[item.name].emoji() ?? '❓',
+                emoji: itemList[item.name].emoji() ?? "❓",
                 description: displayAttributes(item, true),
                 default: state.selectedFishingRodId === item._id,
               })),
@@ -133,17 +133,17 @@ function components(state: ZvejotState): ActionRowBuilder<ButtonBuilder | String
   const buttons = [
     new ButtonBuilder()
       .setCustomId(ComponentId.RemoveFishingRod)
-      .setLabel('Noņemt makšķeri')
+      .setLabel("Noņemt makšķeri")
       .setStyle(ButtonStyle.Secondary)
-      .setEmoji(itemList[selectedRod].emoji() || '❓'),
+      .setEmoji(itemList[selectedRod].emoji() || "❓"),
   ];
   if (state.user.guildId === process.env.DEV_SERVER_ID) {
     buttons.push(
       new ButtonBuilder()
         .setCustomId(ComponentId.Refresh)
-        .setLabel('Atjaunot')
+        .setLabel("Atjaunot")
         .setStyle(ButtonStyle.Secondary)
-        .setEmoji('🔄'),
+        .setEmoji("🔄"),
     );
   }
 
@@ -156,11 +156,11 @@ function components(state: ZvejotState): ActionRowBuilder<ButtonBuilder | String
         .setLabel(
           repairable
             ? `Salabot makšķeri (${latiString(calcRepairCost(selectedRod, usesLeft))})`
-            : 'Šī makšķere nav salabojama',
+            : "Šī makšķere nav salabojama",
         )
         .setStyle(repairable ? ButtonStyle.Primary : ButtonStyle.Danger)
         .setDisabled(!repairable)
-        .setEmoji('🔧'),
+        .setEmoji("🔧"),
     );
   }
 
@@ -179,35 +179,35 @@ export default function zvejotView(state: ZvejotState, i: BaseInteraction) {
 
   const fields = [
     {
-      name: 'Izvēlētā makšķere',
+      name: "Izvēlētā makšķere",
       value: selectedRod
         ? `${itemString(itemList[selectedRod])} ${usesLeft}/${maksekeresData[selectedRod].maxDurability}`
-        : '-',
+        : "-",
       inline: false,
     },
     {
-      name: 'Nākamais ķēriens',
+      name: "Nākamais ķēriens",
       value:
         futureFishList && futureFishList.length
-          ? `**${time(new Date(futureFishList[0].time), 't')}** ${time(new Date(futureFishList[0].time), 'd')}\n` +
+          ? `**${time(new Date(futureFishList[0].time), "t")}** ${time(new Date(futureFishList[0].time), "d")}\n` +
             `Pēc ${millisToReadableTime(futureFishList[0].time - Date.now())}`
-          : '-',
+          : "-",
       inline: true,
     },
     {
-      name: 'Pēdējais ķēriens',
+      name: "Pēdējais ķēriens",
       value: lastCaughtFish
-        ? `**${time(new Date(lastCaughtFish.time), 't')}** ${time(new Date(lastCaughtFish.time), 'd')}\n` +
+        ? `**${time(new Date(lastCaughtFish.time), "t")}** ${time(new Date(lastCaughtFish.time), "d")}\n` +
           `${itemString(itemList[lastCaughtFish.itemKey], 1)}`
-        : '-',
+        : "-",
       inline: true,
     },
     {
-      name: '\u200B',
+      name: "\u200B",
       value:
         `${zvejaEmojiString()} (${countFish(caughtFishes)}/${maxCapacity}) ` +
-        (countFish(caughtFishes) >= maxCapacity ? underline(bold('PILNS')) : '') +
-        (!caughtFishes || !Object.keys(caughtFishes).length ? '\n-\n\u200B' : ''),
+        (countFish(caughtFishes) >= maxCapacity ? underline(bold("PILNS")) : "") +
+        (!caughtFishes || !Object.keys(caughtFishes).length ? "\n-\n\u200B" : ""),
       inline: false,
     },
   ];
@@ -216,7 +216,7 @@ export default function zvejotView(state: ZvejotState, i: BaseInteraction) {
 
   if (tips)
     fields.unshift({
-      name: '❗ Tu nevari zvejot, jo ❗',
+      name: "❗ Tu nevari zvejot, jo ❗",
       value: tips,
       inline: false,
     });

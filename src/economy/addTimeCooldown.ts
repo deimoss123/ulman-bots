@@ -1,8 +1,8 @@
-import { ClientSession } from 'mongoose';
-import UserProfile from '@/interfaces/UserProfile';
-import User from '@/schemas/User';
-import userCache from '@/utils/userCache';
-import findUser from '@/economy/findUser';
+import { ClientSession } from "mongoose";
+import UserProfile from "@/interfaces/UserProfile";
+import User from "@/schemas/User";
+import userCache from "@/utils/userCache";
+import findUser from "@/economy/findUser";
 
 export default async function addTimeCooldown(
   userId: string,
@@ -16,7 +16,7 @@ export default async function addTimeCooldown(
 
     const { timeCooldowns } = res;
 
-    const cooldownIndex = timeCooldowns.findIndex(cooldown => cooldown.name === commandName);
+    const cooldownIndex = timeCooldowns.findIndex((cooldown) => cooldown.name === commandName);
     if (cooldownIndex === -1) {
       timeCooldowns.push({ name: commandName, lastUsed: Date.now() });
     } else {

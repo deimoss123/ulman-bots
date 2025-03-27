@@ -1,47 +1,47 @@
-import Command from '@/interfaces/Command';
-import { ApplicationCommandOptionType } from 'discord.js';
-import embedTemplate from '@/embeds/embedTemplate';
-import itemString from '@/embeds/helpers/itemString';
-import addItem from '@/economy/addItems';
-import wrongKeyEmbed from '@/embeds/wrongKeyEmbed';
-import itemList from '@/items/itemList';
-import intReply from '@/utils/intReply';
-import allItemAutocomplete from '@/commands/info/allItemAutocomplete';
+import Command from "@/interfaces/Command";
+import { ApplicationCommandOptionType } from "discord.js";
+import embedTemplate from "@/embeds/embedTemplate";
+import itemString from "@/embeds/helpers/itemString";
+import addItem from "@/economy/addItems";
+import wrongKeyEmbed from "@/embeds/wrongKeyEmbed";
+import itemList from "@/items/itemList";
+import intReply from "@/utils/intReply";
+import allItemAutocomplete from "@/commands/info/allItemAutocomplete";
 
 const _addItem: Command = {
   devOnly: true,
-  description: () => 'Pievienot mantu inventārā',
+  description: () => "Pievienot mantu inventārā",
   color: 0xffffff,
   data: {
-    name: 'additem',
-    description: 'Pievienot mantu inventārā',
+    name: "additem",
+    description: "Pievienot mantu inventārā",
     options: [
       {
-        name: 'lietotājs',
-        description: 'Lietotājs kam pievienot lietu',
+        name: "lietotājs",
+        description: "Lietotājs kam pievienot lietu",
         type: ApplicationCommandOptionType.User,
         required: true,
       },
       {
-        name: 'nosaukums',
-        description: 'Kādu lietu pievienot',
+        name: "nosaukums",
+        description: "Kādu lietu pievienot",
         type: ApplicationCommandOptionType.String,
         autocomplete: true,
         required: true,
       },
       {
-        name: 'daudzums',
-        description: 'Cik lietas pievienot',
+        name: "daudzums",
+        description: "Cik lietas pievienot",
         type: ApplicationCommandOptionType.Integer,
         required: true,
       },
     ],
   },
-  autocomplete: allItemAutocomplete('⛔'),
+  autocomplete: allItemAutocomplete("⛔"),
   async run(i) {
-    const target = i.options.getUser('lietotājs')!;
-    const itemToAddKey = i.options.getString('nosaukums')!;
-    const amountToAdd = i.options.getInteger('daudzums')!;
+    const target = i.options.getUser("lietotājs")!;
+    const itemToAddKey = i.options.getString("nosaukums")!;
+    const amountToAdd = i.options.getInteger("daudzums")!;
 
     const itemToAdd = itemList[itemToAddKey];
     if (!itemToAdd) {

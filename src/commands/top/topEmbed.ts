@@ -1,12 +1,12 @@
-import { ChatInputCommandInteraction } from 'discord.js';
-import commandColors from '@/embeds/commandColors';
-import embedTemplate from '@/embeds/embedTemplate';
-import StatsProfile from '@/interfaces/StatsProfile';
-import UserProfile from '@/interfaces/UserProfile';
-import { displayPlace } from '@/commands/statistika/statistika';
-import { SortDataProfileEntry } from '@/commands/top/sortData';
-import { TOP_USERS_PER_PAGE } from '@/commands/top/top';
-import emoji from '@/utils/emoji';
+import { ChatInputCommandInteraction } from "discord.js";
+import commandColors from "@/embeds/commandColors";
+import embedTemplate from "@/embeds/embedTemplate";
+import StatsProfile from "@/interfaces/StatsProfile";
+import UserProfile from "@/interfaces/UserProfile";
+import { displayPlace } from "@/commands/statistika/statistika";
+import { SortDataProfileEntry } from "@/commands/top/sortData";
+import { TOP_USERS_PER_PAGE } from "@/commands/top/top";
+import emoji from "@/utils/emoji";
 
 export default function topEmbed<T extends UserProfile | StatsProfile>(
   i: ChatInputCommandInteraction,
@@ -23,26 +23,26 @@ export default function topEmbed<T extends UserProfile | StatsProfile>(
   const fields = slicedUsers.map((user, index) => {
     return {
       name:
-        (user.userId === i.user.id ? `${emoji('icon_top_arrow')} ` : '') +
+        (user.userId === i.user.id ? `${emoji("icon_top_arrow")} ` : "") +
         `${displayPlace(index + offset)} ${
-          i.guild!.members.cache.get(user.userId)?.user.tag || 'Nezināms lietotājs'
+          i.guild!.members.cache.get(user.userId)?.user.tag || "Nezināms lietotājs"
         } ` +
-        (total ? `\`${(partOfTotal!(total, user) * 100).toFixed(2)}%\`` : ''),
+        (total ? `\`${(partOfTotal!(total, user) * 100).toFixed(2)}%\`` : ""),
       value: displayValue(user),
       inline: false,
     };
   });
 
-  const indexOf = sortedUsers.findIndex(u => u.userId === i.user.id);
+  const indexOf = sortedUsers.findIndex((u) => u.userId === i.user.id);
 
-  if (!slicedUsers.find(u => u.userId === i.user.id)) {
-    const foundUser = sortedUsers.find(user => user.userId === i.user.id)!;
+  if (!slicedUsers.find((u) => u.userId === i.user.id)) {
+    const foundUser = sortedUsers.find((user) => user.userId === i.user.id)!;
 
-    fields[fields.length - 1].value += `\n__${'\u2800'.repeat(20)}__`;
+    fields[fields.length - 1].value += `\n__${"\u2800".repeat(20)}__`;
     fields.push({
       name:
-        `${emoji('icon_top_arrow')} ${displayPlace(indexOf)} ${i.user.tag} ` +
-        (total ? `\`${(partOfTotal!(total, foundUser) * 100).toFixed(2)}%\`` : ''),
+        `${emoji("icon_top_arrow")} ${displayPlace(indexOf)} ${i.user.tag} ` +
+        (total ? `\`${(partOfTotal!(total, foundUser) * 100).toFixed(2)}%\`` : ""),
       value: displayValue(foundUser),
       inline: false,
     });

@@ -1,10 +1,10 @@
-import addItems from '@/economy/addItems';
-import findUser from '@/economy/findUser';
-import increaseInvCap from '@/economy/increaseInvCap';
-import itemString from '@/embeds/helpers/itemString';
-import { UsableItemFunc } from '@/interfaces/Item';
-import itemList from '@/items/itemList';
-import { INCREASE_CAP_1 } from '@/items/usableItems/mugursoma';
+import addItems from "@/economy/addItems";
+import findUser from "@/economy/findUser";
+import increaseInvCap from "@/economy/increaseInvCap";
+import itemString from "@/embeds/helpers/itemString";
+import { UsableItemFunc } from "@/interfaces/Item";
+import itemList from "@/items/itemList";
+import { INCREASE_CAP_1 } from "@/items/usableItems/mugursoma";
 
 export const INCREASE_CAP_2 = 200;
 export const INV_NCREASE_AMOUNT_2 = 10;

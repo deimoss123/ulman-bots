@@ -72,5 +72,5 @@ export default async function generateCalendarImage(day: number): Promise<Buffer
 
   // pagaidām šādi, jo canvasu nevar ar Bun ieinstalēt, un advente vispār nestrādā
   // tiek atgriezsts bufferis lai TS nebļauj
-  return new Promise(r => r(Buffer.from('')));
+  return new Promise((r) => r(Buffer.from("")));
 }

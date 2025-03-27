@@ -1,6 +1,6 @@
-import { ClientSession } from 'mongoose';
-import { UserStats } from '@/interfaces/StatsProfile';
-import Stats from '@/schemas/Stats';
+import { ClientSession } from "mongoose";
+import { UserStats } from "@/interfaces/StatsProfile";
+import Stats from "@/schemas/Stats";
 
 type StatsParam = Partial<Record<keyof UserStats, number | `=${number}`>>;
 
@@ -18,7 +18,7 @@ export default async function setStats(
       const key = entry[0] as keyof UserStats;
       const value = entry[1];
 
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         if (!isNaN(+value.slice(1))) {
           toMax[key] = +value.slice(1);
         }

@@ -1,6 +1,6 @@
-import StatsProfile from '@/interfaces/StatsProfile';
-import Stats from '@/schemas/Stats';
-import { ClientSession, ProjectionType } from 'mongoose';
+import StatsProfile from "@/interfaces/StatsProfile";
+import Stats from "@/schemas/Stats";
+import { ClientSession, ProjectionType } from "mongoose";
 
 export default async function getStatsMany(
   clientId: string,

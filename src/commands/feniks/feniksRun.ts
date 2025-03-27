@@ -1,22 +1,22 @@
-import { ButtonInteraction, ChatInputCommandInteraction, ComponentType } from 'discord.js';
-import addItems from '@/economy/addItems';
-import addLati from '@/economy/addLati';
-import findUser from '@/economy/findUser';
-import setStats from '@/economy/stats/setStats';
-import commandColors from '@/embeds/commandColors';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import errorEmbed from '@/embeds/errorEmbed';
-import itemString from '@/embeds/helpers/itemString';
-import latiString from '@/embeds/helpers/latiString';
-import smallEmbed from '@/embeds/smallEmbed';
-import UserProfile from '@/interfaces/UserProfile';
-import itemList, { ItemCategory, ItemKey } from '@/items/itemList';
-import intReply from '@/utils/intReply';
-import { KazinoLikme } from '@/commands/rulete/rulete';
-import calcSpin from '@/commands/feniks/calcSpin';
-import { FENIKS_MIN_LIKME } from '@/commands/feniks/feniks';
-import { Dialogs } from '@/utils/Dialogs';
-import feniksView, { ComponentId, FeniksState, FreeSpinIds } from '@/commands/feniks/feniksView';
+import { ButtonInteraction, ChatInputCommandInteraction, ComponentType } from "discord.js";
+import addItems from "@/economy/addItems";
+import addLati from "@/economy/addLati";
+import findUser from "@/economy/findUser";
+import setStats from "@/economy/stats/setStats";
+import commandColors from "@/embeds/commandColors";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import errorEmbed from "@/embeds/errorEmbed";
+import itemString from "@/embeds/helpers/itemString";
+import latiString from "@/embeds/helpers/latiString";
+import smallEmbed from "@/embeds/smallEmbed";
+import UserProfile from "@/interfaces/UserProfile";
+import itemList, { ItemCategory, ItemKey } from "@/items/itemList";
+import intReply from "@/utils/intReply";
+import { KazinoLikme } from "@/commands/rulete/rulete";
+import calcSpin from "@/commands/feniks/calcSpin";
+import { FENIKS_MIN_LIKME } from "@/commands/feniks/feniks";
+import { Dialogs } from "@/utils/Dialogs";
+import feniksView, { ComponentId, FeniksState, FreeSpinIds } from "@/commands/feniks/feniksView";
 
 const DEFAULT_EMOJI_COUNT = 5;
 
@@ -45,7 +45,7 @@ export default async function feniksRun(
       );
     }
 
-    if (typeof likme === 'number' && lati < likme) {
+    if (typeof likme === "number" && lati < likme) {
       return intReply(
         i,
         ephemeralReply(
@@ -55,8 +55,8 @@ export default async function feniksRun(
       );
     }
 
-    if (likme === 'virve') {
-      const hasVirve = items.find(item => item.name === 'virve');
+    if (likme === "virve") {
+      const hasVirve = items.find((item) => item.name === "virve");
       if (!hasVirve) {
         return intReply(
           i,
@@ -71,9 +71,9 @@ export default async function feniksRun(
   }
 
   const likmeLati =
-    typeof likme === 'number'
+    typeof likme === "number"
       ? likme
-      : likme === 'virve'
+      : likme === "virve"
         ? Math.floor(Math.random() * (lati - FENIKS_MIN_LIKME) + FENIKS_MIN_LIKME)
         : lati;
 
@@ -111,12 +111,12 @@ export default async function feniksRun(
         embeds: smallEmbed(errorEmbed.content!, commandColors.feniks).embeds,
         components: [],
       })
-      .catch(_ => _);
+      .catch((_) => _);
   }
 
   // testSpins(1_000_000);
 
-  const canSpinAgain = typeof likme === 'number' ? lati >= likme : lati >= FENIKS_MIN_LIKME;
+  const canSpinAgain = typeof likme === "number" ? lati >= likme : lati >= FENIKS_MIN_LIKME;
 
   const freeSpinsInInv: [ItemKey, number][] = userAfter.items
     .filter(({ name }) => itemList[name].categories.includes(ItemCategory.BRIVGRIEZIENS))
@@ -138,7 +138,7 @@ export default async function feniksRun(
     isSpinning: true,
   };
 
-  const dialogs = new Dialogs(i, initialState, feniksView, 'feniks', { time: 20000, isActive: true });
+  const dialogs = new Dialogs(i, initialState, feniksView, "feniks", { time: 20000, isActive: true });
 
   if (!(await dialogs.start())) {
     return intReply(i, errorEmbed);
@@ -153,7 +153,7 @@ export default async function feniksRun(
     isFree ? 300 : 1500,
   );
 
-  dialogs.onClick(async int => {
+  dialogs.onClick(async (int) => {
     const { customId, componentType } = int;
 
     if (componentType !== ComponentType.Button) return;
@@ -173,13 +173,13 @@ export default async function feniksRun(
 
       const itemObj = itemList[freeSpinName];
 
-      const itemInInv = user.items.find(item => item.name === freeSpinName);
+      const itemInInv = user.items.find((item) => item.name === freeSpinName);
       if (!itemInInv || itemInInv.amount < 1) {
         await intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString(itemObj)}**`));
         return;
       }
 
-      const freeSpinLikme = freeSpinName.split('brivgriez')[1];
+      const freeSpinLikme = freeSpinName.split("brivgriez")[1];
       if (!freeSpinLikme) return { error: true };
 
       return {

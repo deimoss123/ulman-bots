@@ -6,29 +6,29 @@ import {
   ChatInputCommandInteraction,
   ComponentType,
   StringSelectMenuBuilder,
-} from 'discord.js';
-import addLati from '@/economy/addLati';
-import addSpecialItems from '@/economy/addSpecialItems';
-import findUser from '@/economy/findUser';
-import removeItemsById from '@/economy/removeItemsById';
-import setStats from '@/economy/stats/setStats';
-import commandColors from '@/embeds/commandColors';
-import embedTemplate from '@/embeds/embedTemplate';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import { displayAttributes } from '@/embeds/helpers/displayAttributes';
-import itemString, { itemStringCustom } from '@/embeds/helpers/itemString';
-import latiString from '@/embeds/helpers/latiString';
-import Item, { AttributeItem } from '@/interfaces/Item';
-import UserProfile, { ItemAttributes, SpecialItemInProfile } from '@/interfaces/UserProfile';
-import checkUserSpecialItems from '@/items/helpers/checkUserSpecialItems';
-import countFreeInvSlots from '@/items/helpers/countFreeInvSlots';
-import itemList, { ItemKey } from '@/items/itemList';
-import intReply from '@/utils/intReply';
-import { attributeItemSort } from '@/commands/inventars/inventars';
-import { cantPayTaxEmbed } from '@/commands/iedot/iedot';
-import { Dialogs } from '@/utils/Dialogs';
-import errorEmbed from '@/embeds/errorEmbed';
-import mongoTransaction from '@/utils/mongoTransaction';
+} from "discord.js";
+import addLati from "@/economy/addLati";
+import addSpecialItems from "@/economy/addSpecialItems";
+import findUser from "@/economy/findUser";
+import removeItemsById from "@/economy/removeItemsById";
+import setStats from "@/economy/stats/setStats";
+import commandColors from "@/embeds/commandColors";
+import embedTemplate from "@/embeds/embedTemplate";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import { displayAttributes } from "@/embeds/helpers/displayAttributes";
+import itemString, { itemStringCustom } from "@/embeds/helpers/itemString";
+import latiString from "@/embeds/helpers/latiString";
+import Item, { AttributeItem } from "@/interfaces/Item";
+import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/interfaces/UserProfile";
+import checkUserSpecialItems from "@/items/helpers/checkUserSpecialItems";
+import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
+import itemList, { ItemKey } from "@/items/itemList";
+import intReply from "@/utils/intReply";
+import { attributeItemSort } from "@/commands/inventars/inventars";
+import { cantPayTaxEmbed } from "@/commands/iedot/iedot";
+import { Dialogs } from "@/utils/Dialogs";
+import errorEmbed from "@/embeds/errorEmbed";
+import mongoTransaction from "@/utils/mongoTransaction";
 
 function makeEmbedAfter(
   i: ChatInputCommandInteraction,
@@ -45,22 +45,22 @@ function makeEmbedAfter(
     content: `<@${targetUser.userId}>`,
 
     description: `Nodoklis: ${
-      'notSellable' in itemObj
-        ? '**0** lati **(nepārdodama manta)**'
+      "notSellable" in itemObj
+        ? "**0** lati **(nepārdodama manta)**"
         : hasJuridisks
-          ? '**0** lati **(juridiska persona)**'
+          ? "**0** lati **(juridiska persona)**"
           : `${latiString(taxLati, false, true)} (${Math.floor(user.giveTax * 100)}% no mantu kopējās vērtības)`
     }\n<@${targetUser.userId}> tu iedevi:`,
 
     fields: [
-      ...itemsToGive.map(item => {
+      ...itemsToGive.map((item) => {
         const lati =
-          'customValue' in itemObj && itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value;
+          "customValue" in itemObj && itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value;
 
         return {
           name: itemString(itemObj, null, true, item.attributes),
           value:
-            ('notSellable' in itemObj ? '' : `Vērtība: ${latiString(lati, false, true)}\n`) + displayAttributes(item),
+            ("notSellable" in itemObj ? "" : `Vērtība: ${latiString(lati, false, true)}\n`) + displayAttributes(item),
           inline: false,
         };
       }),
@@ -81,19 +81,19 @@ type State = {
 };
 
 const enum ComponentId {
-  Select = 'iedot_special_select',
-  Confirm = 'iedot_special_confirm',
+  Select = "iedot_special_select",
+  Confirm = "iedot_special_confirm",
 }
 
 function view(state: State, i: BaseInteraction) {
-  const selectedIds = state.selectedItems.map(item => item._id!);
+  const selectedIds = state.selectedItems.map((item) => item._id!);
 
   const components = [
     new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
       new StringSelectMenuBuilder()
         .setCustomId(ComponentId.Select)
         .setDisabled(state.hasGiven)
-        .setPlaceholder('Izvēlies ko iedot')
+        .setPlaceholder("Izvēlies ko iedot")
         .setMinValues(1)
         .setMaxValues(Math.min(state.itemsInInv.length, 25))
         .setOptions(
@@ -109,20 +109,20 @@ function view(state: State, i: BaseInteraction) {
 
               return valueB - valueA;
             })
-            .map(item => {
+            .map((item) => {
               const lati =
-                'customValue' in state.itemObj && state.itemObj.customValue
+                "customValue" in state.itemObj && state.itemObj.customValue
                   ? state.itemObj.customValue(item.attributes)
                   : state.itemObj.value;
 
               return {
                 label: itemStringCustom(state.itemObj, item.attributes?.customName),
                 description:
-                  ('notSellable' in state.itemObj ? '' : `${latiString(lati)} | `) + displayAttributes(item, true),
+                  ("notSellable" in state.itemObj ? "" : `${latiString(lati)} | `) + displayAttributes(item, true),
                 value: item._id!,
                 emoji:
                   (state.itemObj.customEmoji ? state.itemObj.customEmoji(item.attributes) : state.itemObj.emoji()) ||
-                  '❓',
+                  "❓",
                 default: !!selectedIds.length && selectedIds!.includes(item._id!),
               };
             }),
@@ -132,7 +132,7 @@ function view(state: State, i: BaseInteraction) {
       new ButtonBuilder()
         .setCustomId(ComponentId.Confirm)
         .setDisabled(state.hasGiven || !selectedIds.length || state.user.lati < state.totalTax)
-        .setLabel(state.user.lati < state.totalTax ? 'Iedot (nepietiek naudas)' : 'Iedot')
+        .setLabel(state.user.lati < state.totalTax ? "Iedot (nepietiek naudas)" : "Iedot")
         .setStyle(
           state.hasGiven
             ? ButtonStyle.Success
@@ -152,11 +152,11 @@ function view(state: State, i: BaseInteraction) {
       `Tavā inventārā ir **${itemString(state.itemObj, state.itemsInInv.length)}**\n` +
       `No saraksta izvēlies vienu vai vairākas mantas ko iedot <@${state.targetUserId}>\n\n` +
       `**Nodoklis:** ` +
-      ('notSellable' in state.itemObj
+      ("notSellable" in state.itemObj
         ? `0 lati **(nepārdodama manta)**`
         : state.hasJuridisks
           ? `0 lati **(${itemList.juridiska_zivs.emoji()} juridiska persona)**`
-          : `${state.totalTax ? latiString(state.totalTax) : '-'} ` +
+          : `${state.totalTax ? latiString(state.totalTax) : "-"} ` +
             `(${Math.floor(state.user.giveTax * 100)}% no mantu kopējās vērtības)`),
     components,
   });
@@ -200,11 +200,11 @@ export default async function iedotRunSpecial(
       return intReply(i, ephemeralReply(`Neizdevās iedot, jo ${checkRes.reason}`));
     }
 
-    if (hasJuridisks || 'notSellable' in itemObj) {
+    if (hasJuridisks || "notSellable" in itemObj) {
       totalTax = 0;
     } else {
       const value =
-        'customValue' in itemObj && itemObj.customValue ? itemObj.customValue(itemsInInv[0].attributes) : itemObj.value;
+        "customValue" in itemObj && itemObj.customValue ? itemObj.customValue(itemsInInv[0].attributes) : itemObj.value;
       totalTax = Math.floor(value * user.giveTax);
     }
 
@@ -212,7 +212,7 @@ export default async function iedotRunSpecial(
       return intReply(i, cantPayTaxEmbed(itemObj, 1, totalTax, user));
     }
 
-    const { ok } = await mongoTransaction(session => {
+    const { ok } = await mongoTransaction((session) => {
       const arr = [
         // prettier-ignore
         () => removeItemsById(i.user.id, guildId, itemsInInv.map(item => item._id!), session),
@@ -248,7 +248,7 @@ export default async function iedotRunSpecial(
     hasGiven: false,
   };
 
-  const dialogs = new Dialogs(i, initialState, view, 'iedot', { time: 60000 });
+  const dialogs = new Dialogs(i, initialState, view, "iedot", { time: 60000 });
 
   if (!(await dialogs.start())) {
     return intReply(i, errorEmbed);
@@ -258,9 +258,9 @@ export default async function iedotRunSpecial(
     const { customId, componentType } = int;
 
     if (customId === ComponentId.Select && componentType === ComponentType.StringSelect) {
-      state.selectedItems = itemsInInv.filter(item => int.values.includes(item._id!));
+      state.selectedItems = itemsInInv.filter((item) => int.values.includes(item._id!));
 
-      if (hasJuridisks || 'notSellable' in itemObj) {
+      if (hasJuridisks || "notSellable" in itemObj) {
         state.totalTax = 0;
       } else {
         state.totalTax =
@@ -304,7 +304,7 @@ export default async function iedotRunSpecial(
         };
       }
 
-      const userItemIds = user.specialItems.map(item => item._id!);
+      const userItemIds = user.specialItems.map((item) => item._id!);
       for (const specItem of state.selectedItems) {
         if (!userItemIds.includes(specItem._id!)) {
           return {
@@ -312,14 +312,14 @@ export default async function iedotRunSpecial(
             after: () => {
               intReply(
                 int,
-                ephemeralReply('Tavs inventāra saturs ir mainījies, kāda no izvēlētām mantām vairs nav tavā inventārā'),
+                ephemeralReply("Tavs inventāra saturs ir mainījies, kāda no izvēlētām mantām vairs nav tavā inventārā"),
               );
             },
           };
         }
       }
 
-      const { ok } = await mongoTransaction(session => {
+      const { ok } = await mongoTransaction((session) => {
         const arr = [
           // prettier-ignore
           () => removeItemsById(userId, guildId, state.selectedItems.map(item => item._id!), session),

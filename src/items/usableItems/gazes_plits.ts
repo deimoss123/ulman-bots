@@ -5,26 +5,26 @@ import {
   ButtonStyle,
   ComponentType,
   StringSelectMenuBuilder,
-} from 'discord.js';
-import findUser from '@/economy/findUser';
-import errorEmbed from '@/embeds/errorEmbed';
-import Item, { UsableItemFunc } from '@/interfaces/Item';
-import intReply from '@/utils/intReply';
-import embedTemplate from '@/embeds/embedTemplate';
-import { Dialogs } from '@/utils/Dialogs';
-import itemList, { ItemKey } from '@/items/itemList';
-import UserProfile from '@/interfaces/UserProfile';
-import itemString from '@/embeds/helpers/itemString';
-import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
-import commandColors from '@/embeds/commandColors';
-import { calcIevarijumsPrice } from '@/items/usableItems/ievarijums';
-import { BerryProperties, berryProperties, propertiesLat } from '@/items/usableItems/oga';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import smallEmbed from '@/embeds/smallEmbed';
-import editItemAttribute from '@/economy/editItemAttribute';
-import addItems from '@/economy/addItems';
+} from "discord.js";
+import findUser from "@/economy/findUser";
+import errorEmbed from "@/embeds/errorEmbed";
+import Item, { UsableItemFunc } from "@/interfaces/Item";
+import intReply from "@/utils/intReply";
+import embedTemplate from "@/embeds/embedTemplate";
+import { Dialogs } from "@/utils/Dialogs";
+import itemList, { ItemKey } from "@/items/itemList";
+import UserProfile from "@/interfaces/UserProfile";
+import itemString from "@/embeds/helpers/itemString";
+import capitalizeFirst from "@/embeds/helpers/capitalizeFirst";
+import commandColors from "@/embeds/commandColors";
+import { calcIevarijumsPrice } from "@/items/usableItems/ievarijums";
+import { BerryProperties, berryProperties, propertiesLat } from "@/items/usableItems/oga";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import smallEmbed from "@/embeds/smallEmbed";
+import editItemAttribute from "@/economy/editItemAttribute";
+import addItems from "@/economy/addItems";
 
-export type GazesPlitsActionType = '' | 'cook' | 'boil_ievarijums' | 'boil_special_ievarijums';
+export type GazesPlitsActionType = "" | "cook" | "boil_ievarijums" | "boil_special_ievarijums";
 
 interface CookableItem {
   input: ItemKey;
@@ -34,18 +34,18 @@ interface CookableItem {
 
 export const cookableItems: CookableItem[] = [
   {
-    input: 'lidaka',
-    output: 'cepta_lidaka',
+    input: "lidaka",
+    output: "cepta_lidaka",
     time: 7_200_000, // 2h
   },
   {
-    input: 'asaris',
-    output: 'cepts_asaris',
+    input: "asaris",
+    output: "cepts_asaris",
     time: 10_800_000, // 3h
   },
   {
-    input: 'lasis',
-    output: 'cepts_lasis',
+    input: "lasis",
+    output: "cepts_lasis",
     time: 14_400_000, // 4h
   },
 ];
@@ -59,7 +59,7 @@ type BerryInInv = {
 type State = {
   user: UserProfile;
 
-  selectedMenu: null | 'cook' | 'boil';
+  selectedMenu: null | "cook" | "boil";
 
   boil: {
     berriesInInv: BerryInInv[];
@@ -77,9 +77,9 @@ function makeCombinedProperties(chosenBerries: Record<ItemKey, number>) {
     slapjums: 0,
   };
 
-  Object.keys(chosenBerries).forEach(berry => {
+  Object.keys(chosenBerries).forEach((berry) => {
     const properties = berryProperties[berry];
-    Object.keys(properties).forEach(prop => {
+    Object.keys(properties).forEach((prop) => {
       // @ts-ignore
       combinedProperties[prop] += properties[prop] * chosenBerries[berry];
     });
@@ -93,48 +93,48 @@ function getBoilDuration() {
 }
 
 const enum ComponentId {
-  SelectBoil = 'plits_select_menu_boil',
-  SelectCook = 'plits_select_menu_cook',
+  SelectBoil = "plits_select_menu_boil",
+  SelectCook = "plits_select_menu_cook",
 
-  SelectBerry = 'plits_select_berry',
-  AddBerry = 'plits_add_berry',
-  RemoveBerry = 'plits_remove_berry',
-  RemoveAllBerries = 'plits_remove_all_berries',
-  Boil = 'plits_boil_ievarijums',
+  SelectBerry = "plits_select_berry",
+  AddBerry = "plits_add_berry",
+  RemoveBerry = "plits_remove_berry",
+  RemoveAllBerries = "plits_remove_all_berries",
+  Boil = "plits_boil_ievarijums",
 }
 
 function view(state: State, i: BaseInteraction) {
   if (!state.selectedMenu) {
     return embedTemplate({
       i,
-      title: `Izmantot: ${itemString('gazes_plits')}`,
+      title: `Izmantot: ${itemString("gazes_plits")}`,
       color: commandColors.izmantot,
-      description: 'Ko tu vēlies darīt?',
+      description: "Ko tu vēlies darīt?",
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder().setCustomId(ComponentId.SelectCook).setLabel('Cept').setStyle(ButtonStyle.Primary),
+          new ButtonBuilder().setCustomId(ComponentId.SelectCook).setLabel("Cept").setStyle(ButtonStyle.Primary),
           new ButtonBuilder()
             .setCustomId(ComponentId.SelectBoil)
-            .setLabel('Vārīt ievārījumu')
+            .setLabel("Vārīt ievārījumu")
             .setStyle(ButtonStyle.Primary),
         ),
       ],
     });
   }
 
-  if (state.selectedMenu === 'boil') {
+  if (state.selectedMenu === "boil") {
     if (!state.boil.berriesInInv.length) {
       return embedTemplate({
         i,
         color: commandColors.izmantot,
-        description: 'Tev inventārā nav ogu ko vārīt',
+        description: "Tev inventārā nav ogu ko vārīt",
       });
     }
 
-    let description = '';
+    let description = "";
 
     if (!Object.keys(state.boil.chosenBerries).length) {
-      description = 'No izvēlnes izvēlies ogas, kuras pievienot vārīšanai';
+      description = "No izvēlnes izvēlies ogas, kuras pievienot vārīšanai";
     } else {
       const { distance, value, normalizedDistance } = calcIevarijumsPrice(state.boil.combinedProperties);
       description += `Distance: ${distance} \nVērtība: ${value} lati \nNormalized distance: ${normalizedDistance}`;
@@ -144,7 +144,7 @@ function view(state: State, i: BaseInteraction) {
       new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
         new StringSelectMenuBuilder()
           .setCustomId(ComponentId.SelectBerry)
-          .setPlaceholder('Izvēlies ogu')
+          .setPlaceholder("Izvēlies ogu")
           .addOptions(
             ...state.boil.berriesInInv // @ts-ignore jo stringu salīdzināšana
               .toSorted((a, b) => a.name > b.name)
@@ -156,7 +156,7 @@ function view(state: State, i: BaseInteraction) {
                   `Rūgt. ${berryProperties[name].rugtums} | ` +
                   `Slapj. ${berryProperties[name].slapjums}`,
                 value: name,
-                emoji: itemObj.emoji() || '❓',
+                emoji: itemObj.emoji() || "❓",
                 default: name === state.boil.selectedBerry,
               })),
           ),
@@ -169,7 +169,7 @@ function view(state: State, i: BaseInteraction) {
       const row = [
         new ButtonBuilder()
           .setCustomId(ComponentId.AddBerry)
-          .setLabel('Mest katlā')
+          .setLabel("Mest katlā")
           .setStyle(ButtonStyle.Primary)
           .setDisabled(selectedBerryInInv.amount <= state.boil.chosenBerries[state.boil.selectedBerry]),
       ];
@@ -187,7 +187,7 @@ function view(state: State, i: BaseInteraction) {
         row.push(
           new ButtonBuilder()
             .setCustomId(ComponentId.RemoveAllBerries)
-            .setLabel('Izņemt visas ogas')
+            .setLabel("Izņemt visas ogas")
             .setStyle(ButtonStyle.Danger),
         );
       }
@@ -200,7 +200,7 @@ function view(state: State, i: BaseInteraction) {
         new ActionRowBuilder<ButtonBuilder>().addComponents(
           new ButtonBuilder()
             .setCustomId(ComponentId.Boil)
-            .setLabel('Vārīt')
+            .setLabel("Vārīt")
             .setStyle(totalBerryCount < 3 ? ButtonStyle.Secondary : ButtonStyle.Success)
             .setDisabled(totalBerryCount < 3),
         ),
@@ -209,28 +209,28 @@ function view(state: State, i: BaseInteraction) {
 
     return embedTemplate({
       i,
-      title: `${itemString('gazes_plits')} - Vārīt ievārījumu`,
+      title: `${itemString("gazes_plits")} - Vārīt ievārījumu`,
       color: commandColors.izmantot,
       description,
       fields: [
         {
-          name: 'Izvēlētās ogas',
+          name: "Izvēlētās ogas",
           value: Object.entries(state.boil.chosenBerries) // @ts-ignore jo stringu salīdzināšana
             .toSorted((a, b) => a[0] > b[0])
             .map(([key, amount]) => `${itemString(key)}: ${amount}`)
-            .join('\n'),
+            .join("\n"),
           inline: false,
         },
         {
-          name: 'Kombinētās īpašības',
+          name: "Kombinētās īpašības",
           value: Object.keys(state.boil.combinedProperties)
             .map(
-              prop =>
+              (prop) =>
                 // neliela TS putra
                 `${propertiesLat[prop as keyof BerryProperties]}: ` +
                 `${state.boil.combinedProperties[prop as keyof BerryProperties]}`,
             )
-            .join('\n'),
+            .join("\n"),
           inline: false,
         },
       ],
@@ -239,20 +239,20 @@ function view(state: State, i: BaseInteraction) {
   }
 
   // TODO: uztaisīt cepšanu
-  if (state.selectedMenu === 'cook') {
+  if (state.selectedMenu === "cook") {
     return embedTemplate({
       i,
-      description: 'Cept',
+      description: "Cept",
     });
   }
 
   // šim nekad nevajadzētu notikt, bet atgriežu, lai TS nebļauj
-  return embedTemplate({ i, description: 'ja tu redzi šo ziņu, tad kaut kas ir nogājis galīgi greizi' });
+  return embedTemplate({ i, description: "ja tu redzi šo ziņu, tad kaut kas ir nogājis galīgi greizi" });
 }
 
 const gazes_plits: UsableItemFunc = async (userId, guildId, _, specialItem) => {
   return {
-    custom: async i => {
+    custom: async (i) => {
       const user = await findUser(userId, guildId);
 
       if (!user || !specialItem) {
@@ -261,7 +261,7 @@ const gazes_plits: UsableItemFunc = async (userId, guildId, _, specialItem) => {
 
       const berriesInInv: BerryInInv[] = [];
 
-      Object.keys(berryProperties).forEach(berry => {
+      Object.keys(berryProperties).forEach((berry) => {
         const inInv = user.items.find(({ name }) => name === berry);
         if (inInv && inInv.amount > 0) {
           berriesInInv.push({ name: berry, amount: inInv.amount, itemObj: itemList[berry] });
@@ -273,29 +273,29 @@ const gazes_plits: UsableItemFunc = async (userId, guildId, _, specialItem) => {
         selectedMenu: null,
         boil: {
           berriesInInv,
-          selectedBerry: '',
+          selectedBerry: "",
           chosenBerries: {},
           combinedProperties: makeCombinedProperties({}),
         },
       };
 
-      const dialogs = new Dialogs(i, initialState, view, 'izmantot_gazes_plits', { time: 60000 });
+      const dialogs = new Dialogs(i, initialState, view, "izmantot_gazes_plits", { time: 60000 });
 
       if (!(await dialogs.start())) {
         return intReply(i, errorEmbed);
       }
 
-      dialogs.onClick(async int => {
+      dialogs.onClick(async (int) => {
         const { customId, componentType: type } = int;
 
         // pirmā izvēlne ========================================
         if (customId === ComponentId.SelectCook && type === ComponentType.Button) {
-          dialogs.state.selectedMenu = 'cook';
+          dialogs.state.selectedMenu = "cook";
           return { update: true };
         }
 
         if (customId === ComponentId.SelectBoil && type === ComponentType.Button) {
-          dialogs.state.selectedMenu = 'boil';
+          dialogs.state.selectedMenu = "boil";
 
           if (!dialogs.state.boil.berriesInInv.length) {
             return { update: true, end: true };
@@ -342,7 +342,7 @@ const gazes_plits: UsableItemFunc = async (userId, guildId, _, specialItem) => {
         if (customId === ComponentId.RemoveAllBerries && type === ComponentType.Button) {
           dialogs.state.boil.chosenBerries = {};
           dialogs.state.boil.combinedProperties = makeCombinedProperties({});
-          dialogs.state.boil.selectedBerry = '';
+          dialogs.state.boil.selectedBerry = "";
 
           return { update: true };
         }
@@ -354,7 +354,7 @@ const gazes_plits: UsableItemFunc = async (userId, guildId, _, specialItem) => {
           // pārbaudam, vai plīts ir inventarā
           const isPlitsInInv = user.specialItems.find(({ _id }) => _id === specialItem._id);
           if (!isPlitsInInv) {
-            await intReply(int, ephemeralReply(`Kļūda: Šī **${itemString('gazes_plits')}** vairs nav tavā inventārā`));
+            await intReply(int, ephemeralReply(`Kļūda: Šī **${itemString("gazes_plits")}** vairs nav tavā inventārā`));
             return { end: true };
           }
 
@@ -372,7 +372,7 @@ const gazes_plits: UsableItemFunc = async (userId, guildId, _, specialItem) => {
             await intReply(
               int,
               ephemeralReply(
-                'Kļūda: Tava inventāra saturs ir mainījies, tev nav nepieciešamo ogu, lai uzvārītu šo ievārījumu',
+                "Kļūda: Tava inventāra saturs ir mainījies, tev nav nepieciešamo ogu, lai uzvārītu šo ievārījumu",
               ),
             );
             return { end: true };
@@ -385,7 +385,7 @@ const gazes_plits: UsableItemFunc = async (userId, guildId, _, specialItem) => {
           await addItems(userId, guildId, itemsToRemove);
 
           await editItemAttribute(userId, guildId, specialItem._id!, {
-            actionType: 'boil_ievarijums',
+            actionType: "boil_ievarijums",
             boilIevarijums: {
               boilStarttime: Date.now(),
               boilDuration: getBoilDuration(),
@@ -394,7 +394,7 @@ const gazes_plits: UsableItemFunc = async (userId, guildId, _, specialItem) => {
             },
           });
 
-          intReply(int, smallEmbed('Ievārījuma vārīšana uzsākta veiksmīgi!', commandColors.izmantot));
+          intReply(int, smallEmbed("Ievārījuma vārīšana uzsākta veiksmīgi!", commandColors.izmantot));
           return { end: true };
         }
 

@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import chalk from "chalk";
 import {
   ButtonInteraction,
   ChatInputCommandInteraction,
@@ -8,7 +8,7 @@ import {
   Message,
   ModalSubmitInteraction,
   SelectMenuInteraction,
-} from 'discord.js';
+} from "discord.js";
 
 type InteractionTypes =
   | ChatInputCommandInteraction
@@ -18,22 +18,22 @@ type InteractionTypes =
 
 function intReply(
   interaction: InteractionTypes,
-  options: InteractionReplyOptions & { withResponse: true }
+  options: InteractionReplyOptions & { withResponse: true },
 ): Promise<InteractionCallbackResponse | null>;
 function intReply(
   interaction: InteractionTypes,
-  options: InteractionReplyOptions | string
+  options: InteractionReplyOptions | string,
 ): Promise<InteractionResponse | null>;
 
 async function intReply(
   interaction: InteractionTypes,
-  options: (InteractionReplyOptions & { withResponse: true }) | InteractionReplyOptions | string
+  options: (InteractionReplyOptions & { withResponse: true }) | InteractionReplyOptions | string,
 ): Promise<InteractionResponse | InteractionCallbackResponse | null> {
   try {
     const res = await interaction.reply(options);
     return res;
   } catch (e: any) {
-    console.log(new Date().toLocaleString('en-GB') + chalk.redBright(' [Error] ') + chalk.bold(e.message));
+    console.log(new Date().toLocaleString("en-GB") + chalk.redBright(" [Error] ") + chalk.bold(e.message));
     return null;
   }
 }

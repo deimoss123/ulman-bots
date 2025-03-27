@@ -1,22 +1,22 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, ComponentType } from 'discord.js';
-import deleteAuction from '@/economy/auction/deleteAuction';
-import findAuctionById from '@/economy/auction/findAuctionById';
-import buttonHandler from '@/embeds/buttonHandler';
-import embedTemplate from '@/embeds/embedTemplate';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import errorEmbed from '@/embeds/errorEmbed';
-import intReply from '@/utils/intReply';
-import { izsoleItemString } from '@/commands/_izsole/izsoleEmbeds';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, ComponentType } from "discord.js";
+import deleteAuction from "@/economy/auction/deleteAuction";
+import findAuctionById from "@/economy/auction/findAuctionById";
+import buttonHandler from "@/embeds/buttonHandler";
+import embedTemplate from "@/embeds/embedTemplate";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import errorEmbed from "@/embeds/errorEmbed";
+import intReply from "@/utils/intReply";
+import { izsoleItemString } from "@/commands/_izsole/izsoleEmbeds";
 
 const deleteConfirmComponents = [
   new ActionRowBuilder<ButtonBuilder>().addComponents(
-    new ButtonBuilder().setCustomId('izsole_delete_yes').setLabel('Jā').setStyle(ButtonStyle.Primary),
-    new ButtonBuilder().setCustomId('izsole_delete_no').setLabel('Nē').setStyle(ButtonStyle.Danger),
+    new ButtonBuilder().setCustomId("izsole_delete_yes").setLabel("Jā").setStyle(ButtonStyle.Primary),
+    new ButtonBuilder().setCustomId("izsole_delete_no").setLabel("Nē").setStyle(ButtonStyle.Danger),
   ),
 ];
 
 export default async function izsolesDelete(i: ChatInputCommandInteraction) {
-  const id = i.options.getString('id');
+  const id = i.options.getString("id");
   if (!id) return intReply(i, errorEmbed);
 
   const izsole = await findAuctionById(id);
@@ -26,19 +26,19 @@ export default async function izsolesDelete(i: ChatInputCommandInteraction) {
     i,
     embedTemplate({
       i,
-      title: '❔ Vai tiešām izdzēst šo izsoli?',
+      title: "❔ Vai tiešām izdzēst šo izsoli?",
       description: izsoleItemString(izsole),
       components: deleteConfirmComponents,
     }),
   );
   if (!msg) return;
 
-  buttonHandler(i, 'izsole', msg, async int => {
+  buttonHandler(i, "izsole", msg, async (int) => {
     const { customId } = int;
     if (int.componentType !== ComponentType.Button) return;
 
     switch (customId) {
-      case 'izsole_delete_yes': {
+      case "izsole_delete_yes": {
         const res = await deleteAuction(id);
         if (!res) return { error: true };
 
@@ -47,7 +47,7 @@ export default async function izsolesDelete(i: ChatInputCommandInteraction) {
           edit: {
             embeds: embedTemplate({
               i,
-              title: '🔴 Izsole izdzēsta',
+              title: "🔴 Izsole izdzēsta",
               color: 0xee0000,
               description: izsoleItemString(izsole),
             }).embeds,
@@ -55,7 +55,7 @@ export default async function izsolesDelete(i: ChatInputCommandInteraction) {
           },
         };
       }
-      case 'izsole_delete_no': {
+      case "izsole_delete_no": {
         return {
           end: true,
           edit: {

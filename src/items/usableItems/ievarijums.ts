@@ -1,5 +1,5 @@
-import { UsableItemFunc } from '@/interfaces/Item';
-import { BerryProperties } from '@/items/usableItems/oga';
+import { UsableItemFunc } from "@/interfaces/Item";
+import { BerryProperties } from "@/items/usableItems/oga";
 
 /* 
 Ievārījumiem vērtībā tiek rēķināta izmantojot 6 vektoru telpu

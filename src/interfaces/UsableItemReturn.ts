@@ -1,4 +1,4 @@
-import { ButtonInteraction, ChatInputCommandInteraction, EmbedField } from 'discord.js';
+import { ButtonInteraction, ChatInputCommandInteraction, EmbedField } from "discord.js";
 
 type UsableItemReturn =
   | {
@@ -10,7 +10,7 @@ type UsableItemReturn =
       custom: (
         // i: ChatInputCommandInteraction | ButtonInteraction,
         i: ChatInputCommandInteraction | ButtonInteraction,
-        color: number
+        color: number,
       ) => any;
     }
   | {

@@ -1,6 +1,6 @@
-import itemString from '@/embeds/helpers/itemString';
-import { UsableItemFunc } from '@/interfaces/Item';
-import { ItemKey } from '@/items/itemList';
+import itemString from "@/embeds/helpers/itemString";
+import { UsableItemFunc } from "@/interfaces/Item";
+import { ItemKey } from "@/items/itemList";
 
 export type BerryProperties = {
   saldums: number;
@@ -10,10 +10,10 @@ export type BerryProperties = {
 };
 
 export const propertiesLat: Record<keyof BerryProperties, string> = {
-  saldums: 'Saldums',
-  skabums: 'Skābums',
-  rugtums: 'Rūgtums',
-  slapjums: 'Slapjums',
+  saldums: "Saldums",
+  skabums: "Skābums",
+  rugtums: "Rūgtums",
+  slapjums: "Slapjums",
 };
 
 export const berryProperties: Record<ItemKey, BerryProperties> = {
@@ -51,14 +51,14 @@ export const berryProperties: Record<ItemKey, BerryProperties> = {
 
 export function ogaInfo(key: ItemKey) {
   return () =>
-    `Ogas var iegūt no **${itemString('ogu_krums')}**\n` +
-    `No ogām var vārīt **${itemString('ievarijums', null, true)}**, ` +
-    `izmantojot **${itemString('gazes_plits', null, true)}**\n\n` +
+    `Ogas var iegūt no **${itemString("ogu_krums")}**\n` +
+    `No ogām var vārīt **${itemString("ievarijums", null, true)}**, ` +
+    `izmantojot **${itemString("gazes_plits", null, true)}**\n\n` +
     `Katrai ogai ir savas īpašības, kas ietekmē ievārījuma beigu cenu\n\n` +
     `**Šīs ogas īpašības:**\n` +
     Object.entries(berryProperties[key])
       .map(([key, value]) => `${propertiesLat[key as keyof BerryProperties]}: ${value}`)
-      .join('\n');
+      .join("\n");
 }
 
 export default function oga(key: ItemKey): UsableItemFunc {

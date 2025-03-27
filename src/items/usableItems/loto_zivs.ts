@@ -1,26 +1,26 @@
-import { ActionRowBuilder, BaseInteraction, ComponentType, StringSelectMenuBuilder } from 'discord.js';
-import addItems from '@/economy/addItems';
-import findUser from '@/economy/findUser';
-import removeItemsById from '@/economy/removeItemsById';
-import commandColors from '@/embeds/commandColors';
-import embedTemplate from '@/embeds/embedTemplate';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import errorEmbed from '@/embeds/errorEmbed';
-import itemString from '@/embeds/helpers/itemString';
-import { UsableItemFunc } from '@/interfaces/Item';
-import intReply from '@/utils/intReply';
-import chance, { ChanceObj, ChanceRecord } from '@/items/helpers/chance';
-import countFreeInvSlots from '@/items/helpers/countFreeInvSlots';
-import itemList, { ItemKey } from '@/items/itemList';
-import UserProfile from '@/interfaces/UserProfile';
-import emoji from '@/utils/emoji';
-import mongoTransaction from '@/utils/mongoTransaction';
-import { Dialogs } from '@/utils/Dialogs';
-import { useDifferentItemHandler, useDifferentItemSelectMenu } from '@/utils/useDifferentItem';
+import { ActionRowBuilder, BaseInteraction, ComponentType, StringSelectMenuBuilder } from "discord.js";
+import addItems from "@/economy/addItems";
+import findUser from "@/economy/findUser";
+import removeItemsById from "@/economy/removeItemsById";
+import commandColors from "@/embeds/commandColors";
+import embedTemplate from "@/embeds/embedTemplate";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import errorEmbed from "@/embeds/errorEmbed";
+import itemString from "@/embeds/helpers/itemString";
+import { UsableItemFunc } from "@/interfaces/Item";
+import intReply from "@/utils/intReply";
+import chance, { ChanceObj, ChanceRecord } from "@/items/helpers/chance";
+import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
+import itemList, { ItemKey } from "@/items/itemList";
+import UserProfile from "@/interfaces/UserProfile";
+import emoji from "@/utils/emoji";
+import mongoTransaction from "@/utils/mongoTransaction";
+import { Dialogs } from "@/utils/Dialogs";
+import { useDifferentItemHandler, useDifferentItemSelectMenu } from "@/utils/useDifferentItem";
 
 const fishCountChance: ChanceRecord = {
-  3: { chance: '*' }, // 0.25
-  4: { chance: '*' }, // 0.25
+  3: { chance: "*" }, // 0.25
+  4: { chance: "*" }, // 0.25
   5: { chance: 0.2 },
   6: { chance: 0.15 },
   7: { chance: 0.1 },
@@ -32,9 +32,9 @@ export function generateFishCount() {
 }
 
 const lotoFishChanceObj: Record<ItemKey, ChanceObj> = {
-  lidaka: { chance: '*' },
-  asaris: { chance: '*' },
-  lasis: { chance: '*' },
+  lidaka: { chance: "*" },
+  asaris: { chance: "*" },
+  lasis: { chance: "*" },
   petniekzivs: { chance: 0.15 },
   juridiska_zivs: { chance: 0.1 },
   divaina_zivs: { chance: 0.1 },
@@ -49,16 +49,16 @@ type State = {
 };
 
 function view(state: State, i: BaseInteraction) {
-  const emptyEmoji = emoji('blank');
-  const arrow_1_left = emoji('icon_arrow_1_left');
-  const arrow_1_right = emoji('icon_arrow_1_right');
-  const arrow_2_left = emoji('icon_arrow_2_left');
-  const arrow_2_right = emoji('icon_arrow_2_right');
+  const emptyEmoji = emoji("blank");
+  const arrow_1_left = emoji("icon_arrow_1_left");
+  const arrow_1_right = emoji("icon_arrow_1_right");
+  const arrow_2_left = emoji("icon_arrow_2_left");
+  const arrow_2_right = emoji("icon_arrow_2_right");
 
   const components: ActionRowBuilder<StringSelectMenuBuilder>[] = [];
 
-  if (!state.isSpinning && state.user.specialItems.filter(({ name }) => name === 'loto_zivs').length) {
-    components.push(useDifferentItemSelectMenu(state.user, 'loto_zivs', state.itemId));
+  if (!state.isSpinning && state.user.specialItems.filter(({ name }) => name === "loto_zivs").length) {
+    components.push(useDifferentItemSelectMenu(state.user, "loto_zivs", state.itemId));
   }
 
   return embedTemplate({
@@ -69,19 +69,19 @@ function view(state: State, i: BaseInteraction) {
       (state.isSpinning ? arrow_1_right : arrow_2_right) +
       emptyEmoji +
       (state.isSpinning
-        ? Array(state.wonFishArr.length).fill(emoji('icon_loto_zivs_spin'))
-        : state.wonFishArr.map(key => itemList[key].emoji())
-      ).join(' ') +
+        ? Array(state.wonFishArr.length).fill(emoji("icon_loto_zivs_spin"))
+        : state.wonFishArr.map((key) => itemList[key].emoji())
+      ).join(" ") +
       emptyEmoji +
       (state.isSpinning ? arrow_1_left : arrow_2_left),
     fields: state.isSpinning
       ? []
       : [
           {
-            name: 'Tu laimēji:',
+            name: "Tu laimēji:",
             value: Object.entries(state.wonFishObj)
               .map(([key, amount]) => itemString(itemList[key], amount, true))
-              .join('\n'),
+              .join("\n"),
             inline: true,
           },
         ],
@@ -91,7 +91,7 @@ function view(state: State, i: BaseInteraction) {
 
 const loto_zivs: UsableItemFunc = (userId, guildId, _, specialItem) => {
   return {
-    custom: async i => {
+    custom: async (i) => {
       const holdsFishCount = specialItem!.attributes.holdsFishCount!;
 
       const user = await findUser(userId, guildId);
@@ -118,7 +118,7 @@ const loto_zivs: UsableItemFunc = (userId, guildId, _, specialItem) => {
         wonFishObj[key] = wonFishObj[key] ? wonFishObj[key] + 1 : 1;
       }
 
-      const { ok, values } = await mongoTransaction(session => [
+      const { ok, values } = await mongoTransaction((session) => [
         () => addItems(userId, guildId, { ...wonFishObj }, session),
         () => removeItemsById(userId, guildId, [specialItem!._id!], session),
       ]);
@@ -135,7 +135,7 @@ const loto_zivs: UsableItemFunc = (userId, guildId, _, specialItem) => {
         isSpinning: true,
       };
 
-      const dialogs = new Dialogs(i, initialState, view, 'izmantot', { time: 30000, isActive: true });
+      const dialogs = new Dialogs(i, initialState, view, "izmantot", { time: 30000, isActive: true });
 
       if (!(await dialogs.start())) {
         return intReply(i, errorEmbed);
@@ -155,8 +155,8 @@ const loto_zivs: UsableItemFunc = (userId, guildId, _, specialItem) => {
 
         state.user = user;
 
-        if (int.customId === 'use_different' && int.componentType === ComponentType.StringSelect) {
-          return useDifferentItemHandler(user, 'loto_zivs', int);
+        if (int.customId === "use_different" && int.componentType === ComponentType.StringSelect) {
+          return useDifferentItemHandler(user, "loto_zivs", int);
         }
       });
     },

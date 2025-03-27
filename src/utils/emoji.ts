@@ -1,12 +1,12 @@
-import { APIUser, RESTGetAPIApplicationEmojisResult, Routes } from 'discord-api-types/v10';
-import { APIEmoji, REST } from 'discord.js';
+import { APIUser, RESTGetAPIApplicationEmojisResult, Routes } from "discord-api-types/v10";
+import { APIEmoji, REST } from "discord.js";
 
 const botEmojis: Map<string, APIEmoji> = new Map();
 
 export async function loadEmojis() {
-  const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN);
+  const rest = new REST({ version: "10" }).setToken(process.env.BOT_TOKEN);
 
-  const bot = (await rest.get(Routes.user('@me'))) as APIUser;
+  const bot = (await rest.get(Routes.user("@me"))) as APIUser;
   const botId = bot!.id;
 
   const emojis = (await rest.get(Routes.applicationEmojis(botId))) as RESTGetAPIApplicationEmojisResult;
@@ -24,9 +24,9 @@ export default function emoji(
 export default function emoji(name: string, asObject: boolean | undefined = false) {
   const emoji = botEmojis.get(name);
 
-  if (!emoji) return asObject ? null : '';
+  if (!emoji) return asObject ? null : "";
 
   if (asObject) return { id: emoji.id!, name: emoji.name!, animated: emoji.animated };
 
-  return `<${emoji.animated ? 'a' : ''}:${name}:${emoji.id}>`;
+  return `<${emoji.animated ? "a" : ""}:${name}:${emoji.id}>`;
 }

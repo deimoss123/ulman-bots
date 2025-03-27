@@ -1,29 +1,29 @@
-import { bold, ComponentType, EmbedBuilder } from 'discord.js';
-import addItems from '@/economy/addItems';
-import addLati from '@/economy/addLati';
-import addSpecialItems from '@/economy/addSpecialItems';
-import addXp, { AddXpReturn } from '@/economy/addXp';
-import findUser from '@/economy/findUser';
-import removeItemsById from '@/economy/removeItemsById';
-import setFishing from '@/economy/setFishing';
-import commandColors from '@/embeds/commandColors';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import errorEmbed from '@/embeds/errorEmbed';
-import { displayAttributes } from '@/embeds/helpers/displayAttributes';
-import itemString from '@/embeds/helpers/itemString';
-import latiString from '@/embeds/helpers/latiString';
-import xpAddedEmbed from '@/embeds/helpers/xpAddedEmbed';
-import smallEmbed from '@/embeds/smallEmbed';
-import Command from '@/interfaces/Command';
-import checkUserSpecialItems from '@/items/helpers/checkUserSpecialItems';
-import countFreeInvSlots from '@/items/helpers/countFreeInvSlots';
-import itemList, { ItemKey } from '@/items/itemList';
-import intReply from '@/utils/intReply';
-import maksekeresData from '@/commands/zvejot/makskeresData';
-import syncFishing from '@/commands/zvejot/syncFishing';
-import { Dialogs } from '@/utils/Dialogs';
-import zvejotView, { ComponentId, ZvejotState } from '@/commands/zvejot/zvejotView';
-import mongoTransaction from '@/utils/mongoTransaction';
+import { bold, ComponentType, EmbedBuilder } from "discord.js";
+import addItems from "@/economy/addItems";
+import addLati from "@/economy/addLati";
+import addSpecialItems from "@/economy/addSpecialItems";
+import addXp, { AddXpReturn } from "@/economy/addXp";
+import findUser from "@/economy/findUser";
+import removeItemsById from "@/economy/removeItemsById";
+import setFishing from "@/economy/setFishing";
+import commandColors from "@/embeds/commandColors";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import errorEmbed from "@/embeds/errorEmbed";
+import { displayAttributes } from "@/embeds/helpers/displayAttributes";
+import itemString from "@/embeds/helpers/itemString";
+import latiString from "@/embeds/helpers/latiString";
+import xpAddedEmbed from "@/embeds/helpers/xpAddedEmbed";
+import smallEmbed from "@/embeds/smallEmbed";
+import Command from "@/interfaces/Command";
+import checkUserSpecialItems from "@/items/helpers/checkUserSpecialItems";
+import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
+import itemList, { ItemKey } from "@/items/itemList";
+import intReply from "@/utils/intReply";
+import maksekeresData from "@/commands/zvejot/makskeresData";
+import syncFishing from "@/commands/zvejot/syncFishing";
+import { Dialogs } from "@/utils/Dialogs";
+import zvejotView, { ComponentId, ZvejotState } from "@/commands/zvejot/zvejotView";
+import mongoTransaction from "@/utils/mongoTransaction";
 
 export function calcRepairCost(itemKey: ItemKey, usesLeft: number) {
   const price = itemList[itemKey].value * 2;
@@ -39,18 +39,18 @@ export const ZVEJOT_MIN_LEVEL = 0;
 
 const zvejot: Command = {
   description: () =>
-    'Copēt zivis DižLatvijas ūdeņos\n\n' +
-    'Lai zvejotu tev ir nepieciešama makšķere, kad esi ieguvis makšķeri izvēlies to ar `/zvejot` komandu un sāc zvejot\n' +
-    'Zvejošana notiek automātiski, līdz brīdim kad makšķerei beigsies izturība, vai arī zvejošanas inventārs ir pilns\n' +
-    'Zvejošanas ietilpība ir **6**, bet to var palielināt sasniedzot noteiktus līmeņus\n' +
-    'Katra nozvejotā manta dod **1** UlmaņPunktu\n\n' +
-    'Par katru makšķeri var apskatīt zvejošanas informāciju ar komandu `/info`\n' +
-    'Makšķeres ir atribūtu mantas - katrai makšķerei ir izturības atribūts kas ietekmē tās vērtību\n' +
-    'Dažas makšķeres ir iespējams salabot par latiem vai nu tās izmantojot ar `/izmantot` komandu, vai arī caur `/zvejot`, kad tā ir izvēlēta zvejošanai',
+    "Copēt zivis DižLatvijas ūdeņos\n\n" +
+    "Lai zvejotu tev ir nepieciešama makšķere, kad esi ieguvis makšķeri izvēlies to ar `/zvejot` komandu un sāc zvejot\n" +
+    "Zvejošana notiek automātiski, līdz brīdim kad makšķerei beigsies izturība, vai arī zvejošanas inventārs ir pilns\n" +
+    "Zvejošanas ietilpība ir **6**, bet to var palielināt sasniedzot noteiktus līmeņus\n" +
+    "Katra nozvejotā manta dod **1** UlmaņPunktu\n\n" +
+    "Par katru makšķeri var apskatīt zvejošanas informāciju ar komandu `/info`\n" +
+    "Makšķeres ir atribūtu mantas - katrai makšķerei ir izturības atribūts kas ietekmē tās vērtību\n" +
+    "Dažas makšķeres ir iespējams salabot par latiem vai nu tās izmantojot ar `/izmantot` komandu, vai arī caur `/zvejot`, kad tā ir izvēlēta zvejošanai",
   color: commandColors.zvejot,
   data: {
-    name: 'zvejot',
-    description: 'Copēt zivis DižLatvijas ūdeņos',
+    name: "zvejot",
+    description: "Copēt zivis DižLatvijas ūdeņos",
   },
   async run(i) {
     const userId = i.user.id;
@@ -65,7 +65,7 @@ const zvejot: Command = {
       selectedFishingRodId: null,
     };
 
-    const dialogs = new Dialogs<ZvejotState>(i, initialState, zvejotView, 'zvejot', { time: 60000 });
+    const dialogs = new Dialogs<ZvejotState>(i, initialState, zvejotView, "zvejot", { time: 60000 });
 
     if (!(await dialogs.start())) {
       return intReply(i, errorEmbed);
@@ -76,7 +76,7 @@ const zvejot: Command = {
         case ComponentId.SelectFishingRod: {
           if (int.componentType !== ComponentType.StringSelect) return;
 
-          [state.selectedFishingRod, state.selectedFishingRodId] = int.values[0].split(' ');
+          [state.selectedFishingRod, state.selectedFishingRodId] = int.values[0].split(" ");
 
           return { update: true };
         }
@@ -86,18 +86,18 @@ const zvejot: Command = {
           const user = await findUser(userId, guildId);
           if (!user) return { error: true };
 
-          const rod = user.specialItems.find(item => item._id === state.selectedFishingRodId);
+          const rod = user.specialItems.find((item) => item._id === state.selectedFishingRodId);
 
           if (!rod) {
             state.user = user;
             state.selectedFishingRod = null;
             state.selectedFishingRodId = null;
 
-            intReply(int, ephemeralReply('Hmmm, šī maksķere ir maģiski pazudusi no tava inventāra'));
+            intReply(int, ephemeralReply("Hmmm, šī maksķere ir maģiski pazudusi no tava inventāra"));
             return { edit: true };
           }
 
-          const { ok, values } = await mongoTransaction(session => [
+          const { ok, values } = await mongoTransaction((session) => [
             () => removeItemsById(userId, guildId, [state.selectedFishingRodId!], session),
             () => setFishing(userId, guildId, { selectedRod: rod.name, usesLeft: rod.attributes.durability! }, session),
             () => syncFishing(userId, guildId, true, true, undefined, session),
@@ -135,7 +135,7 @@ const zvejot: Command = {
             return { edit: true };
           }
 
-          const specialItemsToAdd = Object.entries(fishesToAdd).filter(([name]) => 'attributes' in itemList[name]);
+          const specialItemsToAdd = Object.entries(fishesToAdd).filter(([name]) => "attributes" in itemList[name]);
           if (specialItemsToAdd.length) {
             for (const [name, amount] of specialItemsToAdd) {
               const checkRes = checkUserSpecialItems(user, name, amount);
@@ -146,7 +146,7 @@ const zvejot: Command = {
             }
           }
 
-          const { ok, values } = await mongoTransaction(session => [
+          const { ok, values } = await mongoTransaction((session) => [
             () => setFishing(userId, guildId, { caughtFishes: null }, session),
             () => addItems(userId, guildId, fishesToAdd, session),
             () => syncFishing(userId, guildId, true, false, undefined, session),
@@ -161,12 +161,12 @@ const zvejot: Command = {
           intReply(int, {
             embeds: [
               new EmbedBuilder().setColor(this.color).setFields({
-                name: 'Tu savāci copi:',
+                name: "Tu savāci copi:",
                 value: Object.entries(fishesToAdd)
                   .map(([key, amount]) => `> ${itemString(itemList[key], amount, true)}`)
-                  .join('\n'),
+                  .join("\n"),
               }),
-              xpAddedEmbed(leveledUser, xpToAdd, 'No zvejošanas tu ieguvi'),
+              xpAddedEmbed(leveledUser, xpToAdd, "No zvejošanas tu ieguvi"),
             ],
           });
 
@@ -186,7 +186,7 @@ const zvejot: Command = {
           if (!selectedRod) return { error: true };
 
           if (!countFreeInvSlots(user)) {
-            intReply(int, ephemeralReply('Tu nevari noņemt maksķeri, jo tev ir pilns inventārs'));
+            intReply(int, ephemeralReply("Tu nevari noņemt maksķeri, jo tev ir pilns inventārs"));
             return { edit: true };
           }
 
@@ -198,7 +198,7 @@ const zvejot: Command = {
 
           const specialItemObj = { name: selectedRod, attributes: { durability: usesLeft } };
 
-          const { ok, values } = await mongoTransaction(session => [
+          const { ok, values } = await mongoTransaction((session) => [
             () => addSpecialItems(userId, guildId, [specialItemObj], session),
             () => setFishing(userId, guildId, { selectedRod: null, usesLeft: 0, futureFishList: [] }, session),
           ]);
@@ -212,7 +212,7 @@ const zvejot: Command = {
           intReply(int, {
             embeds: [
               new EmbedBuilder()
-                .setDescription('Tavam inventāram tika pievienota:')
+                .setDescription("Tavam inventāram tika pievienota:")
                 .setFields({
                   name: itemString(itemList[selectedRod]),
                   value: displayAttributes(specialItemObj),
@@ -254,7 +254,7 @@ const zvejot: Command = {
 
           const { maxDurability } = maksekeresData[fishing.selectedRod!];
 
-          const { ok, values } = await mongoTransaction(session => [
+          const { ok, values } = await mongoTransaction((session) => [
             () => setFishing(userId, guildId, { usesLeft: maxDurability }, session),
             () => addLati(userId, guildId, -repairCost, session),
             () => syncFishing(userId, guildId, true, false, undefined, session),

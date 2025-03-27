@@ -1,9 +1,9 @@
-import { ClientSession } from 'mongoose';
-import UserProfile from '@/interfaces/UserProfile';
-import { ItemKey } from '@/items/itemList';
-import User from '@/schemas/User';
-import userCache from '@/utils/userCache';
-import findUser from '@/economy/findUser';
+import { ClientSession } from "mongoose";
+import UserProfile from "@/interfaces/UserProfile";
+import { ItemKey } from "@/items/itemList";
+import User from "@/schemas/User";
+import userCache from "@/utils/userCache";
+import findUser from "@/economy/findUser";
 
 export default async function setTirgus(
   userId: string,
@@ -15,7 +15,7 @@ export default async function setTirgus(
     const user = await findUser(userId, guildId, session);
     if (!user) return;
 
-    const today = new Date().toLocaleDateString('en-GB');
+    const today = new Date().toLocaleDateString("en-GB");
     if (user.tirgus.lastDayUsed !== today) {
       user.tirgus.lastDayUsed = today;
       user.tirgus.itemsBought = [];

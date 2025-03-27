@@ -1,46 +1,46 @@
-import Command from '@/interfaces/Command';
-import { ApplicationCommandOptionType, ComponentType } from 'discord.js';
-import findUser from '@/economy/findUser';
-import errorEmbed from '@/embeds/errorEmbed';
-import itemList from '@/items/itemList';
-import latiString from '@/embeds/helpers/latiString';
-import countItems from '@/items/helpers/countItems';
-import commandColors from '@/embeds/commandColors';
-import itemString from '@/embeds/helpers/itemString';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import UserProfile, { ItemAttributes, ItemInProfile } from '@/interfaces/UserProfile';
-import Item, { AttributeItem, NotSellableItem } from '@/interfaces/Item';
-import { displayAttributes } from '@/embeds/helpers/displayAttributes';
-import pardotRun from '@/commands/pardot/pardotRun';
-import { INCREASE_CAP_1 } from '@/items/usableItems/mugursoma';
-import { INCREASE_CAP_2 } from '@/items/usableItems/divaina_mugursoma';
-import intReply from '@/utils/intReply';
-import emoji from '@/utils/emoji';
-import { ComponentId, InventarsState, inventarsView } from '@/commands/inventars/inventarsView';
-import { Dialogs } from '@/utils/Dialogs';
+import Command from "@/interfaces/Command";
+import { ApplicationCommandOptionType, ComponentType } from "discord.js";
+import findUser from "@/economy/findUser";
+import errorEmbed from "@/embeds/errorEmbed";
+import itemList from "@/items/itemList";
+import latiString from "@/embeds/helpers/latiString";
+import countItems from "@/items/helpers/countItems";
+import commandColors from "@/embeds/commandColors";
+import itemString from "@/embeds/helpers/itemString";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import UserProfile, { ItemAttributes, ItemInProfile } from "@/interfaces/UserProfile";
+import Item, { AttributeItem, NotSellableItem } from "@/interfaces/Item";
+import { displayAttributes } from "@/embeds/helpers/displayAttributes";
+import pardotRun from "@/commands/pardot/pardotRun";
+import { INCREASE_CAP_1 } from "@/items/usableItems/mugursoma";
+import { INCREASE_CAP_2 } from "@/items/usableItems/divaina_mugursoma";
+import intReply from "@/utils/intReply";
+import emoji from "@/utils/emoji";
+import { ComponentId, InventarsState, inventarsView } from "@/commands/inventars/inventarsView";
+import { Dialogs } from "@/utils/Dialogs";
 
-export type ItemType = 'not_usable' | 'usable' | 'special' | 'not_sellable';
+export type ItemType = "not_usable" | "usable" | "special" | "not_sellable";
 
 export const itemTypes: Record<ItemType, { text: string; textCompact: string; emoji: () => string }> = {
   not_sellable: {
-    text: 'īpaša izmantojama un **nepārdodama** un manta',
-    textCompact: 'izmantojams (nepārdodams)',
-    emoji: () => emoji('icon_check3'),
+    text: "īpaša izmantojama un **nepārdodama** un manta",
+    textCompact: "izmantojams (nepārdodams)",
+    emoji: () => emoji("icon_check3"),
   },
   special: {
-    text: 'izmantojama manta ar atribūtiem',
-    textCompact: 'izmantojams (ar atribūtiem)',
-    emoji: () => emoji('icon_check2'),
+    text: "izmantojama manta ar atribūtiem",
+    textCompact: "izmantojams (ar atribūtiem)",
+    emoji: () => emoji("icon_check2"),
   },
   usable: {
-    text: 'izmantojama manta',
-    textCompact: 'izmantojams',
-    emoji: () => emoji('icon_check1'),
+    text: "izmantojama manta",
+    textCompact: "izmantojams",
+    emoji: () => emoji("icon_check1"),
   },
   not_usable: {
-    text: 'neizmantojama manta',
-    textCompact: 'neizmantojams',
-    emoji: () => emoji('icon_cross'),
+    text: "neizmantojama manta",
+    textCompact: "neizmantojams",
+    emoji: () => emoji("icon_cross"),
   },
 };
 
@@ -61,11 +61,11 @@ export function attributeItemSort(
   }
 
   switch (typeof valueA) {
-    case 'string':
+    case "string":
       return valueA ? -1 : 1;
-    case 'number':
+    case "number":
       return ((valueB as number) - valueA) * sortDirection;
-    case 'boolean':
+    case "boolean":
       return valueA ? -1 : 1;
   }
 
@@ -80,7 +80,7 @@ function mapItems({ items, specialItems }: UserProfile) {
       const itemA = itemList[a.name] as AttributeItem<ItemAttributes> | NotSellableItem;
       const itemB = itemList[b.name] as AttributeItem<ItemAttributes> | NotSellableItem;
 
-      if ('notSellable' in itemA === 'notSellable' in itemB) {
+      if ("notSellable" in itemA === "notSellable" in itemB) {
         const valueA = itemA.customValue ? itemA.customValue(a.attributes) : itemA.value;
         const valueB = itemB.customValue ? itemB.customValue(b.attributes) : itemB.value;
 
@@ -91,17 +91,17 @@ function mapItems({ items, specialItems }: UserProfile) {
         }
 
         return valueB - valueA;
-      } else if ('notSellable' in itemB) {
+      } else if ("notSellable" in itemB) {
         return 1;
       }
 
       return -1;
     })
-    .map(specialItem => {
+    .map((specialItem) => {
       const { name, attributes } = specialItem;
       const item = itemList[name] as AttributeItem<ItemAttributes> | NotSellableItem;
 
-      const currentItemType: ItemType = 'notSellable' in item && item.notSellable ? 'not_sellable' : 'special';
+      const currentItemType: ItemType = "notSellable" in item && item.notSellable ? "not_sellable" : "special";
       itemTypesInInv.add(currentItemType);
 
       const value = item.customValue ? item.customValue(attributes) : item.value;
@@ -110,7 +110,7 @@ function mapItems({ items, specialItems }: UserProfile) {
         name: itemString(item, null, false, attributes),
         value:
           `${itemTypes[currentItemType].emoji()} ` +
-          `${currentItemType === 'not_sellable' ? '??? lati' : latiString(value)}\n` +
+          `${currentItemType === "not_sellable" ? "??? lati" : latiString(value)}\n` +
           displayAttributes(specialItem),
         inline: true,
       };
@@ -119,13 +119,13 @@ function mapItems({ items, specialItems }: UserProfile) {
   const sortedItems: ItemInProfile[] = items.sort((a, b) => {
     const itemA = itemList[a.name];
     const itemB = itemList[b.name];
-    return 'use' in itemB === 'use' in itemA ? itemB.value - itemA.value : 'use' in itemB ? 1 : -1;
+    return "use" in itemB === "use" in itemA ? itemB.value - itemA.value : "use" in itemB ? 1 : -1;
   });
 
   const itemFields = sortedItems.map(({ name, amount }) => {
     const item = itemList[name] as Item;
 
-    const currentItemType: ItemType = 'use' in item ? 'usable' : 'not_usable';
+    const currentItemType: ItemType = "use" in item ? "usable" : "not_usable";
     itemTypesInInv.add(currentItemType);
 
     return {
@@ -157,34 +157,34 @@ export const INV_PAGE_SIZE = 12;
 
 const inventars: Command = {
   description: () =>
-    'Apskatīt savu, vai cita lietotāja inventāru\n' +
-    'Inventārā tiek glabātas visas lietotāja mantas\n' +
-    'Caur inventāru ir iespējams arī pārdot nelietojamās vai visas mantas\n\n' +
-    'Katra lietotāja inventāram ir mantu limits - **50**\n' +
+    "Apskatīt savu, vai cita lietotāja inventāru\n" +
+    "Inventārā tiek glabātas visas lietotāja mantas\n" +
+    "Caur inventāru ir iespējams arī pārdot nelietojamās vai visas mantas\n\n" +
+    "Katra lietotāja inventāram ir mantu limits - **50**\n" +
     `Inventāra limitu ir iespējams palielināt ar šīm mantām: \n` +
     `- ${itemString(itemList.mugursoma)} (līdz ${INCREASE_CAP_1})\n` +
     `- ${itemString(itemList.divaina_mugursoma)} (līdz ${INCREASE_CAP_2})\n\n` +
-    'Katra manta aizņem vienādu vietu inventārā - **1** (vienu)',
+    "Katra manta aizņem vienādu vietu inventārā - **1** (vienu)",
   color: commandColors.inventars,
   data: {
-    name: 'inv',
-    description: 'Apskatīt savu, vai cita lietotāja inventāru',
+    name: "inv",
+    description: "Apskatīt savu, vai cita lietotāja inventāru",
     options: [
       {
-        name: 'lietotājs',
-        description: 'Lietotājs kam apskatīt inventāru',
+        name: "lietotājs",
+        description: "Lietotājs kam apskatīt inventāru",
         type: ApplicationCommandOptionType.User,
       },
     ],
   },
   async run(i) {
-    const targetDiscordUser = i.options.getUser('lietotājs') || i.user;
+    const targetDiscordUser = i.options.getUser("lietotājs") || i.user;
 
     const targetUser = await findUser(targetDiscordUser.id, i.guildId!);
     if (!targetUser) return intReply(i, errorEmbed);
 
     if (targetDiscordUser.id === i.client.user?.id) {
-      return intReply(i, ephemeralReply('Tu nevari apskatīt Valsts Bankas inventāru'));
+      return intReply(i, ephemeralReply("Tu nevari apskatīt Valsts Bankas inventāru"));
     }
 
     const { fields, itemTypesInv } = mapItems(targetUser);
@@ -206,13 +206,13 @@ const inventars: Command = {
       buttonsPressed: new Set(),
     };
 
-    const dialogs = new Dialogs<InventarsState>(i, initialState, inventarsView, 'inventārs', { time: 60000 });
+    const dialogs = new Dialogs<InventarsState>(i, initialState, inventarsView, "inventārs", { time: 60000 });
 
     if (!(await dialogs.start())) {
       return intReply(i, errorEmbed);
     }
 
-    dialogs.onClick(async int => {
+    dialogs.onClick(async (int) => {
       const { customId } = int;
       if (int.componentType !== ComponentType.Button) return;
 
@@ -242,19 +242,19 @@ const inventars: Command = {
           return { update: true };
         }
         case ComponentId.SellUnusable: {
-          dialogs.state.buttonsPressed.add('neizmantojamas');
+          dialogs.state.buttonsPressed.add("neizmantojamas");
 
           return {
             edit: true,
-            after: () => pardotRun(int, 'neizmantojamās'),
+            after: () => pardotRun(int, "neizmantojamās"),
           };
         }
         case ComponentId.SellAll: {
-          dialogs.state.buttonsPressed.add('visas');
+          dialogs.state.buttonsPressed.add("visas");
 
           return {
             edit: true,
-            after: () => pardotRun(int, 'visas'),
+            after: () => pardotRun(int, "visas"),
           };
         }
       }

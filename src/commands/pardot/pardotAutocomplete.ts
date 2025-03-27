@@ -1,19 +1,19 @@
-import { AutocompleteInteraction } from 'discord.js';
-import normalizeLatText from '@/embeds/helpers/normalizeLatText';
-import Item from '@/interfaces/Item';
-import itemList, { ItemKey } from '@/items/itemList';
-import findUser from '@/economy/findUser';
-import { ItemInProfile } from '@/interfaces/UserProfile';
-import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
-import findItemsByQuery from '@/items/helpers/findItemsByQuery';
-import latiString from '@/embeds/helpers/latiString';
+import { AutocompleteInteraction } from "discord.js";
+import normalizeLatText from "@/embeds/helpers/normalizeLatText";
+import Item from "@/interfaces/Item";
+import itemList, { ItemKey } from "@/items/itemList";
+import findUser from "@/economy/findUser";
+import { ItemInProfile } from "@/interfaces/UserProfile";
+import capitalizeFirst from "@/embeds/helpers/capitalizeFirst";
+import findItemsByQuery from "@/items/helpers/findItemsByQuery";
+import latiString from "@/embeds/helpers/latiString";
 
 function mapItemsToChoices(itemInList: [string, Item]) {
   const [key, item] = itemInList;
 
   return {
     name:
-      `💵${'customValue' in item && item.customValue ? '' : ` [${latiString(item.value)}]`} ` +
+      `💵${"customValue" in item && item.customValue ? "" : ` [${latiString(item.value)}]`} ` +
       capitalizeFirst(item.nameNomVsk),
     value: key,
   };
@@ -31,17 +31,17 @@ export default async function pardotAutocomplete(interaction: AutocompleteIntera
   if (!user) return;
 
   const { specialItems } = user;
-  const specialItemsList = [...new Set(specialItems.map(item => item.name))]
-    .map(key => [key, itemList[key]])
-    .filter(([, item]) => !('notSellable' in (item as Item))) as [ItemKey, Item][];
+  const specialItemsList = [...new Set(specialItems.map((item) => item.name))]
+    .map((key) => [key, itemList[key]])
+    .filter(([, item]) => !("notSellable" in (item as Item))) as [ItemKey, Item][];
 
   const allChoices: [ItemKey, Item][] = [...user.items.map(mapProfileItemsToItemsList), ...specialItemsList];
 
   if (!allChoices.length) {
-    await interaction.respond([{ name: 'Tev nav ko pārdot', value: 'no-items-inv' }]);
+    await interaction.respond([{ name: "Tev nav ko pārdot", value: "no-items-inv" }]);
     return;
   }
 
   const queriedChoices = findItemsByQuery(focusedValue, allChoices);
-  await interaction.respond(queriedChoices.map(mapItemsToChoices)).catch(_ => _);
+  await interaction.respond(queriedChoices.map(mapItemsToChoices)).catch((_) => _);
 }

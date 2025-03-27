@@ -1,8 +1,8 @@
-import { ClientSession } from 'mongoose';
-import UserProfile, { UserStatus, UserStatusName } from '@/interfaces/UserProfile';
-import User from '@/schemas/User';
-import userCache from '@/utils/userCache';
-import findUser from '@/economy/findUser';
+import { ClientSession } from "mongoose";
+import UserProfile, { UserStatus, UserStatusName } from "@/interfaces/UserProfile";
+import User from "@/schemas/User";
+import userCache from "@/utils/userCache";
+import findUser from "@/economy/findUser";
 
 export default async function addStatus(
   userId: string,
@@ -27,11 +27,9 @@ export default async function addStatus(
         status[statusName] < currentTime ? statusTime + currentTime : status[statusName] + statusTime;
     }
 
-    const resUser = (await User.findOneAndUpdate(
-      { userId, guildId },
-      { $set: { status } },
-      { new: true }
-    ).session(session)) as UserProfile;
+    const resUser = (await User.findOneAndUpdate({ userId, guildId }, { $set: { status } }, { new: true }).session(
+      session,
+    )) as UserProfile;
 
     // userCache[guildId][userId] = resUser;
 

@@ -1,6 +1,6 @@
-import itemString from '@/embeds/helpers/itemString';
-import UserProfile from '@/interfaces/UserProfile';
-import itemList, { ItemCategory, ItemKey } from '@/items/itemList';
+import itemString from "@/embeds/helpers/itemString";
+import UserProfile from "@/interfaces/UserProfile";
+import itemList, { ItemCategory, ItemKey } from "@/items/itemList";
 
 const FISHING_ROD_MAX_PER_USER = 15;
 const SPECIAL_ITEM_MAX_PER_USER = 20;
@@ -10,14 +10,14 @@ type CheckUserSpecialItemsReturn = { valid: true } | { valid: false; reason: str
 export default function checkUserSpecialItems(
   { specialItems }: UserProfile,
   itemKey: ItemKey,
-  amount = 1
+  amount = 1,
 ): CheckUserSpecialItemsReturn {
   if (!specialItems.length) return { valid: true };
 
   // pārbauda vai ir makšķere
   if (itemList[itemKey].categories.includes(ItemCategory.MAKSKERE)) {
     const fishingRodCount = specialItems.filter(({ name }) =>
-      itemList[name].categories.includes(ItemCategory.MAKSKERE)
+      itemList[name].categories.includes(ItemCategory.MAKSKERE),
     ).length;
 
     if (fishingRodCount + amount > FISHING_ROD_MAX_PER_USER) {

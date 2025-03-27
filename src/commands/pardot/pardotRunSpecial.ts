@@ -6,25 +6,25 @@ import {
   ChatInputCommandInteraction,
   ComponentType,
   StringSelectMenuBuilder,
-} from 'discord.js';
-import addLati from '@/economy/addLati';
-import findUser from '@/economy/findUser';
-import removeItemsById from '@/economy/removeItemsById';
-import setStats from '@/economy/stats/setStats';
-import embedTemplate from '@/embeds/embedTemplate';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import errorEmbed from '@/embeds/errorEmbed';
-import { displayAttributes } from '@/embeds/helpers/displayAttributes';
-import itemString, { itemStringCustom } from '@/embeds/helpers/itemString';
-import latiString from '@/embeds/helpers/latiString';
-import { AttributeItem } from '@/interfaces/Item';
-import UserProfile, { ItemAttributes, SpecialItemInProfile } from '@/interfaces/UserProfile';
-import itemList, { ItemKey } from '@/items/itemList';
-import intReply from '@/utils/intReply';
-import { attributeItemSort } from '@/commands/inventars/inventars';
-import { PIRKT_PARDOT_NODOKLIS } from '@/commands/pardot/pardot';
-import { Dialogs } from '@/utils/Dialogs';
-import mongoTransaction from '@/utils/mongoTransaction';
+} from "discord.js";
+import addLati from "@/economy/addLati";
+import findUser from "@/economy/findUser";
+import removeItemsById from "@/economy/removeItemsById";
+import setStats from "@/economy/stats/setStats";
+import embedTemplate from "@/embeds/embedTemplate";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import errorEmbed from "@/embeds/errorEmbed";
+import { displayAttributes } from "@/embeds/helpers/displayAttributes";
+import itemString, { itemStringCustom } from "@/embeds/helpers/itemString";
+import latiString from "@/embeds/helpers/latiString";
+import { AttributeItem } from "@/interfaces/Item";
+import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/interfaces/UserProfile";
+import itemList, { ItemKey } from "@/items/itemList";
+import intReply from "@/utils/intReply";
+import { attributeItemSort } from "@/commands/inventars/inventars";
+import { PIRKT_PARDOT_NODOKLIS } from "@/commands/pardot/pardot";
+import { Dialogs } from "@/utils/Dialogs";
+import mongoTransaction from "@/utils/mongoTransaction";
 
 type State = {
   user: UserProfile;
@@ -39,8 +39,8 @@ type State = {
 };
 
 const enum ComponentId {
-  Select = 'pardot_special_select',
-  Confirm = 'pardot_special_confirm',
+  Select = "pardot_special_select",
+  Confirm = "pardot_special_confirm",
 }
 
 function view(state: State, i: BaseInteraction) {
@@ -54,7 +54,7 @@ function view(state: State, i: BaseInteraction) {
     new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
       new StringSelectMenuBuilder()
         .setCustomId(ComponentId.Select)
-        .setPlaceholder('Izvēlies ko pārdot')
+        .setPlaceholder("Izvēlies ko pārdot")
         .setMinValues(1)
         .setMaxValues(itemsInInv.length)
         .setOptions(
@@ -69,16 +69,16 @@ function view(state: State, i: BaseInteraction) {
 
               return valueB - valueA;
             })
-            .map(item => ({
+            .map((item) => ({
               label: itemStringCustom(itemObj, item.attributes?.customName),
               description:
                 `${latiString(
-                  'customValue' in itemObj && itemObj.customValue
+                  "customValue" in itemObj && itemObj.customValue
                     ? itemObj.customValue(item.attributes)
                     : itemObj.value,
                 )} | ` + displayAttributes(item, true),
               value: item._id!,
-              emoji: (itemObj.customEmoji ? itemObj.customEmoji(item.attributes) : itemObj.emoji()) || '❓',
+              emoji: (itemObj.customEmoji ? itemObj.customEmoji(item.attributes) : itemObj.emoji()) || "❓",
               default: !!selectedIds.length && selectedIds!.includes(item._id!),
             })),
         ),
@@ -87,7 +87,7 @@ function view(state: State, i: BaseInteraction) {
       new ButtonBuilder()
         .setCustomId(ComponentId.Confirm)
         .setDisabled(!selectedIds.length)
-        .setLabel('Pārdot')
+        .setLabel("Pārdot")
         .setStyle(selectedIds.length ? ButtonStyle.Primary : ButtonStyle.Secondary),
     ),
   ];
@@ -111,16 +111,16 @@ function soldEmbed(
 ) {
   return embedTemplate({
     i,
-    title: 'Tu pārdevi:',
+    title: "Tu pārdevi:",
     color,
     fields: [
-      ...soldItems.map(item => ({
+      ...soldItems.map((item) => ({
         name: itemString(itemList[item.name], null, false, item.attributes),
         value: displayAttributes(item),
         inline: false,
       })),
-      { name: 'Tu ieguvi', value: latiString(soldValue, true), inline: true },
-      { name: 'Tev tagad ir', value: latiString(user.lati), inline: true },
+      { name: "Tu ieguvi", value: latiString(soldValue, true), inline: true },
+      { name: "Tev tagad ir", value: latiString(user.lati), inline: true },
     ],
   });
 }
@@ -139,11 +139,11 @@ export default async function pardotRunSpecial(
 
   if (itemsInInv.length === 1) {
     const soldValue =
-      'customValue' in itemObj && itemObj.customValue ? itemObj.customValue(itemsInInv[0].attributes) : itemObj.value;
+      "customValue" in itemObj && itemObj.customValue ? itemObj.customValue(itemsInInv[0].attributes) : itemObj.value;
 
     const taxPaid = Math.floor(soldValue * PIRKT_PARDOT_NODOKLIS);
 
-    const { ok, values } = await mongoTransaction(session => [
+    const { ok, values } = await mongoTransaction((session) => [
       () => addLati(i.client.user!.id, guildId, taxPaid, session),
       () => addLati(userId, guildId, soldValue, session),
       () => setStats(userId, guildId, { soldShop: soldValue, taxPaid }, session),
@@ -167,7 +167,7 @@ export default async function pardotRunSpecial(
     soldValue: 0,
   };
 
-  const dialogs = new Dialogs(i, initialState, view, 'pardot', { time: 60000 });
+  const dialogs = new Dialogs(i, initialState, view, "pardot", { time: 60000 });
 
   if (!(await dialogs.start())) {
     return intReply(i, errorEmbed);
@@ -182,8 +182,8 @@ export default async function pardotRunSpecial(
       const user = await findUser(userId, guildId);
       if (!user) return { error: true };
 
-      const userItemIds = user.specialItems.map(item => item._id!);
-      const hasEvery = state.selectedIds.every(id => userItemIds.includes(id));
+      const userItemIds = user.specialItems.map((item) => item._id!);
+      const hasEvery = state.selectedIds.every((id) => userItemIds.includes(id));
 
       if (!hasEvery) {
         // prettier-ignore
@@ -194,16 +194,16 @@ export default async function pardotRunSpecial(
         return { end: true };
       }
 
-      const selectedItems = itemsInInv.filter(item => state.selectedIds.includes(item._id!));
+      const selectedItems = itemsInInv.filter((item) => state.selectedIds.includes(item._id!));
       const soldValue = selectedItems.reduce((p, { attributes }) => {
-        return p + ('customValue' in itemObj && itemObj.customValue ? itemObj.customValue(attributes) : itemObj.value);
+        return p + ("customValue" in itemObj && itemObj.customValue ? itemObj.customValue(attributes) : itemObj.value);
       }, 0);
 
       if (!selectedItems.length) return;
 
       const taxPaid = Math.floor(soldValue * PIRKT_PARDOT_NODOKLIS);
 
-      const { ok, values } = await mongoTransaction(session => [
+      const { ok, values } = await mongoTransaction((session) => [
         () => addLati(i.client.user!.id, guildId, taxPaid, session),
         () => addLati(userId, guildId, soldValue, session),
         () => setStats(userId, guildId, { soldShop: soldValue, taxPaid }, session),

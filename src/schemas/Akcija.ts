@@ -1,6 +1,6 @@
-import { model, Schema } from 'mongoose';
-import { AkcijaChartTimes } from '@/commands/economyCommands/akcijas/akcijasList';
-import AkcijaType from '@/interfaces/AkcijaType';
+import { model, Schema } from "mongoose";
+import { AkcijaChartTimes } from "@/commands/economyCommands/akcijas/akcijasList";
+import AkcijaType from "@/interfaces/AkcijaType";
 
 const reqStr = {
   type: String,
@@ -17,11 +17,11 @@ const akcijaSchema = new Schema<AkcijaType & { imgUrls: Record<AkcijaChartTimes,
   time: reqNum,
   price: reqNum,
   imgUrls: {
-    '2h': String,
-    '8h': String,
-    '24h': String,
-    '7d': String,
+    "2h": String,
+    "8h": String,
+    "24h": String,
+    "7d": String,
   },
 });
 
-export default model('Akcija', akcijaSchema);
+export default model("Akcija", akcijaSchema);

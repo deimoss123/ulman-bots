@@ -1,11 +1,11 @@
-import normalizeLatText from '@/embeds/helpers/normalizeLatText';
-import { AutocompleteInteraction } from 'discord.js';
-import Item from '@/interfaces/Item';
-import itemList, { ItemKey } from '@/items/itemList';
-import findUser from '@/economy/findUser';
-import findItemsByQuery from '@/items/helpers/findItemsByQuery';
-import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
-import { ItemInProfile } from '@/interfaces/UserProfile';
+import normalizeLatText from "@/embeds/helpers/normalizeLatText";
+import { AutocompleteInteraction } from "discord.js";
+import Item from "@/interfaces/Item";
+import itemList, { ItemKey } from "@/items/itemList";
+import findUser from "@/economy/findUser";
+import findItemsByQuery from "@/items/helpers/findItemsByQuery";
+import capitalizeFirst from "@/embeds/helpers/capitalizeFirst";
+import { ItemInProfile } from "@/interfaces/UserProfile";
 
 function mapItemsToChoices(itemInList: [string, Item]) {
   const [key, item] = itemInList;
@@ -21,7 +21,7 @@ function mapProfileItemsToItemsList(item: ItemInProfile): [string, Item] {
 }
 
 function filterByUsable([, item]: [string, Item]) {
-  return 'use' in item;
+  return "use" in item;
 }
 
 export default async function izmantotAutocomplete(interaction: AutocompleteInteraction): Promise<void> {
@@ -33,7 +33,7 @@ export default async function izmantotAutocomplete(interaction: AutocompleteInte
   const user = await findUser(interaction.user.id, interaction.guildId!);
   if (user) {
     const { specialItems } = user;
-    const specialItemsList = [...new Set(specialItems.map(item => item.name))].map(key => [key, itemList[key]]) as [
+    const specialItemsList = [...new Set(specialItems.map((item) => item.name))].map((key) => [key, itemList[key]]) as [
       ItemKey,
       Item,
     ][];
@@ -42,10 +42,10 @@ export default async function izmantotAutocomplete(interaction: AutocompleteInte
   }
 
   if (!allChoices.length) {
-    await interaction.respond([{ name: 'Tev nav ko izmantot', value: '' }]);
+    await interaction.respond([{ name: "Tev nav ko izmantot", value: "" }]);
     return;
   }
 
   const queriedChoices = findItemsByQuery(focusedValue, allChoices);
-  await interaction.respond(queriedChoices.map(mapItemsToChoices)).catch(_ => _);
+  await interaction.respond(queriedChoices.map(mapItemsToChoices)).catch((_) => _);
 }

@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
-import UserProfile from '@/interfaces/UserProfile';
+import { Schema, model } from "mongoose";
+import UserProfile from "@/interfaces/UserProfile";
 
 const RequiredStringIndex = {
   type: String,
@@ -164,7 +164,7 @@ export const userSchema = new Schema<UserProfile>({
 
   lastDayUsed: {
     type: String,
-    default: new Date().toLocaleDateString('en-GB'), // "1/1/1970"
+    default: new Date().toLocaleDateString("en-GB"), // "1/1/1970"
   },
   dailyCooldowns: {
     type: {
@@ -229,7 +229,7 @@ export const userSchema = new Schema<UserProfile>({
   tirgus: {
     lastDayUsed: {
       type: String,
-      default: new Date().toLocaleDateString('en-GB'), // "1/1/1970"
+      default: new Date().toLocaleDateString("en-GB"), // "1/1/1970"
     },
     itemsBought: {
       type: [String],
@@ -277,4 +277,4 @@ export const userSchema = new Schema<UserProfile>({
   },
 });
 
-export default model('User', userSchema);
+export default model("User", userSchema);

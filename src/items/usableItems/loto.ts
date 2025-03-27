@@ -1,12 +1,12 @@
-import chance, { ChanceValue } from '@/items/helpers/chance';
-import itemList, { ItemKey } from '@/items/itemList';
-import { UsableItemFunc } from '@/interfaces/Item';
-import findUser from '@/economy/findUser';
-import intReply from '@/utils/intReply';
-import errorEmbed from '@/embeds/errorEmbed';
-import embedTemplate from '@/embeds/embedTemplate';
-import itemString from '@/embeds/helpers/itemString';
-import shuffleArray from '@/items/helpers/shuffleArray';
+import chance, { ChanceValue } from "@/items/helpers/chance";
+import itemList, { ItemKey } from "@/items/itemList";
+import { UsableItemFunc } from "@/interfaces/Item";
+import findUser from "@/economy/findUser";
+import intReply from "@/utils/intReply";
+import errorEmbed from "@/embeds/errorEmbed";
+import embedTemplate from "@/embeds/embedTemplate";
+import itemString from "@/embeds/helpers/itemString";
+import shuffleArray from "@/items/helpers/shuffleArray";
 import {
   ActionRowBuilder,
   BaseInteraction,
@@ -14,14 +14,14 @@ import {
   ButtonStyle,
   ComponentEmojiResolvable,
   ComponentType,
-} from 'discord.js';
-import addLati from '@/economy/addLati';
-import addItems from '@/economy/addItems';
-import smallEmbed from '@/embeds/smallEmbed';
-import commandColors from '@/embeds/commandColors';
-import emoji from '@/utils/emoji';
-import { Dialogs } from '@/utils/Dialogs';
-import ephemeralReply from '@/embeds/ephemeralReply';
+} from "discord.js";
+import addLati from "@/economy/addLati";
+import addItems from "@/economy/addItems";
+import smallEmbed from "@/embeds/smallEmbed";
+import commandColors from "@/embeds/commandColors";
+import emoji from "@/utils/emoji";
+import { Dialogs } from "@/utils/Dialogs";
+import ephemeralReply from "@/embeds/ephemeralReply";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function testLaimesti(options: LotoOptions, count: number) {
@@ -83,22 +83,22 @@ function generateLotoArr(
     if (index === 0) return rewards[Object.keys(rewards)[0]];
     if (index < rewardsCount) return chance(rewards).obj as LotoReward;
     return null;
-  }).map(reward => ({ reward, scratched: false }));
+  }).map((reward) => ({ reward, scratched: false }));
 
   const shuffled = shuffleArray(array);
 
   if (printBoard) {
-    console.log('-'.repeat(columns * 10));
+    console.log("-".repeat(columns * 10));
     for (let row = 0; row < rows; row++) {
       console.log(
         shuffled
           .slice(row * columns, (row + 1) * columns)
-          .map(i =>
-            (i.reward?.lati ? `${i.reward?.lati}Ls` : i.reward?.multiplier ? `${i.reward?.multiplier}x` : '').padEnd(7),
+          .map((i) =>
+            (i.reward?.lati ? `${i.reward?.lati}Ls` : i.reward?.multiplier ? `${i.reward?.multiplier}x` : "").padEnd(7),
           )
-          .join(' | '),
+          .join(" | "),
       );
-      console.log('-'.repeat(columns * 10));
+      console.log("-".repeat(columns * 10));
     }
   }
 
@@ -106,7 +106,7 @@ function generateLotoArr(
 }
 
 function scratchesLeftText(scratchesLeft: number, format = false) {
-  const boldStr = format ? '**' : '';
+  const boldStr = format ? "**" : "";
 
   return scratchesLeft === 1
     ? `Atlicis ${boldStr}1${boldStr} skrāpējums`
@@ -152,8 +152,8 @@ type State = {
 function view(state: State, i: BaseInteraction) {
   const { itemKey, totalWin, lotoArray, lotoArrayWon, scratchesLeft, lotoOptions, isActive, lotoInInv } = state;
 
-  const latiArr = lotoArrayWon.filter(item => item.reward?.lati);
-  const multiplierArr = lotoArrayWon.filter(item => item.reward?.multiplier);
+  const latiArr = lotoArrayWon.filter((item) => item.reward?.lati);
+  const multiplierArr = lotoArrayWon.filter((item) => item.reward?.multiplier);
   const color = scratchesLeft ? commandColors.feniks : lotoOptions.colors.find(({ lati }) => totalWin >= lati)!.color;
 
   const actionRows: ActionRowBuilder<ButtonBuilder>[] = [];
@@ -169,8 +169,8 @@ function view(state: State, i: BaseInteraction) {
             !isActive || scratched
               ? reward
                 ? reward.emoji() //
-                : emoji('blank')
-              : emoji('loto_question_mark');
+                : emoji("blank")
+              : emoji("loto_question_mark");
 
           const btn = new ButtonBuilder()
             .setCustomId(`${itemKey}-${lotoArrIndex}`)
@@ -193,7 +193,7 @@ function view(state: State, i: BaseInteraction) {
     actionRows.push(
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
-          .setCustomId('_')
+          .setCustomId("_")
           .setStyle(ButtonStyle.Secondary)
           .setLabel(scratchesLeftText(scratchesLeft))
           .setDisabled(true),
@@ -203,32 +203,32 @@ function view(state: State, i: BaseInteraction) {
     actionRows.push(
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
-          .setCustomId('loto_izmantot_velreiz')
+          .setCustomId("loto_izmantot_velreiz")
           .setStyle(ButtonStyle.Primary)
           .setLabel(`Izmantot vēlreiz (${lotoInInv})`)
-          .setEmoji(itemList[itemKey].emoji() || '❓'),
+          .setEmoji(itemList[itemKey].emoji() || "❓"),
       ),
     );
   }
 
   return embedTemplate({
     i,
-    content: '\u200b',
+    content: "\u200b",
     title: `Izmantot: ${itemString(itemKey, null, true)}`,
     description: scratchesLeftText(scratchesLeft, true),
     color,
     fields: [
       {
-        name: 'Atrastie lati:',
-        value: latiArr.length ? latiArr.map(item => item.reward?.emoji()).join(' + ') : '-',
+        name: "Atrastie lati:",
+        value: latiArr.length ? latiArr.map((item) => item.reward?.emoji()).join(" + ") : "-",
         inline: false,
       },
       {
-        name: 'Atrastie reizinātāji:',
+        name: "Atrastie reizinātāji:",
         value:
-          `${multiplierArr.length ? multiplierArr.map(item => item.reward?.emoji()).join(' + ') : '-'}\n\n` +
+          `${multiplierArr.length ? multiplierArr.map((item) => item.reward?.emoji()).join(" + ") : "-"}\n\n` +
           (scratchesLeft
-            ? `_Spied uz_ ${emoji('loto_question_mark')} _lai atklātu balvas_`
+            ? `_Spied uz_ ${emoji("loto_question_mark")} _lai atklātu balvas_`
             : `**KOPĒJAIS LAIMESTS: __${totalWin}__ lati**`),
         inline: false,
       },
@@ -239,9 +239,9 @@ function view(state: State, i: BaseInteraction) {
 
 export default function loto(itemKey: ItemKey, options: LotoOptions): UsableItemFunc {
   return () => ({
-    custom: async i => {
+    custom: async (i) => {
       if (TEST_SPINS) {
-        await intReply(i, smallEmbed('Testing spins...', 0xffffff));
+        await intReply(i, smallEmbed("Testing spins...", 0xffffff));
         testLaimesti(options, 1_000_000);
         return;
       }
@@ -275,12 +275,12 @@ export default function loto(itemKey: ItemKey, options: LotoOptions): UsableItem
         const { customId } = int;
         if (int.componentType !== ComponentType.Button) return;
 
-        if (customId === 'loto_izmantot_velreiz' && !state.scratchesLeft) {
+        if (customId === "loto_izmantot_velreiz" && !state.scratchesLeft) {
           return {
             end: true,
             after: async () => {
               // ahhh nepatīk šitais imports, lūdzu, neesi atmiņas noplūde
-              const izmantotRun = await import('@/commands/izmantot/izmantotRun');
+              const izmantotRun = await import("@/commands/izmantot/izmantotRun");
               izmantotRun.default(int, itemKey, 0);
             },
           };
@@ -288,7 +288,7 @@ export default function loto(itemKey: ItemKey, options: LotoOptions): UsableItem
 
         if (state.scratchesLeft <= 0) return;
 
-        const [btnItemKey, btnIndexStr] = customId.split('-');
+        const [btnItemKey, btnIndexStr] = customId.split("-");
         const btnIndex = +btnIndexStr;
 
         if (btnItemKey !== itemKey || isNaN(btnIndex) || btnIndex < 0 || btnIndex >= buttonCount) return;
@@ -300,7 +300,7 @@ export default function loto(itemKey: ItemKey, options: LotoOptions): UsableItem
           const user = await findUser(userId, guildId);
           if (!user) return { error: true };
 
-          const item = user.items.find(item => item.name === itemKey);
+          const item = user.items.find((item) => item.name === itemKey);
           const hasItem = item && item.amount > 0;
 
           if (!hasItem) {
@@ -326,7 +326,7 @@ export default function loto(itemKey: ItemKey, options: LotoOptions): UsableItem
           user = total > 0 ? await addLati(userId, guildId, total) : await findUser(userId, guildId);
           if (!user) return { error: true };
 
-          state.lotoInInv = user.items.find(item => item.name === itemKey)?.amount || 0;
+          state.lotoInInv = user.items.find((item) => item.name === itemKey)?.amount || 0;
         }
 
         return {

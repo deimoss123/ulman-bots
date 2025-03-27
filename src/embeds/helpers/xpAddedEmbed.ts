@@ -1,9 +1,9 @@
-import { bold, EmbedBuilder } from 'discord.js';
-import { AddXpReturn } from '@/economy/addXp';
-import itemList from '@/items/itemList';
-import levelsList, { MAX_LEVEL } from '@/levelingSystem/levelsList';
-import itemString from '@/embeds/helpers/itemString';
-import latiString from '@/embeds/helpers/latiString';
+import { bold, EmbedBuilder } from "discord.js";
+import { AddXpReturn } from "@/economy/addXp";
+import itemList from "@/items/itemList";
+import levelsList, { MAX_LEVEL } from "@/levelingSystem/levelsList";
+import itemString from "@/embeds/helpers/itemString";
+import latiString from "@/embeds/helpers/latiString";
 
 const DEFAULT_COLOR = 0x2e3035;
 const LEVEL_INCREASE_COLOR = 0xbb4ae8;
@@ -15,18 +15,18 @@ export default function xpAddedEmbed(leveledUser: AddXpReturn, xpToAdd: number, 
 
   const XP_BAR_LENGTH = 20;
 
-  let xpBar = '';
-  let xpText = '🔥';
+  let xpBar = "";
+  let xpText = "🔥";
 
   if (user.level !== MAX_LEVEL) {
-    const filledSlots = '#'.repeat(Math.round((XP_BAR_LENGTH / levelsList[user.level + 1].xp) * excessXp));
-    xpBar += filledSlots + '-'.repeat(XP_BAR_LENGTH - filledSlots.length);
+    const filledSlots = "#".repeat(Math.round((XP_BAR_LENGTH / levelsList[user.level + 1].xp) * excessXp));
+    xpBar += filledSlots + "-".repeat(XP_BAR_LENGTH - filledSlots.length);
     xpBar = `**${user.level}** \`[${xpBar}]\` **${user.level + 1}**\n`;
 
     xpText = `| UlmaņPunkti: ${user.xp}/${levelsList[user.level + 1].xp}`;
   }
 
-  let levelIncreaseText = '';
+  let levelIncreaseText = "";
   if (levelIncrease) {
     const rewardsArr: string[] = [];
     let addedLati = 0;
@@ -34,7 +34,7 @@ export default function xpAddedEmbed(leveledUser: AddXpReturn, xpToAdd: number, 
       if (levelReward.lati) addedLati += levelReward.lati;
       if (levelReward.item) {
         rewardsArr.push(
-          ...Object.entries(levelReward.item).map(([key, amount]) => itemString(itemList[key], amount, true))
+          ...Object.entries(levelReward.item).map(([key, amount]) => itemString(itemList[key], amount, true)),
         );
       }
       if (levelReward.taxDiscount) {
@@ -42,7 +42,7 @@ export default function xpAddedEmbed(leveledUser: AddXpReturn, xpToAdd: number, 
         const taxArr: string[] = [];
         if (payTax) taxArr.push(`maksāšanai (**${Math.floor(payTax * 100)}%**)`);
         if (giveTax) taxArr.push(`iedošanai (**${Math.floor(giveTax * 100)}%**)`);
-        rewardsArr.push('Nodokļu atvieglojumu ' + taxArr.join(' un '));
+        rewardsArr.push("Nodokļu atvieglojumu " + taxArr.join(" un "));
       }
       if (levelReward.fishingInvIncrease) {
         rewardsArr.push(`Zvejošanas inventārs palielināts uz **${levelReward.fishingInvIncrease}**`);
@@ -55,17 +55,17 @@ export default function xpAddedEmbed(leveledUser: AddXpReturn, xpToAdd: number, 
 
     levelIncreaseText =
       `\nPalielināts līmenis **${levelIncrease.from}** ➔ **${levelIncrease.to}**\n\n` +
-      `${bold('Tu saņēmi:')}\n` +
-      rewardsArr.map(r => `> ${r}`).join('\n');
+      `${bold("Tu saņēmi:")}\n` +
+      rewardsArr.map((r) => `> ${r}`).join("\n");
   }
 
   return new EmbedBuilder()
     .setDescription(
-      `${prefixText} **${xpToAdd}** UlmaņPunktu${xpToAdd === 1 ? '' : 's'}\n` +
+      `${prefixText} **${xpToAdd}** UlmaņPunktu${xpToAdd === 1 ? "" : "s"}\n` +
         `Līmenis: **${user.level}** ${xpText}\n` +
         xpBar +
         levelIncreaseText +
-        (maxLevelReward ? `Maksimālā līmeņa bonuss: **${latiString(maxLevelReward)}**` : '')
+        (maxLevelReward ? `Maksimālā līmeņa bonuss: **${latiString(maxLevelReward)}**` : ""),
     )
     .setColor(levelIncrease ? LEVEL_INCREASE_COLOR : maxLevelReward ? MAX_LEVEL_COLOR : DEFAULT_COLOR);
 }

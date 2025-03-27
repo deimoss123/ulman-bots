@@ -10,8 +10,8 @@ import {
   JSONEncodable,
   MessageActionRowComponentBuilder,
   MessageActionRowComponentData,
-} from 'discord.js';
-import updatesList, { VersionString } from '@/commands/palidziba/jaunumi/updatesList';
+} from "discord.js";
+import updatesList, { VersionString } from "@/commands/palidziba/jaunumi/updatesList";
 
 interface EmbedTemplateOptions {
   i: BaseInteraction;
@@ -27,18 +27,18 @@ interface EmbedTemplateOptions {
     | ActionRowData<MessageActionRowComponentData | MessageActionRowComponentBuilder>
     | APIActionRowComponent<APIMessageActionRowComponent>
   )[];
-  files?: BaseMessageOptions['files'];
+  files?: BaseMessageOptions["files"];
 }
 
-export const ULMANBOTA_VERSIJA: VersionString = '4.3';
+export const ULMANBOTA_VERSIJA: VersionString = "4.3";
 
 export default function embedTemplate(options: EmbedTemplateOptions): InteractionReplyOptions & { withResponse: true } {
   return {
     content: options.content,
     embeds: [
       {
-        title: options.title ?? '',
-        description: options.description ?? '',
+        title: options.title ?? "",
+        description: options.description ?? "",
         color: options.color ?? 0x000000,
         fields: options.fields ?? [],
         author: {

@@ -1,9 +1,9 @@
-import findUser from '@/economy/findUser';
-import User from '@/schemas/User';
-import UserProfile from '@/interfaces/UserProfile';
-import userCache from '@/utils/userCache';
-import itemList, { ItemKey } from '@/items/itemList';
-import { ClientSession } from 'mongoose';
+import findUser from "@/economy/findUser";
+import User from "@/schemas/User";
+import UserProfile from "@/interfaces/UserProfile";
+import userCache from "@/utils/userCache";
+import itemList, { ItemKey } from "@/items/itemList";
+import { ClientSession } from "mongoose";
 
 export default async function addItems(
   userId: string,
@@ -25,7 +25,7 @@ export default async function addItems(
       const itemObj = itemList[itemToAdd];
 
       // pārbauda vai manta ir ar atribūtiem
-      if ('attributes' in itemObj) {
+      if ("attributes" in itemObj) {
         for (let i = 0; i < amountToAdd; i++) {
           specialItems.push({
             name: itemToAdd,
@@ -37,7 +37,7 @@ export default async function addItems(
       }
 
       // meklē lietotāja inventārā itemToAdd
-      const itemIndex = items.findIndex(item => item.name === itemToAdd);
+      const itemIndex = items.findIndex((item) => item.name === itemToAdd);
 
       // ja nav lietotājam datubāzē, tad ievieto jaunu item objektu
       if (itemIndex === -1) {

@@ -1,7 +1,7 @@
-import axios from 'axios';
-import AuctionType from '@/interfaces/AuctionType';
-import { ItemAttributes } from '@/interfaces/UserProfile';
-import Auction from '@/schemas/Auction';
+import axios from "axios";
+import AuctionType from "@/interfaces/AuctionType";
+import { ItemAttributes } from "@/interfaces/UserProfile";
+import Auction from "@/schemas/Auction";
 
 export default async function createAuction(
   clientId: string,
@@ -10,7 +10,7 @@ export default async function createAuction(
   attributes: ItemAttributes | null,
   startPrice: number,
   startDate: number,
-  endDate: number
+  endDate: number,
 ): Promise<AuctionType | void> {
   try {
     const secondsUntil = Math.floor((startDate - Date.now()) / 1000);
@@ -26,10 +26,10 @@ export default async function createAuction(
         {
           headers: {
             Authorization: `Bearer ${process.env.UPSTASH_QSTASH_TOKEN}`,
-            'Upstash-Delay': `${secondsUntil}s`,
-            'Content-Type': 'application/json',
+            "Upstash-Delay": `${secondsUntil}s`,
+            "Content-Type": "application/json",
           },
-        }
+        },
       ),
       newAuction.save(),
     ]);

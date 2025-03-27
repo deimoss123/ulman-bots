@@ -1,24 +1,24 @@
-import commandColors from '@/embeds/commandColors';
-import Command from '@/interfaces/Command';
-import buttonHandler from '@/embeds/buttonHandler';
-import findUser from '@/economy/findUser';
-import errorEmbed from '@/embeds/errorEmbed';
-import tirgusEmbed from '@/commands/tirgus/tirgusEmbed';
-import UserProfile from '@/interfaces/UserProfile';
-import Item, { TirgusItem } from '@/interfaces/Item';
-import itemList, { ItemCategory, ItemKey } from '@/items/itemList';
-import tirgusComponents from '@/commands/tirgus/tirgusComponents';
-import { ComponentType } from 'discord.js';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import itemString from '@/embeds/helpers/itemString';
-import addItems from '@/economy/addItems';
-import addLati from '@/economy/addLati';
-import smallEmbed from '@/embeds/smallEmbed';
-import checkUserSpecialItems from '@/items/helpers/checkUserSpecialItems';
-import setTirgus from '@/economy/setTirgus';
-import midNightStr from '@/embeds/helpers/midnightStr';
-import axios from 'axios';
-import intReply from '@/utils/intReply';
+import commandColors from "@/embeds/commandColors";
+import Command from "@/interfaces/Command";
+import buttonHandler from "@/embeds/buttonHandler";
+import findUser from "@/economy/findUser";
+import errorEmbed from "@/embeds/errorEmbed";
+import tirgusEmbed from "@/commands/tirgus/tirgusEmbed";
+import UserProfile from "@/interfaces/UserProfile";
+import Item, { TirgusItem } from "@/interfaces/Item";
+import itemList, { ItemCategory, ItemKey } from "@/items/itemList";
+import tirgusComponents from "@/commands/tirgus/tirgusComponents";
+import { ComponentType } from "discord.js";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import itemString from "@/embeds/helpers/itemString";
+import addItems from "@/economy/addItems";
+import addLati from "@/economy/addLati";
+import smallEmbed from "@/embeds/smallEmbed";
+import checkUserSpecialItems from "@/items/helpers/checkUserSpecialItems";
+import setTirgus from "@/economy/setTirgus";
+import midNightStr from "@/embeds/helpers/midnightStr";
+import axios from "axios";
+import intReply from "@/utils/intReply";
 
 export function calcReqItems({ items, lati }: UserProfile, itemObj: Item) {
   const tirgusPrice = (itemObj as Item & TirgusItem).tirgusPrice;
@@ -28,7 +28,7 @@ export function calcReqItems({ items, lati }: UserProfile, itemObj: Item) {
 
   const reqItemsInv: Record<ItemKey, number> = {};
   for (const [key, amount] of Object.entries(tirgusPrice.items)) {
-    const amountInInv = items.find(i => i.name === key)?.amount ?? 0;
+    const amountInInv = items.find((i) => i.name === key)?.amount ?? 0;
     reqItemsInv[key] = amountInInv;
     if (amountInInv < amount) hasAll = false;
   }
@@ -49,26 +49,26 @@ async function getTirgusData(): Promise<ItemKey[] | null> {
 }
 
 function getBoughtItems({ tirgus }: UserProfile) {
-  const today = new Date().toLocaleDateString('en-GB');
+  const today = new Date().toLocaleDateString("en-GB");
   if (tirgus.lastDayUsed !== today) return [];
   return tirgus.itemsBought;
 }
 
 const tirgus: Command = {
   description: () =>
-    'Tirgū var nopirkt īpašas mantas, kas nav pieejamas nekur citur (ar retiem izņēmumiem)\n\n' +
-    'Atšķirībā no veikala, tirgus preces ir nopērkamas par citām mantām (dažām mantām cenā ir arī lati)\n' +
-    'Katrs lietotājs var nopirkt katru no tirgus mantām tikai **VIENU** reizi noteiktā dienā\n' +
+    "Tirgū var nopirkt īpašas mantas, kas nav pieejamas nekur citur (ar retiem izņēmumiem)\n\n" +
+    "Atšķirībā no veikala, tirgus preces ir nopērkamas par citām mantām (dažām mantām cenā ir arī lati)\n" +
+    "Katrs lietotājs var nopirkt katru no tirgus mantām tikai **VIENU** reizi noteiktā dienā\n" +
     `Katru dienu (plkst. ${midNightStr()}) nejauši tiek izvēlētas **3** mantas kas būs nopērkamas tirgū\n\n` +
-    '**Visas tirgū pieejamās mantas:**\n>>> ' +
+    "**Visas tirgū pieejamās mantas:**\n>>> " +
     Object.values(itemList)
-      .filter(i => i.categories.includes(ItemCategory.TIRGUS))
-      .map(i => itemString(i))
-      .join('\n'),
+      .filter((i) => i.categories.includes(ItemCategory.TIRGUS))
+      .map((i) => itemString(i))
+      .join("\n"),
   color: commandColors.veikals,
   data: {
-    name: 'tirgus',
-    description: 'Apskatīt šodienas tirgus preces',
+    name: "tirgus",
+    description: "Apskatīt šodienas tirgus preces",
   },
   async run(i) {
     const userId = i.user.id;
@@ -83,7 +83,7 @@ const tirgus: Command = {
     const itemsBought = getBoughtItems(user);
 
     const msg = await intReply(i, {
-      content: '\u200B',
+      content: "\u200B",
       embeds: tirgusEmbed(i, tirgusListings, user, itemsBought),
       components: tirgusComponents(tirgusListings, user, itemsBought),
       fetchReply: true,
@@ -91,8 +91,8 @@ const tirgus: Command = {
 
     if (!msg) return;
 
-    buttonHandler(i, 'tirgus', msg, async int => {
-      if (int.customId === 'tirgus_select_menu') {
+    buttonHandler(i, "tirgus", msg, async (int) => {
+      if (int.customId === "tirgus_select_menu") {
         if (int.componentType !== ComponentType.StringSelect) return;
         selectedListing = int.values[0];
 
@@ -108,7 +108,7 @@ const tirgus: Command = {
           },
         };
       }
-      if (int.customId === 'tirgus_pirkt') {
+      if (int.customId === "tirgus_pirkt") {
         if (int.componentType !== ComponentType.Button) return;
         if (!selectedListing) return;
 
@@ -132,7 +132,7 @@ const tirgus: Command = {
           return {
             end: true,
             after: () => {
-              intReply(int, 'Kļūda: šī manta vairs nepārdodas tirgū');
+              intReply(int, "Kļūda: šī manta vairs nepārdodas tirgū");
             },
           };
         }
@@ -147,7 +147,7 @@ const tirgus: Command = {
           };
         }
 
-        if ('attributes' in itemObj) {
+        if ("attributes" in itemObj) {
           const specialRes = checkUserSpecialItems(newUser, selectedListing);
           if (!specialRes.valid) {
             return {

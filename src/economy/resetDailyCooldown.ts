@@ -1,7 +1,7 @@
-import { ClientSession } from 'mongoose';
-import UserProfile from '@/interfaces/UserProfile';
-import User, { dailyCooldownDefault } from '@/schemas/User';
-import userCache from '@/utils/userCache';
+import { ClientSession } from "mongoose";
+import UserProfile from "@/interfaces/UserProfile";
+import User, { dailyCooldownDefault } from "@/schemas/User";
+import userCache from "@/utils/userCache";
 
 export default async function resetDailyCooldown(
   userId: string,
@@ -13,7 +13,7 @@ export default async function resetDailyCooldown(
       { userId, guildId },
       {
         $set: {
-          lastDayUsed: new Date().toLocaleDateString('en-GB'),
+          lastDayUsed: new Date().toLocaleDateString("en-GB"),
           dailyCooldowns: dailyCooldownDefault,
         },
       },

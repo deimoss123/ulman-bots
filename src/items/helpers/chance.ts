@@ -10,7 +10,7 @@ piemērs 2:
 svari ir 0.4, '*', '*'
 svars katram '*' būs 0.3
 */
-export type ChanceValue = number | '*';
+export type ChanceValue = number | "*";
 
 export interface ChanceObj {
   chance: ChanceValue;
@@ -44,7 +44,7 @@ function chance(data: ChanceObj[] | ChanceRecord): ChanceObj | ChanceReturn {
 
     for (const obj of data) {
       // ja svars ir '*' tas tiek pievienots starredArr
-      if (obj.chance === '*') {
+      if (obj.chance === "*") {
         starredArr.push(obj);
         continue;
       }
@@ -67,11 +67,11 @@ function chance(data: ChanceObj[] | ChanceRecord): ChanceObj | ChanceReturn {
 
     return result;
   } else {
-    let resultKey = '';
+    let resultKey = "";
 
     for (const [key, obj] of Object.entries(data)) {
       // ja svars ir '*' tas tiek pievienots starredArr
-      if (obj.chance === '*') {
+      if (obj.chance === "*") {
         starredArr.push(key);
         continue;
       }
@@ -113,7 +113,7 @@ export default function chance2(obj: ChanceRecord): ChanceReturn {
   // iziet cauri visiem svariem
   for (const key in obj) {
     // ja svars ir '*' tas tiek pievienots starredArr
-    if (obj[key].chance === '*') {
+    if (obj[key].chance === "*") {
       starredArr.push(key);
       continue;
     }

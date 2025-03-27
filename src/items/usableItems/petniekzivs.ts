@@ -1,7 +1,7 @@
-import { statusList } from '@/commands/profils';
-import addStatus from '@/economy/addStatus';
-import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
-import { UsableItemFunc } from '@/interfaces/Item';
+import { statusList } from "@/commands/profils";
+import addStatus from "@/economy/addStatus";
+import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import { UsableItemFunc } from "@/interfaces/Item";
 
 export const PETNIEKZIVS_STATUS_TIME = 900_000; // 15 min
 

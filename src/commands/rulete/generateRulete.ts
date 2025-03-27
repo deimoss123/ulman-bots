@@ -1,4 +1,4 @@
-import { RulColors, ruleteOrder, RulPosition, rulPositions } from '@/commands/rulete/ruleteData';
+import { RulColors, ruleteOrder, RulPosition, rulPositions } from "@/commands/rulete/ruleteData";
 
 export interface GenerateRuleteRes {
   num: number;
@@ -36,7 +36,7 @@ export default function generateRulete(pos: RulPosition | number): GenerateRulet
   let didWin = false;
   let multiplier = 0;
 
-  if (typeof pos === 'number') {
+  if (typeof pos === "number") {
     if (num === pos) {
       didWin = true;
       multiplier = 35;
@@ -47,9 +47,9 @@ export default function generateRulete(pos: RulPosition | number): GenerateRulet
     if (rulPositions[pos].isMatching(num)) {
       didWin = true;
       multiplier = 2;
-    } else if (pos === 'low' && randNum < 0.2) {
+    } else if (pos === "low" && randNum < 0.2) {
       num = Math.random() < 0.5 ? 0 : 19;
-    } else if (pos === 'high' && randNum < 0.1) {
+    } else if (pos === "high" && randNum < 0.1) {
       num = 18;
     }
   }

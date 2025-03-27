@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 type Strictify<T extends readonly unknown[]> = { [K in keyof T]: NonNullable<Awaited<T[K]>> };
 

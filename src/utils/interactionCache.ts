@@ -1,4 +1,4 @@
-import { ButtonInteraction, InteractionCollector, SelectMenuInteraction } from 'discord.js';
+import { ButtonInteraction, InteractionCollector, SelectMenuInteraction } from "discord.js";
 
 /*
 Interaction Cache glabā visas ziņas kurās pogas nav izslēgtas un kurās strādā collectori

@@ -1,7 +1,7 @@
-import { AkcijaId } from '@/commands/economyCommands/akcijas/akcijasList';
-import { ItemKey } from '@/items/itemList';
-import { GazesPlitsActionType } from '@/items/usableItems/gazes_plits';
-import { BerryProperties } from '@/items/usableItems/oga';
+import { AkcijaId } from "@/commands/economyCommands/akcijas/akcijasList";
+import { ItemKey } from "@/items/itemList";
+import { GazesPlitsActionType } from "@/items/usableItems/gazes_plits";
+import { BerryProperties } from "@/items/usableItems/oga";
 
 export interface ItemInProfile {
   name: ItemKey;
@@ -80,14 +80,14 @@ export interface TimeCooldown {
 }
 
 export type DailyCooldowns = Record<
-  'stradat' | 'ubagot' | 'pabalsts',
+  "stradat" | "ubagot" | "pabalsts",
   {
     timesUsed: number;
     extraTimesUsed: number;
   }
 >;
 
-export type UserStatusName = 'aizsargats' | 'laupitajs' | 'juridisks' | 'veiksmigs';
+export type UserStatusName = "aizsargats" | "laupitajs" | "juridisks" | "veiksmigs";
 export type UserStatus = Record<UserStatusName, number>;
 
 export interface FishObj {

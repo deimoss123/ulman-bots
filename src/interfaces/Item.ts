@@ -1,10 +1,10 @@
-import { APIMessageComponentEmoji, ButtonInteraction } from 'discord.js';
-import { ItemCategory, ItemKey } from '@/items/itemList';
-import UsableItemReturn from '@/interfaces/UsableItemReturn';
-import { ItemAttributes, SpecialItemInProfile } from '@/interfaces/UserProfile';
-import { LotoOptions } from '@/items/usableItems/loto';
-import { VersionString } from '@/commands/palidziba/jaunumi/updatesList';
-import emoji from '@/utils/emoji';
+import { APIMessageComponentEmoji, ButtonInteraction } from "discord.js";
+import { ItemCategory, ItemKey } from "@/items/itemList";
+import UsableItemReturn from "@/interfaces/UsableItemReturn";
+import { ItemAttributes, SpecialItemInProfile } from "@/interfaces/UserProfile";
+import { LotoOptions } from "@/items/usableItems/loto";
+import { VersionString } from "@/commands/palidziba/jaunumi/updatesList";
+import emoji from "@/utils/emoji";
 
 // masīvs ar vismaz vienu vērtību
 interface categories extends Array<ItemCategory> {
@@ -84,7 +84,7 @@ export type UseManyType = {
   runFunc: (i: ButtonInteraction) => any;
 };
 
-export interface AttributeItem<A extends Partial<ItemAttributes>> extends Omit<UsableItem, 'removedOnUse'> {
+export interface AttributeItem<A extends Partial<ItemAttributes>> extends Omit<UsableItem, "removedOnUse"> {
   // mantu atribūti, piemēram kaķa vecums vai burkāna nosaukums
   attributes: (currTime: number) => A;
   // pēc kādiem atribūtiem kārtot mantas inventārā un izvēlnēs
@@ -105,6 +105,6 @@ export interface NotSellableItem extends AttributeItem<ItemAttributes> {
 
 type Item = BaseItem | UsableItem | AttributeItem<ItemAttributes> | NotSellableItem;
 
-export const item: <T extends Item>(item: T) => T = item => item;
+export const item: <T extends Item>(item: T) => T = (item) => item;
 
 export default Item;

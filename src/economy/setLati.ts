@@ -1,7 +1,7 @@
-import { ClientSession } from 'mongoose';
-import UserProfile from '@/interfaces/UserProfile';
-import User from '@/schemas/User';
-import userCache from '@/utils/userCache';
+import { ClientSession } from "mongoose";
+import UserProfile from "@/interfaces/UserProfile";
+import User from "@/schemas/User";
+import userCache from "@/utils/userCache";
 
 export default async function setLati(
   userId: string,

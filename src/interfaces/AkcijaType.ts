@@ -1,4 +1,4 @@
-import { AkcijaId } from '@/commands/economyCommands/akcijas/akcijasList';
+import { AkcijaId } from "@/commands/economyCommands/akcijas/akcijasList";
 
 interface AkcijaType {
   akcijaId: AkcijaId;

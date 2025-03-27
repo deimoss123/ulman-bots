@@ -1,16 +1,16 @@
-import { Client, GatewayIntentBits } from 'discord.js';
-import { commandList } from '@/utils/commandList';
-import validateEnv from '@/utils/validateEnv';
-import chalk from 'chalk';
-import { getPalidzibaChoices } from '@/commands/palidziba/palidziba';
+import { Client, GatewayIntentBits } from "discord.js";
+import { commandList } from "@/utils/commandList";
+import validateEnv from "@/utils/validateEnv";
+import chalk from "chalk";
+import { getPalidzibaChoices } from "@/commands/palidziba/palidziba";
 
 async function registerGuildCommands(client: Client) {
   client
     .application!.commands.set(
       commandList
-        .filter(command => !command.devOnly)
-        .map(command => {
-          if (command.data.name === 'palidziba') {
+        .filter((command) => !command.devOnly)
+        .map((command) => {
+          if (command.data.name === "palidziba") {
             // @ts-ignore šīzofrēnija
             command.data.options[1].options[0].choices = getPalidzibaChoices();
           }
@@ -18,7 +18,7 @@ async function registerGuildCommands(client: Client) {
         }),
     )
     .then(() => {
-      console.log(chalk.green('Global commands registered!'));
+      console.log(chalk.green("Global commands registered!"));
       process.exit(0);
     });
 }

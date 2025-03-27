@@ -1,22 +1,22 @@
-import { ApplicationCommandOptionType } from 'discord.js';
-import addLati from '@/economy/addLati';
-import addTimeCooldown from '@/economy/addTimeCooldown';
-import editItemAttribute from '@/economy/editItemAttribute';
-import findUser from '@/economy/findUser';
-import setStats from '@/economy/stats/setStats';
-import commandColors from '@/embeds/commandColors';
-import embedTemplate from '@/embeds/embedTemplate';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import errorEmbed from '@/embeds/errorEmbed';
-import { displayAttributes } from '@/embeds/helpers/displayAttributes';
-import itemString from '@/embeds/helpers/itemString';
-import latiString from '@/embeds/helpers/latiString';
-import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
-import Command from '@/interfaces/Command';
-import itemList from '@/items/itemList';
-import intReply from '@/utils/intReply';
-import { statusList } from '@/commands/profils';
-import emoji from '@/utils/emoji';
+import { ApplicationCommandOptionType } from "discord.js";
+import addLati from "@/economy/addLati";
+import addTimeCooldown from "@/economy/addTimeCooldown";
+import editItemAttribute from "@/economy/editItemAttribute";
+import findUser from "@/economy/findUser";
+import setStats from "@/economy/stats/setStats";
+import commandColors from "@/embeds/commandColors";
+import embedTemplate from "@/embeds/embedTemplate";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import errorEmbed from "@/embeds/errorEmbed";
+import { displayAttributes } from "@/embeds/helpers/displayAttributes";
+import itemString from "@/embeds/helpers/itemString";
+import latiString from "@/embeds/helpers/latiString";
+import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import Command from "@/interfaces/Command";
+import itemList from "@/items/itemList";
+import intReply from "@/utils/intReply";
+import { statusList } from "@/commands/profils";
+import emoji from "@/utils/emoji";
 
 const ZAGT_MIN_LATI = 100;
 const ZAGT_MAX_LATI = 1000;
@@ -31,15 +31,15 @@ const ZAGT_COOLDOWN = 900_000; //15 min
 
 const zagt: Command = {
   description: () =>
-    '__**Zagšana no lietotāja**__\n' +
+    "__**Zagšana no lietotāja**__\n" +
     `Zogot no kāda cita tiek izvēlēta nozagtās naudas summa, kas tiek aprēķināta nejauši\n` +
     `Gan tev, gan lietotājam no kā zodz ir jābūt vismaz **${ZAGT_MIN_LATI}** latiem\n` +
     `Maksimālais latu daudzums ko iespējams nozagt ir **${ZAGT_MAX_LATI}** lati\n\n` +
     `Iespēja nozagt ir ${Math.floor(BASE_STEAL_CHANCE * 100)}% un ` +
     `${Math.floor(NAZIS_STEAL_CHANCE * 100)}% ar "${statusList.laupitajs}" statusu\n` +
-    'Ja tev nepaveicās un neizdodas nozagt, tad izrēķinātā nozagtā summa tiks atņemta no tava maka un pievienota lietotājam kuru centies apzagt\n\n' +
+    "Ja tev nepaveicās un neizdodas nozagt, tad izrēķinātā nozagtā summa tiks atņemta no tava maka un pievienota lietotājam kuru centies apzagt\n\n" +
     `Zagt nav iespējams, ja tev, vai lietotājam kuru centies apzagt ir "${statusList.aizsargats}" statuss (neattiecas uz bankas apzagšanu)\n\n` +
-    '__**Zagšana no Valsts Bankas (UlmaņBota)**__\n' +
+    "__**Zagšana no Valsts Bankas (UlmaņBota)**__\n" +
     `Lai apzagtu banku, tai ir jābūt vismaz **${MIN_BANKA_STEAL}** latiem, ` +
     `kā arī tavā inventārā ir jābūt **${itemString(itemList.naudas_maiss)}** (tukšs)\n` +
     `No bankas maksimāli var nozagt **${MAX_BANKA_STEAL}** latus\n` +
@@ -48,12 +48,12 @@ const zagt: Command = {
   color: commandColors.zagt,
   cooldown: ZAGT_COOLDOWN,
   data: {
-    name: 'zagt',
-    description: 'Zagt no kāda lietotāja, vai Valsts Bankas (UlmaņBota)',
+    name: "zagt",
+    description: "Zagt no kāda lietotāja, vai Valsts Bankas (UlmaņBota)",
     options: [
       {
-        name: 'lietotājs',
-        description: 'Lietotājs kuru apzagt',
+        name: "lietotājs",
+        description: "Lietotājs kuru apzagt",
         type: ApplicationCommandOptionType.User,
         required: true,
       },
@@ -62,11 +62,11 @@ const zagt: Command = {
   async run(i) {
     const guildId = i.guildId!;
 
-    const target = i.options.getUser('lietotājs');
-    if (!target) return intReply(i, ephemeralReply('Izvēlies no kā zagt'));
+    const target = i.options.getUser("lietotājs");
+    if (!target) return intReply(i, ephemeralReply("Izvēlies no kā zagt"));
 
     if (target.id === i.user.id) {
-      return intReply(i, ephemeralReply('Tu nevari zagt no sevis'));
+      return intReply(i, ephemeralReply("Tu nevari zagt no sevis"));
     }
 
     const [user, targetUser] = await Promise.all([findUser(i.user.id, guildId), findUser(target.id, guildId)]);
@@ -83,7 +83,9 @@ const zagt: Command = {
         );
       }
 
-      const maiss = user.specialItems.find(item => item.name === 'naudas_maiss' && item.attributes.latiCollected === 0);
+      const maiss = user.specialItems.find(
+        (item) => item.name === "naudas_maiss" && item.attributes.latiCollected === 0,
+      );
       if (!maiss) {
         return intReply(
           i,
@@ -100,7 +102,7 @@ const zagt: Command = {
       ]);
       if (!userAfter || !bankaUser) return intReply(i, errorEmbed);
 
-      await addTimeCooldown(i.user.id, guildId, 'zagt');
+      await addTimeCooldown(i.user.id, guildId, "zagt");
       await setStats(i.user.id, guildId, { stolenFromBanka: stolenAmount });
 
       return intReply(
@@ -108,14 +110,14 @@ const zagt: Command = {
         embedTemplate({
           i,
           color: this.color,
-          title: `${emoji('icon_check1')} Zagt no Valsts Bankas`,
+          title: `${emoji("icon_check1")} Zagt no Valsts Bankas`,
           description:
             `No Valsts bankas tu nozagi ${latiString(stolenAmount, true, true)}\n\n` +
             `Tavam inventāram tika pievienots:\n` +
             `**${itemString(itemList.naudas_maiss)}** (${displayAttributes(userAfter.newItem)})`,
           fields: [
             {
-              name: 'Valsts bankai palika',
+              name: "Valsts bankai palika",
               value: latiString(bankaUser.lati),
               inline: true,
             },
@@ -161,7 +163,7 @@ const zagt: Command = {
     const stealChance = hasLaupitajs ? NAZIS_STEAL_CHANCE : BASE_STEAL_CHANCE;
     const didSteal = Math.random() < stealChance;
 
-    await addTimeCooldown(i.user.id, guildId, 'zagt');
+    await addTimeCooldown(i.user.id, guildId, "zagt");
 
     const [userAfter, targetUserAfter] = await Promise.all([
       addLati(i.user.id, guildId, stolenAmount * (didSteal ? 1 : -1)),
@@ -181,12 +183,12 @@ const zagt: Command = {
         color: this.color,
         content: `${target}`,
         title:
-          `${didSteal ? emoji('icon_check1') : emoji('icon_cross')} Zagt ` +
-          (hasLaupitajs ? `(ar "${statusList.laupitajs}" statusu)` : ''),
+          `${didSteal ? emoji("icon_check1") : emoji("icon_cross")} Zagt ` +
+          (hasLaupitajs ? `(ar "${statusList.laupitajs}" statusu)` : ""),
         description: text,
         fields: [
           {
-            name: 'Tev tagad ir',
+            name: "Tev tagad ir",
             value: latiString(userAfter.lati),
             inline: true,
           },

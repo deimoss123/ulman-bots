@@ -1,4 +1,4 @@
-import Command from '@/interfaces/Command';
+import Command from "@/interfaces/Command";
 import {
   ActionRowBuilder,
   BaseInteraction,
@@ -7,25 +7,25 @@ import {
   ComponentType,
   SelectMenuComponentOptionData,
   StringSelectMenuBuilder,
-} from 'discord.js';
-import itemList, { ItemCategory, ItemKey } from '@/items/itemList';
-import embedTemplate from '@/embeds/embedTemplate';
-import latiString from '@/embeds/helpers/latiString';
-import commandColors from '@/embeds/commandColors';
-import itemString from '@/embeds/helpers/itemString';
-import findUser from '@/economy/findUser';
-import pirktRun from '@/commands/pirkt/pirktRun';
-import errorEmbed from '@/embeds/errorEmbed';
-import countFreeInvSlots from '@/items/helpers/countFreeInvSlots';
-import getItemPrice from '@/items/helpers/getItemPrice';
-import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
-import midNightStr from '@/embeds/helpers/midnightStr';
-import getDiscounts from '@/items/helpers/getDiscounts';
-import intReply from '@/utils/intReply';
-import Item from '@/interfaces/Item';
-import UserProfile from '@/interfaces/UserProfile';
-import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
-import { Dialogs } from '@/utils/Dialogs';
+} from "discord.js";
+import itemList, { ItemCategory, ItemKey } from "@/items/itemList";
+import embedTemplate from "@/embeds/embedTemplate";
+import latiString from "@/embeds/helpers/latiString";
+import commandColors from "@/embeds/commandColors";
+import itemString from "@/embeds/helpers/itemString";
+import findUser from "@/economy/findUser";
+import pirktRun from "@/commands/pirkt/pirktRun";
+import errorEmbed from "@/embeds/errorEmbed";
+import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
+import getItemPrice from "@/items/helpers/getItemPrice";
+import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import midNightStr from "@/embeds/helpers/midnightStr";
+import getDiscounts from "@/items/helpers/getDiscounts";
+import intReply from "@/utils/intReply";
+import Item from "@/interfaces/Item";
+import UserProfile from "@/interfaces/UserProfile";
+import capitalizeFirst from "@/embeds/helpers/capitalizeFirst";
+import { Dialogs } from "@/utils/Dialogs";
 
 type ShopItem = {
   key: ItemKey;
@@ -44,13 +44,13 @@ type State = {
 };
 
 const enum ComponentId {
-  Buy = 'veikals_pirkt',
-  SelectItem = 'veikals_select_item',
-  SelectAmount = 'veikals_select_amount',
+  Buy = "veikals_pirkt",
+  SelectItem = "veikals_select_item",
+  SelectAmount = "veikals_select_amount",
 }
 
 function view({ user, shopItems, chosenItem, chosenAmount, resetTime, timeUntilReset }: State, i: BaseInteraction) {
-  const fields = shopItems.map(item => {
+  const fields = shopItems.map((item) => {
     let name = itemString(item.key);
     if (item.discount) {
       name += ` -${Math.floor(item.discount * 100)}%`;
@@ -82,24 +82,24 @@ function view({ user, shopItems, chosenItem, chosenAmount, resetTime, timeUntilR
     hasFreeInvSlots = countFreeInvSlots(user) >= chosenAmount;
   }
 
-  const disableBuy = chosenItem === '' || !canAfford || !hasFreeInvSlots;
+  const disableBuy = chosenItem === "" || !canAfford || !hasFreeInvSlots;
 
   const buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setCustomId(ComponentId.Buy)
-      .setLabel('Pirkt' + (totalCost ? ` (${latiString(totalCost)})` : ''))
+      .setLabel("Pirkt" + (totalCost ? ` (${latiString(totalCost)})` : ""))
       .setStyle(disableBuy ? ButtonStyle.Secondary : ButtonStyle.Primary)
-      .setEmoji('911400812754915388')
+      .setEmoji("911400812754915388")
       .setDisabled(disableBuy),
   );
 
   if (!canAfford) {
     buttonRow.addComponents(
       new ButtonBuilder()
-        .setCustomId('_')
-        .setLabel('Tev nepietiek naudas')
+        .setCustomId("_")
+        .setLabel("Tev nepietiek naudas")
         .setStyle(ButtonStyle.Danger)
-        .setEmoji('❕')
+        .setEmoji("❕")
         .setDisabled(true),
     );
   }
@@ -107,19 +107,19 @@ function view({ user, shopItems, chosenItem, chosenAmount, resetTime, timeUntilR
   if (!hasFreeInvSlots) {
     buttonRow.addComponents(
       new ButtonBuilder()
-        .setCustomId('_1')
-        .setLabel('Inventārā nepietiek vieta')
+        .setCustomId("_1")
+        .setLabel("Inventārā nepietiek vieta")
         .setStyle(ButtonStyle.Danger)
-        .setEmoji('❕')
+        .setEmoji("❕")
         .setDisabled(true),
     );
   }
 
   return embedTemplate({
     i,
-    title: 'Veikals',
+    title: "Veikals",
     description:
-      'Nopirkt preci: `/pirkt <nosaukums> <daudzums>\n`' +
+      "Nopirkt preci: `/pirkt <nosaukums> <daudzums>\n`" +
       `Atlaides mainās katru dienu plkst. <t:${Math.floor(resetTime / 1000)}:t> ` +
       `(pēc ${millisToReadableTime(timeUntilReset)})`,
     color: commandColors.veikals,
@@ -134,7 +134,7 @@ function view({ user, shopItems, chosenItem, chosenAmount, resetTime, timeUntilR
               label: capitalizeFirst(itemObj.nameNomVsk),
               description: latiString(price),
               value: key,
-              emoji: itemObj.emoji() || '❓',
+              emoji: itemObj.emoji() || "❓",
               default: key === chosenItem,
             })),
           ),
@@ -152,12 +152,12 @@ function view({ user, shopItems, chosenItem, chosenAmount, resetTime, timeUntilR
 
 const veikals: Command = {
   description: () =>
-    'Apskatīt visas preces, kas nopērkamas veikalā\n' +
+    "Apskatīt visas preces, kas nopērkamas veikalā\n" +
     `Veikalā dažām precēm vienmēr būs atlaides, kas mainās katru dienu plkst. ${midNightStr()}`,
   color: commandColors.veikals,
   data: {
-    name: 'veikals',
-    description: 'Apskatīt veikalā nopērkamās preces',
+    name: "veikals",
+    description: "Apskatīt veikalā nopērkamās preces",
   },
   async run(i) {
     const userId = i.user.id;
@@ -168,26 +168,26 @@ const veikals: Command = {
 
     // izfiltrē veikala mantas un sakārto pēc cenas
     const shopItems: ShopItem[] = Object.entries(itemList)
-      .filter(obj => obj[1].categories.includes(ItemCategory.VEIKALS))
+      .filter((obj) => obj[1].categories.includes(ItemCategory.VEIKALS))
       .sort((a, b) => b[1].value - a[1].value)
       .map(([key, itemObj]) => ({ key, itemObj, ...getItemPrice(key, discounts) }));
 
     const initialState: State = {
       user,
       shopItems,
-      chosenItem: '',
+      chosenItem: "",
       chosenAmount: 1,
       resetTime: new Date().setHours(24, 0, 0, 0),
       timeUntilReset: new Date().setHours(24, 0, 0, 0) - Date.now(),
     };
 
-    const dialogs = new Dialogs(i, initialState, view, 'veikals', { time: 60000 });
+    const dialogs = new Dialogs(i, initialState, view, "veikals", { time: 60000 });
 
     if (!(await dialogs.start())) {
       return intReply(i, errorEmbed);
     }
 
-    dialogs.onClick(async int => {
+    dialogs.onClick(async (int) => {
       const { customId, componentType: type } = int;
 
       if (customId === ComponentId.SelectItem && type === ComponentType.StringSelect) {

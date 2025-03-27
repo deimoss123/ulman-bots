@@ -1,11 +1,11 @@
-import { AutocompleteInteraction } from 'discord.js';
-import normalizeLatText from '@/embeds/helpers/normalizeLatText';
-import findUser from '@/economy/findUser';
-import Item from '@/interfaces/Item';
-import itemList, { ItemKey } from '@/items/itemList';
-import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
-import findItemsByQuery from '@/items/helpers/findItemsByQuery';
-import { ItemInProfile } from '@/interfaces/UserProfile';
+import { AutocompleteInteraction } from "discord.js";
+import normalizeLatText from "@/embeds/helpers/normalizeLatText";
+import findUser from "@/economy/findUser";
+import Item from "@/interfaces/Item";
+import itemList, { ItemKey } from "@/items/itemList";
+import capitalizeFirst from "@/embeds/helpers/capitalizeFirst";
+import findItemsByQuery from "@/items/helpers/findItemsByQuery";
+import { ItemInProfile } from "@/interfaces/UserProfile";
 
 function mapItemsToChoices(itemInList: [string, Item]) {
   const [key, item] = itemInList;
@@ -31,7 +31,7 @@ export default async function iedotAutocomplete(interaction: AutocompleteInterac
 
   const { specialItems, items } = user;
 
-  const specialItemsList = [...new Set(specialItems.map(item => item.name))].map(key => [key, itemList[key]]) as [
+  const specialItemsList = [...new Set(specialItems.map((item) => item.name))].map((key) => [key, itemList[key]]) as [
     ItemKey,
     Item,
   ][];
@@ -39,10 +39,10 @@ export default async function iedotAutocomplete(interaction: AutocompleteInterac
   allChoices = [...items.map(mapProfileItemsToItemsList), ...specialItemsList];
 
   if (!allChoices.length) {
-    await interaction.respond([{ name: 'Tev nav ko iedot', value: '' }]);
+    await interaction.respond([{ name: "Tev nav ko iedot", value: "" }]);
     return;
   }
 
   const queriedChoices = findItemsByQuery(focusedValue, allChoices);
-  await interaction.respond(queriedChoices.map(mapItemsToChoices)).catch(_ => _);
+  await interaction.respond(queriedChoices.map(mapItemsToChoices)).catch((_) => _);
 }

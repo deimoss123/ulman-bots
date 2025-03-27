@@ -1,6 +1,6 @@
-import { BaseInteraction, ButtonInteraction, StringSelectMenuInteraction } from 'discord.js';
-import { IpasumiState } from '@/commands/ipasumi/ipasumi';
-import embedTemplate from '@/embeds/embedTemplate';
+import { BaseInteraction, ButtonInteraction, StringSelectMenuInteraction } from "discord.js";
+import { IpasumiState } from "@/commands/ipasumi/ipasumi";
+import embedTemplate from "@/embeds/embedTemplate";
 
 type State = {};
 
@@ -15,7 +15,7 @@ function defaultState(): State {
 function view(state: IpasumiState, i: BaseInteraction) {
   return embedTemplate({
     i,
-    content: 'ievarijumuStends',
+    content: "ievarijumuStends",
   });
 }
 

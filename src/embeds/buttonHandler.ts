@@ -11,10 +11,10 @@ import {
   StringSelectMenuBuilder,
   SelectMenuInteraction,
   MessageFlags,
-} from 'discord.js';
-import interactionCache, { InteractionInCache } from '@/utils/interactionCache';
-import intReply from '@/utils/intReply';
-import errorEmbed from '@/embeds/errorEmbed';
+} from "discord.js";
+import interactionCache, { InteractionInCache } from "@/utils/interactionCache";
+import intReply from "@/utils/intReply";
+import errorEmbed from "@/embeds/errorEmbed";
 
 export interface CallbackReturn {
   edit?: InteractionUpdateOptions | MessagePayload;
@@ -57,10 +57,10 @@ export default async function buttonHandler(
     isInteractionActive: isActive,
   });
 
-  collector.on('collect', async componentInteraction => {
+  collector.on("collect", async (componentInteraction) => {
     if (componentInteraction.user.id !== interaction.user.id) {
       intReply(componentInteraction, {
-        content: 'Nav pieklājīgi spaidīt svešu cilvēku pogas :^)',
+        content: "Nav pieklājīgi spaidīt svešu cilvēku pogas :^)",
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -70,7 +70,7 @@ export default async function buttonHandler(
 
     const res = await callback(componentInteraction as ButtonInteraction | SelectMenuInteraction);
     if (!res) {
-      componentInteraction.deferUpdate().catch(_ => _);
+      componentInteraction.deferUpdate().catch((_) => _);
       return;
     }
 
@@ -107,7 +107,7 @@ export default async function buttonHandler(
     res.after?.();
   });
 
-  collector.on('end', async () => {
+  collector.on("end", async () => {
     // izdzēš izbeigto interaction no interactionCache
     interactionCache.get(cacheId)?.delete(interactionName);
 
@@ -123,9 +123,9 @@ export default async function buttonHandler(
     const editedMessageComponents: ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] = [];
 
     // iziet cauri visām pogām message objektā un atspējo tās
-    currentMessage.components.forEach(row => {
+    currentMessage.components.forEach((row) => {
       const editedRow = new ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>();
-      row.components.forEach(component => {
+      row.components.forEach((component) => {
         if (!component.data.disabled) areAllComponentsAlreadyDisabled = false;
 
         if (component.type === ComponentType.Button) {

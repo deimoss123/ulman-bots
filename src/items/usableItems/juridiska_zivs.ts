@@ -1,7 +1,7 @@
-import { statusList } from '@/commands/profils';
-import addStatus from '@/economy/addStatus';
-import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
-import { UsableItemFunc } from '@/interfaces/Item';
+import { statusList } from "@/commands/profils";
+import addStatus from "@/economy/addStatus";
+import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import { UsableItemFunc } from "@/interfaces/Item";
 
 export const JURIDISKA_ZIVS_STATUS = 259_200_000; //72h
 
@@ -12,7 +12,7 @@ const juridiska_zivs: UsableItemFunc = async (userId, guildId) => {
   return {
     text:
       `Apēdot juridisko zivi tu ieguvi statusu: **${statusList.juridisks}**\n` +
-      'Tu esi atbrīvots no maksāšanas/iedošanas nodokļa: \n' +
+      "Tu esi atbrīvots no maksāšanas/iedošanas nodokļa: \n" +
       `\`\`\`${millisToReadableTime(user.status.juridisks - Date.now())}\`\`\``,
   };
 };

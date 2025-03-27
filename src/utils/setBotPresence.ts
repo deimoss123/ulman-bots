@@ -1,4 +1,4 @@
-import { ActivityType, Client, PresenceUpdateStatus } from 'discord.js';
+import { ActivityType, Client, PresenceUpdateStatus } from "discord.js";
 
 export default function setBotPresence(client: Client<true>) {
   const guildCount = client.guilds.cache.size;
@@ -9,7 +9,7 @@ export default function setBotPresence(client: Client<true>) {
       {
         state: `/palidziba | ${guildCount} serveros`,
         type: ActivityType.Custom,
-        name: '-',
+        name: "-",
       },
     ],
   });

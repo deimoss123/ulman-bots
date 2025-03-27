@@ -1,11 +1,11 @@
-import User from '@/schemas/User';
-import mongo from '@/utils/mongo';
-import 'dotenv/config';
+import User from "@/schemas/User";
+import mongo from "@/utils/mongo";
+import "dotenv/config";
 
 // sūdīga funkcija lai atjaunotu datubāzi ar jaunajiem mantu atribūtiem
 export default async function updateDb() {
-  await mongo().then(() => console.log('Connected to MongoDB'));
-  console.log('started updating');
+  await mongo().then(() => console.log("Connected to MongoDB"));
+  console.log("started updating");
 
   // // visiem kaķiem un pētniekiem pievieno tukšu cepures atribūtu
   // await User.updateMany(
@@ -33,12 +33,12 @@ export default async function updateDb() {
 
   await User.updateMany(
     {},
-    { $set: { 'specialItems.$[elem].attributes.fedUntil': 1675039604581 } },
+    { $set: { "specialItems.$[elem].attributes.fedUntil": 1675039604581 } },
     {
-      arrayFilters: [{ $and: [{ 'elem.name': 'kakis' }, { 'elem.attributes.fedUntil': { $gt: 1673301600000 } }] }],
+      arrayFilters: [{ $and: [{ "elem.name": "kakis" }, { "elem.attributes.fedUntil": { $gt: 1673301600000 } }] }],
     },
   );
-  console.log('Kaķu atdzīvināšana');
+  console.log("Kaķu atdzīvināšana");
 }
 
 updateDb();

@@ -1,6 +1,6 @@
-import chance from '@/items/helpers/chance';
-import shuffleArray from '@/items/helpers/shuffleArray';
-import feniksLaimesti from '@/commands/feniks/feniksLaimesti';
+import chance from "@/items/helpers/chance";
+import shuffleArray from "@/items/helpers/shuffleArray";
+import feniksLaimesti from "@/commands/feniks/feniksLaimesti";
 
 export interface CalcSpinRes {
   emojiGroups: {
@@ -13,7 +13,7 @@ export interface CalcSpinRes {
 
 export default function calcSpin(emojiCount: number): CalcSpinRes {
   const res: Record<string, number> = {};
-  let emojiGroups: CalcSpinRes['emojiGroups'] = [];
+  let emojiGroups: CalcSpinRes["emojiGroups"] = [];
   let totalMultiplier = 0;
 
   for (let i = 0; i < emojiCount; i++) {
@@ -47,7 +47,7 @@ export default function calcSpin(emojiCount: number): CalcSpinRes {
 }
 
 export function testSpins(count: number) {
-  console.log('Testē griezienus...');
+  console.log("Testē griezienus...");
 
   let totalMultiplierSum = 0;
   for (let i = 0; i < count; i++) {

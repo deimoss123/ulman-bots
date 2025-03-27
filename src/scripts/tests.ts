@@ -1,6 +1,6 @@
 function oguKombinacijas() {
   const max_ogas = 10;
-  const ogas = ['avene', 'janoga', 'mellene', 'vinoga', 'zemene'];
+  const ogas = ["avene", "janoga", "mellene", "vinoga", "zemene"];
 
   let count = 1;
 

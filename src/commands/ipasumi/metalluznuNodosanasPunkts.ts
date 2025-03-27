@@ -7,27 +7,27 @@ import {
   ButtonStyle,
   resolveColor,
   StringSelectMenuInteraction,
-} from 'discord.js';
-import { IpasumiState } from '@/commands/ipasumi/ipasumi';
-import embedTemplate from '@/embeds/embedTemplate';
-import UserProfile from '@/interfaces/UserProfile';
-import setUser from '@/economy/setUser';
-import findUser from '@/economy/findUser';
-import emoji from '@/utils/emoji';
-import { writeFile, readFile } from 'fs/promises';
-import { Dialogs } from '@/utils/Dialogs';
-import mongoTransaction from '@/utils/mongoTransaction';
-import addLati from '@/economy/addLati';
-import intReply from '@/utils/intReply';
-import smallEmbed from '@/embeds/smallEmbed';
-import latiString from '@/embeds/helpers/latiString';
-import { Canvas, createCanvas, GlobalFonts, SKRSContext2D } from '@napi-rs/canvas';
-import { join } from 'path';
+} from "discord.js";
+import { IpasumiState } from "@/commands/ipasumi/ipasumi";
+import embedTemplate from "@/embeds/embedTemplate";
+import UserProfile from "@/interfaces/UserProfile";
+import setUser from "@/economy/setUser";
+import findUser from "@/economy/findUser";
+import emoji from "@/utils/emoji";
+import { writeFile, readFile } from "fs/promises";
+import { Dialogs } from "@/utils/Dialogs";
+import mongoTransaction from "@/utils/mongoTransaction";
+import addLati from "@/economy/addLati";
+import intReply from "@/utils/intReply";
+import smallEmbed from "@/embeds/smallEmbed";
+import latiString from "@/embeds/helpers/latiString";
+import { Canvas, createCanvas, GlobalFonts, SKRSContext2D } from "@napi-rs/canvas";
+import { join } from "path";
 
-const fontPath = join(__dirname, '..', '..', '..', '..', 'assets', 'fonts');
+const fontPath = join(__dirname, "..", "..", "..", "..", "assets", "fonts");
 
 // fontos beigās 2, lai pārliecinātos, ka izmanto ielādētos, nevis sistēmas
-GlobalFonts.registerFromPath(join(fontPath, 'Inter-VariableFont_opsz,wght.ttf'), 'Inter2');
+GlobalFonts.registerFromPath(join(fontPath, "Inter-VariableFont_opsz,wght.ttf"), "Inter2");
 
 // gatavo json datu tips
 interface MetalluznuData {
@@ -38,7 +38,7 @@ interface MetalluznuData {
 }
 
 // iegūst iepriekš ģenerētos līknes datus zīmēšanai
-const jsonData = JSON.parse(await readFile('metalluznuNodosanasPunktsData.json', 'utf-8')) as MetalluznuData;
+const jsonData = JSON.parse(await readFile("metalluznuNodosanasPunktsData.json", "utf-8")) as MetalluznuData;
 
 const enum Config {
   INITIAL_TEMPERATURE = -20, // sākuma temperatūra
@@ -75,7 +75,7 @@ async function generateChartData() {
     data: arr,
   };
 
-  await writeFile('metalluznuNodosanasPunktsData.json', JSON.stringify(obj, null, 2), 'utf-8');
+  await writeFile("metalluznuNodosanasPunktsData.json", JSON.stringify(obj, null, 2), "utf-8");
 }
 
 // tips charta novietojumam iekš canvasa
@@ -98,7 +98,7 @@ const chartConfig = {
   width: 600,
   height: 300,
 
-  fontFamily: 'Inter2',
+  fontFamily: "Inter2",
   labelFontSize: 22,
   tickFontSize: 16,
 
@@ -125,26 +125,26 @@ const chartConfig = {
     left: 8,
   },
   colors: {
-    background: '#18181b',
-    axis: '#fafafa',
-    axisTicks: '#fafafa',
-    tickLabels: '#fafafa',
-    axisLabels: '#d4d4d4',
-    dot: '#fafafa',
-    indicatorLine: '#52525b',
+    background: "#18181b",
+    axis: "#fafafa",
+    axisTicks: "#fafafa",
+    tickLabels: "#fafafa",
+    axisLabels: "#d4d4d4",
+    dot: "#fafafa",
+    indicatorLine: "#52525b",
   },
 };
 
 // temperatūras iedaļas tekstam un līknes krāsiņai
 // katrs iedaļa attiecas uz temperatūru kas ir zemāka par pirmo elementu (temperatūru)
 const tempSegments: [number, { text: string; color: string }][] = [
-  [0, { text: 'Auksts', color: '#1d4ed8' }], // zem 0 grādiem
-  [10, { text: 'Vēss', color: '#0891b2' }], // zem 10 grādiem
-  [16, { text: 'Remdens', color: '#2dd4bf' }], // utt.
-  [26, { text: 'Optimāls siltums', color: '#4ade80' }],
-  [35, { text: 'Ļoti karsts', color: '#facc15' }],
-  [42, { text: 'Bīstami karsts', color: '#f97316' }],
-  [Infinity, { text: 'Pārkaršana', color: '#b91c1c' }],
+  [0, { text: "Auksts", color: "#1d4ed8" }], // zem 0 grādiem
+  [10, { text: "Vēss", color: "#0891b2" }], // zem 10 grādiem
+  [16, { text: "Remdens", color: "#2dd4bf" }], // utt.
+  [26, { text: "Optimāls siltums", color: "#4ade80" }],
+  [35, { text: "Ļoti karsts", color: "#facc15" }],
+  [42, { text: "Bīstami karsts", color: "#f97316" }],
+  [Infinity, { text: "Pārkaršana", color: "#b91c1c" }],
 ];
 
 // aprēķina kur tiks novietots pats charts
@@ -201,7 +201,7 @@ async function initializeStaticChart(): Promise<void> {
   const { width, height, tickLength, tickLabelGap, labelFontSize, padding, colors } = chartConfig;
 
   staticCanvas = createCanvas(width, height);
-  staticCtx = staticCanvas.getContext('2d');
+  staticCtx = staticCanvas.getContext("2d");
 
   staticCtx.fillStyle = colors.background;
   staticCtx.fillRect(0, 0, width, height);
@@ -211,10 +211,10 @@ async function initializeStaticChart(): Promise<void> {
   // axis labeļu stili
   staticCtx.fillStyle = colors.axisLabels;
   staticCtx.font = `${labelFontSize}px ${chartConfig.fontFamily}`;
-  staticCtx.textAlign = 'center';
+  staticCtx.textAlign = "center";
 
   // x-axis labelis
-  staticCtx.fillText('Temperatūra, °C', chartArea.x + chartArea.width / 2, height - padding.bottom);
+  staticCtx.fillText("Temperatūra, °C", chartArea.x + chartArea.width / 2, height - padding.bottom);
 
   // y-axis labelis
   // stulbais canvas neļauj pagriezt tekstu
@@ -222,7 +222,7 @@ async function initializeStaticChart(): Promise<void> {
   staticCtx.save();
   staticCtx.translate(padding.left + labelFontSize, chartArea.y + chartArea.height / 2);
   staticCtx.rotate(-Math.PI / 2);
-  staticCtx.fillText('Peļņa, lati/h', 0, 0);
+  staticCtx.fillText("Peļņa, lati/h", 0, 0);
   staticCtx.restore();
 
   staticCtx.font = `${chartConfig.tickFontSize}px ${chartConfig.fontFamily}`;
@@ -243,7 +243,7 @@ async function initializeStaticChart(): Promise<void> {
     staticCtx.stroke();
 
     // ticka leibelis
-    staticCtx.textAlign = 'center';
+    staticCtx.textAlign = "center";
     staticCtx.fillText(
       temp.toString(),
       x,
@@ -264,7 +264,7 @@ async function initializeStaticChart(): Promise<void> {
     staticCtx.stroke();
 
     // ticka leibelis
-    staticCtx.textAlign = 'right';
+    staticCtx.textAlign = "right";
     staticCtx.fillText(
       rate.toString(),
       chartArea.x - tickLength - tickLabelGap,
@@ -287,7 +287,7 @@ async function generateChart(temperature: number): Promise<Buffer> {
   const { data } = jsonData;
 
   const canvas = createCanvas(width, height);
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext("2d");
 
   ctx.drawImage(staticCanvas!, 0, 0);
 
@@ -368,7 +368,7 @@ async function generateChart(temperature: number): Promise<Buffer> {
   ctx.arc(currentX, currentY, 5, 0, Math.PI * 2);
   ctx.fill();
 
-  return await canvas.encode('png');
+  return await canvas.encode("png");
 }
 
 // funckija kopējās peļņas aprēķinam konkrētā laikā
@@ -451,7 +451,7 @@ async function updateDb(
 
   const latiToAdd = action === UpdateAction.IznemtLatus ? Math.floor(newLati) : 0;
 
-  const { ok, values } = await mongoTransaction(session => {
+  const { ok, values } = await mongoTransaction((session) => {
     const arr = [() => setUser(userId, guildId, { properties: newProperties }, session)];
 
     if (action === UpdateAction.IznemtLatus) {
@@ -467,7 +467,7 @@ async function updateDb(
 
   const now = performance.now();
   state.metalluznuNodosanasPunkts.chart = await generateChart(newTemp);
-  console.log('Granulu katla bildes ģenerācija:', performance.now() - now);
+  console.log("Granulu katla bildes ģenerācija:", performance.now() - now);
 
   return { ok: true, data: { user: values.at(-1)!, latiToAdd } };
 }
@@ -502,9 +502,9 @@ function defaultState(): State {
 }
 
 const enum ComponentId {
-  IznemtLatus = 'ipasumi_metalluznuNodosanasPunkts_withdraw',
-  IemestGranulas = 'ipasumi_metalluznuNodosanasPunkts_granulas',
-  Refresh = 'ipasumi_metalluznuNodosanasPunkts_refresh',
+  IznemtLatus = "ipasumi_metalluznuNodosanasPunkts_withdraw",
+  IemestGranulas = "ipasumi_metalluznuNodosanasPunkts_granulas",
+  Refresh = "ipasumi_metalluznuNodosanasPunkts_refresh",
 }
 
 // funkcija
@@ -537,30 +537,30 @@ function view(state: IpasumiState, i: BaseInteraction) {
       .setLabel(`Iemest granulas, +5°C`)
       .setStyle(ButtonStyle.Primary)
       .setCustomId(ComponentId.IemestGranulas)
-      .setEmoji(emoji('granulas')),
+      .setEmoji(emoji("granulas")),
   );
 
   // poga izstrādei lai atjauninātu datus
   row.addComponents(
-    new ButtonBuilder().setStyle(ButtonStyle.Secondary).setCustomId(ComponentId.Refresh).setEmoji('🔄'),
+    new ButtonBuilder().setStyle(ButtonStyle.Secondary).setCustomId(ComponentId.Refresh).setEmoji("🔄"),
   );
 
   const tempText = tempSegments.find(([t]) => data.currentTemp <= t)?.[1]?.text;
 
   return embedTemplate({
     i,
-    content: '\u200B',
-    title: 'Metāllūžņu nodošanas punkts',
-    description: '',
-    color: resolveColor('#fdba74'),
+    content: "\u200B",
+    title: "Metāllūžņu nodošanas punkts",
+    description: "",
+    color: resolveColor("#fdba74"),
     fields: [
       {
-        name: 'Granulu katls:',
+        name: "Granulu katls:",
         value: `Temperatūra: **${data.currentTemp.toFixed(1)}** °C\n${tempText}`,
         inline: true,
       },
       {
-        name: '\u200B',
+        name: "\u200B",
         value:
           `Lati: **${data.currentLati}**/${data.maxLati}\n` +
           `Pašreizējā peļņa: **${calculateEarningRatePerHour(data.currentTemp).toFixed(2)}** lati/h\n`,
@@ -570,16 +570,16 @@ function view(state: IpasumiState, i: BaseInteraction) {
 
     components: [row],
     files: state.metalluznuNodosanasPunkts.chart
-      ? [new AttachmentBuilder(state.metalluznuNodosanasPunkts.chart, { name: 'granulu_katls_grafiks.png' })]
+      ? [new AttachmentBuilder(state.metalluznuNodosanasPunkts.chart, { name: "granulu_katls_grafiks.png" })]
       : undefined,
-    image: state.metalluznuNodosanasPunkts.chart ? 'attachment://granulu_katls_grafiks.png' : undefined,
+    image: state.metalluznuNodosanasPunkts.chart ? "attachment://granulu_katls_grafiks.png" : undefined,
   });
 }
 
 async function handler(
   i: ButtonInteraction | StringSelectMenuInteraction,
   state: IpasumiState,
-): ReturnType<Parameters<Dialogs<IpasumiState>['onClick']>[0]> {
+): ReturnType<Parameters<Dialogs<IpasumiState>["onClick"]>[0]> {
   if (!i.isButton()) return;
 
   const userId = i.user.id;

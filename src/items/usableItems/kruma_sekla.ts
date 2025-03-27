@@ -1,18 +1,18 @@
-import addItems from '@/economy/addItems';
-import findUser from '@/economy/findUser';
-import itemString from '@/embeds/helpers/itemString';
-import { UsableItemFunc } from '@/interfaces/Item';
-import checkUserSpecialItems from '@/items/helpers/checkUserSpecialItems';
+import addItems from "@/economy/addItems";
+import findUser from "@/economy/findUser";
+import itemString from "@/embeds/helpers/itemString";
+import { UsableItemFunc } from "@/interfaces/Item";
+import checkUserSpecialItems from "@/items/helpers/checkUserSpecialItems";
 
 const kruma_sekla: UsableItemFunc = async (userId, guildId) => {
   const user = await findUser(userId, guildId);
   if (!user) return { error: true };
 
-  const res = checkUserSpecialItems(user, 'ogu_krums');
+  const res = checkUserSpecialItems(user, "ogu_krums");
 
   if (!res.valid) {
     return {
-      text: `Tu nevari iestādīt **${itemString('ogu_krums', null, true)}**, jo ${res.reason}`,
+      text: `Tu nevari iestādīt **${itemString("ogu_krums", null, true)}**, jo ${res.reason}`,
     };
   }
 

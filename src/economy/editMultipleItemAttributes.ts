@@ -1,8 +1,8 @@
-import { ClientSession } from 'mongoose';
-import UserProfile, { ItemAttributes, SpecialItemInProfile } from '@/interfaces/UserProfile';
-import User from '@/schemas/User';
-import userCache from '@/utils/userCache';
-import findUser from '@/economy/findUser';
+import { ClientSession } from "mongoose";
+import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/interfaces/UserProfile";
+import User from "@/schemas/User";
+import userCache from "@/utils/userCache";
+import findUser from "@/economy/findUser";
 
 export default async function editMultipleItemAttributes(
   userId: string,
@@ -18,7 +18,7 @@ export default async function editMultipleItemAttributes(
     const newItems: SpecialItemInProfile[] = [];
 
     for (const { itemId, newAttributes } of itemsToChange) {
-      const itemIndex = specialItems.findIndex(i => i._id === itemId);
+      const itemIndex = specialItems.findIndex((i) => i._id === itemId);
       if (itemIndex === -1) return;
 
       specialItems[itemIndex].attributes = newAttributes;

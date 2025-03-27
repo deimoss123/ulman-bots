@@ -1,13 +1,13 @@
-import { ChatInputCommandInteraction } from 'discord.js';
-import commandColors from '@/embeds/commandColors';
-import embedTemplate from '@/embeds/embedTemplate';
-import itemString from '@/embeds/helpers/itemString';
-import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
-import Item, { TirgusItem } from '@/interfaces/Item';
-import UserProfile from '@/interfaces/UserProfile';
-import itemList, { ItemKey } from '@/items/itemList';
-import { calcReqItems } from '@/commands/tirgus/tirgus';
-import emoji from '@/utils/emoji';
+import { ChatInputCommandInteraction } from "discord.js";
+import commandColors from "@/embeds/commandColors";
+import embedTemplate from "@/embeds/embedTemplate";
+import itemString from "@/embeds/helpers/itemString";
+import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import Item, { TirgusItem } from "@/interfaces/Item";
+import UserProfile from "@/interfaces/UserProfile";
+import itemList, { ItemKey } from "@/items/itemList";
+import { calcReqItems } from "@/commands/tirgus/tirgus";
+import emoji from "@/utils/emoji";
 
 function mapPrice(itemObj: Item, user: UserProfile): string {
   const tirgusPrice = (itemObj as Item & TirgusItem).tirgusPrice;
@@ -20,19 +20,19 @@ function mapPrice(itemObj: Item, user: UserProfile): string {
 
   return (
     (reqLati
-      ? `${user.lati >= reqLati ? emoji('icon_check1') : emoji('icon_cross')} \` ${user.lati}/${reqLati} \` lati\n`
-      : '') +
+      ? `${user.lati >= reqLati ? emoji("icon_check1") : emoji("icon_cross")} \` ${user.lati}/${reqLati} \` lati\n`
+      : "") +
     Object.entries(reqItemsInv)
       .map(([key, amount]) => {
         const reqAmount = tirgusPrice.items[key];
 
         return (
-          `${amount >= reqAmount ? emoji('icon_check1') : emoji('icon_cross')} ` +
-          `\` ${' '.repeat(maxHasLen - `${amount}`.length)}${amount}/` +
-          `${reqAmount}${' '.repeat(maxReqLen - `${reqAmount}`.length)} \` ${itemString(itemList[key])}`
+          `${amount >= reqAmount ? emoji("icon_check1") : emoji("icon_cross")} ` +
+          `\` ${" ".repeat(maxHasLen - `${amount}`.length)}${amount}/` +
+          `${reqAmount}${" ".repeat(maxReqLen - `${reqAmount}`.length)} \` ${itemString(itemList[key])}`
         );
       })
-      .join('\n')
+      .join("\n")
   );
 }
 
@@ -48,9 +48,9 @@ export default function tirgusEmbed(
   return embedTemplate({
     i,
     color: commandColors.veikals,
-    title: 'Tirgus',
+    title: "Tirgus",
     description:
-      '\n' +
+      "\n" +
       `Tirgus preces mainās katru dienu plkst. \n` +
       `<t:${Math.floor(resetTime / 1000)}:t> (pēc ${millisToReadableTime(timeUntilReset)})`,
     fields: listings.map((key, index) => {
@@ -58,10 +58,10 @@ export default function tirgusEmbed(
       return {
         name: itemString(itemObj),
         value:
-          `Pieejams: ${itemsBought.includes(key) ? emoji('icon_cross') : emoji('icon_check1')}\n` +
-          '**Cena:**\n' +
+          `Pieejams: ${itemsBought.includes(key) ? emoji("icon_cross") : emoji("icon_check1")}\n` +
+          "**Cena:**\n" +
           mapPrice(itemObj, user) +
-          (index !== listings.length - 1 ? `\n__${'\u2800'.repeat(20)}__` : ''),
+          (index !== listings.length - 1 ? `\n__${"\u2800".repeat(20)}__` : ""),
         inline: false,
       };
     }),

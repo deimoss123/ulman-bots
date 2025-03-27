@@ -1,8 +1,8 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } from 'discord.js';
-import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
-import UserProfile from '@/interfaces/UserProfile';
-import itemList, { ItemKey } from '@/items/itemList';
-import { calcReqItems } from '@/commands/tirgus/tirgus';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } from "discord.js";
+import capitalizeFirst from "@/embeds/helpers/capitalizeFirst";
+import UserProfile from "@/interfaces/UserProfile";
+import itemList, { ItemKey } from "@/items/itemList";
+import { calcReqItems } from "@/commands/tirgus/tirgus";
 
 export default function tirgusComponents(
   listings: ItemKey[],
@@ -14,14 +14,14 @@ export default function tirgusComponents(
   return [
     new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
       new StringSelectMenuBuilder()
-        .setCustomId('tirgus_select_menu')
-        .setPlaceholder('Izvēlies tirgus preci')
+        .setCustomId("tirgus_select_menu")
+        .setPlaceholder("Izvēlies tirgus preci")
         .addOptions(
-          listings.map(key => {
+          listings.map((key) => {
             const itemObj = itemList[key];
             return {
               label: capitalizeFirst(itemObj.nameNomVsk),
-              emoji: itemObj.emoji() || '❓',
+              emoji: itemObj.emoji() || "❓",
               value: key,
               default: key === selectedListing,
             };
@@ -30,16 +30,16 @@ export default function tirgusComponents(
     ),
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
-        .setCustomId('tirgus_pirkt')
+        .setCustomId("tirgus_pirkt")
         .setLabel(
-          'Pirkt ' +
+          "Pirkt " +
             (!selectedListing
-              ? '(izvēlies preci)'
+              ? "(izvēlies preci)"
               : boughtItems.includes(selectedListing)
-                ? '(prece jau nopirkta)'
+                ? "(prece jau nopirkta)"
                 : !calcRes?.hasAll
-                  ? '(nevari atļauties)'
-                  : ''),
+                  ? "(nevari atļauties)"
+                  : ""),
         )
         .setStyle(
           !selectedListing

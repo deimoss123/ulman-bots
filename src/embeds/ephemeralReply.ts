@@ -1,4 +1,4 @@
-import { EmbedBuilder, InteractionReplyOptions, MessageFlags } from 'discord.js';
+import { EmbedBuilder, InteractionReplyOptions, MessageFlags } from "discord.js";
 
 export default function ephemeralReply(description: string): InteractionReplyOptions {
   return {

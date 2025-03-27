@@ -1,24 +1,24 @@
-import { ChatInputCommandInteraction } from 'discord.js';
-import addDailyCooldown from '@/economy/addDailyCooldown';
-import addItems from '@/economy/addItems';
-import addLati from '@/economy/addLati';
-import addTimeCooldown from '@/economy/addTimeCooldown';
-import addXp from '@/economy/addXp';
-import findUser from '@/economy/findUser';
-import commandColors from '@/embeds/commandColors';
-import embedTemplate from '@/embeds/embedTemplate';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import errorEmbed from '@/embeds/errorEmbed';
-import itemString from '@/embeds/helpers/itemString';
-import latiString from '@/embeds/helpers/latiString';
-import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
-import xpAddedEmbed from '@/embeds/helpers/xpAddedEmbed';
-import Command from '@/interfaces/Command';
-import { DailyCooldowns } from '@/interfaces/UserProfile';
-import chance, { ChanceValue } from '@/items/helpers/chance';
-import countFreeInvSlots from '@/items/helpers/countFreeInvSlots';
-import itemList, { ItemKey } from '@/items/itemList';
-import intReply from '@/utils/intReply';
+import { ChatInputCommandInteraction } from "discord.js";
+import addDailyCooldown from "@/economy/addDailyCooldown";
+import addItems from "@/economy/addItems";
+import addLati from "@/economy/addLati";
+import addTimeCooldown from "@/economy/addTimeCooldown";
+import addXp from "@/economy/addXp";
+import findUser from "@/economy/findUser";
+import commandColors from "@/embeds/commandColors";
+import embedTemplate from "@/embeds/embedTemplate";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import errorEmbed from "@/embeds/errorEmbed";
+import itemString from "@/embeds/helpers/itemString";
+import latiString from "@/embeds/helpers/latiString";
+import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import xpAddedEmbed from "@/embeds/helpers/xpAddedEmbed";
+import Command from "@/interfaces/Command";
+import { DailyCooldowns } from "@/interfaces/UserProfile";
+import chance, { ChanceValue } from "@/items/helpers/chance";
+import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
+import itemList, { ItemKey } from "@/items/itemList";
+import intReply from "@/utils/intReply";
 
 interface UbagotRes {
   chance: ChanceValue;
@@ -28,16 +28,16 @@ interface UbagotRes {
 
 const ubagotChances: Record<string, UbagotRes> = {
   nauda: {
-    chance: '*',
-    text: 'tavā krūzītē iebēra nedaudz latus',
+    chance: "*",
+    text: "tavā krūzītē iebēra nedaudz latus",
   },
   pudele: {
-    chance: '*',
+    chance: "*",
     text: `tavā krūzē tika ielikta **${itemString(itemList.pudele, 1)}**`,
     reward: { pudele: 1 },
   },
   metalluznis: {
-    chance: '*',
+    chance: "*",
     text: `tajā pamanījies atrast **${itemString(itemList.metalluznis, 1, true)}**`,
     reward: { metalluznis: 1 },
   },
@@ -99,14 +99,14 @@ function ubagotEmbed(
 
 const ubagot: Command = {
   description: () =>
-    'Žēlīgi krati savu krūzīti un ceri ka kāds iemetīs kādu santīmu\n' +
+    "Žēlīgi krati savu krūzīti un ceri ka kāds iemetīs kādu santīmu\n" +
     `Ubagot var **${MAX_DAILY}** reizes dienā, ` +
     `un komandu var izmantot ik \`${millisToReadableTime(UBAGOT_COOLDOWN)}\``,
   color: commandColors.stradat,
   cooldown: UBAGOT_COOLDOWN,
   data: {
-    name: 'ubagot',
-    description: 'Ubagot uz ielas',
+    name: "ubagot",
+    description: "Ubagot uz ielas",
   },
   async run(i) {
     const userId = i.user.id;
@@ -118,11 +118,11 @@ const ubagot: Command = {
     const { dailyCooldowns } = user;
 
     if (dailyCooldowns.ubagot.timesUsed >= MAX_DAILY) {
-      return intReply(i, ephemeralReply('Tu esi sasniedzis maksimālo ubagošanas daudzumu šodien'));
+      return intReply(i, ephemeralReply("Tu esi sasniedzis maksimālo ubagošanas daudzumu šodien"));
     }
 
     if (!countFreeInvSlots(user)) {
-      return intReply(i, ephemeralReply('Lai ubagotu tev vajag vismaz vienu brīvu vietu inventārā'));
+      return intReply(i, ephemeralReply("Lai ubagotu tev vajag vismaz vienu brīvu vietu inventārā"));
     }
 
     const res = chance(ubagotChances);
@@ -131,7 +131,7 @@ const ubagot: Command = {
     let earnedLati = 0;
 
     await addTimeCooldown(userId, guildId, this.data.name);
-    await addDailyCooldown(userId, guildId, 'ubagot');
+    await addDailyCooldown(userId, guildId, "ubagot");
 
     if (!obj.reward) {
       earnedLati = Math.floor(Math.random() * (LATI_MAX - LATI_MIN)) + LATI_MIN;
@@ -148,7 +148,7 @@ const ubagot: Command = {
     intReply(i, {
       embeds: [
         ubagotEmbed(i, leveledUser.user.dailyCooldowns, obj, earnedLati),
-        xpAddedEmbed(leveledUser, xpToAdd, 'Par ubagošanu tu saņēmi'),
+        xpAddedEmbed(leveledUser, xpToAdd, "Par ubagošanu tu saņēmi"),
       ],
     });
   },

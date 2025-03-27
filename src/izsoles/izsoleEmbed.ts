@@ -1,11 +1,11 @@
-import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonStyle, time } from 'discord.js';
-import itemString from '@/embeds/helpers/itemString';
-import latiString from '@/embeds/helpers/latiString';
-import AuctionType from '@/interfaces/AuctionType';
-import itemList from '@/items/itemList';
-import emoji from '@/utils/emoji';
+import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonStyle, time } from "discord.js";
+import itemString from "@/embeds/helpers/itemString";
+import latiString from "@/embeds/helpers/latiString";
+import AuctionType from "@/interfaces/AuctionType";
+import itemList from "@/items/itemList";
+import emoji from "@/utils/emoji";
 
-export const ULMANBOTA_ROLE_ID = '905377993633955930';
+export const ULMANBOTA_ROLE_ID = "905377993633955930";
 
 export default function izsoleEmbed({
   _id,
@@ -22,31 +22,31 @@ export default function izsoleEmbed({
 
   const embeds: APIEmbed[] = [
     {
-      title: `${isActive ? `${emoji('icon_check1')} Aktīva` : `${emoji('icon_cross')} Beigusies`} Izsole`,
+      title: `${isActive ? `${emoji("icon_check1")} Aktīva` : `${emoji("icon_cross")} Beigusies`} Izsole`,
       description:
-        `Sākums: **${time(new Date(startDate), 't')}** ${time(new Date(startDate), 'd')}\n` +
-        `Beigas: **${time(new Date(endDate), 't')}** ${time(new Date(endDate), 'd')}`,
+        `Sākums: **${time(new Date(startDate), "t")}** ${time(new Date(startDate), "d")}\n` +
+        `Beigas: **${time(new Date(endDate), "t")}** ${time(new Date(endDate), "d")}`,
       color: 0x9d2235,
       thumbnail: { url: itemObj.imgLink! },
       fields: [
         {
           name: `**${itemString(itemObj)}**`,
-          value: '-',
+          value: "-",
         },
         {
-          name: currentBid ? 'Augstākā likme' : 'Sākuma likme',
+          name: currentBid ? "Augstākā likme" : "Sākuma likme",
           value: currentBid ? `-` : latiString(startPrice),
         },
         {
-          name: 'Likmju vēsture',
+          name: "Likmju vēsture",
           value: bidHistory.length
             ? bidHistory
                 .map(
                   ({ userTag, lati, date }) =>
-                    `${time(new Date(date), 't')} ${userTag} - ${latiString(lati, false, true)}`
+                    `${time(new Date(date), "t")} ${userTag} - ${latiString(lati, false, true)}`,
                 )
-                .join('\n')
-            : '-',
+                .join("\n")
+            : "-",
         },
       ],
     },
@@ -68,7 +68,7 @@ export default function izsoleEmbed({
       new ButtonBuilder()
         .setCustomId(`${btnCustomId}custom`)
         .setLabel(`Solīt ar izvēlētu likmi`)
-        .setStyle(ButtonStyle.Primary)
+        .setStyle(ButtonStyle.Primary),
     ),
   ];
 

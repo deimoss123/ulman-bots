@@ -1,13 +1,13 @@
-import { ClientSession } from 'mongoose';
-import UserProfile from '@/interfaces/UserProfile';
-import User from '@/schemas/User';
-import userCache from '@/utils/userCache';
-import findUser from '@/economy/findUser';
+import { ClientSession } from "mongoose";
+import UserProfile from "@/interfaces/UserProfile";
+import User from "@/schemas/User";
+import userCache from "@/utils/userCache";
+import findUser from "@/economy/findUser";
 
 export default async function addDailyCooldown(
   userId: string,
   guildId: string,
-  commandName: 'stradat' | 'ubagot' | 'pabalsts',
+  commandName: "stradat" | "ubagot" | "pabalsts",
   isExtraUses = false,
   session: ClientSession | null = null,
 ): Promise<UserProfile | undefined> {

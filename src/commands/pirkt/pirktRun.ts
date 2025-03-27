@@ -6,25 +6,25 @@ import {
   ButtonStyle,
   ChatInputCommandInteraction,
   ComponentType,
-} from 'discord.js';
-import findUser from '@/economy/findUser';
-import errorEmbed from '@/embeds/errorEmbed';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import itemString from '@/embeds/helpers/itemString';
-import latiString from '@/embeds/helpers/latiString';
-import countFreeInvSlots from '@/items/helpers/countFreeInvSlots';
-import addLati from '@/economy/addLati';
-import addItems from '@/economy/addItems';
-import embedTemplate from '@/embeds/embedTemplate';
-import itemList from '@/items/itemList';
-import buttonHandler from '@/embeds/buttonHandler';
-import izmantotRun from '@/commands/izmantot/izmantotRun';
-import getItemPrice from '@/items/helpers/getItemPrice';
-import { PIRKT_PARDOT_NODOKLIS } from '@/commands/pardot/pardot';
-import checkUserSpecialItems from '@/items/helpers/checkUserSpecialItems';
-import setStats from '@/economy/stats/setStats';
-import getDiscounts from '@/items/helpers/getDiscounts';
-import intReply from '@/utils/intReply';
+} from "discord.js";
+import findUser from "@/economy/findUser";
+import errorEmbed from "@/embeds/errorEmbed";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import itemString from "@/embeds/helpers/itemString";
+import latiString from "@/embeds/helpers/latiString";
+import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
+import addLati from "@/economy/addLati";
+import addItems from "@/economy/addItems";
+import embedTemplate from "@/embeds/embedTemplate";
+import itemList from "@/items/itemList";
+import buttonHandler from "@/embeds/buttonHandler";
+import izmantotRun from "@/commands/izmantot/izmantotRun";
+import getItemPrice from "@/items/helpers/getItemPrice";
+import { PIRKT_PARDOT_NODOKLIS } from "@/commands/pardot/pardot";
+import checkUserSpecialItems from "@/items/helpers/checkUserSpecialItems";
+import setStats from "@/economy/stats/setStats";
+import getDiscounts from "@/items/helpers/getDiscounts";
+import intReply from "@/utils/intReply";
 
 type State = {};
 
@@ -68,7 +68,7 @@ export default async function pirktRun(
     );
   }
 
-  if ('attributes' in itemToBuy) {
+  if ("attributes" in itemToBuy) {
     const checkRes = checkUserSpecialItems(user, itemToBuyKey, amountToBuy);
     if (!checkRes.valid) {
       return intReply(i, ephemeralReply(`Neizdevās nopirkt, jo ${checkRes.reason}`));
@@ -86,24 +86,24 @@ export default async function pirktRun(
   const userAfter = await addItems(userId, guildId, { [itemToBuyKey]: amountToBuy });
   if (!userAfter) return intReply(i, errorEmbed);
 
-  if ('attributes' in itemToBuy) {
-    const resSpecialItems = userAfter.specialItems.filter(item => item.name === itemToBuyKey);
+  if ("attributes" in itemToBuy) {
+    const resSpecialItems = userAfter.specialItems.filter((item) => item.name === itemToBuyKey);
 
     return intReply(
       i,
       embedTemplate({
         i,
-        title: 'Tu nopirki',
+        title: "Tu nopirki",
         description: `**${itemString(itemToBuy, amountToBuy, true)}** par ${totalCost} latiem`,
         color: embedColor,
         fields: [
           {
-            name: 'Tev palika',
+            name: "Tev palika",
             value: latiString(userAfter.lati),
             inline: true,
           },
           {
-            name: 'Tev tagad ir',
+            name: "Tev tagad ir",
             value: itemString(itemToBuy, resSpecialItems.length),
             inline: true,
           },
@@ -112,46 +112,46 @@ export default async function pirktRun(
     );
   }
 
-  const resItems = userAfter.items.find(item => item.name === itemToBuyKey)!;
+  const resItems = userAfter.items.find((item) => item.name === itemToBuyKey)!;
 
   const componentRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
-      .setCustomId('pirkt_izmantot')
+      .setCustomId("pirkt_izmantot")
       .setLabel(`Izmantot (${resItems.amount})`)
       .setStyle(ButtonStyle.Primary)
-      .setEmoji(itemToBuy.emoji() || '❓'),
+      .setEmoji(itemToBuy.emoji() || "❓"),
   );
 
   const replyMessage = embedTemplate({
     i,
-    title: 'Tu nopirki',
+    title: "Tu nopirki",
     description: `**${itemString(itemToBuy, amountToBuy, true)}** ` + `par ${totalCost} latiem`,
     color: embedColor,
     fields: [
       {
-        name: 'Tev palika',
+        name: "Tev palika",
         value: latiString(userAfter.lati),
         inline: true,
       },
       {
-        name: 'Tev tagad ir',
+        name: "Tev tagad ir",
         value: itemString(itemList[resItems.name], resItems.amount),
         inline: true,
       },
     ],
-    components: 'use' in itemToBuy ? [componentRow] : [],
+    components: "use" in itemToBuy ? [componentRow] : [],
   });
 
   const msg = await intReply(i, replyMessage);
 
-  if (!msg || !('use' in itemToBuy)) return;
+  if (!msg || !("use" in itemToBuy)) return;
 
   buttonHandler(
     i,
-    'pirkt',
+    "pirkt",
     msg,
-    async int => {
-      if (int.customId === 'pirkt_izmantot') {
+    async (int) => {
+      if (int.customId === "pirkt_izmantot") {
         if (int.componentType !== ComponentType.Button) return;
 
         let buttonStyle = ButtonStyle.Success;
@@ -159,16 +159,16 @@ export default async function pirktRun(
         const userBeforeUse = await findUser(userId, guildId);
         if (!userBeforeUse) return { error: true };
 
-        if (!userBeforeUse.items.find(item => item.name === itemToBuyKey)) {
+        if (!userBeforeUse.items.find((item) => item.name === itemToBuyKey)) {
           buttonStyle = ButtonStyle.Danger;
         }
 
         componentRow.setComponents(
           new ButtonBuilder()
-            .setCustomId('pirkt_izmantot')
+            .setCustomId("pirkt_izmantot")
             .setLabel(`Izmantot (${resItems.amount})`)
             .setStyle(buttonStyle)
-            .setEmoji(itemToBuy.emoji() || '❓')
+            .setEmoji(itemToBuy.emoji() || "❓")
             .setDisabled(true),
         );
 

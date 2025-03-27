@@ -1,6 +1,6 @@
-import findUser from '@/economy/findUser';
-import { UsableItemFunc } from '@/interfaces/Item';
-import { ItemKey } from '@/items/itemList';
+import findUser from "@/economy/findUser";
+import { UsableItemFunc } from "@/interfaces/Item";
+import { ItemKey } from "@/items/itemList";
 
 interface IZivs {
   attributes: {
@@ -25,7 +25,7 @@ const zivju_kaste: UsableItemFunc = async (userId, guildId) => {
   if (!user) return { error: true };
 
   return {
-    text: '',
+    text: "",
   };
 };
 

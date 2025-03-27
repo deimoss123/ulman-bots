@@ -7,27 +7,27 @@ import {
   ChatInputCommandInteraction,
   ComponentType,
   InteractionReplyOptions,
-} from 'discord.js';
-import addItems from '@/economy/addItems';
-import addLati from '@/economy/addLati';
-import findUser from '@/economy/findUser';
-import setStats from '@/economy/stats/setStats';
-import setUser from '@/economy/setUser';
-import commandColors from '@/embeds/commandColors';
-import embedTemplate from '@/embeds/embedTemplate';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import errorEmbed from '@/embeds/errorEmbed';
-import { displayAttributes } from '@/embeds/helpers/displayAttributes';
-import itemString from '@/embeds/helpers/itemString';
-import latiString from '@/embeds/helpers/latiString';
-import Item from '@/interfaces/Item';
-import UserProfile, { ItemAttributes } from '@/interfaces/UserProfile';
-import itemList, { ItemKey } from '@/items/itemList';
-import { emptyInvEmbed, PIRKT_PARDOT_NODOKLIS } from '@/commands/pardot/pardot';
-import removeItemsById from '@/economy/removeItemsById';
-import intReply from '@/utils/intReply';
-import mongoTransaction from '@/utils/mongoTransaction';
-import { Dialogs } from '@/utils/Dialogs';
+} from "discord.js";
+import addItems from "@/economy/addItems";
+import addLati from "@/economy/addLati";
+import findUser from "@/economy/findUser";
+import setStats from "@/economy/stats/setStats";
+import setUser from "@/economy/setUser";
+import commandColors from "@/embeds/commandColors";
+import embedTemplate from "@/embeds/embedTemplate";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import errorEmbed from "@/embeds/errorEmbed";
+import { displayAttributes } from "@/embeds/helpers/displayAttributes";
+import itemString from "@/embeds/helpers/itemString";
+import latiString from "@/embeds/helpers/latiString";
+import Item from "@/interfaces/Item";
+import UserProfile, { ItemAttributes } from "@/interfaces/UserProfile";
+import itemList, { ItemKey } from "@/items/itemList";
+import { emptyInvEmbed, PIRKT_PARDOT_NODOKLIS } from "@/commands/pardot/pardot";
+import removeItemsById from "@/economy/removeItemsById";
+import intReply from "@/utils/intReply";
+import mongoTransaction from "@/utils/mongoTransaction";
+import { Dialogs } from "@/utils/Dialogs";
 
 interface ItemsToSell {
   name: string;
@@ -41,24 +41,24 @@ export function pardotEmbed(i: BaseInteraction, user: UserProfile, itemsToSell: 
   return embedTemplate({
     i,
     color: commandColors.pardot,
-    title: 'Tu pārdevi',
+    title: "Tu pārdevi",
     description:
-      '>>> ' +
+      ">>> " +
       itemsToSell
         .map(
           ({ name, item, amount, attributes }) =>
             `${itemString(item, amount, true, attributes)}` +
-            (attributes ? `\n${displayAttributes({ name, attributes })}` : ''),
+            (attributes ? `\n${displayAttributes({ name, attributes })}` : ""),
         )
-        .join('\n'),
+        .join("\n"),
     fields: [
       {
-        name: 'Tu ieguvi',
+        name: "Tu ieguvi",
         value: latiString(soldItemsValue, true),
         inline: true,
       },
       {
-        name: 'Tev tagad ir',
+        name: "Tev tagad ir",
         value: latiString(user.lati),
         inline: true,
       },
@@ -70,16 +70,16 @@ type State = {
   user: UserProfile;
   itemsToSell: ItemsToSell[];
   soldItemsValue: number;
-  selected: 'ja' | 'ne' | null;
+  selected: "ja" | "ne" | null;
 };
 
 const enum ComponentId {
-  Yes = 'pardot_visu_yes',
-  No = 'pardot_visu_no',
+  Yes = "pardot_visu_yes",
+  No = "pardot_visu_no",
 }
 
 function pardotVisuView(state: State, i: BaseInteraction): InteractionReplyOptions & { withResponse: true } {
-  if (state.selected === 'ja') {
+  if (state.selected === "ja") {
     return pardotEmbed(i, state.user, state.itemsToSell, state.soldItemsValue);
   }
 
@@ -87,13 +87,13 @@ function pardotVisuView(state: State, i: BaseInteraction): InteractionReplyOptio
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
         .setCustomId(ComponentId.Yes)
-        .setLabel('Jā')
+        .setLabel("Jā")
         .setStyle(state.selected ? ButtonStyle.Secondary : ButtonStyle.Primary)
         .setDisabled(!!state.selected),
       new ButtonBuilder()
         .setCustomId(ComponentId.No)
-        .setLabel('Nē')
-        .setStyle(state.selected === 'ne' ? ButtonStyle.Success : ButtonStyle.Danger)
+        .setLabel("Nē")
+        .setStyle(state.selected === "ne" ? ButtonStyle.Success : ButtonStyle.Danger)
         .setDisabled(!!state.selected),
     ),
   ];
@@ -111,7 +111,7 @@ function pardotVisuView(state: State, i: BaseInteraction): InteractionReplyOptio
 
 export default async function pardotRun(
   i: ChatInputCommandInteraction | ButtonInteraction,
-  type: 'neizmantojamās' | 'visas',
+  type: "neizmantojamās" | "visas",
 ) {
   const userId = i.user.id;
   const guildId = i.guildId!;
@@ -125,10 +125,10 @@ export default async function pardotRun(
     return intReply(i, emptyInvEmbed());
   }
 
-  if (type === 'neizmantojamās') {
-    const unusuableItems = items.filter(item => !('use' in itemList[item.name]));
+  if (type === "neizmantojamās") {
+    const unusuableItems = items.filter((item) => !("use" in itemList[item.name]));
     if (!unusuableItems.length) {
-      return intReply(i, ephemeralReply('Tavā inventārā nav neviena neizmantojama manta'));
+      return intReply(i, ephemeralReply("Tavā inventārā nav neviena neizmantojama manta"));
     }
 
     const soldItemsValue = unusuableItems.reduce((p, c) => p + c.amount * itemList[c.name].value, 0);
@@ -139,7 +139,7 @@ export default async function pardotRun(
 
     const taxPaid = Math.floor(soldItemsValue * PIRKT_PARDOT_NODOKLIS);
 
-    const { ok, values } = await mongoTransaction(session => [
+    const { ok, values } = await mongoTransaction((session) => [
       () => addLati(userId, guildId, soldItemsValue, session),
       () => addLati(i.client.user!.id, guildId, taxPaid, session),
       () => setStats(userId, guildId, { soldShop: soldItemsValue, taxPaid }, session),
@@ -152,8 +152,8 @@ export default async function pardotRun(
   }
 
   // visas
-  if (user.specialItems.length && !user.specialItems.find(({ name }) => !('notSellable' in itemList[name]))) {
-    return intReply(i, ephemeralReply('Tavā inventārā nav neviena pārdodama manta'));
+  if (user.specialItems.length && !user.specialItems.find(({ name }) => !("notSellable" in itemList[name]))) {
+    return intReply(i, ephemeralReply("Tavā inventārā nav neviena pārdodama manta"));
   }
 
   const initialState: State = {
@@ -163,7 +163,7 @@ export default async function pardotRun(
     selected: null,
   };
 
-  const dialogs = new Dialogs(i, initialState, pardotVisuView, 'pardot', { time: 30000 });
+  const dialogs = new Dialogs(i, initialState, pardotVisuView, "pardot", { time: 30000 });
 
   if (!(await dialogs.start())) {
     return intReply(i, errorEmbed);
@@ -175,7 +175,7 @@ export default async function pardotRun(
     if (componentType !== ComponentType.Button) return;
 
     if (customId === ComponentId.No) {
-      state.selected = 'ne';
+      state.selected = "ne";
       return {
         update: true,
         end: true,
@@ -195,7 +195,7 @@ export default async function pardotRun(
 
       const specialItemsToSell: ItemsToSell[] = specialItems
         .map(({ name, attributes, _id }) => ({ name, amount: null, item: itemList[name], attributes, _id }))
-        .filter(({ item }) => !('notSellable' in item));
+        .filter(({ item }) => !("notSellable" in item));
 
       const itemsToSell: ItemsToSell[] = [
         ...specialItemsToSell,
@@ -203,13 +203,13 @@ export default async function pardotRun(
       ];
 
       if (!itemsToSell.length) {
-        intReply(int, ephemeralReply('Tavā inventārā nav neviena pārdodama manta'));
+        intReply(int, ephemeralReply("Tavā inventārā nav neviena pārdodama manta"));
         return { end: true };
       }
 
       const soldItemsValue = itemsToSell.reduce((p, { item, amount, attributes }) => {
         return (
-          p + ('customValue' in item && item.customValue ? item.customValue(attributes!) : item.value * (amount || 1))
+          p + ("customValue" in item && item.customValue ? item.customValue(attributes!) : item.value * (amount || 1))
         );
       }, 0);
 
@@ -227,7 +227,7 @@ export default async function pardotRun(
 
       state.itemsToSell = itemsToSell;
       state.soldItemsValue = soldItemsValue;
-      state.selected = 'ja';
+      state.selected = "ja";
       state.user = values[3];
 
       return {

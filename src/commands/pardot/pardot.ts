@@ -1,67 +1,67 @@
-import Command from '@/interfaces/Command';
-import { ApplicationCommandOptionType } from 'discord.js';
-import findUser from '@/economy/findUser';
-import errorEmbed from '@/embeds/errorEmbed';
-import pardotValidate from '@/commands/pardot/pardotValidate';
-import commandColors from '@/embeds/commandColors';
-import pardotAutocomplete from '@/commands/pardot/pardotAutocomplete';
-import pardotRun, { pardotEmbed } from '@/commands/pardot/pardotRun';
-import addItems from '@/economy/addItems';
-import addLati from '@/economy/addLati';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import setStats from '@/economy/stats/setStats';
-import intReply from '@/utils/intReply';
-import mongoTransaction from '@/utils/mongoTransaction';
+import Command from "@/interfaces/Command";
+import { ApplicationCommandOptionType } from "discord.js";
+import findUser from "@/economy/findUser";
+import errorEmbed from "@/embeds/errorEmbed";
+import pardotValidate from "@/commands/pardot/pardotValidate";
+import commandColors from "@/embeds/commandColors";
+import pardotAutocomplete from "@/commands/pardot/pardotAutocomplete";
+import pardotRun, { pardotEmbed } from "@/commands/pardot/pardotRun";
+import addItems from "@/economy/addItems";
+import addLati from "@/economy/addLati";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import setStats from "@/economy/stats/setStats";
+import intReply from "@/utils/intReply";
+import mongoTransaction from "@/utils/mongoTransaction";
 
 export const PIRKT_PARDOT_NODOKLIS = 0.05;
 
 export function emptyInvEmbed() {
-  return ephemeralReply('Tev nav ko pārdot, tev ir tukšs inventārs');
+  return ephemeralReply("Tev nav ko pārdot, tev ir tukšs inventārs");
 }
 
 const pardot: Command = {
   description: () =>
-    'Pārdot kādu noteiktu mantu, nelietojamās mantas, vai visas mantas no sava inventāra\n' +
-    'Cenšoties pārdot visas mantas ar komandu `/pardot visas`, tiks parādīts apstiprināšanas dialogs, lai netīšām nepārdotu visu\n' +
-    'Visas un nelietojamās mantas ir iespējams pārdot arī caur inventāru (komanda `/inv`)\n\n' +
-    '__**Par mantu daudzumu:**__\n' +
-    'Mantu daudzums nav jāievada ja vēlies pārdot tikai 1 mantu\n' +
-    'Ja daudzums ko pārdot būs ievadīts lielāks nekā tas ir tavā inventārā, tad tiks iedotas visas noteiktās mantas\n' +
-    '**Piemērs:** tev ir 14 virves, tu ievadi 99 daudzumu, tiks pārdotas 14 virves\n\n' +
-    'Atribūtu mantām pārdošanas daudzums nav jāievada, jo tām ir atsevišķs dialogs lai izvēletos kuras tieši tu vēlies pārdot',
+    "Pārdot kādu noteiktu mantu, nelietojamās mantas, vai visas mantas no sava inventāra\n" +
+    "Cenšoties pārdot visas mantas ar komandu `/pardot visas`, tiks parādīts apstiprināšanas dialogs, lai netīšām nepārdotu visu\n" +
+    "Visas un nelietojamās mantas ir iespējams pārdot arī caur inventāru (komanda `/inv`)\n\n" +
+    "__**Par mantu daudzumu:**__\n" +
+    "Mantu daudzums nav jāievada ja vēlies pārdot tikai 1 mantu\n" +
+    "Ja daudzums ko pārdot būs ievadīts lielāks nekā tas ir tavā inventārā, tad tiks iedotas visas noteiktās mantas\n" +
+    "**Piemērs:** tev ir 14 virves, tu ievadi 99 daudzumu, tiks pārdotas 14 virves\n\n" +
+    "Atribūtu mantām pārdošanas daudzums nav jāievada, jo tām ir atsevišķs dialogs lai izvēletos kuras tieši tu vēlies pārdot",
   color: commandColors.pardot,
   data: {
-    name: 'pardot',
-    description: 'Pārdot mantas no sava inventāra',
+    name: "pardot",
+    description: "Pārdot mantas no sava inventāra",
     options: [
       {
-        name: 'pec_nosaukuma',
-        description: 'Pārdot mantu pēc nosaukuma',
+        name: "pec_nosaukuma",
+        description: "Pārdot mantu pēc nosaukuma",
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
-            name: 'nosaukums',
-            description: 'Mantas nosaukums',
+            name: "nosaukums",
+            description: "Mantas nosaukums",
             type: ApplicationCommandOptionType.String,
             autocomplete: true,
             required: true,
           },
           {
-            name: 'daudzums',
-            description: 'Cik daudz mantas vēlies pārdot',
+            name: "daudzums",
+            description: "Cik daudz mantas vēlies pārdot",
             type: ApplicationCommandOptionType.Integer,
             min_value: 1,
           },
         ],
       },
       {
-        name: 'neizmantojamās',
-        description: 'Pārdot visas neizmantojamās mantas',
+        name: "neizmantojamās",
+        description: "Pārdot visas neizmantojamās mantas",
         type: ApplicationCommandOptionType.Subcommand,
       },
       {
-        name: 'visas',
-        description: 'Pārdot pilnīgi VISAS mantas inventārā (bīstami)',
+        name: "visas",
+        description: "Pārdot pilnīgi VISAS mantas inventārā (bīstami)",
         type: ApplicationCommandOptionType.Subcommand,
       },
     ],
@@ -73,16 +73,16 @@ const pardot: Command = {
 
     const subCommandName = i.options.getSubcommand();
 
-    if (['neizmantojamās', 'visas'].includes(subCommandName)) {
-      pardotRun(i, subCommandName as 'neizmantojamās' | 'visas');
+    if (["neizmantojamās", "visas"].includes(subCommandName)) {
+      pardotRun(i, subCommandName as "neizmantojamās" | "visas");
     }
 
-    if (subCommandName === 'pec_nosaukuma') {
+    if (subCommandName === "pec_nosaukuma") {
       const user = await findUser(userId, guildId);
       if (!user) return intReply(i, errorEmbed);
 
-      const itemToSellId = i.options.getString('nosaukums')!;
-      const amountToSell = i.options.getInteger('daudzums') ?? 1;
+      const itemToSellId = i.options.getString("nosaukums")!;
+      const amountToSell = i.options.getInteger("daudzums") ?? 1;
 
       const validateRes = await pardotValidate(i, user, itemToSellId, amountToSell, this.color);
       if (!validateRes) return;
@@ -93,7 +93,7 @@ const pardot: Command = {
 
       const taxPaid = Math.floor(soldItemsValue * PIRKT_PARDOT_NODOKLIS);
 
-      const { ok, values } = await mongoTransaction(session => [
+      const { ok, values } = await mongoTransaction((session) => [
         () => addItems(userId, guildId, { [key]: -amount }, session),
         () => addLati(i.client.user!.id, guildId, taxPaid, session),
         () => addLati(userId, guildId, soldItemsValue, session),

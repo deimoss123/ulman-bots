@@ -1,20 +1,20 @@
 //šis pavisam noteikti nebūs labs kods (ja salīdzina ar pārējo)
 //praktiski visu šo šizofrēniju ir veidojis bumbotajs (ar "mazu" deimosa palīdzību)
 
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } from 'discord.js';
-import editItemAttribute from '@/economy/editItemAttribute';
-import findUser from '@/economy/findUser';
-import buttonHandler from '@/embeds/buttonHandler';
-import embedTemplate from '@/embeds/embedTemplate';
-import errorEmbed from '@/embeds/errorEmbed';
-import itemString from '@/embeds/helpers/itemString';
-import smallEmbed from '@/embeds/smallEmbed';
-import { UsableItemFunc, item } from '@/interfaces/Item';
-import intReply from '@/utils/intReply';
-import itemList, { ItemKey } from '@/items/itemList';
-import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
-import addItems from '@/economy/addItems';
-import { SpecialItemInProfile } from '@/interfaces/UserProfile';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
+import editItemAttribute from "@/economy/editItemAttribute";
+import findUser from "@/economy/findUser";
+import buttonHandler from "@/embeds/buttonHandler";
+import embedTemplate from "@/embeds/embedTemplate";
+import errorEmbed from "@/embeds/errorEmbed";
+import itemString from "@/embeds/helpers/itemString";
+import smallEmbed from "@/embeds/smallEmbed";
+import { UsableItemFunc, item } from "@/interfaces/Item";
+import intReply from "@/utils/intReply";
+import itemList, { ItemKey } from "@/items/itemList";
+import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import addItems from "@/economy/addItems";
+import { SpecialItemInProfile } from "@/interfaces/UserProfile";
 
 //ogu rekinasana
 //no currTime atnemt lastUsed un tad dalīt ar augasnas laiku un tad floorosu
@@ -51,7 +51,7 @@ export function getRandomApliesanasReizes() {
 
 // dabuju ogu tipu krumam
 export function getRandomOga() {
-  const ogas: ItemKey[] = ['mellene', 'avene', 'vinoga', 'zemene', 'janoga'];
+  const ogas: ItemKey[] = ["mellene", "avene", "vinoga", "zemene", "janoga"];
   return ogas[Math.floor(Math.random() * ogas.length)];
 }
 
@@ -122,10 +122,10 @@ function makeComponents() {
   return [
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
-        .setCustomId('apliet_krumu')
+        .setCustomId("apliet_krumu")
         .setStyle(ButtonStyle.Primary)
-        .setEmoji('💧')
-        .setLabel('Apliet Krūmu'),
+        .setEmoji("💧")
+        .setLabel("Apliet Krūmu"),
     ),
   ];
 }
@@ -168,13 +168,13 @@ const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
         });
         if (!msg) return;
 
-        buttonHandler(i, 'izmantot', msg, async int => {
+        buttonHandler(i, "izmantot", msg, async (int) => {
           const sobridLaiks = Date.now();
           const { customId } = int;
 
           if (int.componentType !== ComponentType.Button) return;
 
-          if (customId === 'apliet_krumu') {
+          if (customId === "apliet_krumu") {
             await editItemAttribute(userId, guildId, specialItem!._id!, {
               ...specialItem?.attributes,
               iestadits: sobridLaiks - aplaistits + iestadisanasLaiks,
@@ -215,7 +215,7 @@ const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
       const userAfter = await addItems(userId, guildId, { [ogasTips]: cikOgasDot });
       if (!userAfter || !afterEdit) return intReply(i, errorEmbed);
       const { cikNakamaOga: cikNakamaOgaJauns } = dabutOguInfo(afterEdit.newItem, currTime);
-      const itemCount = userAfter.items.find(item => item.name === ogasTips)?.amount || 1;
+      const itemCount = userAfter.items.find((item) => item.name === ogasTips)?.amount || 1;
       return intReply(
         i,
         embedTemplate({
@@ -224,12 +224,12 @@ const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
             `Tu ievāci **${cikOgasDot}** ogas \n` + `Nākamā oga pēc \`${millisToReadableTime(cikNakamaOgaJauns)}\``,
           fields: [
             {
-              name: 'Tu ievāci:',
+              name: "Tu ievāci:",
               value: `${itemString(ogasTips, cikOgasDot, true)}`,
               inline: true,
             },
             {
-              name: 'Tev tagad ir:',
+              name: "Tev tagad ir:",
               value: `${itemString(ogasTips, itemCount)}`,
               inline: true,
             },

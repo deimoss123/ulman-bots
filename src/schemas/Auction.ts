@@ -1,6 +1,6 @@
-import { model, Schema, SchemaDefinitionProperty } from 'mongoose';
-import AuctionType from '@/interfaces/AuctionType';
-import { ItemAttributesSchema } from '@/schemas/User';
+import { model, Schema, SchemaDefinitionProperty } from "mongoose";
+import AuctionType from "@/interfaces/AuctionType";
+import { ItemAttributesSchema } from "@/schemas/User";
 
 const reqStr: SchemaDefinitionProperty = {
   type: String,
@@ -48,4 +48,4 @@ const auctionSchema = new Schema<AuctionType>({
   },
 });
 
-export default model('Auction', auctionSchema);
+export default model("Auction", auctionSchema);

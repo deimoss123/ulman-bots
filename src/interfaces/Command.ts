@@ -1,4 +1,4 @@
-import { AutocompleteInteraction, ChatInputApplicationCommandData, ChatInputCommandInteraction } from 'discord.js';
+import { AutocompleteInteraction, ChatInputApplicationCommandData, ChatInputCommandInteraction } from "discord.js";
 
 // interfeiss bota komandu objektiem
 interface Command {

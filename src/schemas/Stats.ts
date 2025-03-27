@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
-import StatsProfile from '@/interfaces/StatsProfile';
+import { Schema, model } from "mongoose";
+import StatsProfile from "@/interfaces/StatsProfile";
 
 const reqString = {
   type: String,
@@ -45,4 +45,4 @@ const statsSchema = new Schema<StatsProfile>({
   rulSpinCount: NumZero,
 });
 
-export default model('Stats', statsSchema);
+export default model("Stats", statsSchema);

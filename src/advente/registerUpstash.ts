@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 async function registerUpstash() {
   const date = Date.now();
@@ -16,8 +16,8 @@ async function registerUpstash() {
       {
         headers: {
           Authorization: `Bearer ${process.env.UPSTASH_QSTASH_TOKEN}`,
-          'Upstash-Delay': `${secondsUntil}s`,
-          'Content-Type': 'application/json',
+          "Upstash-Delay": `${secondsUntil}s`,
+          "Content-Type": "application/json",
         },
       },
     );

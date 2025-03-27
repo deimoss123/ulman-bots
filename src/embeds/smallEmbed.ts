@@ -1,4 +1,4 @@
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder } from "discord.js";
 
 export default function smallEmbed(text: string, color: number) {
   return {

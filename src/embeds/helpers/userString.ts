@@ -1,4 +1,4 @@
-import { User } from 'discord.js';
+import { User } from "discord.js";
 
 export default function userString(user: User, isBlue = false) {
   return isBlue

@@ -1,10 +1,10 @@
-import { ClientSession } from 'mongoose';
-import findUser from '@/economy/findUser';
-import setFishing from '@/economy/setFishing';
-import UserProfile, { FishObj, UserFishing } from '@/interfaces/UserProfile';
-import chance from '@/items/helpers/chance';
-import maksekeresData, { FishChance } from '@/commands/zvejot/makskeresData';
-import { ZVEJOT_MIN_LEVEL } from '@/commands/zvejot/zvejot';
+import { ClientSession } from "mongoose";
+import findUser from "@/economy/findUser";
+import setFishing from "@/economy/setFishing";
+import UserProfile, { FishObj, UserFishing } from "@/interfaces/UserProfile";
+import chance from "@/items/helpers/chance";
+import maksekeresData, { FishChance } from "@/commands/zvejot/makskeresData";
+import { ZVEJOT_MIN_LEVEL } from "@/commands/zvejot/zvejot";
 
 const ONE_HOUR = 3_600_000;
 
@@ -39,7 +39,7 @@ function generateFish(fishing: UserFishing, currentTime: number, overrideFish = 
   return fishList;
 }
 
-export function countFish(fish: UserFishing['caughtFishes']) {
+export function countFish(fish: UserFishing["caughtFishes"]) {
   if (!fish || !Object.keys(fish).length) return 0;
   return Object.values(fish).reduce((prev, curr) => prev + curr, 0);
 }
@@ -50,7 +50,7 @@ function calcCaughtFish(
 ): {
   usesLeft: number;
   futureFishList: FishObj[] | null;
-  caughtFishes: UserFishing['caughtFishes'];
+  caughtFishes: UserFishing["caughtFishes"];
   lastCaughtFish: FishObj | null;
 } {
   // eslint-disable-next-line prefer-const
@@ -103,7 +103,7 @@ function calcCaughtFish(
 }
 
 function shiftTime(futureFishList: FishObj[], shiftTime: number): FishObj[] {
-  return futureFishList.map(obj => ({ ...obj, time: obj.time - shiftTime }));
+  return futureFishList.map((obj) => ({ ...obj, time: obj.time - shiftTime }));
 }
 
 export default async function syncFishing(

@@ -7,20 +7,20 @@ import {
   ChatInputCommandInteraction,
   ComponentType,
   StringSelectMenuBuilder,
-} from 'discord.js';
-import findUser from '@/economy/findUser';
-import embedTemplate from '@/embeds/embedTemplate';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import errorEmbed from '@/embeds/errorEmbed';
-import { displayAttributes } from '@/embeds/helpers/displayAttributes';
-import itemString, { itemStringCustom } from '@/embeds/helpers/itemString';
-import Item, { AttributeItem, NotSellableItem } from '@/interfaces/Item';
-import UsableItemReturn from '@/interfaces/UsableItemReturn';
-import { ItemAttributes, SpecialItemInProfile } from '@/interfaces/UserProfile';
-import itemList, { ItemKey } from '@/items/itemList';
-import intReply from '@/utils/intReply';
-import { attributeItemSort } from '@/commands/inventars/inventars';
-import { Dialogs } from '@/utils/Dialogs';
+} from "discord.js";
+import findUser from "@/economy/findUser";
+import embedTemplate from "@/embeds/embedTemplate";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import errorEmbed from "@/embeds/errorEmbed";
+import { displayAttributes } from "@/embeds/helpers/displayAttributes";
+import itemString, { itemStringCustom } from "@/embeds/helpers/itemString";
+import Item, { AttributeItem, NotSellableItem } from "@/interfaces/Item";
+import UsableItemReturn from "@/interfaces/UsableItemReturn";
+import { ItemAttributes, SpecialItemInProfile } from "@/interfaces/UserProfile";
+import itemList, { ItemKey } from "@/items/itemList";
+import intReply from "@/utils/intReply";
+import { attributeItemSort } from "@/commands/inventars/inventars";
+import { Dialogs } from "@/utils/Dialogs";
 
 function makeEmbed(
   i: ChatInputCommandInteraction | ButtonInteraction,
@@ -46,9 +46,9 @@ type State = {
 };
 
 const enum ComponentId {
-  Confirm = 'izmantot_special_confirm',
-  UseMany = 'izmantot_special_many',
-  Select = 'izmantot_special_select',
+  Confirm = "izmantot_special_confirm",
+  UseMany = "izmantot_special_many",
+  Select = "izmantot_special_select",
 }
 
 function view(state: State, i: BaseInteraction) {
@@ -56,7 +56,7 @@ function view(state: State, i: BaseInteraction) {
     new ButtonBuilder()
       .setCustomId(ComponentId.Confirm)
       .setDisabled(!state.selectedId)
-      .setLabel('Izmantot')
+      .setLabel("Izmantot")
       .setStyle(state.selectedId ? ButtonStyle.Primary : ButtonStyle.Secondary),
   );
 
@@ -77,7 +77,7 @@ function view(state: State, i: BaseInteraction) {
     new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
       new StringSelectMenuBuilder()
         .setCustomId(ComponentId.Select)
-        .setPlaceholder('Izvēlies kuru izmantot')
+        .setPlaceholder("Izvēlies kuru izmantot")
         .setOptions(
           state.itemsInInv
             .slice(0, 25)
@@ -90,13 +90,13 @@ function view(state: State, i: BaseInteraction) {
 
               return valueB - valueA;
             })
-            .map(item => ({
+            .map((item) => ({
               label: itemStringCustom(state.itemObj, item.attributes?.customName),
               description: displayAttributes(item, true),
               value: item._id!,
               emoji:
                 (state.itemObj.customEmoji ? state.itemObj.customEmoji(item.attributes) : state.itemObj.emoji()) ||
-                '❓',
+                "❓",
               default: state.selectedId === item._id,
             })),
         ),
@@ -128,8 +128,8 @@ export default async function izmantotRunSpecial(
   if (itemsInInv.length === 1) {
     const selectedItem = itemsInInv[0];
     const useRes = await itemObj.use(userId, guildId, itemKey, selectedItem);
-    if ('error' in useRes) return intReply(i, errorEmbed);
-    if ('custom' in useRes) return useRes.custom(i, embedColor);
+    if ("error" in useRes) return intReply(i, errorEmbed);
+    if ("custom" in useRes) return useRes.custom(i, embedColor);
     return intReply(i, makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
   }
 
@@ -140,7 +140,7 @@ export default async function izmantotRunSpecial(
     embedColor,
   };
 
-  const dialogs = new Dialogs(i, initialState, view, 'izmantot', { time: 60000 });
+  const dialogs = new Dialogs(i, initialState, view, "izmantot", { time: 60000 });
 
   if (!(await dialogs.start())) {
     return intReply(i, errorEmbed);
@@ -161,13 +161,13 @@ export default async function izmantotRunSpecial(
       const user = await findUser(userId, guildId);
       if (!user) return { error: true };
 
-      const selectedItem = user.specialItems.find(item => item._id === state.selectedId);
+      const selectedItem = user.specialItems.find((item) => item._id === state.selectedId);
 
       if (!selectedItem) {
         state.selectedId = null;
-        state.itemsInInv = user.specialItems.filter(item => item.name === itemKey);
+        state.itemsInInv = user.specialItems.filter((item) => item.name === itemKey);
 
-        intReply(int, ephemeralReply('Tavs inventāra saturs ir mainījies, šī manta vairs nav tavā inventārā'));
+        intReply(int, ephemeralReply("Tavs inventāra saturs ir mainījies, šī manta vairs nav tavā inventārā"));
         return { edit: true };
       }
 
@@ -176,8 +176,8 @@ export default async function izmantotRunSpecial(
       return {
         end: true,
         after: () => {
-          if ('error' in useRes) return intReply(int, errorEmbed);
-          if ('custom' in useRes) return useRes.custom(int, embedColor);
+          if ("error" in useRes) return intReply(int, errorEmbed);
+          if ("custom" in useRes) return useRes.custom(int, embedColor);
 
           intReply(int, makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
         },

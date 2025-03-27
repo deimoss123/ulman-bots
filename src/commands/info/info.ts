@@ -1,43 +1,43 @@
-import { ApplicationCommandOptionType, EmbedField } from 'discord.js';
-import commandColors from '@/embeds/commandColors';
-import embedTemplate from '@/embeds/embedTemplate';
-import errorEmbed from '@/embeds/errorEmbed';
-import itemString from '@/embeds/helpers/itemString';
-import latiString from '@/embeds/helpers/latiString';
-import wrongKeyEmbed from '@/embeds/wrongKeyEmbed';
-import Command from '@/interfaces/Command';
-import Item, { TirgusItem } from '@/interfaces/Item';
-import getDiscounts from '@/items/helpers/getDiscounts';
-import getItemPrice from '@/items/helpers/getItemPrice';
-import itemList, { ItemCategory } from '@/items/itemList';
-import intReply from '@/utils/intReply';
-import { ItemType, itemTypes } from '@/commands/inventars/inventars';
-import maksekeresData from '@/commands/zvejot/makskeresData';
-import allItemAutocomplete from '@/commands/info/allItemAutocomplete';
-import { LotoOptions } from '@/items/usableItems/loto';
-import updatesList from '@/commands/palidziba/jaunumi/updatesList';
-import emoji from '@/utils/emoji';
+import { ApplicationCommandOptionType, EmbedField } from "discord.js";
+import commandColors from "@/embeds/commandColors";
+import embedTemplate from "@/embeds/embedTemplate";
+import errorEmbed from "@/embeds/errorEmbed";
+import itemString from "@/embeds/helpers/itemString";
+import latiString from "@/embeds/helpers/latiString";
+import wrongKeyEmbed from "@/embeds/wrongKeyEmbed";
+import Command from "@/interfaces/Command";
+import Item, { TirgusItem } from "@/interfaces/Item";
+import getDiscounts from "@/items/helpers/getDiscounts";
+import getItemPrice from "@/items/helpers/getItemPrice";
+import itemList, { ItemCategory } from "@/items/itemList";
+import intReply from "@/utils/intReply";
+import { ItemType, itemTypes } from "@/commands/inventars/inventars";
+import maksekeresData from "@/commands/zvejot/makskeresData";
+import allItemAutocomplete from "@/commands/info/allItemAutocomplete";
+import { LotoOptions } from "@/items/usableItems/loto";
+import updatesList from "@/commands/palidziba/jaunumi/updatesList";
+import emoji from "@/utils/emoji";
 
 const info: Command = {
   description: () =>
-    'Iegūt detalizētu informāciju par kādu mantu - vērtība, cena, tirgus cena, makšķeres informācija, utt.',
+    "Iegūt detalizētu informāciju par kādu mantu - vērtība, cena, tirgus cena, makšķeres informācija, utt.",
   color: commandColors.info,
   data: {
-    name: 'info',
-    description: 'Iegūt informāciju par kādu mantu',
+    name: "info",
+    description: "Iegūt informāciju par kādu mantu",
     options: [
       {
-        name: 'nosaukums',
-        description: 'Mantas nosaukums',
+        name: "nosaukums",
+        description: "Mantas nosaukums",
         type: ApplicationCommandOptionType.String,
         autocomplete: true,
         required: true,
       },
     ],
   },
-  autocomplete: allItemAutocomplete('🔍'),
+  autocomplete: allItemAutocomplete("🔍"),
   async run(i) {
-    const itemKey = i.options.getString('nosaukums')!;
+    const itemKey = i.options.getString("nosaukums")!;
 
     const itemObj = itemList[itemKey];
     if (!itemObj) {
@@ -45,20 +45,20 @@ const info: Command = {
     }
 
     const itemType: ItemType =
-      'notSellable' in itemObj
-        ? 'not_sellable'
-        : 'attributes' in itemObj
-          ? 'special'
-          : 'use' in itemObj
-            ? 'usable'
-            : 'not_usable';
+      "notSellable" in itemObj
+        ? "not_sellable"
+        : "attributes" in itemObj
+          ? "special"
+          : "use" in itemObj
+            ? "usable"
+            : "not_usable";
 
     const fields: EmbedField[] = [
       {
-        name: `Vērtība: ${itemType === 'not_sellable' ? '??? lati' : latiString(itemObj.value)}`,
+        name: `Vērtība: ${itemType === "not_sellable" ? "??? lati" : latiString(itemObj.value)}`,
         value:
-          ('customValue' in itemObj ? '⚠️ šīs mantas vērtība var \nmainīties atkarībā no atribūtiem\n' : '') +
-          '\u200B\n' +
+          ("customValue" in itemObj ? "⚠️ šīs mantas vērtība var \nmainīties atkarībā no atribūtiem\n" : "") +
+          "\u200B\n" +
           `**Mantas tips:**\n${itemTypes[itemType].emoji()} - ${itemTypes[itemType].text}`,
         inline: true,
       },
@@ -80,10 +80,10 @@ const info: Command = {
 
       fields[0].value +=
         `\n\n**Tirgus cena:**\n` +
-        (tirgusPrice.lati ? `${latiString(tirgusPrice.lati)} un\n` : '') +
+        (tirgusPrice.lati ? `${latiString(tirgusPrice.lati)} un\n` : "") +
         `${Object.entries(tirgusPrice.items)
           .map(([key, amount]) => `> ${itemString(itemList[key], amount)}`)
-          .join('\n')}`;
+          .join("\n")}`;
     }
 
     // makšķeru informācija
@@ -95,14 +95,14 @@ const info: Command = {
         `\n\n**Makšķeres informācija:**\n` +
         `Maksimālā izturība: ${maxDurability}\n` +
         `Zvejas laiks: ${timeStr}\n` +
-        `Salabojama: ${repairable ? emoji('icon_check1') : emoji('icon_cross')}`;
+        `Salabojama: ${repairable ? emoji("icon_check1") : emoji("icon_cross")}`;
 
       fields.push({
-        name: 'Nocopējamās mantas:',
+        name: "Nocopējamās mantas:",
         value: `>>> ${Object.entries(fishChances)
           .filter(([, { chance }]) => chance !== 0)
           .map(([key]) => itemString(itemList[key]))
-          .join('\n')}`,
+          .join("\n")}`,
         inline: true,
       });
     }
@@ -115,8 +115,8 @@ const info: Command = {
     // info no kuras makšķeres var dabūt
     if (makskeres.length) {
       fields.push({
-        name: 'Var nozvejot ar:',
-        value: makskeres.map(m => itemString(m[0], null, true)).join('\n'),
+        name: "Var nozvejot ar:",
+        value: makskeres.map((m) => itemString(m[0], null, true)).join("\n"),
         inline: true,
       });
     }
@@ -125,25 +125,25 @@ const info: Command = {
     fields[0].value += `\n\nPievienots versijā **${itemObj.addedInVersion}** (${updatesList[itemObj.addedInVersion]().date})`;
 
     // loto biļešu info
-    if (itemObj.categories.includes(ItemCategory.LOTO) && 'lotoOptions' in itemObj) {
+    if (itemObj.categories.includes(ItemCategory.LOTO) && "lotoOptions" in itemObj) {
       const { columns, rows, scratches, rewards } = itemObj.lotoOptions as LotoOptions;
-      const latiRewards = Object.values(rewards).filter(reward => reward.lati);
-      const multiplierRewards = Object.values(rewards).filter(reward => reward.multiplier);
+      const latiRewards = Object.values(rewards).filter((reward) => reward.lati);
+      const multiplierRewards = Object.values(rewards).filter((reward) => reward.multiplier);
 
       fields.unshift(
         {
-          name: 'Loto informācija:',
+          name: "Loto informācija:",
           value: `Izmērs: **${rows}**x**${columns}**\n` + `Skrāp. skaits: **${scratches}**`,
           inline: true,
         },
         {
-          name: 'Iesp. laimesti:',
-          value: latiRewards.map(({ emoji, lati }) => `${emoji()} - ${latiString(lati!, false, true)}`).join('\n'),
+          name: "Iesp. laimesti:",
+          value: latiRewards.map(({ emoji, lati }) => `${emoji()} - ${latiString(lati!, false, true)}`).join("\n"),
           inline: true,
         },
         {
-          name: 'Iesp. reizinātāji:',
-          value: multiplierRewards.map(({ emoji, multiplier }) => `${emoji()} - **${multiplier!}x** reiz.`).join('\n'),
+          name: "Iesp. reizinātāji:",
+          value: multiplierRewards.map(({ emoji, multiplier }) => `${emoji()} - **${multiplier!}x** reiz.`).join("\n"),
           inline: true,
         },
       );
@@ -156,10 +156,10 @@ const info: Command = {
         color: this.color,
         title: `Info: ${itemString(itemObj)}`,
         description: itemObj.info
-          ? typeof itemObj.info === 'string'
+          ? typeof itemObj.info === "string"
             ? itemObj.info
             : itemObj.info()
-          : 'UlmaņBota veidotājs ir aizmirsis pievienot aprakstu šai mantai dritvai kociņ',
+          : "UlmaņBota veidotājs ir aizmirsis pievienot aprakstu šai mantai dritvai kociņ",
         thumbnail: itemObj.imgLink || undefined,
         fields,
         components: [

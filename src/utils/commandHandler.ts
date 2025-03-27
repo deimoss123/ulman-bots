@@ -1,4 +1,4 @@
-import { commandList } from '@/utils/commandList';
+import { commandList } from "@/utils/commandList";
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -7,20 +7,20 @@ import {
   ChatInputCommandInteraction,
   MessageFlags,
   PermissionsBitField,
-} from 'discord.js';
-import errorEmbed from '@/embeds/errorEmbed';
-import interactionCache from '@/utils/interactionCache';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import logCommand from '@/utils/logCommand';
-import findUser from '@/economy/findUser';
-import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
-import resetDailyCooldown from '@/economy/resetDailyCooldown';
-import smallEmbed from '@/embeds/smallEmbed';
-import intReply from '@/utils/intReply';
+} from "discord.js";
+import errorEmbed from "@/embeds/errorEmbed";
+import interactionCache from "@/utils/interactionCache";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import logCommand from "@/utils/logCommand";
+import findUser from "@/economy/findUser";
+import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import resetDailyCooldown from "@/economy/resetDailyCooldown";
+import smallEmbed from "@/embeds/smallEmbed";
+import intReply from "@/utils/intReply";
 
 export default async function commandHandler(i: ChatInputCommandInteraction) {
   if (!i.inGuild() || !i.guild) {
-    return intReply(i, 'UlmaņBota komandas var izmantot tikai serveros');
+    return intReply(i, "UlmaņBota komandas var izmantot tikai serveros");
   }
 
   if (i.channel?.type !== ChannelType.GuildText) return;
@@ -35,15 +35,15 @@ export default async function commandHandler(i: ChatInputCommandInteraction) {
   const userId = i.user.id;
   const guildId = i.guildId;
 
-  const command = commandList.find(cmd => cmd.data.name === i.commandName);
+  const command = commandList.find((cmd) => cmd.data.name === i.commandName);
 
   if (!command) {
-    return intReply(i, ephemeralReply('Šāda komanda neeksistē\nRestartē savu Discord lietotni'));
+    return intReply(i, ephemeralReply("Šāda komanda neeksistē\nRestartē savu Discord lietotni"));
   }
 
   // ja testa komandas KAUT KĀDĀ veidā nokļūst mirstīgu cilvēku rokās, šis neļaus tām strādāt
   if (command.devOnly && userId !== process.env.DEV_ID) {
-    return intReply(i, ephemeralReply('Tev nav atļaujas izmantot šo komandu'));
+    return intReply(i, ephemeralReply("Tev nav atļaujas izmantot šo komandu"));
   }
 
   // pārbauda iekš interaction cache vai komanda nav aktīva
@@ -62,7 +62,7 @@ export default async function commandHandler(i: ChatInputCommandInteraction) {
       flags: MessageFlags.Ephemeral,
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder().setURL(url).setLabel('Doties uz ziņu').setStyle(ButtonStyle.Link),
+          new ButtonBuilder().setURL(url).setLabel("Doties uz ziņu").setStyle(ButtonStyle.Link),
         ),
       ],
     });
@@ -72,7 +72,7 @@ export default async function commandHandler(i: ChatInputCommandInteraction) {
   if (!user) return intReply(i, errorEmbed);
 
   if (command.cooldown) {
-    const currentCooldown = user.timeCooldowns.find(c => c.name === command?.data.name);
+    const currentCooldown = user.timeCooldowns.find((c) => c.name === command?.data.name);
 
     if (currentCooldown) {
       const timePassed = Date.now() - currentCooldown.lastUsed;
@@ -87,7 +87,7 @@ export default async function commandHandler(i: ChatInputCommandInteraction) {
     }
   }
 
-  const currentDay = new Date().toLocaleDateString('en-GB');
+  const currentDay = new Date().toLocaleDateString("en-GB");
   if (user.lastDayUsed !== currentDay) await resetDailyCooldown(userId, guildId);
 
   command.run(i);

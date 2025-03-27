@@ -1,26 +1,26 @@
-import { ActionRowBuilder, BaseInteraction, bold, ButtonBuilder, ButtonStyle, ComponentType } from 'discord.js';
-import maksekeresData from '@/commands/zvejot/makskeresData';
-import { calcRepairCost } from '@/commands/zvejot/zvejot';
-import addLati from '@/economy/addLati';
-import editItemAttribute from '@/economy/editItemAttribute';
-import findUser from '@/economy/findUser';
-import commandColors from '@/embeds/commandColors';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import capitalizeFirst from '@/embeds/helpers/capitalizeFirst';
-import { displayAttributes } from '@/embeds/helpers/displayAttributes';
-import itemString from '@/embeds/helpers/itemString';
-import latiString from '@/embeds/helpers/latiString';
-import smallEmbed from '@/embeds/smallEmbed';
-import { AttributeItem, UsableItemFunc } from '@/interfaces/Item';
-import intReply from '@/utils/intReply';
-import itemList, { ItemKey } from '@/items/itemList';
-import UserProfile, { ItemAttributes, SpecialItemInProfile } from '@/interfaces/UserProfile';
-import embedTemplate from '@/embeds/embedTemplate';
-import { Dialogs } from '@/utils/Dialogs';
-import errorEmbed from '@/embeds/errorEmbed';
-import mongoTransaction from '@/utils/mongoTransaction';
+import { ActionRowBuilder, BaseInteraction, bold, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
+import maksekeresData from "@/commands/zvejot/makskeresData";
+import { calcRepairCost } from "@/commands/zvejot/zvejot";
+import addLati from "@/economy/addLati";
+import editItemAttribute from "@/economy/editItemAttribute";
+import findUser from "@/economy/findUser";
+import commandColors from "@/embeds/commandColors";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import capitalizeFirst from "@/embeds/helpers/capitalizeFirst";
+import { displayAttributes } from "@/embeds/helpers/displayAttributes";
+import itemString from "@/embeds/helpers/itemString";
+import latiString from "@/embeds/helpers/latiString";
+import smallEmbed from "@/embeds/smallEmbed";
+import { AttributeItem, UsableItemFunc } from "@/interfaces/Item";
+import intReply from "@/utils/intReply";
+import itemList, { ItemKey } from "@/items/itemList";
+import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/interfaces/UserProfile";
+import embedTemplate from "@/embeds/embedTemplate";
+import { Dialogs } from "@/utils/Dialogs";
+import errorEmbed from "@/embeds/errorEmbed";
+import mongoTransaction from "@/utils/mongoTransaction";
 
-export function makskereCustomValue(itemKey: string): AttributeItem<ItemAttributes>['customValue'] {
+export function makskereCustomValue(itemKey: string): AttributeItem<ItemAttributes>["customValue"] {
   return ({ durability }) => {
     const { value } = itemList[itemKey];
     const { maxDurability } = maksekeresData[itemKey];
@@ -44,7 +44,7 @@ type State = {
 };
 
 const enum ComponentId {
-  FixFishingRod = 'izmantot_makskere_fix_fishing_rod',
+  FixFishingRod = "izmantot_makskere_fix_fishing_rod",
 }
 
 function view(state: State, i: BaseInteraction) {
@@ -61,21 +61,21 @@ function view(state: State, i: BaseInteraction) {
         .setCustomId(ComponentId.FixFishingRod)
         .setLabel(
           repairable
-            ? `Salabot ${itemObj.nameAkuVsk} - ${latiString(state.repairCost)}${!canAfford ? ' (nevari atļauties)' : ''}`
+            ? `Salabot ${itemObj.nameAkuVsk} - ${latiString(state.repairCost)}${!canAfford ? " (nevari atļauties)" : ""}`
             : `${capitalizeFirst(itemObj.nameNomVsk)} nav salabojama`,
         )
         .setStyle(
           state.hasRepaired ? ButtonStyle.Success : repairable && canAfford ? ButtonStyle.Primary : ButtonStyle.Danger,
         )
         .setDisabled(state.hasRepaired || !repairable || !canAfford)
-        .setEmoji(itemObj.emoji() || '❓'),
+        .setEmoji(itemObj.emoji() || "❓"),
     ),
   ];
 
   let description = `Makšķeres ir izmantojamas zvejošanai\nSāc zvejot ar komandu \`/zvejot\``;
 
   if (durability! >= maxDurability) {
-    description += '\n\n💡 Ja makšķerei ir samazinājusies izturība, to var salabot ar šo pašu komandu';
+    description += "\n\n💡 Ja makšķerei ir samazinājusies izturība, to var salabot ar šo pašu komandu";
   }
 
   return embedTemplate({
@@ -89,7 +89,7 @@ function view(state: State, i: BaseInteraction) {
 
 const makskere: UsableItemFunc = async (userId, guildId, itemKey, specialItem) => {
   return {
-    custom: async i => {
+    custom: async (i) => {
       const { attributes, _id } = specialItem!;
       const { maxDurability, repairable } = maksekeresData[itemKey];
 
@@ -107,7 +107,7 @@ const makskere: UsableItemFunc = async (userId, guildId, itemKey, specialItem) =
         hasRepaired: false,
       };
 
-      const dialogs = new Dialogs(i, initialState, view, 'izmantot');
+      const dialogs = new Dialogs(i, initialState, view, "izmantot");
 
       if (!(await dialogs.start())) {
         return intReply(i, errorEmbed);
@@ -133,12 +133,12 @@ const makskere: UsableItemFunc = async (userId, guildId, itemKey, specialItem) =
           return { end: true };
         }
 
-        if (!specialItems.find(item => item._id === _id)) {
-          intReply(int, ephemeralReply('Tavs inventāra saturs ir mainījies, šī makšķere vairs nav tavā inventārā'));
+        if (!specialItems.find((item) => item._id === _id)) {
+          intReply(int, ephemeralReply("Tavs inventāra saturs ir mainījies, šī makšķere vairs nav tavā inventārā"));
           return { end: true };
         }
 
-        const { ok, values } = await mongoTransaction(session => [
+        const { ok, values } = await mongoTransaction((session) => [
           () => addLati(userId, guildId, -repairCost, session),
           () => editItemAttribute(userId, guildId, _id!, { durability: maxDurability }, session),
         ]);

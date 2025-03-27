@@ -11,11 +11,11 @@ import {
   ModalSubmitInteraction,
   StringSelectMenuBuilder,
   StringSelectMenuInteraction,
-} from 'discord.js';
-import intReply from '@/utils/intReply';
-import chalk from 'chalk';
-import errorEmbed from '@/embeds/errorEmbed';
-import interactionCache, { InteractionInCache } from '@/utils/interactionCache';
+} from "discord.js";
+import intReply from "@/utils/intReply";
+import chalk from "chalk";
+import errorEmbed from "@/embeds/errorEmbed";
+import interactionCache, { InteractionInCache } from "@/utils/interactionCache";
 
 // apvienots tips visiem iespējamiem interactioniem, kam var izmantot šo klasi
 type InteractionType =
@@ -65,7 +65,10 @@ export class Dialogs<T extends { [key: string]: any }> {
     public state: T,
 
     // funkcija, kas atgriež embedus/pogas, atkarīga no state
-    private viewFunc: (state: T, interaction: InteractionType) => Omit<InteractionReplyOptions & { withResponse: true }, 'ephemeral'>,
+    private viewFunc: (
+      state: T,
+      interaction: InteractionType,
+    ) => Omit<InteractionReplyOptions & { withResponse: true }, "ephemeral">,
 
     private name: string,
 
@@ -75,8 +78,8 @@ export class Dialogs<T extends { [key: string]: any }> {
     this.guildId = primaryInteraction.guildId!;
 
     if (options) {
-      if ('isActive' in options) this.isActive = options.isActive!;
-      if ('time' in options) this.collectorTime = options.time!;
+      if ("isActive" in options) this.isActive = options.isActive!;
+      if ("time" in options) this.collectorTime = options.time!;
     }
   }
 
@@ -129,12 +132,12 @@ export class Dialogs<T extends { [key: string]: any }> {
     ) => Promise<DialogsOnClickCallbackReturn | void>,
   ) {
     if (!this.primaryMsg) {
-      console.log(chalk.red('Kļūda: ') + 'Tu neesi palaidis start() metodi dialogam');
+      console.log(chalk.red("Kļūda: ") + "Tu neesi palaidis start() metodi dialogam");
       return;
     }
 
     if (!this.name) {
-      console.log(chalk.red('Kļūda: ') + 'Dialoga nosaukums (name) nevar būt tukšs');
+      console.log(chalk.red("Kļūda: ") + "Dialoga nosaukums (name) nevar būt tukšs");
       return;
     }
 
@@ -162,11 +165,11 @@ export class Dialogs<T extends { [key: string]: any }> {
       isInteractionActive: this.isActive,
     });
 
-    collector?.on('collect', async componentInteraction => {
+    collector?.on("collect", async (componentInteraction) => {
       // pārbauda vai pogu spieda autors
       if (componentInteraction.user.id !== this.primaryInteraction.user.id) {
         intReply(componentInteraction, {
-          content: 'Nav pieklājīgi spaidīt svešu cilvēku pogas :^)',
+          content: "Nav pieklājīgi spaidīt svešu cilvēku pogas :^)",
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -177,7 +180,7 @@ export class Dialogs<T extends { [key: string]: any }> {
       const res = await callback(componentInteraction, this.state);
       if (!res) {
         if (componentInteraction.replied) return;
-        await componentInteraction.deferUpdate().catch(_ => _);
+        await componentInteraction.deferUpdate().catch((_) => _);
         return;
       }
 
@@ -203,7 +206,7 @@ export class Dialogs<T extends { [key: string]: any }> {
       }
     });
 
-    collector?.on('end', async () => {
+    collector?.on("end", async () => {
       let currentMessage: Message;
 
       try {
@@ -223,9 +226,9 @@ export class Dialogs<T extends { [key: string]: any }> {
       const editedMessageComponents: ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] = [];
 
       // iziet cauri visām pogām/izvēlnēm message objektā un atspējo tās
-      currentMessage.components.forEach(row => {
+      currentMessage.components.forEach((row) => {
         const editedRow = new ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>();
-        row.components.forEach(component => {
+        row.components.forEach((component) => {
           if (!component.data.disabled) areAllComponentsAlreadyDisabled = false;
 
           if (component.type === ComponentType.Button) {

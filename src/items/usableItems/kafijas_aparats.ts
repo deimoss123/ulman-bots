@@ -1,17 +1,17 @@
-import addItems from '@/economy/addItems';
-import editItemAttribute from '@/economy/editItemAttribute';
-import editMultipleItemAttributes from '@/economy/editMultipleItemAttributes';
-import findUser from '@/economy/findUser';
-import commandColors from '@/embeds/commandColors';
-import embedTemplate from '@/embeds/embedTemplate';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import errorEmbed from '@/embeds/errorEmbed';
-import itemString from '@/embeds/helpers/itemString';
-import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
-import { UsableItemFunc, UseManyType } from '@/interfaces/Item';
-import intReply from '@/utils/intReply';
-import countFreeInvSlots from '@/items/helpers/countFreeInvSlots';
-import itemList from '@/items/itemList';
+import addItems from "@/economy/addItems";
+import editItemAttribute from "@/economy/editItemAttribute";
+import editMultipleItemAttributes from "@/economy/editMultipleItemAttributes";
+import findUser from "@/economy/findUser";
+import commandColors from "@/embeds/commandColors";
+import embedTemplate from "@/embeds/embedTemplate";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import errorEmbed from "@/embeds/errorEmbed";
+import itemString from "@/embeds/helpers/itemString";
+import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import { UsableItemFunc, UseManyType } from "@/interfaces/Item";
+import intReply from "@/utils/intReply";
+import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
+import itemList from "@/items/itemList";
 
 // 24 stundas
 export const KAFIJAS_APARATS_COOLDOWN = 86_400_000;
@@ -26,11 +26,11 @@ export const kafijasAparatsUseMany: UseManyType = {
     if (!user) return intReply(i, errorEmbed);
 
     const usableItems = user.specialItems.filter(
-      ({ name, attributes }) => name === 'kafijas_aparats' && this.filter(attributes)
+      ({ name, attributes }) => name === "kafijas_aparats" && this.filter(attributes),
     );
 
     if (!usableItems.length) {
-      return intReply(i, ephemeralReply(`Tev nav neviens izmantojams **${itemString('kafijas_aparats')}**`));
+      return intReply(i, ephemeralReply(`Tev nav neviens izmantojams **${itemString("kafijas_aparats")}**`));
     }
 
     const coffeeCount = usableItems.length;
@@ -41,8 +41,8 @@ export const kafijasAparatsUseMany: UseManyType = {
         i,
         ephemeralReply(
           `Lai saņemtu kafijas tev vajag vismaz **${coffeeCount}** brīvas vietas inventārā\n` +
-            `Tev ir **${freeSlots}** brīvas vietas`
-        )
+            `Tev ir **${freeSlots}** brīvas vietas`,
+        ),
       );
     }
 
@@ -52,7 +52,7 @@ export const kafijasAparatsUseMany: UseManyType = {
       usableItems.map(({ _id, attributes }) => ({
         itemId: _id!,
         newAttributes: { ...attributes, lastUsed: Date.now() },
-      }))
+      })),
     );
     const userAfter = await addItems(userId, guildId, { kafija: coffeeCount });
 
@@ -63,20 +63,20 @@ export const kafijasAparatsUseMany: UseManyType = {
       embedTemplate({
         i,
         color: commandColors.izmantot,
-        title: `Izmantot ${itemString('kafijas_aparats', usableItems.length, true)}`,
+        title: `Izmantot ${itemString("kafijas_aparats", usableItems.length, true)}`,
         fields: [
           {
-            name: 'Tu uztaisīji',
-            value: itemString('kafija', coffeeCount, true),
+            name: "Tu uztaisīji",
+            value: itemString("kafija", coffeeCount, true),
             inline: true,
           },
           {
-            name: 'Tev tagad ir',
-            value: itemString('kafija', userAfter.items.find(({ name }) => name === 'kafija')?.amount || 0),
+            name: "Tev tagad ir",
+            value: itemString("kafija", userAfter.items.find(({ name }) => name === "kafija")?.amount || 0),
             inline: true,
           },
         ],
-      })
+      }),
     );
   },
 };
@@ -104,18 +104,18 @@ const kafijas_aparats: UsableItemFunc = async (userId, guildId, _, specialItem) 
   const userAfter = await addItems(userId, guildId, { kafija: 1 });
   if (!userAfter) return { error: true };
 
-  const itemCount = userAfter.items.find(item => item.name === 'kafija')?.amount || 1;
+  const itemCount = userAfter.items.find((item) => item.name === "kafija")?.amount || 1;
 
   return {
     text: `Nākamā kafija pēc \`${millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - 1)}\``,
     fields: [
       {
-        name: 'Tu uztaisīji',
+        name: "Tu uztaisīji",
         value: `${itemString(itemList.kafija, 1, true)}`,
         inline: true,
       },
       {
-        name: 'Tev tagad ir',
+        name: "Tev tagad ir",
         value: `${itemString(itemList.kafija, itemCount)}`,
         inline: true,
       },

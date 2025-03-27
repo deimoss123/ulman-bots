@@ -1,26 +1,26 @@
-import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle, ComponentType } from 'discord.js';
-import addItems from '@/economy/addItems';
-import editItemAttribute from '@/economy/editItemAttribute';
-import editMultipleItemAttributes from '@/economy/editMultipleItemAttributes';
-import findUser from '@/economy/findUser';
-import commandColors from '@/embeds/commandColors';
-import embedTemplate from '@/embeds/embedTemplate';
-import ephemeralReply from '@/embeds/ephemeralReply';
-import errorEmbed from '@/embeds/errorEmbed';
-import itemString from '@/embeds/helpers/itemString';
-import millisToReadableTime from '@/embeds/helpers/millisToReadableTime';
-import smallEmbed from '@/embeds/smallEmbed';
-import { UsableItemFunc, UseManyType } from '@/interfaces/Item';
-import UserProfile, { ItemAttributes } from '@/interfaces/UserProfile';
-import intReply from '@/utils/intReply';
-import countFreeInvSlots from '@/items/helpers/countFreeInvSlots';
-import itemList, { ItemKey } from '@/items/itemList';
-import mongoTransaction from '@/utils/mongoTransaction';
-import { Dialogs } from '@/utils/Dialogs';
-import { useDifferentItemHandler, useDifferentItemSelectMenu } from '@/utils/useDifferentItem';
+import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
+import addItems from "@/economy/addItems";
+import editItemAttribute from "@/economy/editItemAttribute";
+import editMultipleItemAttributes from "@/economy/editMultipleItemAttributes";
+import findUser from "@/economy/findUser";
+import commandColors from "@/embeds/commandColors";
+import embedTemplate from "@/embeds/embedTemplate";
+import ephemeralReply from "@/embeds/ephemeralReply";
+import errorEmbed from "@/embeds/errorEmbed";
+import itemString from "@/embeds/helpers/itemString";
+import millisToReadableTime from "@/embeds/helpers/millisToReadableTime";
+import smallEmbed from "@/embeds/smallEmbed";
+import { UsableItemFunc, UseManyType } from "@/interfaces/Item";
+import UserProfile, { ItemAttributes } from "@/interfaces/UserProfile";
+import intReply from "@/utils/intReply";
+import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
+import itemList, { ItemKey } from "@/items/itemList";
+import mongoTransaction from "@/utils/mongoTransaction";
+import { Dialogs } from "@/utils/Dialogs";
+import { useDifferentItemHandler, useDifferentItemSelectMenu } from "@/utils/useDifferentItem";
 
 export function getRandFreeSpin() {
-  const spins: ItemKey[] = ['brivgriez10', 'brivgriez25', 'brivgriez50'];
+  const spins: ItemKey[] = ["brivgriez10", "brivgriez25", "brivgriez50"];
   return spins[Math.floor(Math.random() * spins.length)];
 }
 
@@ -36,11 +36,11 @@ export const petnieksUseMany: UseManyType = {
     if (!user) return intReply(i, errorEmbed);
 
     const usableItems = user.specialItems.filter(
-      ({ name, attributes }) => name === 'petnieks' && this.filter(attributes),
+      ({ name, attributes }) => name === "petnieks" && this.filter(attributes),
     );
 
     if (!usableItems.length) {
-      return intReply(i, ephemeralReply(`Tev nav neviens izmantojams **${itemString('petnieks')}**`));
+      return intReply(i, ephemeralReply(`Tev nav neviens izmantojams **${itemString("petnieks")}**`));
     }
 
     const itemsToAdd: Record<ItemKey, number> = {};
@@ -61,7 +61,7 @@ export const petnieksUseMany: UseManyType = {
       );
     }
 
-    const { ok } = await mongoTransaction(session => [
+    const { ok } = await mongoTransaction((session) => [
       () =>
         editMultipleItemAttributes(
           userId,
@@ -84,14 +84,14 @@ export const petnieksUseMany: UseManyType = {
       embedTemplate({
         i,
         color: commandColors.izmantot,
-        title: `Izmantot ${itemString('petnieks', usableItems.length, true)}`,
+        title: `Izmantot ${itemString("petnieks", usableItems.length, true)}`,
         fields: [
           {
-            name: 'Atrastie brīvgriezieni:',
+            name: "Atrastie brīvgriezieni:",
             value: Object.entries(itemsToAdd)
               .sort((a, b) => itemList[b[0]].value - itemList[a[0]].value)
               .map(([name, amount]) => `> ${itemString(name, amount)}`)
-              .join('\n'),
+              .join("\n"),
             inline: false,
           },
         ],
@@ -108,36 +108,36 @@ type State = {
 };
 
 const enum ComponentId {
-  AddHat = 'petnieks_add_hat',
-  RemoveHat = 'petnieks_remove_hat',
+  AddHat = "petnieks_add_hat",
+  RemoveHat = "petnieks_remove_hat",
 }
 
 function view(state: State, i: BaseInteraction) {
   const { hat } = state.attributes;
 
   const components = [];
-  const hatInInv = state.user.items.find(({ name }) => name === 'salaveca_cepure');
+  const hatInInv = state.user.items.find(({ name }) => name === "salaveca_cepure");
 
   if (hatInInv || hat) {
     components.push(
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
           .setCustomId(hat ? ComponentId.RemoveHat : ComponentId.AddHat)
-          .setEmoji(itemList.salaveca_cepure.emoji() || '❓')
-          .setLabel(hat ? 'Novilkt cepuri' : 'Uzvilkt cepuri')
+          .setEmoji(itemList.salaveca_cepure.emoji() || "❓")
+          .setLabel(hat ? "Novilkt cepuri" : "Uzvilkt cepuri")
           .setStyle(ButtonStyle.Primary),
       ),
     );
   }
 
-  if (state.user.specialItems.filter(({ name }) => name === 'petnieks').length > 1) {
-    components.push(useDifferentItemSelectMenu(state.user, 'petnieks', state.itemId));
+  if (state.user.specialItems.filter(({ name }) => name === "petnieks").length > 1) {
+    components.push(useDifferentItemSelectMenu(state.user, "petnieks", state.itemId));
   }
 
   return embedTemplate({
     i,
-    content: hatInInv || hat ? '\u200b' : undefined,
-    title: `Izmantot: ${itemString('petnieks', null, true, state.attributes)}`,
+    content: hatInInv || hat ? "\u200b" : undefined,
+    title: `Izmantot: ${itemString("petnieks", null, true, state.attributes)}`,
     description: state.text,
     color: commandColors.izmantot,
     components,
@@ -150,7 +150,7 @@ const petnieks: UsableItemFunc = async (userId, guildId, _, specialItem) => {
       const user = await findUser(userId, guildId);
       if (!user) return intReply(i, errorEmbed);
 
-      let text = '';
+      let text = "";
 
       const lastUsed = specialItem!.attributes.lastUsed!;
       const itemKey = specialItem!.attributes.foundItemKey!;
@@ -162,7 +162,7 @@ const petnieks: UsableItemFunc = async (userId, guildId, _, specialItem) => {
       } else if (!countFreeInvSlots(user)) {
         text = `Pētnieks ir atradis ${itemString(itemList[itemKey], 1, true)}, bet tu to nevari saņemt, jo tev ir pilns inventārs`;
       } else {
-        const { ok } = await mongoTransaction(session => [
+        const { ok } = await mongoTransaction((session) => [
           () =>
             editItemAttribute(
               userId,
@@ -190,7 +190,7 @@ const petnieks: UsableItemFunc = async (userId, guildId, _, specialItem) => {
         attributes: specialItem!.attributes,
       };
 
-      const dialogs = new Dialogs(i, initialState, view, 'izmantot', { time: 30000 });
+      const dialogs = new Dialogs(i, initialState, view, "izmantot", { time: 30000 });
 
       if (!(await dialogs.start())) {
         return intReply(i, errorEmbed);
@@ -202,15 +202,15 @@ const petnieks: UsableItemFunc = async (userId, guildId, _, specialItem) => {
         const user = await findUser(userId, guildId);
         if (!user) return { error: true };
 
-        if (customId === 'use_different' && componentType === ComponentType.StringSelect) {
-          return useDifferentItemHandler(user, 'petnieks', int);
+        if (customId === "use_different" && componentType === ComponentType.StringSelect) {
+          return useDifferentItemHandler(user, "petnieks", int);
         }
 
         const petnieksInInv = user.specialItems.find(({ _id }) => _id === specialItem!._id);
         if (!petnieksInInv) {
           return {
             end: true,
-            after: () => intReply(int, ephemeralReply('Kļūda, šis pētnieks vairs nav tavā inventārā')),
+            after: () => intReply(int, ephemeralReply("Kļūda, šis pētnieks vairs nav tavā inventārā")),
           };
         }
 
@@ -218,19 +218,19 @@ const petnieks: UsableItemFunc = async (userId, guildId, _, specialItem) => {
         state.attributes = petnieksInInv.attributes;
 
         if (customId === ComponentId.AddHat && componentType === ComponentType.Button) {
-          if (!user.items.find(({ name }) => name === 'salaveca_cepure')) {
-            intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString('salaveca_cepure')}**`));
+          if (!user.items.find(({ name }) => name === "salaveca_cepure")) {
+            intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString("salaveca_cepure")}**`));
             return { edit: true };
           }
 
-          const { ok, values } = await mongoTransaction(session => [
+          const { ok, values } = await mongoTransaction((session) => [
             () => addItems(userId, guildId, { salaveca_cepure: -1 }, session),
             () =>
               editItemAttribute(
                 userId,
                 guildId,
                 petnieksInInv._id!,
-                { ...petnieksInInv.attributes, hat: 'salaveca_cepure' },
+                { ...petnieksInInv.attributes, hat: "salaveca_cepure" },
                 session,
               ),
           ]);
@@ -242,18 +242,18 @@ const petnieks: UsableItemFunc = async (userId, guildId, _, specialItem) => {
           state.user = userAfter;
           state.attributes = newItem.attributes;
 
-          intReply(int, smallEmbed(`Tu pētniekam uzvilki **${itemString('salaveca_cepure', null, true)}**`, color));
+          intReply(int, smallEmbed(`Tu pētniekam uzvilki **${itemString("salaveca_cepure", null, true)}**`, color));
           return { edit: true };
         }
 
         if (customId === ComponentId.RemoveHat && componentType === ComponentType.Button) {
-          if (petnieksInInv.attributes.hat !== 'salaveca_cepure') {
-            intReply(int, ephemeralReply('Kļūda, šim pētniekam nav uzvilkta cepure'));
+          if (petnieksInInv.attributes.hat !== "salaveca_cepure") {
+            intReply(int, ephemeralReply("Kļūda, šim pētniekam nav uzvilkta cepure"));
             return { edit: true };
           }
 
           if (!countFreeInvSlots(user)) {
-            intReply(int, ephemeralReply('Tu nevari pētniekam novilkt cepuri, jo tev ir pilns inventārs'));
+            intReply(int, ephemeralReply("Tu nevari pētniekam novilkt cepuri, jo tev ir pilns inventārs"));
             return { edit: true };
           }
 

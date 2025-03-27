@@ -1,5 +1,5 @@
-import emoji from '@/utils/emoji';
-import loto, { LotoOptions } from '@/items/usableItems/loto';
+import emoji from "@/utils/emoji";
+import loto, { LotoOptions } from "@/items/usableItems/loto";
 
 export const dizlotoOptions: LotoOptions = {
   rows: 3,
@@ -8,44 +8,44 @@ export const dizlotoOptions: LotoOptions = {
   minRewards: 6,
   maxRewards: 6,
   rewards: {
-    '60_lati': {
+    "60_lati": {
       lati: 60,
-      emoji: () => emoji('loto_60'),
-      chance: '*',
+      emoji: () => emoji("loto_60"),
+      chance: "*",
     },
-    '100_lati': {
+    "100_lati": {
       lati: 100,
-      emoji: () => emoji('loto_100'),
+      emoji: () => emoji("loto_100"),
       chance: 0.22,
     },
-    '250_lati': {
+    "250_lati": {
       lati: 250,
-      emoji: () => emoji('loto_250'),
+      emoji: () => emoji("loto_250"),
       chance: 0.1,
     },
-    '450_lati': {
+    "450_lati": {
       lati: 450,
-      emoji: () => emoji('loto_450'),
+      emoji: () => emoji("loto_450"),
       chance: 0.05,
     },
-    '800_lati': {
+    "800_lati": {
       lati: 800,
-      emoji: () => emoji('loto_800'),
+      emoji: () => emoji("loto_800"),
       chance: 0.01,
     },
-    '2x': {
+    "2x": {
       multiplier: 2,
-      emoji: () => emoji('loto_reiz_2x'),
+      emoji: () => emoji("loto_reiz_2x"),
       chance: 0.2,
     },
-    '3x': {
+    "3x": {
       multiplier: 3,
-      emoji: () => emoji('loto_reiz_3x'),
+      emoji: () => emoji("loto_reiz_3x"),
       chance: 0.1,
     },
-    '5x': {
+    "5x": {
       multiplier: 5,
-      emoji: () => emoji('loto_reiz_5x'),
+      emoji: () => emoji("loto_reiz_5x"),
       chance: 0.02,
     },
   },
@@ -60,4 +60,4 @@ export const dizlotoOptions: LotoOptions = {
   ],
 };
 
-export default loto('dizloto', dizlotoOptions);
+export default loto("dizloto", dizlotoOptions);
