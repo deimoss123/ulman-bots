@@ -5,7 +5,7 @@ import findUser from "@/db/findUser";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import userString from "@/utils/strings/userString";
 import embedTemplate from "@/utils/embeds/embedTemplate";
-import levelsList, { MAX_LEVEL } from "@/levelingSystem/levelsList";
+import levelsList, { MAX_LEVEL } from "@/utils/levelsList";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import { JobPositions } from "@/commands/vakances";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";

@@ -1,7 +1,7 @@
 import { bold, EmbedBuilder } from "discord.js";
 import { AddXpReturn } from "@/db/addXp";
 import itemList from "@/items/itemList";
-import levelsList, { MAX_LEVEL } from "@/levelingSystem/levelsList";
+import levelsList, { MAX_LEVEL } from "@/utils/levelsList";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 

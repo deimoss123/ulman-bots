@@ -2,7 +2,7 @@ import UserProfile from "@/types/UserProfile";
 import { ProjectionType } from "mongoose";
 import { getInvValue } from "@/commands/inventars/inventars";
 import latiString from "@/utils/strings/latiString";
-import levelsList, { MAX_LEVEL } from "@/levelingSystem/levelsList";
+import levelsList, { MAX_LEVEL } from "@/utils/levelsList";
 import StatsProfile from "@/types/StatsProfile";
 import { spinCountDisplayValue } from "@/commands/statistika/statsList";
 
