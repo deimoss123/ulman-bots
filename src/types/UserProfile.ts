@@ -110,7 +110,7 @@ interface UserTirgus {
   itemsBought: ItemKey[];
 }
 
-export enum StocksTransactionType {
+export const enum StocksTransactionType {
   BUY = 0,
   SELL = 1,
 }
