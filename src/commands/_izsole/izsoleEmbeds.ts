@@ -6,7 +6,7 @@ import {
   InteractionReplyOptions,
   time,
 } from "discord.js";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import AuctionType from "@/types/AuctionType";
@@ -27,7 +27,7 @@ export function confirmNewIzsoleMsg(
   startDate: number,
   endDate: number,
 ): InteractionReplyOptions & { fetchReply: true } {
-  return embedTemplate({
+  return mainEmbed({
     i,
     title: "Izveidot jaunu izsoli?",
     description:

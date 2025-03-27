@@ -15,7 +15,7 @@ import latiString from "@/utils/strings/latiString";
 import countFreeInvSlots from "@/items/helpers/countFreeInvSlots";
 import addLati from "@/db/addLati";
 import addItems from "@/db/addItems";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import itemList from "@/items/itemList";
 import buttonHandler from "@/utils/buttonHandler";
 import izmantotRun from "@/commands/izmantot/izmantotRun";
@@ -91,7 +91,7 @@ export default async function pirktRun(
 
     return intReply(
       i,
-      embedTemplate({
+      mainEmbed({
         i,
         title: "Tu nopirki",
         description: `**${itemString(itemToBuy, amountToBuy, true)}** par ${totalCost} latiem`,
@@ -122,7 +122,7 @@ export default async function pirktRun(
       .setEmoji(itemToBuy.emoji() || "❓"),
   );
 
-  const replyMessage = embedTemplate({
+  const replyMessage = mainEmbed({
     i,
     title: "Tu nopirki",
     description: `**${itemString(itemToBuy, amountToBuy, true)}** ` + `par ${totalCost} latiem`,

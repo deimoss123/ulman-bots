@@ -4,7 +4,7 @@ import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import findUser from "@/db/findUser";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import addItems from "@/db/addItems";
 import commandColors from "@/utils/commandColors";
 import iedotAutocomplete from "@/commands/iedot/iedotAutocomplete";
@@ -137,7 +137,7 @@ const iedot: Command = {
 
     intReply(
       i,
-      embedTemplate({
+      mainEmbed({
         i,
         content: `<@${target.id}>`,
         description:

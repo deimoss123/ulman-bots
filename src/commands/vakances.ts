@@ -11,7 +11,7 @@ import {
 import commandColors from "@/utils/commandColors";
 import findUser from "@/db/findUser";
 import errorEmbed from "@/utils/embeds/errorEmbed";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import intReply from "@/utils/intReply";
 import { Dialogs } from "@/utils/dialogs";
 import UserProfile from "@/types/UserProfile";
@@ -79,7 +79,7 @@ function view({ user, chosenJob, currentJob }: State, i: BaseInteraction) {
       default: key === chosenJob,
     }));
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     title: "Vakances",
     color: commandColors.vakances,

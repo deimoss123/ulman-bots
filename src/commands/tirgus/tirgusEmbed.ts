@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction } from "discord.js";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import itemString from "@/utils/strings/itemString";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import Item, { TirgusItem } from "@/types/Item";
@@ -45,7 +45,7 @@ export default function tirgusEmbed(
   const resetTime = new Date().setHours(24, 0, 0, 0);
   const timeUntilReset = resetTime - Date.now();
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     color: commandColors.veikals,
     title: "Tirgus",

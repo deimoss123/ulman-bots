@@ -5,7 +5,7 @@ import Command from "@/types/Command";
 import UserProfile from "@/types/UserProfile";
 import { Dialogs } from "@/utils/dialogs";
 import intReply from "@/utils/intReply";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import * as metalluznuNodosanasPunkts from "@/commands/ipasumi/metalluznuNodosanasPunkts";
 import * as ievarijumuStends from "@/commands/ipasumi/ievarijumuStends";
@@ -61,7 +61,7 @@ function ipasumiView(state: IpasumiState, i: BaseInteraction) {
     return ALL_PROPERTIES[state.screen].view(state, i);
   }
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     title: "Īpašumi",
     content: "\u200B",

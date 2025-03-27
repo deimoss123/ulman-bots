@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, EmbedField } from "discord.js";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import AuctionType from "@/types/AuctionType";
 import Auction from "@/schemas/Auction";
@@ -22,7 +22,7 @@ export default async function izsoleList(i: ChatInputCommandInteraction) {
 
   intReply(
     i,
-    embedTemplate({
+    mainEmbed({
       i,
       title: "Izsoļu saraksts",
       fields,

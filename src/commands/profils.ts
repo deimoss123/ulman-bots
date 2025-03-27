@@ -4,7 +4,7 @@ import { ApplicationCommandOptionType, codeBlock } from "discord.js";
 import findUser from "@/db/findUser";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import userString from "@/utils/strings/userString";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import levelsList, { MAX_LEVEL } from "@/utils/levelsList";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import { JobPositions } from "@/commands/vakances";
@@ -82,7 +82,7 @@ const profils: Command = {
 
     intReply(
       i,
-      embedTemplate({
+      mainEmbed({
         i,
         color: this.color,
         title: `${targetText} profils`,

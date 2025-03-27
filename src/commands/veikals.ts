@@ -9,7 +9,7 @@ import {
   StringSelectMenuBuilder,
 } from "discord.js";
 import itemList, { ItemCategory, ItemKey } from "@/items/itemList";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import latiString from "@/utils/strings/latiString";
 import commandColors from "@/utils/commandColors";
 import itemString from "@/utils/strings/itemString";
@@ -115,7 +115,7 @@ function view({ user, shopItems, chosenItem, chosenAmount, resetTime, timeUntilR
     );
   }
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     title: "Veikals",
     description:

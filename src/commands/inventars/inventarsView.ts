@@ -2,7 +2,7 @@ import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle, EmbedFie
 import UserProfile from "@/types/UserProfile";
 import { INV_PAGE_SIZE, ItemType, itemTypes } from "@/commands/inventars/inventars";
 import latiString from "@/utils/strings/latiString";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import userString from "@/utils/strings/userString";
 import commandColors from "@/utils/commandColors";
 import btnPaginationRow from "@/items/helpers/btnPaginationRow";
@@ -71,7 +71,7 @@ export function inventarsView(state: InventarsState, i: BaseInteraction) {
     rows.push(sellRow(state.targetUser, state.buttonsPressed));
   }
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     content: state.totalPages > 1 ? "\u200b" : undefined,
     title:

@@ -9,7 +9,7 @@ import {
   StringSelectMenuBuilder,
 } from "discord.js";
 import findUser from "@/db/findUser";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import { displayAttributes } from "@/utils/strings/displayAttributes";
@@ -29,7 +29,7 @@ function makeEmbed(
   useRes: Extract<UsableItemReturn, { text: string }>,
   embedColor: number,
 ) {
-  return embedTemplate({
+  return mainEmbed({
     i,
     color: embedColor,
     title: `Izmantot: ${itemString(itemObj, null, true, selectedItem.attributes)}`,
@@ -104,7 +104,7 @@ function view(state: State, i: BaseInteraction) {
     buttonRow,
   ];
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     color: state.embedColor,
     description:

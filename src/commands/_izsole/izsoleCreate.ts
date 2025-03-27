@@ -10,7 +10,7 @@ import {
 } from "discord.js";
 import createAuction from "@/db/auction/createAuction";
 import buttonHandler from "@/utils/buttonHandler";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import { ItemAttributes } from "@/types/UserProfile";
@@ -125,7 +125,7 @@ export default async function izsoleCreate(i: ChatInputCommandInteraction) {
         return {
           end: true,
           edit: {
-            embeds: embedTemplate({
+            embeds: mainEmbed({
               i,
               title: "✅ Izveidota jauna izsole",
               description: izsoleItemString(newAuction),

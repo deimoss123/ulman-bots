@@ -11,7 +11,7 @@ import addItems from "@/db/addItems";
 import addXp from "@/db/addXp";
 import findUser from "@/db/findUser";
 import buttonHandler from "@/utils/buttonHandler";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
@@ -42,7 +42,7 @@ function makeEmbed(
 ) {
   const maxLength = Math.max(...Object.values(reqItemsInv)).toString().length;
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     description: `Ar velosipēda detaļām tu vari sataisīt **${itemString(itemList["velosipeds"], null, true)}**`,
     fields: [

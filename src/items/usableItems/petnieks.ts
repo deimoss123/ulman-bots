@@ -4,7 +4,7 @@ import editItemAttribute from "@/db/editItemAttribute";
 import editMultipleItemAttributes from "@/db/editMultipleItemAttributes";
 import findUser from "@/db/findUser";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
@@ -81,7 +81,7 @@ export const petnieksUseMany: UseManyType = {
 
     intReply(
       i,
-      embedTemplate({
+      mainEmbed({
         i,
         color: commandColors.izmantot,
         title: `Izmantot ${itemString("petnieks", usableItems.length, true)}`,
@@ -134,7 +134,7 @@ function view(state: State, i: BaseInteraction) {
     components.push(useDifferentItemSelectMenu(state.user, "petnieks", state.itemId));
   }
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     content: hatInInv || hat ? "\u200b" : undefined,
     title: `Izmantot: ${itemString("petnieks", null, true, state.attributes)}`,

@@ -1,7 +1,7 @@
 import Command from "@/types/Command";
 import { ApplicationCommandOptionType } from "discord.js";
 import findUser from "@/db/findUser";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import latiString from "@/utils/strings/latiString";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import addLati from "@/db/addLati";
@@ -99,7 +99,7 @@ const maksat: Command = {
 
     intReply(
       i,
-      embedTemplate({
+      mainEmbed({
         i,
         content: `<@${target.id}>`,
         description:

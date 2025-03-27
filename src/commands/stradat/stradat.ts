@@ -2,7 +2,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Message } f
 import findUser from "@/db/findUser";
 import buttonHandler from "@/utils/buttonHandler";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import Command from "@/types/Command";
@@ -97,7 +97,7 @@ const stradat: Command = {
     );
 
     const embed = EmbedBuilder.from(
-      embedTemplate({
+      mainEmbed({
         i,
         color: this.color,
         title: embedTitle(user, jobPosition),
@@ -127,7 +127,7 @@ const stradat: Command = {
       );
 
       const stradatVelreizEmbed = EmbedBuilder.from(
-        embedTemplate({
+        mainEmbed({
           i,
           color: this.color,
           title: embedTitle(user, jobPosition),

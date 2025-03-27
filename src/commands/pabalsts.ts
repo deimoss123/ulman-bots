@@ -3,7 +3,7 @@ import addLati from "@/db/addLati";
 import addXp from "@/db/addXp";
 import findUser from "@/db/findUser";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import latiString from "@/utils/strings/latiString";
@@ -60,7 +60,7 @@ const pabalsts: Command = {
 
     intReply(i, {
       embeds: [
-        embedTemplate({
+        mainEmbed({
           i,
           color: this.color,
           title: "Pabalsts",

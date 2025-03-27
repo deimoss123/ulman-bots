@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType, EmbedField } from "discord.js";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
@@ -151,7 +151,7 @@ const info: Command = {
 
     const msg = await intReply(
       i,
-      embedTemplate({
+      mainEmbed({
         i,
         color: this.color,
         title: `Info: ${itemString(itemObj)}`,

@@ -4,7 +4,7 @@ import { UsableItemFunc } from "@/types/Item";
 import findUser from "@/db/findUser";
 import intReply from "@/utils/intReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import itemString from "@/utils/strings/itemString";
 import shuffleArray from "@/items/helpers/shuffleArray";
 import {
@@ -211,7 +211,7 @@ function view(state: State, i: BaseInteraction) {
     );
   }
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     content: "\u200b",
     title: `Izmantot: ${itemString(itemKey, null, true)}`,

@@ -9,7 +9,7 @@ import {
   StringSelectMenuInteraction,
 } from "discord.js";
 import { IpasumiState } from "@/commands/ipasumi/ipasumi";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import UserProfile from "@/types/UserProfile";
 import setUser from "@/db/setUser";
 import findUser from "@/db/findUser";
@@ -547,7 +547,7 @@ function view(state: IpasumiState, i: BaseInteraction) {
 
   const tempText = tempSegments.find(([t]) => data.currentTemp <= t)?.[1]?.text;
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     content: "\u200B",
     title: "Metāllūžņu nodošanas punkts",

@@ -13,7 +13,7 @@ import {
 } from "discord.js";
 import updatesList, { VersionString } from "@/commands/palidziba/jaunumi/updatesList";
 
-interface EmbedTemplateOptions {
+interface Options {
   i: BaseInteraction;
   content?: string;
   title?: string;
@@ -32,7 +32,7 @@ interface EmbedTemplateOptions {
 
 export const ULMANBOTA_VERSIJA: VersionString = "4.3";
 
-export default function embedTemplate(options: EmbedTemplateOptions): InteractionReplyOptions & { withResponse: true } {
+export default function mainEmbed(options: Options): InteractionReplyOptions & { withResponse: true } {
   return {
     content: options.content,
     embeds: [

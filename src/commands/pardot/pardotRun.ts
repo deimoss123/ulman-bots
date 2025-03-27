@@ -14,7 +14,7 @@ import findUser from "@/db/findUser";
 import setStats from "@/db/stats/setStats";
 import setUser from "@/db/setUser";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import { displayAttributes } from "@/utils/strings/displayAttributes";
@@ -38,7 +38,7 @@ interface ItemsToSell {
 }
 
 export function pardotEmbed(i: BaseInteraction, user: UserProfile, itemsToSell: ItemsToSell[], soldItemsValue: number) {
-  return embedTemplate({
+  return mainEmbed({
     i,
     color: commandColors.pardot,
     title: "Tu pārdevi",

@@ -3,7 +3,7 @@ import findUser from "@/db/findUser";
 import getAllUsers from "@/db/getAllUsers";
 import getStatsMany from "@/db/stats/getStatsMany";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import Command from "@/types/Command";
@@ -136,7 +136,7 @@ const statistika: Command = {
 
     await defer;
     i.editReply(
-      embedTemplate({
+      mainEmbed({
         i,
         color: this.color,
         title:

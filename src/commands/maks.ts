@@ -1,7 +1,7 @@
 import Command from "@/types/Command";
 import { ApplicationCommandOptionType } from "discord.js";
 import findUser from "@/db/findUser";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import latiString from "@/utils/strings/latiString";
 import userString from "@/utils/strings/userString";
@@ -34,7 +34,7 @@ const maks: Command = {
 
     intReply(
       i,
-      embedTemplate({
+      mainEmbed({
         i,
         title: "Maks",
         description: `${targetText} ir ${latiString(user.lati, false, true)}`,

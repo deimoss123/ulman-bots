@@ -2,7 +2,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteracti
 import deleteAuction from "@/db/auction/deleteAuction";
 import findAuctionById from "@/db/auction/findAuctionById";
 import buttonHandler from "@/utils/buttonHandler";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import intReply from "@/utils/intReply";
@@ -24,7 +24,7 @@ export default async function izsolesDelete(i: ChatInputCommandInteraction) {
 
   const msg = await intReply(
     i,
-    embedTemplate({
+    mainEmbed({
       i,
       title: "❔ Vai tiešām izdzēst šo izsoli?",
       description: izsoleItemString(izsole),
@@ -45,7 +45,7 @@ export default async function izsolesDelete(i: ChatInputCommandInteraction) {
         return {
           end: true,
           edit: {
-            embeds: embedTemplate({
+            embeds: mainEmbed({
               i,
               title: "🔴 Izsole izdzēsta",
               color: 0xee0000,

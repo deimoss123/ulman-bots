@@ -14,7 +14,7 @@ import errorEmbed from "@/utils/embeds/errorEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import itemString from "@/utils/strings/itemString";
 import addItems from "@/db/addItems";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ItemString from "@/utils/strings/itemString";
 import itemList from "@/items/itemList";
 import izmantotRunSpecial from "@/commands/izmantot/izmantotRunSpecial";
@@ -43,7 +43,7 @@ function view(state: State, i: BaseInteraction) {
       .setEmoji(state.itemToUse.emoji() || "❓"),
   );
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     color: state.color,
     title: `Izmantot: ${ItemString(state.itemToUse, null, true)}`,

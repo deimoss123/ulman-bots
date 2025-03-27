@@ -11,7 +11,7 @@ import addLati from "@/db/addLati";
 import findUser from "@/db/findUser";
 import removeItemsById from "@/db/removeItemsById";
 import setStats from "@/db/stats/setStats";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import { displayAttributes } from "@/utils/strings/displayAttributes";
@@ -92,7 +92,7 @@ function view(state: State, i: BaseInteraction) {
     ),
   ];
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     color: state.color,
     description:
@@ -109,7 +109,7 @@ function soldEmbed(
   soldValue: number,
   color: number,
 ) {
-  return embedTemplate({
+  return mainEmbed({
     i,
     title: "Tu pārdevi:",
     color,

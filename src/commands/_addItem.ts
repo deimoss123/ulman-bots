@@ -1,6 +1,6 @@
 import Command from "@/types/Command";
 import { ApplicationCommandOptionType } from "discord.js";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import itemString from "@/utils/strings/itemString";
 import addItem from "@/db/addItems";
 import wrongKeyEmbed from "@/utils/embeds/wrongKeyEmbed";
@@ -52,7 +52,7 @@ const _addItem: Command = {
 
     intReply(
       i,
-      embedTemplate({
+      mainEmbed({
         i,
         description: `Tu pievienoji <@${target.id}> ${itemString(itemToAdd, amountToAdd, true)}`,
         color: this.color,

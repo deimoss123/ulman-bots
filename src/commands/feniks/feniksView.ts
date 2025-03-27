@@ -6,7 +6,7 @@ import emoji from "@/utils/emoji";
 import latiString from "@/utils/strings/latiString";
 import feniksLaimesti from "@/commands/feniks/feniksLaimesti";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import itemList, { ItemKey } from "@/items/itemList";
 
 export type FeniksState = {
@@ -106,7 +106,7 @@ export default function feniksView(state: FeniksState, i: BaseInteraction) {
 
   const m = state.spinRes?.totalMultiplier;
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     title,
     content: "\u200B",

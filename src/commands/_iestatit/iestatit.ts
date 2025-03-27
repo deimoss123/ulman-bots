@@ -1,5 +1,5 @@
 import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import Command from "@/types/Command";
 import { Dialogs } from "@/utils/dialogs";
 import intReply from "@/utils/intReply";
@@ -16,7 +16,7 @@ const enum ComponentId {
 }
 
 function view(state: State, i: BaseInteraction) {
-  return embedTemplate({
+  return mainEmbed({
     i,
     description: `${state.text}\n${state.count}`,
     components: [

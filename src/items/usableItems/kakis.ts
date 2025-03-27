@@ -16,7 +16,7 @@ import addItems from "@/db/addItems";
 import editItemAttribute from "@/db/editItemAttribute";
 import findUser from "@/db/findUser";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
@@ -206,7 +206,7 @@ function view(state: State, i: BaseInteraction) {
     components.push(useDifferentItemSelectMenu(state.user, "kakis", state.itemId));
   }
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     content: "\u200b",
     color: commandColors.izmantot,

@@ -6,7 +6,7 @@ import addTimeCooldown from "@/db/addTimeCooldown";
 import addXp from "@/db/addXp";
 import findUser from "@/db/findUser";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
@@ -89,7 +89,7 @@ function ubagotEmbed(
   { text, reward }: UbagotRes,
   earnedLati?: number,
 ) {
-  return embedTemplate({
+  return mainEmbed({
     i,
     title: `Ubagot | ${dailyCooldowns.ubagot.timesUsed}/${MAX_DAILY}`,
     description: `Tu pakratīji savu krūzīti un ` + (reward ? text : `saņēmi ${latiString(earnedLati!, true, true)}`),

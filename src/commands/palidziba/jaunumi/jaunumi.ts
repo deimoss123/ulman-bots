@@ -7,7 +7,7 @@ import {
   StringSelectMenuBuilder,
 } from "discord.js";
 import commandColors from "@/utils/commandColors";
-import embedTemplate, { ULMANBOTA_VERSIJA } from "@/utils/embeds/embedTemplate";
+import mainEmbed, { ULMANBOTA_VERSIJA } from "@/utils/embeds/mainEmbed";
 import intReply from "@/utils/intReply";
 import updatesList, { VersionString } from "@/commands/palidziba/jaunumi/updatesList";
 import { Dialogs } from "@/utils/dialogs";
@@ -38,7 +38,7 @@ function view(state: State, i: BaseInteraction) {
     ),
   ];
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     color: commandColors.info,
     title: `Jaunumi - Versija ${state.selectedVersion} (${date})`,

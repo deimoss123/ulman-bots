@@ -5,7 +5,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } from "dis
 import editItemAttribute from "@/db/editItemAttribute";
 import findUser from "@/db/findUser";
 import buttonHandler from "@/utils/buttonHandler";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
 import smallEmbed from "@/utils/embeds/smallEmbed";
@@ -145,18 +145,18 @@ const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
       const { izaugsanasProg, izaudzis, vajagApliet } = dabutKrumaInfo(specialItem!, currTime);
 
       if (iestadisanasLaiks + NOMIR < currTime) {
-        return intReply(i, embedTemplate({ i, description: `Diemžēl tavs krūms vairs nav starp mums... 💀⚰`, color }));
+        return intReply(i, mainEmbed({ i, description: `Diemžēl tavs krūms vairs nav starp mums... 💀⚰`, color }));
       }
 
       if (!izaudzis) {
         if (!vajagApliet) {
           return intReply(
             i,
-            embedTemplate({ i, description: `Tavs krūms vēl nav izaudzis! **${izaugsanasProg}%**`, color }),
+            mainEmbed({ i, description: `Tavs krūms vēl nav izaudzis! **${izaugsanasProg}%**`, color }),
           );
         }
         const msg = await intReply(i, {
-          embeds: embedTemplate({
+          embeds: mainEmbed({
             i,
             description:
               `Tavs krūms vēl nav izaudzis! **${izaugsanasProg}%**\n` +
@@ -182,7 +182,7 @@ const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
             });
             return {
               edit: {
-                embeds: embedTemplate({ i, description: `Tu aplaistīji ogu krūmu! 👍`, color }).embeds!,
+                embeds: mainEmbed({ i, description: `Tu aplaistīji ogu krūmu! 👍`, color }).embeds!,
                 components: [],
               },
             };
@@ -218,7 +218,7 @@ const ogu_krums: UsableItemFunc = async (userId, guildId, _, specialItem) => {
       const itemCount = userAfter.items.find((item) => item.name === ogasTips)?.amount || 1;
       return intReply(
         i,
-        embedTemplate({
+        mainEmbed({
           i,
           description:
             `Tu ievāci **${cikOgasDot}** ogas \n` + `Nākamā oga pēc \`${millisToReadableTime(cikNakamaOgaJauns)}\``,

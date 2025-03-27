@@ -5,7 +5,7 @@ import editItemAttribute from "@/db/editItemAttribute";
 import findUser from "@/db/findUser";
 import setStats from "@/db/stats/setStats";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import { displayAttributes } from "@/utils/strings/displayAttributes";
@@ -107,7 +107,7 @@ const zagt: Command = {
 
       return intReply(
         i,
-        embedTemplate({
+        mainEmbed({
           i,
           color: this.color,
           title: `${emoji("icon_check1")} Zagt no Valsts Bankas`,
@@ -178,7 +178,7 @@ const zagt: Command = {
 
     intReply(
       i,
-      embedTemplate({
+      mainEmbed({
         i,
         color: this.color,
         content: `${target}`,

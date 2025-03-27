@@ -3,7 +3,7 @@ import addItems from "@/db/addItems";
 import findUser from "@/db/findUser";
 import removeItemsById from "@/db/removeItemsById";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
@@ -61,7 +61,7 @@ function view(state: State, i: BaseInteraction) {
     components.push(useDifferentItemSelectMenu(state.user, "loto_zivs", state.itemId));
   }
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     color: state.isSpinning ? commandColors.feniks : 0xf080ff,
     title: `Izmantot: ${itemString(itemList.loto_zivs, null, true)} (satur ${state.wonFishArr.length} zivis)`,

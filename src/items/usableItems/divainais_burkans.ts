@@ -13,7 +13,7 @@ import addLati from "@/db/addLati";
 import editItemAttribute from "@/db/editItemAttribute";
 import findUser from "@/db/findUser";
 import buttonHandler from "@/utils/buttonHandler";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
@@ -89,7 +89,7 @@ const divainais_burkans: UsableItemFunc = async (userId, guildId, _, specialItem
 
       const msg = await intReply(
         i,
-        embedTemplate({
+        mainEmbed({
           i,
           color,
           title: `Izmantot: ${itemString(itemList[specialItem!.name]!, null, true, specialItem!.attributes)}`,

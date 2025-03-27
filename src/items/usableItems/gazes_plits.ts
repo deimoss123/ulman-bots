@@ -10,7 +10,7 @@ import findUser from "@/db/findUser";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import Item, { UsableItemFunc } from "@/types/Item";
 import intReply from "@/utils/intReply";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import { Dialogs } from "@/utils/dialogs";
 import itemList, { ItemKey } from "@/items/itemList";
 import UserProfile from "@/types/UserProfile";
@@ -105,7 +105,7 @@ const enum ComponentId {
 
 function view(state: State, i: BaseInteraction) {
   if (!state.selectedMenu) {
-    return embedTemplate({
+    return mainEmbed({
       i,
       title: `Izmantot: ${itemString("gazes_plits")}`,
       color: commandColors.izmantot,
@@ -124,7 +124,7 @@ function view(state: State, i: BaseInteraction) {
 
   if (state.selectedMenu === "boil") {
     if (!state.boil.berriesInInv.length) {
-      return embedTemplate({
+      return mainEmbed({
         i,
         color: commandColors.izmantot,
         description: "Tev inventārā nav ogu ko vārīt",
@@ -207,7 +207,7 @@ function view(state: State, i: BaseInteraction) {
       );
     }
 
-    return embedTemplate({
+    return mainEmbed({
       i,
       title: `${itemString("gazes_plits")} - Vārīt ievārījumu`,
       color: commandColors.izmantot,
@@ -240,14 +240,14 @@ function view(state: State, i: BaseInteraction) {
 
   // TODO: uztaisīt cepšanu
   if (state.selectedMenu === "cook") {
-    return embedTemplate({
+    return mainEmbed({
       i,
       description: "Cept",
     });
   }
 
   // šim nekad nevajadzētu notikt, bet atgriežu, lai TS nebļauj
-  return embedTemplate({ i, description: "ja tu redzi šo ziņu, tad kaut kas ir nogājis galīgi greizi" });
+  return mainEmbed({ i, description: "ja tu redzi šo ziņu, tad kaut kas ir nogājis galīgi greizi" });
 }
 
 const gazes_plits: UsableItemFunc = async (userId, guildId, _, specialItem) => {

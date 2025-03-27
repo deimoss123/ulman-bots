@@ -1,6 +1,6 @@
 import Command from "@/types/Command";
 import { ApplicationCommandOptionType } from "discord.js";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import latiString from "@/utils/strings/latiString";
 import findUser from "@/db/findUser";
 import errorEmbed from "@/utils/embeds/errorEmbed";
@@ -42,7 +42,7 @@ const _addLati: Command = {
 
     intReply(
       i,
-      embedTemplate({
+      mainEmbed({
         i,
         description:
           `<@${target.id}> tika pievienoti ${latiString(latiToAdd)}\n` +

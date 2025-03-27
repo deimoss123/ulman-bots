@@ -4,14 +4,14 @@ import {
   ApplicationCommandSubCommandData,
   ApplicationCommandSubGroupData,
 } from "discord.js";
-import commandColors from "../../../embeds/commandColors";
-import embedTemplate from "../../../embeds/embedTemplate";
-import errorEmbed from "../../../embeds/errorEmbed";
-import latiString from "../../../embeds/helpers/latiString";
-import AkcijaType from "../../../interfaces/AkcijaType";
-import Command from "../../../interfaces/Command";
-import Akcija from "../../../schemas/Akcija";
-import intReply from "../../../utils/intReply";
+import commandColors from "@/utils/commandColors";
+import mainEmbed from "@/utils/embeds/mainEmbed";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import latiString from "@/utils/strings/latiString";
+import AkcijaType from "@/types/AkcijaType";
+import Command from "@/types/Command";
+import Akcija from "@/schemas/Akcija";
+import intReply from "@/utils/intReply";
 import akcijasList, { AkcijaChartTimes, AkcijaId } from "@/commands/akcijas/akcijasList";
 
 const chartTimes: AkcijaChartTimes[] = ["2h", "8h", "24h", "7d"];
@@ -97,7 +97,7 @@ const akcijas: Command = {
 
         return intReply(
           i,
-          embedTemplate({
+          mainEmbed({
             i,
             title: "Visas Akcijas",
             fields: Object.entries(akcijasList).map(([key, { name }]) => {
@@ -122,7 +122,7 @@ const akcijas: Command = {
 
         return intReply(
           i,
-          embedTemplate({
+          mainEmbed({
             i,
             title: `Akcijas grafiks - ${name} (${selectedTime})`,
             color,

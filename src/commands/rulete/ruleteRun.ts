@@ -11,7 +11,7 @@ import addLati from "@/db/addLati";
 import findUser from "@/db/findUser";
 import setStats from "@/db/stats/setStats";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
@@ -80,7 +80,7 @@ function view(state: State, i: BaseInteraction) {
     ),
   ];
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     content: "\u200B",
     color: state.isSpinning

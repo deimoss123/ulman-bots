@@ -11,7 +11,7 @@ import {
 import UserProfile, { ItemAttributes, UserFishing } from "@/types/UserProfile";
 import { countFish } from "@/commands/zvejot/syncFishing";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import maksekeresData from "@/commands/zvejot/makskeresData";
@@ -231,7 +231,7 @@ export default function zvejotView(state: ZvejotState, i: BaseInteraction) {
     );
   }
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     color: commandColors.zvejot,
     fields,

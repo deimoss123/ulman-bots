@@ -15,7 +15,7 @@ import { AttributeItem, UsableItemFunc } from "@/types/Item";
 import intReply from "@/utils/intReply";
 import itemList, { ItemKey } from "@/items/itemList";
 import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import { Dialogs } from "@/utils/dialogs";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import mongoTransaction from "@/utils/mongoTransaction";
@@ -78,7 +78,7 @@ function view(state: State, i: BaseInteraction) {
     description += "\n\n💡 Ja makšķerei ir samazinājusies izturība, to var salabot ar šo pašu komandu";
   }
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     title: `Izmantot: ${itemString(state.itemKey, null, true)}`,
     description,

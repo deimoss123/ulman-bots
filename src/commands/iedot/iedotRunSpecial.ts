@@ -13,7 +13,7 @@ import findUser from "@/db/findUser";
 import removeItemsById from "@/db/removeItemsById";
 import setStats from "@/db/stats/setStats";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import { displayAttributes } from "@/utils/strings/displayAttributes";
 import itemString, { itemStringCustom } from "@/utils/strings/itemString";
@@ -39,7 +39,7 @@ function makeEmbedAfter(
   hasJuridisks: boolean,
   itemObj: Item,
 ) {
-  return embedTemplate({
+  return mainEmbed({
     i,
     color: commandColors.iedot,
     content: `<@${targetUser.userId}>`,
@@ -145,7 +145,7 @@ function view(state: State, i: BaseInteraction) {
     ),
   ];
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     color: commandColors.iedot,
     description:

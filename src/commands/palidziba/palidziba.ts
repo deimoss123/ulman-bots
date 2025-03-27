@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType } from "discord.js";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import Command from "@/types/Command";
 import intReply from "@/utils/intReply";
@@ -53,7 +53,7 @@ const palidziba: Command = {
 
         return intReply(
           i,
-          embedTemplate({
+          mainEmbed({
             i,
             color: this.color,
             title: `Palīdzība - /${cmdName}`,

@@ -3,7 +3,7 @@ import editItemAttribute from "@/db/editItemAttribute";
 import editMultipleItemAttributes from "@/db/editMultipleItemAttributes";
 import findUser from "@/db/findUser";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
@@ -60,7 +60,7 @@ export const kafijasAparatsUseMany: UseManyType = {
 
     intReply(
       i,
-      embedTemplate({
+      mainEmbed({
         i,
         color: commandColors.izmantot,
         title: `Izmantot ${itemString("kafijas_aparats", usableItems.length, true)}`,

@@ -1,6 +1,6 @@
 import { APIEmbedField, ButtonInteraction, ChatInputCommandInteraction, EmbedField } from "discord.js";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import itemString from "@/utils/strings/itemString";
 import { ItemKey } from "@/items/itemList";
 
@@ -12,7 +12,7 @@ export default function kamPiederEmbed(
 ) {
   const fieldss = fields as EmbedField[];
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     color: commandColors.info,
     title: `Kam Pieder - ${itemString(itemKey)}`,

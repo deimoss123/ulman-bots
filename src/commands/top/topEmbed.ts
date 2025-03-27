@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction } from "discord.js";
 import commandColors from "@/utils/commandColors";
-import embedTemplate from "@/utils/embeds/embedTemplate";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import StatsProfile from "@/types/StatsProfile";
 import UserProfile from "@/types/UserProfile";
 import { displayPlace } from "@/commands/statistika/statistika";
@@ -48,7 +48,7 @@ export default function topEmbed<T extends UserProfile | StatsProfile>(
     });
   }
 
-  return embedTemplate({
+  return mainEmbed({
     i,
     description: total ? topDescription!(total) : undefined,
     color: commandColors.top,
