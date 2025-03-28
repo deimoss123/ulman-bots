@@ -55,7 +55,7 @@ function makeEmbedAfter(
     fields: [
       ...itemsToGive.map((item) => {
         const lati =
-          "customValue" in itemObj && itemObj.customValue ? itemObj.customValue(item.attributes) : itemObj.value;
+          "dynamicValue" in itemObj && itemObj.dynamicValue ? itemObj.dynamicValue(item.attributes) : itemObj.value;
 
         return {
           name: itemString(itemObj, null, true, item.attributes),
@@ -100,8 +100,12 @@ function view(state: State, i: BaseInteraction) {
           state.itemsInInv
             .slice(0, 25)
             .sort((a, b) => {
-              const valueA = state.itemObj.customValue ? state.itemObj.customValue(a.attributes) : state.itemObj.value;
-              const valueB = state.itemObj.customValue ? state.itemObj.customValue(b.attributes) : state.itemObj.value;
+              const valueA = state.itemObj.dynamicValue
+                ? state.itemObj.dynamicValue(a.attributes)
+                : state.itemObj.value;
+              const valueB = state.itemObj.dynamicValue
+                ? state.itemObj.dynamicValue(b.attributes)
+                : state.itemObj.value;
 
               if (valueA === valueB) {
                 return attributeItemSort(a.attributes, b.attributes, state.itemObj.sortBy);
@@ -111,8 +115,8 @@ function view(state: State, i: BaseInteraction) {
             })
             .map((item) => {
               const lati =
-                "customValue" in state.itemObj && state.itemObj.customValue
-                  ? state.itemObj.customValue(item.attributes)
+                "dynamicValue" in state.itemObj && state.itemObj.dynamicValue
+                  ? state.itemObj.dynamicValue(item.attributes)
                   : state.itemObj.value;
 
               return {
@@ -121,7 +125,7 @@ function view(state: State, i: BaseInteraction) {
                   ("notSellable" in state.itemObj ? "" : `${latiString(lati)} | `) + displayAttributes(item, true),
                 value: item._id!,
                 emoji:
-                  (state.itemObj.customEmoji ? state.itemObj.customEmoji(item.attributes) : state.itemObj.emoji()) ||
+                  (state.itemObj.dynamicEmoji ? state.itemObj.dynamicEmoji(item.attributes) : state.itemObj.emoji()) ||
                   "❓",
                 default: !!selectedIds.length && selectedIds!.includes(item._id!),
               };
@@ -204,7 +208,9 @@ export default async function iedotRunSpecial(
       totalTax = 0;
     } else {
       const value =
-        "customValue" in itemObj && itemObj.customValue ? itemObj.customValue(itemsInInv[0].attributes) : itemObj.value;
+        "dynamicValue" in itemObj && itemObj.dynamicValue
+          ? itemObj.dynamicValue(itemsInInv[0].attributes)
+          : itemObj.value;
       totalTax = Math.floor(value * user.giveTax);
     }
 
@@ -265,8 +271,8 @@ export default async function iedotRunSpecial(
       } else {
         state.totalTax =
           Math.floor(
-            (itemObj.customValue
-              ? state.selectedItems.reduce((prev, item) => prev + itemObj.customValue!(item.attributes), 0)
+            (itemObj.dynamicValue
+              ? state.selectedItems.reduce((prev, item) => prev + itemObj.dynamicValue!(item.attributes), 0)
               : itemObj.value * state.selectedItems.length) * state.user.giveTax,
           ) || 1;
       }

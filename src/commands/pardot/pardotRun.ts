@@ -209,7 +209,8 @@ export default async function pardotRun(
 
       const soldItemsValue = itemsToSell.reduce((p, { item, amount, attributes }) => {
         return (
-          p + ("customValue" in item && item.customValue ? item.customValue(attributes!) : item.value * (amount || 1))
+          p +
+          ("dynamicValue" in item && item.dynamicValue ? item.dynamicValue(attributes!) : item.value * (amount || 1))
         );
       }, 0);
 

@@ -115,7 +115,7 @@ function components(state: ZvejotState): ActionRowBuilder<ButtonBuilder | String
               .sort((a, b) => {
                 const itemA = itemList[a.name] as AttributeItem<ItemAttributes>;
                 const itemB = itemList[b.name] as AttributeItem<ItemAttributes>;
-                return itemB.customValue!(b.attributes) - itemA.customValue!(a.attributes);
+                return itemB.dynamicValue!(b.attributes) - itemA.dynamicValue!(a.attributes);
               })
               .map((item) => ({
                 label: capitalizeFirst(itemList[item.name].nameNomVsk),

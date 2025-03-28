@@ -34,7 +34,8 @@ export default function itemString(
   if (typeof item === "string") item = itemList[item];
   const customName = attributes && attributes.customName ? attributes.customName : "";
 
-  const emoji = attributes && "customEmoji" in item && item.customEmoji ? item.customEmoji(attributes) : item.emoji();
+  const emoji =
+    attributes && "dynamicEmoji" in item && item.dynamicEmoji ? item.dynamicEmoji(attributes) : item.emoji();
   const emojiStr = emoji || "❓";
 
   let name = "";

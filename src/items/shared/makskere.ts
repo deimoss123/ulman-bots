@@ -20,7 +20,7 @@ import { Dialogs } from "@/utils/dialogs";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import mongoTransaction from "@/utils/mongoTransaction";
 
-export function makskereCustomValue(itemKey: string): AttributeItem<ItemAttributes>["customValue"] {
+export function makskereDynamicValue(itemKey: string): AttributeItem<ItemAttributes>["dynamicValue"] {
   return ({ durability }) => {
     const { value } = itemList[itemKey];
     const { maxDurability } = maksekeresData[itemKey];

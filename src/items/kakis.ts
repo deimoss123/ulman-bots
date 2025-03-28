@@ -521,7 +521,7 @@ const kakis = item<AttributeItem<Attributes> & TirgusItem>({
   isVirsiesuDzimte: true,
   emoji: () => emoji("kakis"),
   // eslint-disable-next-line func-names
-  customEmoji: function ({ hat }) {
+  dynamicEmoji: function ({ hat }) {
     if (hat === "salaveca_cepure") {
       return emoji("kakis_zsv");
     }
@@ -532,7 +532,7 @@ const kakis = item<AttributeItem<Attributes> & TirgusItem>({
   categories: [ItemCategory.TIRGUS],
   value: 100,
   // eslint-disable-next-line func-names
-  customValue: function ({ fedUntil, createdAt }) {
+  dynamicValue: function ({ fedUntil, createdAt }) {
     const currTime = Date.now();
     if (fedUntil < Date.now()) return 0;
 

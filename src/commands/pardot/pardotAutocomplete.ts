@@ -13,7 +13,7 @@ function mapItemsToChoices(itemInList: [string, Item]) {
 
   return {
     name:
-      `💵${"customValue" in item && item.customValue ? "" : ` [${latiString(item.value)}]`} ` +
+      `💵${"dynamicValue" in item && item.dynamicValue ? "" : ` [${latiString(item.value)}]`} ` +
       capitalizeFirst(item.nameNomVsk),
     value: key,
   };

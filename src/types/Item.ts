@@ -109,9 +109,9 @@ export interface AttributeItem<A extends Partial<ItemAttributes> = ItemAttribute
   // 1 ir no lielākā uz mazāko, -1 ir no mazākā uz lielāko
   sortBy: Partial<Record<keyof A, 1 | -1>>;
   // speciāla vērtība, piem. makšķeres izturība ietekmē vērtību
-  customValue?: (attributes: A) => number;
+  dynamicValue?: (attributes: A) => number;
   // speciāls emoji kas mainās atkarībā no atribūtiem
-  customEmoji?: (attributes: A) => string;
+  dynamicEmoji?: (attributes: A) => string;
   // izmantot vairākus vienlaicīgi
   useMany?: UseManyType;
 }

@@ -176,7 +176,7 @@ const loto_zivs = item<AttributeItem<Attributes>>({
   imgLink: "https://www.ulmanbots.lv/images/items/loto_zivs.gif",
   categories: [ItemCategory.ZIVIS],
   value: 0,
-  customValue: ({ holdsFishCount }) => holdsFishCount! * 10,
+  dynamicValue: ({ holdsFishCount }) => holdsFishCount! * 10,
   defaultAttributes: () => ({
     holdsFishCount: generateFishCount(),
   }),

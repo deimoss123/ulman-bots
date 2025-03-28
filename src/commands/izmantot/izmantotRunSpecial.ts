@@ -62,8 +62,12 @@ function view(state: State, i: BaseInteraction) {
           state.itemsInInv
             .slice(0, 25)
             .sort((a, b) => {
-              const valueA = state.itemObj.customValue ? state.itemObj.customValue(a.attributes) : state.itemObj.value;
-              const valueB = state.itemObj.customValue ? state.itemObj.customValue(b.attributes) : state.itemObj.value;
+              const valueA = state.itemObj.dynamicValue
+                ? state.itemObj.dynamicValue(a.attributes)
+                : state.itemObj.value;
+              const valueB = state.itemObj.dynamicValue
+                ? state.itemObj.dynamicValue(b.attributes)
+                : state.itemObj.value;
               if (valueA === valueB) {
                 return attributeItemSort(a.attributes, b.attributes, state.itemObj.sortBy);
               }
@@ -75,7 +79,7 @@ function view(state: State, i: BaseInteraction) {
               description: displayAttributes(item, true),
               value: item._id!,
               emoji:
-                (state.itemObj.customEmoji ? state.itemObj.customEmoji(item.attributes) : state.itemObj.emoji()) ||
+                (state.itemObj.dynamicEmoji ? state.itemObj.dynamicEmoji(item.attributes) : state.itemObj.emoji()) ||
                 "❓",
               default: state.selectedId === item._id,
             })),

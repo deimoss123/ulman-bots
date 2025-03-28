@@ -81,8 +81,8 @@ function mapItems({ items, specialItems }: UserProfile) {
       const itemB = itemList[b.name] as AttributeItem<ItemAttributes> | NotSellableItem;
 
       if ("notSellable" in itemA === "notSellable" in itemB) {
-        const valueA = itemA.customValue ? itemA.customValue(a.attributes) : itemA.value;
-        const valueB = itemB.customValue ? itemB.customValue(b.attributes) : itemB.value;
+        const valueA = itemA.dynamicValue ? itemA.dynamicValue(a.attributes) : itemA.value;
+        const valueB = itemB.dynamicValue ? itemB.dynamicValue(b.attributes) : itemB.value;
 
         if (a.name === b.name && valueA === valueB) {
           const { sortBy } = itemA;
@@ -104,7 +104,7 @@ function mapItems({ items, specialItems }: UserProfile) {
       const currentItemType: ItemType = "notSellable" in item && item.notSellable ? "not_sellable" : "special";
       itemTypesInInv.add(currentItemType);
 
-      const value = item.customValue ? item.customValue(attributes) : item.value;
+      const value = item.dynamicValue ? item.dynamicValue(attributes) : item.value;
 
       return {
         name: itemString(item, null, false, attributes),
@@ -148,7 +148,7 @@ export function getInvValue({ items, specialItems }: UserProfile) {
     }, 0) +
     specialItems.reduce((prev, { name, attributes }) => {
       const itemObj = itemList[name] as AttributeItem<ItemAttributes>;
-      return prev + (itemObj.customValue ? itemObj.customValue!(attributes) : itemObj.value);
+      return prev + (itemObj.dynamicValue ? itemObj.dynamicValue!(attributes) : itemObj.value);
     }, 0)
   );
 }

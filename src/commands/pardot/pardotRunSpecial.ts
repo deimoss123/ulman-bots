@@ -61,8 +61,8 @@ function view(state: State, i: BaseInteraction) {
           itemsInInv
             .slice(0, 25)
             .sort((a, b) => {
-              const valueA = itemObj.customValue ? itemObj.customValue(a.attributes) : itemObj.value;
-              const valueB = itemObj.customValue ? itemObj.customValue(b.attributes) : itemObj.value;
+              const valueA = itemObj.dynamicValue ? itemObj.dynamicValue(a.attributes) : itemObj.value;
+              const valueB = itemObj.dynamicValue ? itemObj.dynamicValue(b.attributes) : itemObj.value;
               if (valueA === valueB) {
                 return attributeItemSort(a.attributes, b.attributes, itemObj.sortBy);
               }
@@ -73,12 +73,12 @@ function view(state: State, i: BaseInteraction) {
               label: itemStringCustom(itemObj, item.attributes?.customName),
               description:
                 `${latiString(
-                  "customValue" in itemObj && itemObj.customValue
-                    ? itemObj.customValue(item.attributes)
+                  "dynamicValue" in itemObj && itemObj.dynamicValue
+                    ? itemObj.dynamicValue(item.attributes)
                     : itemObj.value,
                 )} | ` + displayAttributes(item, true),
               value: item._id!,
-              emoji: (itemObj.customEmoji ? itemObj.customEmoji(item.attributes) : itemObj.emoji()) || "❓",
+              emoji: (itemObj.dynamicEmoji ? itemObj.dynamicEmoji(item.attributes) : itemObj.emoji()) || "❓",
               default: !!selectedIds.length && selectedIds!.includes(item._id!),
             })),
         ),
@@ -139,7 +139,9 @@ export default async function pardotRunSpecial(
 
   if (itemsInInv.length === 1) {
     const soldValue =
-      "customValue" in itemObj && itemObj.customValue ? itemObj.customValue(itemsInInv[0].attributes) : itemObj.value;
+      "dynamicValue" in itemObj && itemObj.dynamicValue
+        ? itemObj.dynamicValue(itemsInInv[0].attributes)
+        : itemObj.value;
 
     const taxPaid = Math.floor(soldValue * PIRKT_PARDOT_NODOKLIS);
 
@@ -196,7 +198,9 @@ export default async function pardotRunSpecial(
 
       const selectedItems = itemsInInv.filter((item) => state.selectedIds.includes(item._id!));
       const soldValue = selectedItems.reduce((p, { attributes }) => {
-        return p + ("customValue" in itemObj && itemObj.customValue ? itemObj.customValue(attributes) : itemObj.value);
+        return (
+          p + ("dynamicValue" in itemObj && itemObj.dynamicValue ? itemObj.dynamicValue(attributes) : itemObj.value)
+        );
       }, 0);
 
       if (!selectedItems.length) return;

@@ -1,5 +1,5 @@
 import maksekeresData from "@/commands/zvejot/makskeresData";
-import makskere, { makskereCustomValue } from "@/items/shared/makskere";
+import makskere, { makskereDynamicValue } from "@/items/shared/makskere";
 import { AttributeItem, item, ItemCategory, TirgusItem } from "@/types/Item";
 import emoji from "@/utils/emoji";
 
@@ -21,7 +21,7 @@ const luznu_makskere = item<AttributeItem<Attributes> & TirgusItem>({
   imgLink: "https://www.ulmanbots.lv/images/items/luznu_makskere.png",
   categories: [ItemCategory.TIRGUS, ItemCategory.MAKSKERE],
   value: 100,
-  customValue: makskereCustomValue("luznu_makskere"),
+  dynamicValue: makskereDynamicValue("luznu_makskere"),
   tirgusPrice: { items: { metalluznis: 15 } },
   defaultAttributes: () => ({
     durability: maksekeresData.luznu_makskere.maxDurability,

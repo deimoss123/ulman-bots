@@ -57,7 +57,7 @@ const info: Command = {
       {
         name: `Vērtība: ${itemType === "not_sellable" ? "??? lati" : latiString(itemObj.value)}`,
         value:
-          ("customValue" in itemObj ? "⚠️ šīs mantas vērtība var \nmainīties atkarībā no atribūtiem\n" : "") +
+          ("dynamicValue" in itemObj ? "⚠️ šīs mantas vērtība var \nmainīties atkarībā no atribūtiem\n" : "") +
           "\u200B\n" +
           `**Mantas tips:**\n${itemTypes[itemType].emoji()} - ${itemTypes[itemType].text}`,
         inline: true,

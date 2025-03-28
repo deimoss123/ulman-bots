@@ -25,7 +25,7 @@ const naudas_maiss = item<AttributeItem<Attributes> & TirgusItem>({
   categories: [ItemCategory.TIRGUS],
   value: 10,
   // eslint-disable-next-line func-names
-  customValue: function ({ latiCollected }) {
+  dynamicValue: function ({ latiCollected }) {
     return latiCollected || this.value;
   },
   tirgusPrice: { items: { nazis: 1, zemenu_rasens: 1, juridiska_zivs: 1, divaina_zivs: 1 } },

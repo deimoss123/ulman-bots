@@ -302,7 +302,7 @@ const petnieks = item<
   isVirsiesuDzimte: true,
   emoji: () => emoji("petnieks"),
   // eslint-disable-next-line func-names
-  customEmoji: function ({ hat }) {
+  dynamicEmoji: function ({ hat }) {
     if (hat === "salaveca_cepure") {
       return emoji("petnieks_zsv");
     }

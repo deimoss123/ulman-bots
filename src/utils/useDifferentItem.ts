@@ -27,8 +27,8 @@ export function useDifferentItemSelectMenu(
           .filter((item) => item.name === itemKey && item._id !== currentItemId)
           .slice(0, 25)
           .toSorted((a, b) => {
-            const valueA = itemObj.customValue ? itemObj.customValue(a.attributes) : itemObj.value;
-            const valueB = itemObj.customValue ? itemObj.customValue(b.attributes) : itemObj.value;
+            const valueA = itemObj.dynamicValue ? itemObj.dynamicValue(a.attributes) : itemObj.value;
+            const valueB = itemObj.dynamicValue ? itemObj.dynamicValue(b.attributes) : itemObj.value;
             if (valueA === valueB) {
               return attributeItemSort(a.attributes, b.attributes, itemObj.sortBy);
             }
@@ -39,7 +39,7 @@ export function useDifferentItemSelectMenu(
             label: itemStringCustom(itemObj, item.attributes?.customName),
             description: displayAttributes(item, true),
             value: item._id!,
-            emoji: (itemObj.customEmoji ? itemObj.customEmoji(item.attributes) : itemObj.emoji()) || "❓",
+            emoji: (itemObj.dynamicEmoji ? itemObj.dynamicEmoji(item.attributes) : itemObj.emoji()) || "❓",
           })),
       ),
   );

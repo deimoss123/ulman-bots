@@ -1,5 +1,5 @@
 import maksekeresData from "@/commands/zvejot/makskeresData";
-import makskere, { makskereCustomValue } from "@/items/shared/makskere";
+import makskere, { makskereDynamicValue } from "@/items/shared/makskere";
 import { AttributeItem, item, ItemCategory, ShopItem } from "@/types/Item";
 import emoji from "@/utils/emoji";
 
@@ -19,7 +19,7 @@ const koka_makskere = item<AttributeItem<Attributes> & ShopItem>({
   imgLink: "https://www.ulmanbots.lv/images/items/kokamakskere.png",
   categories: [ItemCategory.VEIKALS, ItemCategory.MAKSKERE],
   value: 100,
-  customValue: makskereCustomValue("koka_makskere"),
+  dynamicValue: makskereDynamicValue("koka_makskere"),
   defaultAttributes: () => ({
     durability: maksekeresData.koka_makskere.maxDurability,
   }),

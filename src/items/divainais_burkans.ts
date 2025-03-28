@@ -233,7 +233,7 @@ const divainais_burkans = item<AttributeItem<Attributes> & ShopItem>({
   categories: [ItemCategory.VEIKALS],
   value: 5000,
   // eslint-disable-next-line func-names
-  customValue: function ({ customName }) {
+  dynamicValue: function ({ customName }) {
     // humors
     if (customName!.toLowerCase().includes("seks")) return 6969;
 
