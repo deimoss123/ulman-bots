@@ -2,7 +2,7 @@ import addItems from "@/db/addItems";
 import editItemAttribute from "@/db/editItemAttribute";
 import findUser from "@/db/findUser";
 import countFreeInvSlots from "@/utils/countFreeInvSlots";
-import { UsableItemFunc, item, AttributeItem, TirgusItem, ItemCategory } from "@/types/Item";
+import { item, AttributeItem, TirgusItem, ItemCategory, UsableAttributeItemFunc } from "@/types/Item";
 import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
 import commandColors from "@/utils/commandColors";
 import { Dialogs } from "@/utils/dialogs";
@@ -284,218 +284,220 @@ async function handleModal(
   return { newItem, user: newUser };
 }
 
-const use: UsableItemFunc = async (userId, guildId, _, specialItem) => ({
-  custom: async (i, color) => {
+const use: UsableAttributeItemFunc = async (i, user, _, specialItem) => {
+  const userId = i.user.id;
+  const guildId = i.guildId!;
+
+  const initialState: State = {
+    user,
+    itemId: specialItem!._id!,
+    attributes: specialItem!.attributes,
+    currTime: Date.now(),
+    selectedFood: null,
+  };
+
+  const dialogs = new Dialogs(i, initialState, view, "izmantot", { time: 60000 });
+
+  if (!(await dialogs.start())) {
+    return intReply(i, errorEmbed);
+  }
+
+  dialogs.onClick(async (int, state) => {
+    const { customId, componentType } = int;
+
     const user = await findUser(userId, guildId);
-    if (!user) return intReply(i, errorEmbed);
+    if (!user) return { error: true };
 
-    const initialState: State = {
-      user,
-      itemId: specialItem!._id!,
-      attributes: specialItem!.attributes,
-      currTime: Date.now(),
-      selectedFood: null,
-    };
-
-    const dialogs = new Dialogs(i, initialState, view, "izmantot", { time: 60000 });
-
-    if (!(await dialogs.start())) {
-      return intReply(i, errorEmbed);
+    const catInInv = user.specialItems.find(({ _id }) => _id === specialItem?._id);
+    if (!catInInv) {
+      intReply(int, ephemeralReply(`Šis ${itemString("kakis")} vairs nav tavā inventārā`));
+      return { end: true };
     }
 
-    dialogs.onClick(async (int, state) => {
-      const { customId, componentType } = int;
+    state.user = user;
+    state.currTime = Date.now();
+    state.attributes = catInInv.attributes;
 
-      const user = await findUser(userId, guildId);
-      if (!user) return { error: true };
+    if (customId === "use_different" && componentType === ComponentType.StringSelect) {
+      return useDifferentItemHandler(user, "kakis", int);
+    }
 
-      const catInInv = user.specialItems.find(({ _id }) => _id === specialItem?._id);
-      if (!catInInv) {
-        intReply(int, ephemeralReply(`Šis ${itemString("kakis")} vairs nav tavā inventārā`));
-        return { end: true };
+    if (customId === ComponentId.SelectFood && componentType === ComponentType.StringSelect) {
+      state.selectedFood = user.items.find(({ name }) => name === int.values[0]) ? int.values[0] : null;
+      return { update: true };
+    }
+
+    if (componentType !== ComponentType.Button) return;
+
+    if (customId === ComponentId.Feed) {
+      if (!state.selectedFood) return { error: true };
+
+      const hasFood = state.user.items.find(({ name }) => name === state.selectedFood);
+
+      if (!hasFood) {
+        intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString(state.selectedFood)}**`));
+        state.selectedFood = null;
+        return { edit: true };
       }
 
-      state.user = user;
-      state.currTime = Date.now();
-      state.attributes = catInInv.attributes;
-
-      if (customId === "use_different" && componentType === ComponentType.StringSelect) {
-        return useDifferentItemHandler(user, "kakis", int);
+      if (catInInv.attributes!.fedUntil! < state.currTime) {
+        intReply(int, "Tu nevari pabarot šo kaķi, jo tas tikko nomira :(");
+        return { edit: true, end: true };
       }
 
-      if (customId === ComponentId.SelectFood && componentType === ComponentType.StringSelect) {
-        state.selectedFood = user.items.find(({ name }) => name === int.values[0]) ? int.values[0] : null;
-        return { update: true };
-      }
+      const { feedTimeMs } = kakisFoodData[state.selectedFood];
+      const { fedUntil } = catInInv.attributes!;
 
-      if (componentType !== ComponentType.Button) return;
+      const newFedUntil = Math.min(state.currTime + KAKIS_MAX_FEED, feedTimeMs + fedUntil!);
 
-      if (customId === ComponentId.Feed) {
-        if (!state.selectedFood) return { error: true };
-
-        const hasFood = state.user.items.find(({ name }) => name === state.selectedFood);
-
-        if (!hasFood) {
-          intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString(state.selectedFood)}**`));
-          state.selectedFood = null;
-          return { edit: true };
-        }
-
-        if (catInInv.attributes!.fedUntil! < state.currTime) {
-          intReply(int, "Tu nevari pabarot šo kaķi, jo tas tikko nomira :(");
-          return { edit: true, end: true };
-        }
-
-        const { feedTimeMs } = kakisFoodData[state.selectedFood];
-        const { fedUntil } = catInInv.attributes!;
-
-        const newFedUntil = Math.min(state.currTime + KAKIS_MAX_FEED, feedTimeMs + fedUntil!);
-
-        // prettier-ignore
-        const { ok, values } = await mongoTransaction(session => [
+      // prettier-ignore
+      const { ok, values } = await mongoTransaction(session => [
           () => addItems(userId, guildId, { [state.selectedFood!]: -1 }, session),
           () => editItemAttribute(userId, guildId, catInInv._id!, { ...catInInv.attributes!, fedUntil: newFedUntil }, session),
         ]);
 
-        if (!ok) return { error: true };
+      if (!ok) return { error: true };
 
-        const { newItem, user } = values[1];
+      const { newItem, user } = values[1];
 
-        state.attributes = newItem.attributes;
-        state.user = user;
+      state.attributes = newItem.attributes;
+      state.user = user;
 
-        intReply(int, smallEmbed(`Tu pabaroji kaķi ar **${itemString(state.selectedFood, null, true)}**`, color));
+      // prettier-ignore
+      intReply(int, smallEmbed(
+        `Tu pabaroji kaķi ar **${itemString(state.selectedFood, null, true)}**`, 
+        commandColors.izmantot
+      ));
 
-        return {
-          edit: true,
-          after: () => {
-            state.selectedFood = null;
-          },
-        };
-      }
+      state.selectedFood = null;
 
-      if (customId === ComponentId.ChangeName) {
-        const nameTagInInv = user.items.find(({ name }) => name === "kaka_parsaucejs");
-        if (!nameTagInInv) {
-          intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString("kaka_parsaucejs")}**`));
-          return { edit: true };
-        }
+      return { edit: true };
+    }
 
-        const modalId = `cat_modal_${specialItem!._id}_${state.currTime}`;
-
-        await int.showModal(
-          new ModalBuilder()
-            .setCustomId(modalId)
-            .setTitle("Mainīt kaķa nosaukumu")
-            .addComponents(
-              new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-                new TextInputBuilder()
-                  .setCustomId("cat_modal_input")
-                  .setLabel("Jaunais nosaukums")
-                  .setStyle(TextInputStyle.Short)
-                  .setMinLength(1)
-                  .setMaxLength(10),
-              ),
-            ),
-        );
-
-        try {
-          const modalInt = await int.awaitModalSubmit({
-            filter: (i) => i.customId == modalId,
-            time: 50000,
-          });
-
-          const res = await handleModal(modalInt, state.currTime);
-          if (!res) {
-            return {};
-          }
-
-          state.user = res.user;
-          state.attributes = res.newItem.attributes;
-        } catch (_) {
-          return {};
-        }
-
-        state.currTime = Date.now();
-
+    if (customId === ComponentId.ChangeName) {
+      const nameTagInInv = user.items.find(({ name }) => name === "kaka_parsaucejs");
+      if (!nameTagInInv) {
+        intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString("kaka_parsaucejs")}**`));
         return { edit: true };
       }
 
-      // totāli nav kopēts kods no pētnieka
-      if (customId === ComponentId.AddHat) {
-        if (!user.items.find(({ name }) => name === "salaveca_cepure")) {
-          intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString("salaveca_cepure")}**`));
-          return { edit: true };
+      const modalId = `cat_modal_${specialItem!._id}_${state.currTime}`;
+
+      await int.showModal(
+        new ModalBuilder()
+          .setCustomId(modalId)
+          .setTitle("Mainīt kaķa nosaukumu")
+          .addComponents(
+            new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
+              new TextInputBuilder()
+                .setCustomId("cat_modal_input")
+                .setLabel("Jaunais nosaukums")
+                .setStyle(TextInputStyle.Short)
+                .setMinLength(1)
+                .setMaxLength(10),
+            ),
+          ),
+      );
+
+      try {
+        const modalInt = await int.awaitModalSubmit({
+          filter: (i) => i.customId == modalId,
+          time: 50000,
+        });
+
+        const res = await handleModal(modalInt, state.currTime);
+        if (!res) {
+          return {};
         }
 
-        // prettier-ignore
-        const { ok, values } = await mongoTransaction(session => [
+        state.user = res.user;
+        state.attributes = res.newItem.attributes;
+      } catch (_) {
+        return {};
+      }
+
+      state.currTime = Date.now();
+
+      return { edit: true };
+    }
+
+    // totāli nav kopēts kods no pētnieka
+    if (customId === ComponentId.AddHat) {
+      if (!user.items.find(({ name }) => name === "salaveca_cepure")) {
+        intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString("salaveca_cepure")}**`));
+        return { edit: true };
+      }
+
+      // prettier-ignore
+      const { ok, values } = await mongoTransaction(session => [
           () => addItems(userId, guildId, { salaveca_cepure: -1 }, session),
           () => editItemAttribute(userId, guildId, catInInv._id!, { ...catInInv.attributes, hat: 'salaveca_cepure', }, session)
         ]);
 
-        if (!ok) {
-          return { error: true };
-        }
-
-        const { user: userAfter, newItem } = values[1];
-
-        state.user = userAfter;
-        state.attributes = newItem.attributes;
-        state.currTime = Date.now();
-
-        intReply(int, smallEmbed(`Tu kaķim uzvilki **${itemString("salaveca_cepure", null, true)}**`, color));
-
-        return { edit: true };
+      if (!ok) {
+        return { error: true };
       }
 
-      if (customId === ComponentId.RemoveHat) {
-        if (catInInv.attributes.hat !== "salaveca_cepure") {
-          intReply(int, ephemeralReply("Kļūda, šim kaķim nav uzvilkta cepure"));
-          return {};
-        }
+      const { user: userAfter, newItem } = values[1];
 
-        if (!countFreeInvSlots(user)) {
-          intReply(int, ephemeralReply("Tu nevari kaķim novilkt cepuri, jo tev nav brīvu vietu inventārā"));
-          return {};
-        }
+      state.user = userAfter;
+      state.attributes = newItem.attributes;
+      state.currTime = Date.now();
 
-        const { ok, values } = await mongoTransaction((session) => [
-          () => addItems(userId, guildId, { salaveca_cepure: 1 }, session),
-          () => editItemAttribute(userId, guildId, catInInv._id!, { ...catInInv.attributes, hat: "" }, session),
-        ]);
+      // prettier-ignore
+      intReply(int, smallEmbed(
+        `Tu kaķim uzvilki **${itemString("salaveca_cepure", null, true)}**`, 
+        commandColors.izmantot
+      ));
 
-        if (!ok) return { error: true };
+      return { edit: true };
+    }
 
-        const { user: userAfter, newItem } = values[1];
+    if (customId === ComponentId.RemoveHat) {
+      if (catInInv.attributes.hat !== "salaveca_cepure") {
+        intReply(int, ephemeralReply("Kļūda, šim kaķim nav uzvilkta cepure"));
+        return {};
+      }
 
-        state.user = userAfter;
-        state.attributes = newItem.attributes;
-        state.currTime = Date.now();
+      if (!countFreeInvSlots(user)) {
+        intReply(int, ephemeralReply("Tu nevari kaķim novilkt cepuri, jo tev nav brīvu vietu inventārā"));
+        return {};
+      }
 
-        // prettier-ignore
-        intReply(int, smallEmbed(
+      const { ok, values } = await mongoTransaction((session) => [
+        () => addItems(userId, guildId, { salaveca_cepure: 1 }, session),
+        () => editItemAttribute(userId, guildId, catInInv._id!, { ...catInInv.attributes, hat: "" }, session),
+      ]);
+
+      if (!ok) return { error: true };
+
+      const { user: userAfter, newItem } = values[1];
+
+      state.user = userAfter;
+      state.attributes = newItem.attributes;
+      state.currTime = Date.now();
+
+      // prettier-ignore
+      intReply(int, smallEmbed(
           `Tu kaķim novilki **${itemString('salaveca_cepure', null, true)}**, ` +
           `un tā tika pievienota tavam inventāram`,
-          color,
+          commandColors.izmantot,
         ));
 
-        return { edit: true };
-      }
-    });
-  },
-});
+      return { edit: true };
+    }
+  });
+};
 
-const kakis = item<
-  // prettier-ignore
-  AttributeItem<{
-    customName: string;
-    createdAt: number;
-    fedUntil: number;
-    isCooked: boolean;
-    hat: string;
-  }> & TirgusItem
->({
+type Attributes = {
+  customName: string;
+  createdAt: number;
+  fedUntil: number;
+  isCooked: boolean;
+  hat: string;
+};
+
+const kakis = item<AttributeItem<Attributes> & TirgusItem>({
   info: () =>
     "**Pūkains, stilīgs un episks!**\n\n" +
     `Kaķim ir 2 atribūti - vecums un garastāvoklis\n` +

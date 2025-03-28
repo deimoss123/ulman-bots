@@ -14,8 +14,7 @@ const avene = item<UsableItem>({
   imgLink: null,
   categories: [ItemCategory.OTHER],
   value: 15,
-  removedOnUse: false,
-  use: oga("avene"),
+  use: oga,
 });
 
 export default avene;

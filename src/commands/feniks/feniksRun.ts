@@ -1,4 +1,4 @@
-import { ButtonInteraction, ChatInputCommandInteraction, ComponentType } from "discord.js";
+import { ButtonInteraction, ChatInputCommandInteraction, ComponentType, RepliableInteraction } from "discord.js";
 import addItems from "@/db/addItems";
 import addLati from "@/db/addLati";
 import findUser from "@/db/findUser";
@@ -22,7 +22,7 @@ import { ItemCategory } from "@/types/Item";
 const DEFAULT_EMOJI_COUNT = 5;
 
 export default async function feniksRun(
-  i: ChatInputCommandInteraction | ButtonInteraction,
+  i: RepliableInteraction,
   likme: KazinoLikme,
   isFree = false,
   freeSpinName?: string,

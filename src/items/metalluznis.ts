@@ -1,5 +1,9 @@
 import { item, UsableItem, ItemCategory } from "@/types/Item";
+import commandColors from "@/utils/commandColors";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import emoji from "@/utils/emoji";
+import intReply from "@/utils/intReply";
+import izmantotTitle from "@/utils/strings/izmantotTitle";
 
 const metalluznis = item<UsableItem>({
   info:
@@ -15,8 +19,15 @@ const metalluznis = item<UsableItem>({
   imgLink: "https://www.ulmanbots.lv/images/items/metalluznis.png",
   categories: [ItemCategory.ATKRITUMI],
   value: 10,
-  removedOnUse: false,
-  use: async () => ({ text: "Metāllūznis ir izmantojams lai nopirktu dažas tirgus preces" }),
+  use: async (i) => {
+    // prettier-ignore
+    intReply(i, mainEmbed({
+      i,
+      color: commandColors.izmantot,
+      title: izmantotTitle("metalluznis"),
+      description: "Metāllūznis ir izmantojams lai nopirktu dažas tirgus preces",
+    }));
+  },
 });
 
 export default metalluznis;

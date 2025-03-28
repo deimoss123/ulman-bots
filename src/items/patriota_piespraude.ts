@@ -1,5 +1,6 @@
 import { item, AttributeItem, NotSellableItem, ItemCategory } from "@/types/Item";
 import emoji from "@/utils/emoji";
+import intReply from "@/utils/intReply";
 
 const patriota_piespraude = item<AttributeItem<{ piespraudeNum: number }> & NotSellableItem>({
   info: "...",
@@ -18,7 +19,7 @@ const patriota_piespraude = item<AttributeItem<{ piespraudeNum: number }> & NotS
     piespraudeNum: 0,
   }),
   sortBy: { piespraudeNum: 1 },
-  use: () => ({ text: "chau" }),
+  use: (i) => intReply(i, "..."),
 });
 
 export default patriota_piespraude;

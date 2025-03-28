@@ -1,7 +1,14 @@
-import findUser from "@/db/findUser";
+import addItems from "@/db/addItems";
 import setLati from "@/db/setLati";
 import { item, ItemCategory, ShopItem, UsableItem } from "@/types/Item";
+import commandColors from "@/utils/commandColors";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import emoji from "@/utils/emoji";
+import intReply from "@/utils/intReply";
+import mongoTransaction from "@/utils/mongoTransaction";
+import izmantotTitle from "@/utils/strings/izmantotTitle";
 
 const virve = item<UsableItem & ShopItem>({
   info: "Nopērc virvi, ja vienkārši vairs nevari izturēt...\nVirvi izmantot nav ieteicams.",
@@ -16,22 +23,33 @@ const virve = item<UsableItem & ShopItem>({
   categories: [ItemCategory.VEIKALS],
   value: 10,
   allowDiscount: true,
-  removedOnUse: true,
-  use: async (userId, guildId) => {
-    const user = await findUser(userId, guildId);
-    if (!user) return { error: true };
+  use: async (i, user) => {
+    const userId = i.user.id;
+    const guildId = i.guildId!;
 
     if (user.lati < 0) {
-      return {
-        text: "Tu nevari pakārties, jo tev ir negatīvs latu daudzums (nezinu kā tev tas izdevās)",
-      };
+      // prettier-ignore
+      return intReply(i, ephemeralReply(
+        "Tu nevari pakārties, jo tev ir negatīvs latu daudzums (nezinu kā tev tas izdevās)"
+      ));
     }
 
     // TODO: pieviento apstiprinājumu
 
-    await setLati(userId, guildId, 0);
+    const { ok } = await mongoTransaction((session) => [
+      () => setLati(userId, guildId, 0, session),
+      () => addItems(userId, guildId, { virve: -1 }, session),
+    ]);
 
-    return { text: "Tu pakāries un pazaudēji **visu** savu naudu" };
+    if (!ok) return intReply(i, errorEmbed);
+
+    // prettier-ignore
+    intReply(i, mainEmbed({
+      i,
+      color: commandColors.izmantot,
+      title: izmantotTitle("virve"),
+      description: "Tu pakāries un pazaudēji **visu** savu naudu",
+    }));
   },
 });
 

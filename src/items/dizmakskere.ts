@@ -3,11 +3,11 @@ import makskere, { makskereCustomValue } from "@/items/shared/makskere";
 import { AttributeItem, item, ItemCategory } from "@/types/Item";
 import emoji from "@/utils/emoji";
 
-const dizmakskere = item<
-  AttributeItem<{
-    durability: number;
-  }>
->({
+type Attributes = {
+  durability: number;
+};
+
+const dizmakskere = item<AttributeItem<Attributes>>({
   info:
     "UlmaņBota veidotājs rakstot šo aprakstu aizmirsa kāpēc dižmakšķere eksistē...\n\n" +
     "Dižmakšķere var nocopēt tikai un vienīgi vērtīgas mantas, tajā skaitā visas mantas kas nopērkamas tirgū\n",

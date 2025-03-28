@@ -1,7 +1,11 @@
 import { item, UsableItem, ItemCategory } from "@/types/Item";
+import commandColors from "@/utils/commandColors";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import emoji from "@/utils/emoji";
+import intReply from "@/utils/intReply";
 import itemList from "@/utils/itemList";
 import itemString from "@/utils/strings/itemString";
+import izmantotTitle from "@/utils/strings/izmantotTitle";
 
 const kaka_parsaucejs = item<UsableItem>({
   info: () =>
@@ -17,11 +21,16 @@ const kaka_parsaucejs = item<UsableItem>({
   imgLink: "https://www.ulmanbots.lv/images/items/kaka_parsaucejs.png",
   categories: [ItemCategory.OTHER],
   value: 90,
-  removedOnUse: false,
   // eslint-disable-next-line func-names
-  use: function () {
-    // @ts-ignore
-    return { text: this.info() };
+  use: function (i) {
+    // prettier-ignore
+    intReply(i, mainEmbed({
+      i,
+      color: commandColors.izmantot,
+      title: izmantotTitle("kakis"),
+      // @ts-ignore
+      description: this.info(),
+    }));
   },
 });
 

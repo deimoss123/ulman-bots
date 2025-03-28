@@ -14,8 +14,7 @@ const janoga = item<UsableItem>({
   imgLink: null,
   categories: [ItemCategory.OTHER],
   value: 15,
-  removedOnUse: false,
-  use: oga("janoga"),
+  use: oga,
 });
 
 export default janoga;

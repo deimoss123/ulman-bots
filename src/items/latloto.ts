@@ -73,9 +73,8 @@ const latloto = item<UsableItem & ShopItem & LotoItem>({
   imgLink: "https://www.ulmanbots.lv/images/items/latloto.png",
   categories: [ItemCategory.VEIKALS, ItemCategory.LOTO],
   value: 50,
-  removedOnUse: false,
   lotoOptions,
-  use: loto("latloto", lotoOptions),
+  use: loto(lotoOptions),
 });
 
 export default latloto;

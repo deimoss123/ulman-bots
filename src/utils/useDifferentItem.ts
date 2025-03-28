@@ -8,7 +8,6 @@ import { displayAttributes } from "@/utils/strings/displayAttributes";
 import { DialogsOnClickCallbackReturn } from "@/utils/dialogs";
 import intReply from "@/utils/intReply";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
-import commandColors from "@/utils/commandColors";
 
 export function useDifferentItemSelectMenu(
   user: UserProfile,
@@ -51,30 +50,22 @@ export function useDifferentItemSelectMenu(
 export function useDifferentItemHandler(
   user: UserProfile,
   itemKey: ItemKey,
-  interaction: StringSelectMenuInteraction,
+  i: StringSelectMenuInteraction,
 ): DialogsOnClickCallbackReturn {
   const itemObj = itemList[itemKey] as AttributeItem<ItemAttributes>;
-  const itemId = interaction.values[0];
+  const itemId = i.values[0];
   const itemInInv = user.specialItems.find((item) => item._id === itemId);
 
   if (!itemInInv) {
-    intReply(
-      interaction,
-      ephemeralReply(
-        `Tavs inventāra saturs ir mainījies, ${itemObj.isVirsiesuDzimte ? "šis" : "šī"} ` +
-          `**${itemString(itemKey)}** vairs nav tavā inventārā`,
-      ),
-    );
+    // prettier-ignore
+    intReply(i, ephemeralReply(
+      "Tava inventāra saturs ir mainījies\n" +
+      itemObj.isVirsiesuDzimte ? "Šis" : "Šī" +
+      `**${itemString(itemKey)}** vairs nav tavā inventārā`,
+    ));
     return { edit: true };
   }
 
-  return {
-    end: true,
-    after: async () => {
-      const useRes = await itemObj.use(interaction.user.id, interaction.guildId!, itemKey, itemInInv);
-
-      // @ts-expect-error
-      useRes.custom(interaction, commandColors.izmantot);
-    },
-  };
+  itemObj.use(i, user, itemKey, itemInInv);
+  return { end: true };
 }

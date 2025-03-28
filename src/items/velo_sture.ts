@@ -14,7 +14,6 @@ const velo_sture = item<UsableItem>({
   imgLink: "https://www.ulmanbots.lv/images/items/velo_sture.png",
   categories: [ItemCategory.OTHER],
   value: 10,
-  removedOnUse: false,
   use: velo,
 });
 

@@ -1,7 +1,6 @@
-import { ButtonInteraction } from "discord.js";
+import { ButtonInteraction, RepliableInteraction } from "discord.js";
 import { ItemKey } from "@/utils/itemList";
-import UsableItemReturn from "@/types/UsableItemReturn";
-import { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
+import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
 import { LotoOptions } from "@/items/shared/loto";
 import { VersionString } from "@/commands/palidziba/jaunumi/updatesList";
 
@@ -23,12 +22,19 @@ interface categories extends Array<ItemCategory> {
   [key: number]: ItemCategory;
 }
 
+// prettier-ignore
 export type UsableItemFunc = (
-  userId: string,
-  guildId: string,
+  i: RepliableInteraction, 
+  user: UserProfile,
   itemKey: ItemKey,
-  specialItem?: SpecialItemInProfile,
-) => Promise<UsableItemReturn> | UsableItemReturn;
+) => Promise<any> | any;
+
+export type UsableAttributeItemFunc = (
+  i: RepliableInteraction,
+  user: UserProfile,
+  itemKey: ItemKey,
+  specialItem: SpecialItemInProfile,
+) => Promise<any> | any;
 
 export interface BaseItem {
   // īss apraksts par mantu
@@ -61,6 +67,7 @@ interface ShopCategories extends Array<ItemCategory> {
   0: ItemCategory.VEIKALS;
   [key: number]: ItemCategory;
 }
+
 export interface ShopItem {
   // vai ir atļautas atlaides
   allowDiscount?: boolean;
@@ -82,8 +89,6 @@ export interface TirgusItem {
 }
 
 export interface UsableItem extends BaseItem {
-  // vai lietojot mantu tā tiks noņemta no inventāra
-  removedOnUse: boolean;
   // ko manta darīs lietojot /izmantot komandu
   use: UsableItemFunc;
 }
@@ -95,7 +100,9 @@ export type UseManyType = {
   runFunc: (i: ButtonInteraction) => any;
 };
 
-export interface AttributeItem<A extends Partial<ItemAttributes>> extends Omit<UsableItem, "removedOnUse"> {
+export interface AttributeItem<A extends Partial<ItemAttributes> = ItemAttributes> extends Omit<UsableItem, "use"> {
+  // ko manta darīs lietojot /izmantot komandu
+  use: UsableAttributeItemFunc;
   // noklusējuma mantu atribūti, piemēram kaķa vecums vai burkāna nosaukums
   defaultAttributes: (currTime: number) => A;
   // pēc kādiem atribūtiem kārtot mantas inventārā un izvēlnēs

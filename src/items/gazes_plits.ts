@@ -3,7 +3,7 @@ import editItemAttribute from "@/db/editItemAttribute";
 import findUser from "@/db/findUser";
 import { BerryProperties, berryProperties, propertiesLat } from "@/items/shared/oga";
 import { calcIevarijumsPrice } from "@/items/ievarijums";
-import Item, { UsableItemFunc, item, AttributeItem, TirgusItem, ItemCategory } from "@/types/Item";
+import Item, { item, AttributeItem, TirgusItem, ItemCategory, UsableAttributeItemFunc } from "@/types/Item";
 import UserProfile from "@/types/UserProfile";
 import commandColors from "@/utils/commandColors";
 import { Dialogs } from "@/utils/dialogs";
@@ -16,14 +16,8 @@ import intReply from "@/utils/intReply";
 import itemList, { ItemKey } from "@/utils/itemList";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import itemString from "@/utils/strings/itemString";
-import {
-  BaseInteraction,
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  StringSelectMenuBuilder,
-  ComponentType,
-} from "discord.js";
+import { BaseInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } from "discord.js";
+import mongoTransaction from "@/utils/mongoTransaction";
 
 export type GazesPlitsActionType = "" | "cook" | "boil_ievarijums" | "boil_special_ievarijums";
 
@@ -251,172 +245,162 @@ function view(state: State, i: BaseInteraction) {
   return mainEmbed({ i, description: "ja tu redzi šo ziņu, tad kaut kas ir nogājis galīgi greizi" });
 }
 
-const use: UsableItemFunc = async (userId, guildId, _, specialItem) => {
-  return {
-    custom: async (i) => {
-      const user = await findUser(userId, guildId);
+const use: UsableAttributeItemFunc = async (i, user, _, specialItem) => {
+  const berriesInInv: BerryInInv[] = [];
 
-      if (!user || !specialItem) {
-        return intReply(i, errorEmbed);
-      }
+  Object.keys(berryProperties).forEach((berry) => {
+    const inInv = user.items.find(({ name }) => name === berry);
+    if (inInv && inInv.amount > 0) {
+      berriesInInv.push({ name: berry, amount: inInv.amount, itemObj: itemList[berry] });
+    }
+  });
 
-      const berriesInInv: BerryInInv[] = [];
-
-      Object.keys(berryProperties).forEach((berry) => {
-        const inInv = user.items.find(({ name }) => name === berry);
-        if (inInv && inInv.amount > 0) {
-          berriesInInv.push({ name: berry, amount: inInv.amount, itemObj: itemList[berry] });
-        }
-      });
-
-      const initialState: State = {
-        user,
-        selectedMenu: null,
-        boil: {
-          berriesInInv,
-          selectedBerry: "",
-          chosenBerries: {},
-          combinedProperties: makeCombinedProperties({}),
-        },
-      };
-
-      const dialogs = new Dialogs(i, initialState, view, "izmantot_gazes_plits", { time: 60000 });
-
-      if (!(await dialogs.start())) {
-        return intReply(i, errorEmbed);
-      }
-
-      dialogs.onClick(async (int) => {
-        const { customId, componentType: type } = int;
-
-        // pirmā izvēlne ========================================
-        if (customId === ComponentId.SelectCook && type === ComponentType.Button) {
-          dialogs.state.selectedMenu = "cook";
-          return { update: true };
-        }
-
-        if (customId === ComponentId.SelectBoil && type === ComponentType.Button) {
-          dialogs.state.selectedMenu = "boil";
-
-          if (!dialogs.state.boil.berriesInInv.length) {
-            return { update: true, end: true };
-          }
-
-          return { update: true };
-        }
-
-        // vārīšana ========================================
-        if (customId === ComponentId.SelectBerry && type === ComponentType.StringSelect) {
-          dialogs.state.boil.selectedBerry = int.values[0];
-          return { update: true };
-        }
-
-        if (customId === ComponentId.AddBerry && type === ComponentType.Button) {
-          const selectedBerry = dialogs.state.boil.selectedBerry;
-          if (!selectedBerry) return { errror: true };
-
-          if (dialogs.state.boil.chosenBerries[selectedBerry]) {
-            dialogs.state.boil.chosenBerries[selectedBerry]++;
-          } else {
-            dialogs.state.boil.chosenBerries[selectedBerry] = 1;
-          }
-
-          dialogs.state.boil.combinedProperties = makeCombinedProperties(dialogs.state.boil.chosenBerries);
-
-          return { update: true };
-        }
-
-        if (customId === ComponentId.RemoveBerry && type === ComponentType.Button) {
-          const selectedBerry = dialogs.state.boil.selectedBerry;
-
-          if (!selectedBerry || !dialogs.state.boil.chosenBerries[selectedBerry]) {
-            return { errror: true };
-          }
-
-          delete dialogs.state.boil.chosenBerries[selectedBerry];
-          dialogs.state.boil.combinedProperties = makeCombinedProperties(dialogs.state.boil.chosenBerries);
-          // dialogs.state.boil.selectedBerry = '';
-
-          return { update: true };
-        }
-
-        if (customId === ComponentId.RemoveAllBerries && type === ComponentType.Button) {
-          dialogs.state.boil.chosenBerries = {};
-          dialogs.state.boil.combinedProperties = makeCombinedProperties({});
-          dialogs.state.boil.selectedBerry = "";
-
-          return { update: true };
-        }
-
-        if (customId === ComponentId.Boil && type === ComponentType.Button) {
-          const user = await findUser(userId, guildId);
-          if (!user) return { error: true };
-
-          // pārbaudam, vai plīts ir inventarā
-          const isPlitsInInv = user.specialItems.find(({ _id }) => _id === specialItem._id);
-          if (!isPlitsInInv) {
-            await intReply(int, ephemeralReply(`Kļūda: Šī **${itemString("gazes_plits")}** vairs nav tavā inventārā`));
-            return { end: true };
-          }
-
-          // pārbauda, vai izvēlētās ogas ir inventarā
-          let hasInInv = true;
-          for (const [key, amount] of Object.entries(dialogs.state.boil.chosenBerries)) {
-            const inInv = user.items.find(({ name }) => name === key);
-            if (!inInv || inInv.amount < amount) {
-              hasInInv = false;
-              break;
-            }
-          }
-
-          if (!hasInInv) {
-            await intReply(
-              int,
-              ephemeralReply(
-                "Kļūda: Tava inventāra saturs ir mainījies, tev nav nepieciešamo ogu, lai uzvārītu šo ievārījumu",
-              ),
-            );
-            return { end: true };
-          }
-
-          const itemsToRemove = Object.fromEntries(
-            Object.entries(dialogs.state.boil.chosenBerries).map(([key, amount]) => [key, -amount]),
-          );
-
-          await addItems(userId, guildId, itemsToRemove);
-
-          await editItemAttribute(userId, guildId, specialItem._id!, {
-            actionType: "boil_ievarijums",
-            boilIevarijums: {
-              boilStarttime: Date.now(),
-              boilDuration: getBoilDuration(),
-              berries: dialogs.state.boil.chosenBerries,
-              properties: dialogs.state.boil.combinedProperties,
-            },
-          });
-
-          intReply(int, smallEmbed("Ievārījuma vārīšana uzsākta veiksmīgi!", commandColors.izmantot));
-          return { end: true };
-        }
-
-        return;
-      });
+  const initialState: State = {
+    user,
+    selectedMenu: null,
+    boil: {
+      berriesInInv,
+      selectedBerry: "",
+      chosenBerries: {},
+      combinedProperties: makeCombinedProperties({}),
     },
+  };
+
+  const dialogs = new Dialogs(i, initialState, view, "izmantot_gazes_plits", { time: 60000 });
+
+  if (!(await dialogs.start())) {
+    return intReply(i, errorEmbed);
+  }
+
+  dialogs.onClick(async (int) => {
+    const userId = i.user.id;
+    const guildId = i.guildId!;
+
+    // pirmā izvēlne ========================================
+    if (int.customId === ComponentId.SelectCook && int.isButton()) {
+      dialogs.state.selectedMenu = "cook";
+      return { update: true };
+    }
+
+    if (int.customId === ComponentId.SelectBoil && int.isButton()) {
+      dialogs.state.selectedMenu = "boil";
+
+      if (!dialogs.state.boil.berriesInInv.length) {
+        return { update: true, end: true };
+      }
+
+      return { update: true };
+    }
+
+    // vārīšana ========================================
+    if (int.customId === ComponentId.SelectBerry && int.isStringSelectMenu()) {
+      dialogs.state.boil.selectedBerry = int.values[0];
+      return { update: true };
+    }
+
+    if (int.customId === ComponentId.AddBerry && int.isButton()) {
+      const selectedBerry = dialogs.state.boil.selectedBerry;
+      if (!selectedBerry) return { errror: true };
+
+      if (dialogs.state.boil.chosenBerries[selectedBerry]) {
+        dialogs.state.boil.chosenBerries[selectedBerry]++;
+      } else {
+        dialogs.state.boil.chosenBerries[selectedBerry] = 1;
+      }
+
+      dialogs.state.boil.combinedProperties = makeCombinedProperties(dialogs.state.boil.chosenBerries);
+
+      return { update: true };
+    }
+
+    if (int.customId === ComponentId.RemoveBerry && int.isButton()) {
+      const selectedBerry = dialogs.state.boil.selectedBerry;
+
+      if (!selectedBerry || !dialogs.state.boil.chosenBerries[selectedBerry]) {
+        return { errror: true };
+      }
+
+      delete dialogs.state.boil.chosenBerries[selectedBerry];
+      dialogs.state.boil.combinedProperties = makeCombinedProperties(dialogs.state.boil.chosenBerries);
+      // dialogs.state.boil.selectedBerry = '';
+
+      return { update: true };
+    }
+
+    if (int.customId === ComponentId.RemoveAllBerries && int.isButton()) {
+      dialogs.state.boil.chosenBerries = {};
+      dialogs.state.boil.combinedProperties = makeCombinedProperties({});
+      dialogs.state.boil.selectedBerry = "";
+
+      return { update: true };
+    }
+
+    if (int.customId === ComponentId.Boil && int.isButton()) {
+      const user = await findUser(userId, guildId);
+      if (!user) return { error: true };
+
+      // pārbaudam, vai plīts ir inventarā
+      const isPlitsInInv = user.specialItems.find(({ _id }) => _id === specialItem._id);
+      if (!isPlitsInInv) {
+        await intReply(int, ephemeralReply(`Kļūda: Šī **${itemString("gazes_plits")}** vairs nav tavā inventārā`));
+        return { end: true };
+      }
+
+      // pārbauda, vai izvēlētās ogas ir inventarā
+      let hasInInv = true;
+      for (const [key, amount] of Object.entries(dialogs.state.boil.chosenBerries)) {
+        const inInv = user.items.find(({ name }) => name === key);
+        if (!inInv || inInv.amount < amount) {
+          hasInInv = false;
+          break;
+        }
+      }
+
+      if (!hasInInv) {
+        // prettier-ignore
+        await intReply(int, ephemeralReply(
+          "Kļūda: Tava inventāra saturs ir mainījies, tev nav nepieciešamo ogu, lai uzvārītu šo ievārījumu",
+        ));
+        return { end: true };
+      }
+
+      const itemsToRemove = Object.fromEntries(
+        Object.entries(dialogs.state.boil.chosenBerries).map(([key, amount]) => [key, -amount]),
+      );
+
+      // prettier-ignore
+      const { ok } = await mongoTransaction(session => [
+        () => addItems(userId, guildId, itemsToRemove, session),
+        () => editItemAttribute(userId, guildId, specialItem._id!, {
+          actionType: "boil_ievarijums",
+          boilIevarijums: {
+            boilStarttime: Date.now(),
+            boilDuration: getBoilDuration(),
+            berries: dialogs.state.boil.chosenBerries,
+            properties: dialogs.state.boil.combinedProperties,
+          },
+        }, session)
+      ])
+
+      if (!ok) return { error: true };
+
+      intReply(int, smallEmbed("Ievārījuma vārīšana uzsākta veiksmīgi!", commandColors.izmantot));
+      return { end: true };
+    }
+  });
+};
+
+type Attributes = {
+  actionType: GazesPlitsActionType;
+  boilIevarijums?: {
+    boilStarttime: number;
+    boilDuration: number;
+    berries: Record<ItemKey, number>;
+    properties: BerryProperties;
   };
 };
 
-const gazes_plits = item<
-  // prettier-ignore
-  AttributeItem<{
-    actionType: GazesPlitsActionType;
-    boilIevarijums?: {
-      boilStarttime: number;
-      boilDuration: number;
-      berries: Record<ItemKey, number>;
-      properties: BerryProperties;
-    };
-  }> & TirgusItem
->({
+const gazes_plits = item<AttributeItem<Attributes> & TirgusItem>({
   info: "", // TODO
   addedInVersion: "4.3",
   nameNomVsk: "gāzes plīts",

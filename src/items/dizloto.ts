@@ -75,9 +75,8 @@ const dizloto = item<UsableItem & ShopItem & LotoItem>({
   imgLink: "https://www.ulmanbots.lv/images/items/dizloto.gif",
   categories: [ItemCategory.VEIKALS, ItemCategory.LOTO],
   value: 250,
-  removedOnUse: false,
   lotoOptions,
-  use: loto("dizloto", lotoOptions),
+  use: loto(lotoOptions),
 });
 
 export default dizloto;

@@ -1,12 +1,17 @@
 import addItems from "@/db/addItems";
-import findUser from "@/db/findUser";
 import setUser from "@/db/setUser";
 import { UsableItemFunc, item, UsableItem, ItemCategory } from "@/types/Item";
+import commandColors from "@/utils/commandColors";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import emoji from "@/utils/emoji";
+import intReply from "@/utils/intReply";
+import mongoTransaction from "@/utils/mongoTransaction";
+import izmantotTitle from "@/utils/strings/izmantotTitle";
 
-const use: UsableItemFunc = async (userId, guildId) => {
-  const user = await findUser(userId, guildId);
-  if (!user) return { error: true };
+const use: UsableItemFunc = async (i, user) => {
+  const userId = i.user.id;
+  const guildId = i.guildId!;
 
   const userUbagotCooldown = user.timeCooldowns.findIndex((c) => c.name === "ubagot");
   const userStradatCooldown = user.timeCooldowns.findIndex((c) => c.name === "stradat");
@@ -19,12 +24,20 @@ const use: UsableItemFunc = async (userId, guildId) => {
   if (userStradatCooldown === -1) timeCooldowns.push({ name: "stradat", lastUsed: 0 });
   else timeCooldowns[userStradatCooldown] = { name: "stradat", lastUsed: 0 };
 
-  await setUser(userId, guildId, { timeCooldowns });
-  await addItems(userId, guildId, { piparkuka: -1 });
+  const { ok } = await mongoTransaction((session) => [
+    () => setUser(userId, guildId, { timeCooldowns }, session),
+    () => addItems(userId, guildId, { piparkuka: -1 }, session),
+  ]);
 
-  return {
-    text: "Tu izlaidi gaidīšanas laiku līdz nākamajai strādāšanai un ubagošanai",
-  };
+  if (!ok) return intReply(i, errorEmbed);
+
+  // prettier-ignore
+  intReply(i, mainEmbed({
+    i,
+    color: commandColors.izmantot,
+    title: izmantotTitle("piparkuka"),
+    description: "Tu izlaidi gaidīšanas laiku līdz nākamajai strādāšanai un ubagošanai",
+  }));
 };
 
 const piparkuka = item<UsableItem>({
@@ -41,7 +54,6 @@ const piparkuka = item<UsableItem>({
   imgLink: "https://www.ulmanbots.lv/images/items/piparkuka.png",
   categories: [ItemCategory.OTHER],
   value: 25,
-  removedOnUse: false,
   use,
 });
 

@@ -14,8 +14,7 @@ const zemene = item<UsableItem>({
   imgLink: null,
   categories: [ItemCategory.OTHER],
   value: 15,
-  removedOnUse: false,
-  use: oga("zemene"),
+  use: oga,
 });
 
 export default zemene;

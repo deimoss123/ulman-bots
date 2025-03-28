@@ -1,12 +1,10 @@
-//šis pavisam noteikti nebūs labs kods (ja salīdzina ar pārējo)
-//praktiski visu šo šizofrēniju ir veidojis bumbotajs (ar "mazu" deimosa palīdzību)
-
 import addItems from "@/db/addItems";
 import editItemAttribute from "@/db/editItemAttribute";
 import findUser from "@/db/findUser";
-import { UsableItemFunc, item, AttributeItem, ItemCategory } from "@/types/Item";
+import { item, AttributeItem, ItemCategory, UsableAttributeItemFunc } from "@/types/Item";
 import { SpecialItemInProfile } from "@/types/UserProfile";
 import buttonHandler from "@/utils/buttonHandler";
+import commandColors from "@/utils/commandColors";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import smallEmbed from "@/utils/embeds/smallEmbed";
@@ -16,6 +14,9 @@ import { ItemKey } from "@/utils/itemList";
 import itemString from "@/utils/strings/itemString";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
+
+//šis pavisam noteikti nebūs labs kods (ja salīdzina ar pārējo)
+//praktiski visu šo šizofrēniju ir veidojis bumbotajs (ar "mazu" deimosa palīdzību)
 
 //ogu rekinasana
 //no currTime atnemt lastUsed un tad dalīt ar augasnas laiku un tad floorosu
@@ -131,128 +132,135 @@ function makeComponents() {
   ];
 }
 
-const use: UsableItemFunc = async (userId, guildId, _, specialItem) => {
-  return {
-    custom: async (i, color) => {
-      const currTime = Date.now();
-      // stulba attributu siena
-      const oguAgusanasIlgums = specialItem!.attributes.growthTime!;
-      const lastUsed = specialItem!.attributes.lastUsed!;
-      const ogasTips = specialItem!.attributes.berryType!;
-      const aplaistits = specialItem!.attributes.apliets!;
-      const iestadisanasLaiks = specialItem!.attributes.iestadits!;
-      const krumaAugsanasLaiks = KRUMA_AUGSANAS_LAIKS;
-      const { cikNakamaOga, sobridOgas } = dabutOguInfo(specialItem!, currTime);
-      const { izaugsanasProg, izaudzis, vajagApliet } = dabutKrumaInfo(specialItem!, currTime);
+const use: UsableAttributeItemFunc = async (i, _, __, specialItem) => {
+  const userId = i.user.id;
+  const guildId = i.guildId!;
 
-      if (iestadisanasLaiks + NOMIR < currTime) {
-        return intReply(i, mainEmbed({ i, description: `Diemžēl tavs krūms vairs nav starp mums... 💀⚰`, color }));
-      }
+  const currTime = Date.now();
 
-      if (!izaudzis) {
-        if (!vajagApliet) {
-          return intReply(
-            i,
-            mainEmbed({ i, description: `Tavs krūms vēl nav izaudzis! **${izaugsanasProg}%**`, color }),
-          );
-        }
-        const msg = await intReply(i, {
-          embeds: mainEmbed({
-            i,
-            description:
-              `Tavs krūms vēl nav izaudzis! **${izaugsanasProg}%**\n` +
-              `_(Ei, tu tur! Vispār tavs krūms ir izslāpis... 🥵)_`,
-            color,
-          }).embeds!,
-          components: makeComponents(),
-          fetchReply: true,
-        });
-        if (!msg) return;
+  // stulba attributu siena
+  const oguAgusanasIlgums = specialItem!.attributes.growthTime!;
+  const lastUsed = specialItem!.attributes.lastUsed!;
+  const ogasTips = specialItem!.attributes.berryType!;
+  const aplaistits = specialItem!.attributes.apliets!;
+  const iestadisanasLaiks = specialItem!.attributes.iestadits!;
+  const krumaAugsanasLaiks = KRUMA_AUGSANAS_LAIKS;
+  const { cikNakamaOga, sobridOgas } = dabutOguInfo(specialItem!, currTime);
+  const { izaugsanasProg, izaudzis, vajagApliet } = dabutKrumaInfo(specialItem!, currTime);
 
-        buttonHandler(i, "izmantot", msg, async (int) => {
-          const sobridLaiks = Date.now();
-          const { customId } = int;
+  if (iestadisanasLaiks + NOMIR < currTime) {
+    return intReply(
+      i,
+      mainEmbed({ i, description: `Diemžēl tavs krūms vairs nav starp mums... 💀⚰`, color: commandColors.izmantot }),
+    );
+  }
 
-          if (int.componentType !== ComponentType.Button) return;
-
-          if (customId === "apliet_krumu") {
-            await editItemAttribute(userId, guildId, specialItem!._id!, {
-              ...specialItem?.attributes,
-              iestadits: sobridLaiks - aplaistits + iestadisanasLaiks,
-              apliets: sobridLaiks + apliesanasLaiks(specialItem!),
-            });
-            return {
-              edit: {
-                embeds: mainEmbed({ i, description: `Tu aplaistīji ogu krūmu! 👍`, color }).embeds!,
-                components: [],
-              },
-            };
-          }
-        });
-        return;
-      }
-
-      if (sobridOgas < 1) {
-        return intReply(
-          i,
-          smallEmbed(
-            `Tavs ogu krūms vēl nav izaudzējis ogas...\n` + `Izaugs pēc \`${millisToReadableTime(cikNakamaOga)}\``,
-            0xff0000,
-          ),
-        );
-      }
-
-      const cikOgasDot = Math.min(sobridOgas, specialItem!.attributes.maxBerries!);
-
-      const user = await findUser(userId, guildId);
-      if (!user) return intReply(i, errorEmbed);
-
-      const afterEdit = await editItemAttribute(userId, guildId, specialItem!._id!, {
-        ...specialItem?.attributes,
-
-        lastUsed:
-          sobridOgas >= specialItem!.attributes.maxBerries! ? currTime : currTime - oguAgusanasIlgums + cikNakamaOga,
-      });
-      const userAfter = await addItems(userId, guildId, { [ogasTips]: cikOgasDot });
-      if (!userAfter || !afterEdit) return intReply(i, errorEmbed);
-      const { cikNakamaOga: cikNakamaOgaJauns } = dabutOguInfo(afterEdit.newItem, currTime);
-      const itemCount = userAfter.items.find((item) => item.name === ogasTips)?.amount || 1;
+  if (!izaudzis) {
+    if (!vajagApliet) {
       return intReply(
         i,
         mainEmbed({
           i,
-          description:
-            `Tu ievāci **${cikOgasDot}** ogas \n` + `Nākamā oga pēc \`${millisToReadableTime(cikNakamaOgaJauns)}\``,
-          fields: [
-            {
-              name: "Tu ievāci:",
-              value: `${itemString(ogasTips, cikOgasDot, true)}`,
-              inline: true,
-            },
-            {
-              name: "Tev tagad ir:",
-              value: `${itemString(ogasTips, itemCount)}`,
-              inline: true,
-            },
-          ],
-          color,
+          description: `Tavs krūms vēl nav izaudzis! **${izaugsanasProg}%**`,
+          color: commandColors.izmantot,
         }),
       );
-    },
-  };
+    }
+    const msg = await intReply(i, {
+      embeds: mainEmbed({
+        i,
+        description:
+          `Tavs krūms vēl nav izaudzis! **${izaugsanasProg}%**\n` +
+          `_(Ei, tu tur! Vispār tavs krūms ir izslāpis... 🥵)_`,
+        color: commandColors.izmantot,
+      }).embeds!,
+      components: makeComponents(),
+      fetchReply: true,
+    });
+    if (!msg) return;
+
+    buttonHandler(i, "izmantot", msg, async (int) => {
+      const sobridLaiks = Date.now();
+      const { customId } = int;
+
+      if (int.componentType !== ComponentType.Button) return;
+
+      if (customId === "apliet_krumu") {
+        await editItemAttribute(userId, guildId, specialItem!._id!, {
+          ...specialItem?.attributes,
+          iestadits: sobridLaiks - aplaistits + iestadisanasLaiks,
+          apliets: sobridLaiks + apliesanasLaiks(specialItem!),
+        });
+        return {
+          edit: {
+            embeds: mainEmbed({ i, description: `Tu aplaistīji ogu krūmu! 👍`, color: commandColors.izmantot }).embeds!,
+            components: [],
+          },
+        };
+      }
+    });
+    return;
+  }
+
+  if (sobridOgas < 1) {
+    return intReply(
+      i,
+      smallEmbed(
+        `Tavs ogu krūms vēl nav izaudzējis ogas...\n` + `Izaugs pēc \`${millisToReadableTime(cikNakamaOga)}\``,
+        commandColors.izmantot,
+      ),
+    );
+  }
+
+  const cikOgasDot = Math.min(sobridOgas, specialItem!.attributes.maxBerries!);
+
+  const user = await findUser(userId, guildId);
+  if (!user) return intReply(i, errorEmbed);
+
+  const afterEdit = await editItemAttribute(userId, guildId, specialItem!._id!, {
+    ...specialItem?.attributes,
+
+    lastUsed:
+      sobridOgas >= specialItem!.attributes.maxBerries! ? currTime : currTime - oguAgusanasIlgums + cikNakamaOga,
+  });
+  const userAfter = await addItems(userId, guildId, { [ogasTips]: cikOgasDot });
+  if (!userAfter || !afterEdit) return intReply(i, errorEmbed);
+  const { cikNakamaOga: cikNakamaOgaJauns } = dabutOguInfo(afterEdit.newItem, currTime);
+  const itemCount = userAfter.items.find((item) => item.name === ogasTips)?.amount || 1;
+  return intReply(
+    i,
+    mainEmbed({
+      i,
+      description:
+        `Tu ievāci **${cikOgasDot}** ogas \n` + `Nākamā oga pēc \`${millisToReadableTime(cikNakamaOgaJauns)}\``,
+      fields: [
+        {
+          name: "Tu ievāci:",
+          value: `${itemString(ogasTips, cikOgasDot, true)}`,
+          inline: true,
+        },
+        {
+          name: "Tev tagad ir:",
+          value: `${itemString(ogasTips, itemCount)}`,
+          inline: true,
+        },
+      ],
+      color: commandColors.izmantot,
+    }),
+  );
 };
 
-const ogu_krums = item<
-  AttributeItem<{
-    berryType: string;
-    growthTime: number;
-    maxBerries: number;
-    lastUsed: number;
-    apliets: number;
-    iestadits: number;
-    apliesanasReizes: number;
-  }>
->({
+type Attributes = {
+  berryType: string;
+  growthTime: number;
+  maxBerries: number;
+  lastUsed: number;
+  apliets: number;
+  iestadits: number;
+  apliesanasReizes: number;
+};
+
+const ogu_krums = item<AttributeItem<Attributes>>({
   info:
     "Kļūsti par īstu dārznieku.\n" +
     "Katrs ogu krūms, ko iegūsti būs ar nejauši izvēlētu ogu tipu\n" +

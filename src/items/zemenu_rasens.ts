@@ -1,7 +1,14 @@
 import { statusList } from "@/commands/profils";
+import addItems from "@/db/addItems";
 import addStatus from "@/db/addStatus";
 import { item, UsableItem, ShopItem, ItemCategory } from "@/types/Item";
+import commandColors from "@/utils/commandColors";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import emoji from "@/utils/emoji";
+import intReply from "@/utils/intReply";
+import mongoTransaction from "@/utils/mongoTransaction";
+import izmantotTitle from "@/utils/strings/izmantotTitle";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 
 export const RASENS_STATUS_TIME = 10_800_000; // 3h
@@ -22,17 +29,27 @@ const zemenu_rasens = item<UsableItem & ShopItem>({
   categories: [ItemCategory.VEIKALS],
   value: 75,
   allowDiscount: true,
-  removedOnUse: true,
-  use: async (userId, guildId) => {
-    const user = await addStatus(userId, guildId, { aizsargats: RASENS_STATUS_TIME });
-    if (!user) return { error: true };
+  use: async (i) => {
+    const userId = i.user.id;
+    const guildId = i.guildId!;
 
-    return {
-      text:
+    const { ok, values } = await mongoTransaction((session) => [
+      () => addItems(userId, guildId, { zemenu_rasens: -1 }, session),
+      () => addStatus(userId, guildId, { aizsargats: RASENS_STATUS_TIME }, session),
+    ]);
+
+    if (!ok) return intReply(i, errorEmbed);
+
+    // prettier-ignore
+    return intReply(i, mainEmbed({
+      i,
+      color: commandColors.izmantot,
+      title: izmantotTitle("zemenu_rasens"),
+      description: 
         `Tu izdzēri rasenu un ieguvi statusu **"${statusList.aizsargats}"**\n` +
         `Tu tagad esi aizsargāts no apzagšanas: \n` +
-        `\`\`\`${millisToReadableTime(user.status.aizsargats - Date.now())}\`\`\``,
-    };
+        `\`\`\`${millisToReadableTime(values.at(-1)!.status.aizsargats - Date.now())}\`\`\``,
+    }));
   },
 });
 

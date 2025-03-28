@@ -1,4 +1,4 @@
-import { ActionRowBuilder, BaseInteraction, bold, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
+import { ActionRowBuilder, BaseInteraction, bold, ButtonBuilder, ButtonStyle } from "discord.js";
 import maksekeresData from "@/commands/zvejot/makskeresData";
 import { calcRepairCost } from "@/commands/zvejot/zvejot";
 import addLati from "@/db/addLati";
@@ -11,7 +11,7 @@ import { displayAttributes } from "@/utils/strings/displayAttributes";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import smallEmbed from "@/utils/embeds/smallEmbed";
-import { AttributeItem, UsableItemFunc } from "@/types/Item";
+import { AttributeItem, UsableAttributeItemFunc } from "@/types/Item";
 import intReply from "@/utils/intReply";
 import itemList, { ItemKey } from "@/utils/itemList";
 import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
@@ -87,80 +87,76 @@ function view(state: State, i: BaseInteraction) {
   });
 }
 
-const makskere: UsableItemFunc = async (userId, guildId, itemKey, specialItem) => {
-  return {
-    custom: async (i) => {
-      const { attributes, _id } = specialItem!;
-      const { maxDurability, repairable } = maksekeresData[itemKey];
+const makskere: UsableAttributeItemFunc = async (i, user, itemKey, specialItem) => {
+  const userId = i.user.id;
+  const guildId = i.guildId!;
 
-      const user = await findUser(userId, guildId);
-      if (!user) return { error: true };
+  const { attributes, _id } = specialItem;
+  const { maxDurability, repairable } = maksekeresData[itemKey];
 
-      const repairCost = calcRepairCost(itemKey, attributes.durability!);
-      const itemObj = itemList[itemKey];
+  const repairCost = calcRepairCost(itemKey, attributes.durability!);
+  const itemObj = itemList[itemKey];
 
-      const initialState: State = {
-        user,
-        itemKey,
-        makskereInProfile: specialItem!,
-        repairCost,
-        hasRepaired: false,
-      };
-
-      const dialogs = new Dialogs(i, initialState, view, "izmantot");
-
-      if (!(await dialogs.start())) {
-        return intReply(i, errorEmbed);
-      }
-
-      dialogs.onClick(async (int, state) => {
-        if (!repairable) return;
-        if (int.customId !== ComponentId.FixFishingRod || int.componentType !== ComponentType.Button) return;
-
-        const user = await findUser(userId, guildId);
-        if (!user) return { error: true };
-
-        const { lati, specialItems } = user;
-
-        if (lati < repairCost) {
-          intReply(
-            int,
-            ephemeralReply(
-              `Tev nepietiek nauda lai salabotu makšķeri - ${latiString(repairCost, false, true)}\n` +
-                `Tev ir ${latiString(lati, false, true)}`,
-            ),
-          );
-          return { end: true };
-        }
-
-        if (!specialItems.find((item) => item._id === _id)) {
-          intReply(int, ephemeralReply("Tavs inventāra saturs ir mainījies, šī makšķere vairs nav tavā inventārā"));
-          return { end: true };
-        }
-
-        const { ok, values } = await mongoTransaction((session) => [
-          () => addLati(userId, guildId, -repairCost, session),
-          () => editItemAttribute(userId, guildId, _id!, { durability: maxDurability }, session),
-        ]);
-
-        if (!ok) return { error: true };
-
-        const userAfter = values[1];
-
-        state.hasRepaired = true;
-
-        intReply(
-          int,
-          smallEmbed(
-            `Tu salaboji ${bold(itemString(itemObj, null, true))} - ${latiString(repairCost)}\n` +
-              displayAttributes(userAfter.newItem),
-            commandColors.izmantot,
-          ),
-        );
-        return { edit: true, end: true };
-      });
-    },
+  const initialState: State = {
+    user,
+    itemKey,
+    makskereInProfile: specialItem,
+    repairCost,
+    hasRepaired: false,
   };
+
+  const dialogs = new Dialogs(i, initialState, view, "izmantot");
+
+  if (!(await dialogs.start())) {
+    return intReply(i, errorEmbed);
+  }
+
+  dialogs.onClick(async (int, state) => {
+    if (!repairable) return;
+    if (int.customId !== ComponentId.FixFishingRod || !int.isButton()) return;
+
+    const user = await findUser(userId, guildId);
+    if (!user) return { error: true };
+
+    const { lati, specialItems } = user;
+
+    if (lati < repairCost) {
+      intReply(
+        int,
+        ephemeralReply(
+          `Tev nepietiek nauda lai salabotu makšķeri - ${latiString(repairCost, false, true)}\n` +
+            `Tev ir ${latiString(lati, false, true)}`,
+        ),
+      );
+      return { end: true };
+    }
+
+    if (!specialItems.find((item) => item._id === _id)) {
+      intReply(int, ephemeralReply("Tavs inventāra saturs ir mainījies, šī makšķere vairs nav tavā inventārā"));
+      return { end: true };
+    }
+
+    const { ok, values } = await mongoTransaction((session) => [
+      () => addLati(userId, guildId, -repairCost, session),
+      () => editItemAttribute(userId, guildId, _id!, { durability: maxDurability }, session),
+    ]);
+
+    if (!ok) return { error: true };
+
+    const userAfter = values[1];
+
+    state.hasRepaired = true;
+
+    intReply(
+      int,
+      smallEmbed(
+        `Tu salaboji ${bold(itemString(itemObj, null, true))} - ${latiString(repairCost)}\n` +
+          displayAttributes(userAfter.newItem),
+        commandColors.izmantot,
+      ),
+    );
+    return { edit: true, end: true };
+  });
 };
 
 export default makskere;

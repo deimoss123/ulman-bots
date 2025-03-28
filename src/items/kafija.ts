@@ -1,5 +1,9 @@
 import { item, UsableItem, ItemCategory } from "@/types/Item";
+import commandColors from "@/utils/commandColors";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import emoji from "@/utils/emoji";
+import intReply from "@/utils/intReply";
+import izmantotTitle from "@/utils/strings/izmantotTitle";
 
 const kafija = item<UsableItem>({
   info:
@@ -16,13 +20,16 @@ const kafija = item<UsableItem>({
   imgLink: "https://www.ulmanbots.lv/images/items/kafija.png",
   categories: [ItemCategory.OTHER],
   value: 30,
-  removedOnUse: false,
-  use: () => {
-    return {
-      text:
+  use: (i) => {
+    // prettier-ignore
+    return intReply(i, mainEmbed({
+      i,
+      color: commandColors.izmantot,
+      title: izmantotTitle("kafija"),
+      description: 
         "Kafija ir izmantojama, kad tev noteiktā dienā ir beigušās strādāšanas reizes\n" +
         "Komandai `/stradat` ir poga `izdzert kafiju` lai strādātu vēlreiz",
-    };
+    }));
   },
 });
 

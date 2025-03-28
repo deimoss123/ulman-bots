@@ -7,14 +7,7 @@ import errorEmbed from "@/utils/embeds/errorEmbed";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import itemString from "@/utils/strings/itemString";
 import shuffleArray from "@/utils/shuffleArray";
-import {
-  ActionRowBuilder,
-  BaseInteraction,
-  ButtonBuilder,
-  ButtonStyle,
-  ComponentEmojiResolvable,
-  ComponentType,
-} from "discord.js";
+import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle, ComponentEmojiResolvable } from "discord.js";
 import addLati from "@/db/addLati";
 import addItems from "@/db/addItems";
 import smallEmbed from "@/utils/embeds/smallEmbed";
@@ -237,103 +230,100 @@ function view(state: State, i: BaseInteraction) {
   });
 }
 
-export default function loto(itemKey: ItemKey, options: LotoOptions): UsableItemFunc {
-  return () => ({
-    custom: async (i) => {
-      if (TEST_SPINS) {
-        await intReply(i, smallEmbed("Testing spins...", 0xffffff));
-        testLaimesti(options, 1_000_000);
-        return;
-      }
+function loto(options: LotoOptions): UsableItemFunc {
+  return async (i, _, itemKey) => {
+    if (TEST_SPINS) {
+      await intReply(i, smallEmbed("Testing spins...", 0xffffff));
+      testLaimesti(options, 1_000_000);
+      return;
+    }
 
-      const userId = i.user.id;
-      const guildId = i.guildId!;
+    const userId = i.user.id;
+    const guildId = i.guildId!;
 
-      let user = await findUser(userId, guildId);
-      if (!user) return intReply(i, errorEmbed);
+    const initialState: State = {
+      itemKey,
+      totalWin: 0,
+      lotoArray: generateLotoArr(options),
+      lotoArrayWon: [],
+      lotoOptions: options,
+      scratchesLeft: options.scratches,
+      isActive: true,
+      lotoInInv: 0,
+    };
 
-      const initialState: State = {
-        itemKey,
-        totalWin: 0,
-        lotoArray: generateLotoArr(options),
-        lotoArrayWon: [],
-        lotoOptions: options,
-        scratchesLeft: options.scratches,
-        isActive: true,
-        lotoInInv: 0,
-      };
+    const buttonCount = options.rows * options.columns;
 
-      const buttonCount = options.rows * options.columns;
+    const dialogs = new Dialogs<State>(i, initialState, view, `izmantot_loto_${Date.now()}`, { time: 300000 });
 
-      const dialogs = new Dialogs<State>(i, initialState, view, `izmantot_loto_${Date.now()}`, { time: 300000 });
+    if (!(await dialogs.start())) {
+      return intReply(i, errorEmbed);
+    }
 
-      if (!(await dialogs.start())) {
-        return intReply(i, errorEmbed);
-      }
+    dialogs.onClick(async (int, state) => {
+      const { customId } = int;
+      if (!int.isButton()) return;
 
-      dialogs.onClick(async (int, state) => {
-        const { customId } = int;
-        if (int.componentType !== ComponentType.Button) return;
-
-        if (customId === "loto_izmantot_velreiz" && !state.scratchesLeft) {
-          return {
-            end: true,
-            after: async () => {
-              // ahhh nepatīk šitais imports, lūdzu, neesi atmiņas noplūde
-              const izmantotRun = await import("@/commands/izmantot/izmantotRun");
-              izmantotRun.default(int, itemKey, 0);
-            },
-          };
-        }
-
-        if (state.scratchesLeft <= 0) return;
-
-        const [btnItemKey, btnIndexStr] = customId.split("-");
-        const btnIndex = +btnIndexStr;
-
-        if (btnItemKey !== itemKey || isNaN(btnIndex) || btnIndex < 0 || btnIndex >= buttonCount) return;
-
-        const clickedItem = state.lotoArray[btnIndex];
-        if (!clickedItem || clickedItem.scratched) return;
-
-        if (options.scratches === state.scratchesLeft) {
-          const user = await findUser(userId, guildId);
-          if (!user) return { error: true };
-
-          const item = user.items.find((item) => item.name === itemKey);
-          const hasItem = item && item.amount > 0;
-
-          if (!hasItem) {
-            intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString(itemKey)}**. Tu mēģini krāpties?`));
-            return { end: true };
-          }
-
-          const res = await addItems(userId, guildId, { [itemKey]: -1 });
-          if (!res) return { error: true };
-        }
-
-        clickedItem.scratched = true;
-        state.scratchesLeft--;
-
-        state.isActive = state.scratchesLeft > 0;
-
-        const { total, sorted } = calcTotal(state.lotoArray);
-
-        state.lotoArrayWon = sorted;
-        state.totalWin = total;
-
-        if (!state.isActive) {
-          user = total > 0 ? await addLati(userId, guildId, total) : await findUser(userId, guildId);
-          if (!user) return { error: true };
-
-          state.lotoInInv = user.items.find((item) => item.name === itemKey)?.amount || 0;
-        }
-
+      if (customId === "loto_izmantot_velreiz" && !state.scratchesLeft) {
         return {
-          update: true,
-          setInactive: !state.isActive,
+          end: true,
+          after: async () => {
+            // ahhh nepatīk šitais imports, lūdzu, neesi atmiņas noplūde
+            const izmantotRun = await import("@/commands/izmantot/izmantotRun");
+            izmantotRun.default(int, itemKey);
+          },
         };
-      });
-    },
-  });
+      }
+
+      if (state.scratchesLeft <= 0) return;
+
+      const [btnItemKey, btnIndexStr] = customId.split("-");
+      const btnIndex = +btnIndexStr;
+
+      if (btnItemKey !== itemKey || isNaN(btnIndex) || btnIndex < 0 || btnIndex >= buttonCount) return;
+
+      const clickedItem = state.lotoArray[btnIndex];
+      if (!clickedItem || clickedItem.scratched) return;
+
+      if (options.scratches === state.scratchesLeft) {
+        const user = await findUser(userId, guildId);
+        if (!user) return { error: true };
+
+        const item = user.items.find((item) => item.name === itemKey);
+        const hasItem = item && item.amount > 0;
+
+        if (!hasItem) {
+          intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString(itemKey)}**. Tu mēģini krāpties?`));
+          return { end: true };
+        }
+
+        const res = await addItems(userId, guildId, { [itemKey]: -1 });
+        if (!res) return { error: true };
+      }
+
+      clickedItem.scratched = true;
+      state.scratchesLeft--;
+
+      state.isActive = state.scratchesLeft > 0;
+
+      const { total, sorted } = calcTotal(state.lotoArray);
+
+      state.lotoArrayWon = sorted;
+      state.totalWin = total;
+
+      if (!state.isActive) {
+        const user = total > 0 ? await addLati(userId, guildId, total) : await findUser(userId, guildId);
+        if (!user) return { error: true };
+
+        state.lotoInInv = user.items.find((item) => item.name === itemKey)?.amount || 0;
+      }
+
+      return {
+        update: true,
+        setInactive: !state.isActive,
+      };
+    });
+  };
 }
+
+export default loto;

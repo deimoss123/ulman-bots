@@ -1,5 +1,6 @@
 import { item, UsableItem, ShopItem, ItemCategory } from "@/types/Item";
 import emoji from "@/utils/emoji";
+import intReply from "@/utils/intReply";
 
 const granulas = item<UsableItem & ShopItem>({
   info: () => `TODO`,
@@ -14,10 +15,7 @@ const granulas = item<UsableItem & ShopItem>({
   categories: [ItemCategory.VEIKALS],
   value: 1,
   allowDiscount: true,
-  removedOnUse: false,
-  use: () => ({
-    text: `GRANULAS`,
-  }),
+  use: (i) => intReply(i, "TODO"),
 });
 
 export default granulas;

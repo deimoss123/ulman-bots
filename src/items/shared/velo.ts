@@ -1,19 +1,10 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonInteraction,
-  ButtonStyle,
-  ChatInputCommandInteraction,
-  ComponentType,
-  EmbedBuilder,
-} from "discord.js";
+import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilder } from "discord.js";
 import addItems from "@/db/addItems";
 import addXp from "@/db/addXp";
 import findUser from "@/db/findUser";
 import buttonHandler from "@/utils/buttonHandler";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
-import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
 import xpAddedEmbed from "@/utils/embeds/xpAddedEmbed";
 import { UsableItemFunc } from "@/types/Item";
@@ -21,6 +12,7 @@ import { ItemInProfile } from "@/types/UserProfile";
 import intReply from "@/utils/intReply";
 import itemList, { ItemKey } from "@/utils/itemList";
 import emoji from "@/utils/emoji";
+import commandColors from "@/utils/commandColors";
 
 const VELO_XP = 10;
 
@@ -35,11 +27,7 @@ const requiredItems: Record<ItemKey, number> = {
   velo_sture: 1,
 };
 
-function makeEmbed(
-  i: ChatInputCommandInteraction | ButtonInteraction,
-  reqItemsInv: Record<ItemKey, number>,
-  color: number,
-) {
+function makeEmbed(i: BaseInteraction, reqItemsInv: Record<ItemKey, number>, color: number) {
   const maxLength = Math.max(...Object.values(reqItemsInv)).toString().length;
 
   return mainEmbed({
@@ -92,77 +80,71 @@ function makeComponents(hasAll: boolean) {
   ];
 }
 
-const velo: UsableItemFunc = async (userId, guildId) => {
-  return {
-    custom: async (i, color) => {
-      const user = await findUser(userId, guildId);
-      if (!user) return intReply(i, errorEmbed);
+const velo: UsableItemFunc = async (i, user) => {
+  const userId = i.user.id;
+  const guildId = i.guildId!;
 
-      const reqItemsInv = calcReqItems(user.items);
+  const reqItemsInv = calcReqItems(user.items);
 
-      const msg = await intReply(i, {
-        embeds: makeEmbed(i, reqItemsInv.items, color),
-        components: makeComponents(reqItemsInv.hasAll),
-        fetchReply: true,
-      });
+  const msg = await intReply(i, {
+    embeds: makeEmbed(i, reqItemsInv.items, commandColors.izmantot),
+    components: makeComponents(reqItemsInv.hasAll),
+    fetchReply: true,
+  });
 
-      if (!msg) return;
+  if (!msg) return;
 
-      buttonHandler(
-        i,
-        "izmantot_velo",
-        msg,
-        async (int) => {
-          const { customId } = int;
-          if (int.componentType !== ComponentType.Button) return;
+  buttonHandler(
+    i,
+    "izmantot_velo",
+    msg,
+    async (int) => {
+      const { customId } = int;
+      if (int.componentType !== ComponentType.Button) return;
 
-          if (customId === "izveidot_velosipedu") {
-            const user = await findUser(userId, guildId);
-            if (!user) return { error: true };
+      if (customId === "izveidot_velosipedu") {
+        const user = await findUser(userId, guildId);
+        if (!user) return { error: true };
 
-            const { hasAll } = calcReqItems(user.items);
-            if (!hasAll) {
-              intReply(int, ephemeralReply("Tev nav nepieciešamās detaļas, inventāra saturs ir mainījies"));
-              return { end: true };
-            }
+        const { hasAll } = calcReqItems(user.items);
+        if (!hasAll) {
+          intReply(int, ephemeralReply("Tev nav nepieciešamās detaļas, inventāra saturs ir mainījies"));
+          return { end: true };
+        }
 
-            const itemsToRemove: Record<ItemKey, number> = {};
-            for (const [key, value] of Object.entries(requiredItems)) {
-              itemsToRemove[key] = -value;
-            }
+        const itemsToRemove: Record<ItemKey, number> = {};
+        for (const [key, value] of Object.entries(requiredItems)) {
+          itemsToRemove[key] = -value;
+        }
 
-            const userAfter = await addItems(userId, guildId, { ...itemsToRemove, velosipeds: 1 });
-            const userAfterXP = await addXp(userId, guildId, VELO_XP);
-            if (!userAfter || !userAfterXP) {
-              return { error: true };
-            }
+        const userAfter = await addItems(userId, guildId, { ...itemsToRemove, velosipeds: 1 });
+        const userAfterXP = await addXp(userId, guildId, VELO_XP);
+        if (!userAfter || !userAfterXP) {
+          return { error: true };
+        }
 
-            const { items: items2, hasAll: hasAll2 } = calcReqItems(userAfter.items);
+        const { items: items2, hasAll: hasAll2 } = calcReqItems(userAfter.items);
 
-            return {
-              edit: {
-                embeds: makeEmbed(i, items2, color),
-                components: makeComponents(hasAll2),
-              },
-              after: () => {
-                intReply(int, {
-                  embeds: [
-                    new EmbedBuilder()
-                      .setDescription(
-                        `No velosipēda detaļām tu sataisīji **${itemString(itemList.velosipeds, 1, true)}**`,
-                      )
-                      .setColor(color),
-                    xpAddedEmbed(userAfterXP, VELO_XP, "Par velosipēda sataisīšanu tu ieguvi"),
-                  ],
-                });
-              },
-            };
-          }
-        },
-        30_000,
-      );
+        return {
+          edit: {
+            embeds: makeEmbed(i, items2, commandColors.izmantot),
+            components: makeComponents(hasAll2),
+          },
+          after: () => {
+            intReply(int, {
+              embeds: [
+                new EmbedBuilder()
+                  .setDescription(`No velosipēda detaļām tu sataisīji **${itemString(itemList.velosipeds, 1, true)}**`)
+                  .setColor(commandColors.izmantot),
+                xpAddedEmbed(userAfterXP, VELO_XP, "Par velosipēda sataisīšanu tu ieguvi"),
+              ],
+            });
+          },
+        };
+      }
     },
-  };
+    30_000,
+  );
 };
 
 export default velo;

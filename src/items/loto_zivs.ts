@@ -3,7 +3,7 @@ import findUser from "@/db/findUser";
 import removeItemsById from "@/db/removeItemsById";
 import chance, { ChanceRecord, ChanceObj } from "@/utils/chance";
 import countFreeInvSlots from "@/utils/countFreeInvSlots";
-import { UsableItemFunc, item, AttributeItem, ItemCategory } from "@/types/Item";
+import { item, AttributeItem, ItemCategory, UsableAttributeItemFunc } from "@/types/Item";
 import UserProfile from "@/types/UserProfile";
 import commandColors from "@/utils/commandColors";
 import { Dialogs } from "@/utils/dialogs";
@@ -89,85 +89,80 @@ function view(state: State, i: BaseInteraction) {
   });
 }
 
-const use: UsableItemFunc = (userId, guildId, _, specialItem) => {
-  return {
-    custom: async (i) => {
-      const holdsFishCount = specialItem!.attributes.holdsFishCount!;
+const use: UsableAttributeItemFunc = async (i, user, _, specialItem) => {
+  const userId = i.user.id;
+  const guildId = i.guildId!;
 
-      const user = await findUser(userId, guildId);
-      if (!user) return intReply(i, errorEmbed);
+  const holdsFishCount = specialItem.attributes.holdsFishCount!;
+  const freeSlots = countFreeInvSlots(user);
 
-      const freeSlots = countFreeInvSlots(user);
+  if (freeSlots < holdsFishCount - 1) {
+    return intReply(
+      i,
+      ephemeralReply(
+        `Lai izmantotu ${itemString(itemList.loto_zivs, null, true)} kas satur **${holdsFishCount}** zivis, ` +
+          `tev inventārā ir jābūt vismaz **${holdsFishCount - 1}** brīvām vietām\n` +
+          `Tev ir ${freeSlots} brīvas vietas`,
+      ),
+    );
+  }
 
-      if (freeSlots < holdsFishCount - 1) {
-        return intReply(
-          i,
-          ephemeralReply(
-            `Lai izmantotu ${itemString(itemList.loto_zivs, null, true)} kas satur **${holdsFishCount}** zivis, ` +
-              `tev inventārā ir jābūt vismaz **${holdsFishCount - 1}** brīvām vietām\n` +
-              `Tev ir ${freeSlots} brīvas vietas`,
-          ),
-        );
-      }
+  const wonFishObj: Record<ItemKey, number> = {};
+  const wonFishArr: ItemKey[] = [];
+  for (let i = 0; i < holdsFishCount; i++) {
+    const { key } = chance(lotoFishChanceObj);
+    wonFishArr.push(key);
+    wonFishObj[key] = wonFishObj[key] ? wonFishObj[key] + 1 : 1;
+  }
 
-      const wonFishObj: Record<ItemKey, number> = {};
-      const wonFishArr: ItemKey[] = [];
-      for (let i = 0; i < holdsFishCount; i++) {
-        const { key } = chance(lotoFishChanceObj);
-        wonFishArr.push(key);
-        wonFishObj[key] = wonFishObj[key] ? wonFishObj[key] + 1 : 1;
-      }
+  const { ok, values } = await mongoTransaction((session) => [
+    () => addItems(userId, guildId, { ...wonFishObj }, session),
+    () => removeItemsById(userId, guildId, [specialItem!._id!], session),
+  ]);
 
-      const { ok, values } = await mongoTransaction((session) => [
-        () => addItems(userId, guildId, { ...wonFishObj }, session),
-        () => removeItemsById(userId, guildId, [specialItem!._id!], session),
-      ]);
+  if (!ok) return intReply(i, errorEmbed);
 
-      if (!ok) return intReply(i, errorEmbed);
+  const userNew = values[1];
 
-      const userNew = values[1];
-
-      const initialState: State = {
-        user: userNew,
-        itemId: specialItem!._id!,
-        wonFishArr,
-        wonFishObj,
-        isSpinning: true,
-      };
-
-      const dialogs = new Dialogs(i, initialState, view, "izmantot", { time: 30000, isActive: true });
-
-      if (!(await dialogs.start())) {
-        return intReply(i, errorEmbed);
-      }
-
-      setTimeout(async () => {
-        dialogs.state.isSpinning = false;
-        await dialogs.edit();
-        dialogs.setActive(false);
-      }, 1000);
-
-      dialogs.onClick(async (int, state) => {
-        if (state.isSpinning) return {};
-
-        const user = await findUser(userId, guildId);
-        if (!user) return { error: true };
-
-        state.user = user;
-
-        if (int.customId === "use_different" && int.componentType === ComponentType.StringSelect) {
-          return useDifferentItemHandler(user, "loto_zivs", int);
-        }
-      });
-    },
+  const initialState: State = {
+    user: userNew,
+    itemId: specialItem!._id!,
+    wonFishArr,
+    wonFishObj,
+    isSpinning: true,
   };
+
+  const dialogs = new Dialogs(i, initialState, view, "izmantot", { time: 30000, isActive: true });
+
+  if (!(await dialogs.start())) {
+    return intReply(i, errorEmbed);
+  }
+
+  setTimeout(() => {
+    dialogs.state.isSpinning = false;
+    dialogs.setActive(false);
+    dialogs.edit();
+  }, 1000);
+
+  dialogs.onClick(async (int, state) => {
+    if (state.isSpinning) return {};
+
+    const user = await findUser(userId, guildId);
+    if (!user) return { error: true };
+
+    state.user = user;
+
+    if (int.customId === "use_different" && int.componentType === ComponentType.StringSelect) {
+      return useDifferentItemHandler(user, "loto_zivs", int);
+    }
+  });
 };
 
-const loto_zivs = item<
-  AttributeItem<{
-    holdsFishCount: number;
-  }>
->({
+type Attributes = {
+  holdsFishCount: number;
+};
+
+const loto_zivs = item<AttributeItem<Attributes>>({
   info:
     "Uzgriez loto zivi un kā laimestu saņem... zivis\n" +
     'Loto zivij piemīt atribūts "Satur **x** zivis", kas nosaka cik zivis no loto zivs ir iespējams laimēt',

@@ -1,7 +1,14 @@
 import { statusList } from "@/commands/profils";
+import addItems from "@/db/addItems";
 import addStatus from "@/db/addStatus";
 import { item, UsableItem, ItemCategory } from "@/types/Item";
+import commandColors from "@/utils/commandColors";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import emoji from "@/utils/emoji";
+import intReply from "@/utils/intReply";
+import mongoTransaction from "@/utils/mongoTransaction";
+import izmantotTitle from "@/utils/strings/izmantotTitle";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 
 export const PETNIEKZIVS_STATUS_TIME = 900_000; // 15 min
@@ -22,17 +29,27 @@ const petniekzivs = item<UsableItem>({
   imgLink: "https://www.ulmanbots.lv/images/items/petniekzivs.png",
   categories: [ItemCategory.ZIVIS],
   value: 40,
-  removedOnUse: true,
-  use: async (userId, guildId) => {
-    const user = await addStatus(userId, guildId, { veiksmigs: PETNIEKZIVS_STATUS_TIME });
-    if (!user) return { error: true };
+  use: async (i) => {
+    const userId = i.user.id;
+    const guildId = i.guildId!;
 
-    return {
-      text:
+    const { ok, values } = await mongoTransaction((session) => [
+      () => addItems(userId, guildId, { petniekzivs: -1 }, session),
+      () => addStatus(userId, guildId, { veiksmigs: PETNIEKZIVS_STATUS_TIME }, session),
+    ]);
+
+    if (!ok) return intReply(i, errorEmbed);
+
+    // prettier-ignore
+    return intReply(i, mainEmbed({
+      i,
+      color: commandColors.izmantot,
+      title: izmantotTitle("petniekzivs"),
+      description: 
         `Tu apēdi pētniekzivi un ieguvi statusu **"${statusList.veiksmigs}"**\n` +
         `Tev tagad ir palielināti procenti feniksam, ruletei un loto biļetēm: \n` +
-        `\`\`\`${millisToReadableTime(user.status.veiksmigs - Date.now())}\`\`\``,
-    };
+        `\`\`\`${millisToReadableTime(values.at(-1)!.status.veiksmigs - Date.now())}\`\`\``,
+    }));
   },
 });
 

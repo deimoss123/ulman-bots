@@ -1,8 +1,6 @@
 import Command from "@/types/Command";
 import commandColors from "@/utils/commandColors";
 import { ApplicationCommandOptionType } from "discord.js";
-import ephemeralReply from "@/utils/embeds/ephemeralReply";
-import itemString from "@/utils/strings/itemString";
 import izmantotRun from "@/commands/izmantot/izmantotRun";
 import izmantotAutocomplete from "@/commands/izmantot/izmantotAutocomplete";
 import itemList from "@/utils/itemList";
@@ -35,16 +33,7 @@ const izmantot: Command = {
     const itemToUse = itemList[itemToUseKey] as UsableItem;
     if (!itemToUse) return intReply(i, wrongKeyEmbed);
 
-    if (!itemToUse.use) {
-      return intReply(
-        i,
-        ephemeralReply(
-          `**${itemString(itemToUse)}** nav ` + (itemToUse.isVirsiesuDzimte ? "izmantojams" : "izmantojama"),
-        ),
-      );
-    }
-
-    izmantotRun(i, itemToUseKey, this.color);
+    izmantotRun(i, itemToUseKey);
   },
 };
 

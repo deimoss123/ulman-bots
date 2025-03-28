@@ -3,7 +3,7 @@ import editItemAttribute from "@/db/editItemAttribute";
 import editMultipleItemAttributes from "@/db/editMultipleItemAttributes";
 import findUser from "@/db/findUser";
 import countFreeInvSlots from "@/utils/countFreeInvSlots";
-import { UseManyType, UsableItemFunc, item, AttributeItem, TirgusItem, ItemCategory } from "@/types/Item";
+import { UseManyType, item, AttributeItem, TirgusItem, ItemCategory, UsableAttributeItemFunc } from "@/types/Item";
 import UserProfile, { ItemAttributes } from "@/types/UserProfile";
 import commandColors from "@/utils/commandColors";
 import { Dialogs } from "@/utils/dialogs";
@@ -145,143 +145,141 @@ function view(state: State, i: BaseInteraction) {
   });
 }
 
-const use: UsableItemFunc = async (userId, guildId, _, specialItem) => {
-  return {
-    custom: async (i, color) => {
-      const user = await findUser(userId, guildId);
-      if (!user) return intReply(i, errorEmbed);
+const use: UsableAttributeItemFunc = async (i, user, _, specialItem) => {
+  const userId = i.user.id;
+  const guildId = i.guildId!;
 
-      let text = "";
+  const color = commandColors.izmantot;
 
-      const lastUsed = specialItem!.attributes.lastUsed!;
-      const itemKey = specialItem!.attributes.foundItemKey!;
+  let text = "";
 
-      if (Date.now() - lastUsed < PETNIEKS_COOLDOWN) {
-        text =
-          `Pētnieks tev nevar uzdāvināt brīvgriezienu, jo viņš to vēl nav atradis\n` +
-          `Nākamais brīvgrieziens pēc \`${millisToReadableTime(PETNIEKS_COOLDOWN - Date.now() + lastUsed)}\``;
-      } else if (!countFreeInvSlots(user)) {
-        text = `Pētnieks ir atradis ${itemString(itemList[itemKey], 1, true)}, bet tu to nevari saņemt, jo tev ir pilns inventārs`;
-      } else {
-        const { ok } = await mongoTransaction((session) => [
-          () =>
-            editItemAttribute(
-              userId,
-              guildId,
-              specialItem!._id!,
-              { ...specialItem!.attributes, lastUsed: Date.now(), foundItemKey: getRandFreeSpin() },
-              session,
-            ),
-          () => addItems(userId, guildId, { [itemKey]: 1 }, session),
-        ]);
+  const lastUsed = specialItem!.attributes.lastUsed!;
+  const itemKey = specialItem!.attributes.foundItemKey!;
 
-        if (!ok) {
-          return intReply(i, errorEmbed);
-        }
+  if (Date.now() - lastUsed < PETNIEKS_COOLDOWN) {
+    text =
+      `Pētnieks tev nevar uzdāvināt brīvgriezienu, jo viņš to vēl nav atradis\n` +
+      `Nākamais brīvgrieziens pēc \`${millisToReadableTime(PETNIEKS_COOLDOWN - Date.now() + lastUsed)}\``;
+  } else if (!countFreeInvSlots(user)) {
+    text = `Pētnieks ir atradis ${itemString(itemList[itemKey], 1, true)}, bet tu to nevari saņemt, jo tev ir pilns inventārs`;
+  } else {
+    const { ok } = await mongoTransaction((session) => [
+      () =>
+        editItemAttribute(
+          userId,
+          guildId,
+          specialItem!._id!,
+          { ...specialItem!.attributes, lastUsed: Date.now(), foundItemKey: getRandFreeSpin() },
+          session,
+        ),
+      () => addItems(userId, guildId, { [itemKey]: 1 }, session),
+    ]);
 
-        text =
-          `Pētnieks tev uzdāvināja ${itemString(itemList[itemKey], 1, true)}\n` +
-          `Nākamais brīvgrieziens pēc \`${millisToReadableTime(PETNIEKS_COOLDOWN - 1)}\``;
-      }
+    if (!ok) {
+      return intReply(i, errorEmbed);
+    }
 
-      const initialState: State = {
-        user,
-        text,
-        itemId: specialItem!._id!,
-        attributes: specialItem!.attributes,
+    text =
+      `Pētnieks tev uzdāvināja ${itemString(itemList[itemKey], 1, true)}\n` +
+      `Nākamais brīvgrieziens pēc \`${millisToReadableTime(PETNIEKS_COOLDOWN - 1)}\``;
+  }
+
+  const initialState: State = {
+    user,
+    text,
+    itemId: specialItem!._id!,
+    attributes: specialItem!.attributes,
+  };
+
+  const dialogs = new Dialogs(i, initialState, view, "izmantot", { time: 30000 });
+
+  if (!(await dialogs.start())) {
+    return intReply(i, errorEmbed);
+  }
+
+  dialogs.onClick(async (int, state) => {
+    const { customId, componentType } = int;
+
+    const user = await findUser(userId, guildId);
+    if (!user) return { error: true };
+
+    if (customId === "use_different" && componentType === ComponentType.StringSelect) {
+      return useDifferentItemHandler(user, "petnieks", int);
+    }
+
+    const petnieksInInv = user.specialItems.find(({ _id }) => _id === specialItem!._id);
+    if (!petnieksInInv) {
+      return {
+        end: true,
+        after: () => intReply(int, ephemeralReply("Kļūda, šis pētnieks vairs nav tavā inventārā")),
       };
+    }
 
-      const dialogs = new Dialogs(i, initialState, view, "izmantot", { time: 30000 });
+    state.user = user;
+    state.attributes = petnieksInInv.attributes;
 
-      if (!(await dialogs.start())) {
-        return intReply(i, errorEmbed);
+    if (customId === ComponentId.AddHat && componentType === ComponentType.Button) {
+      if (!user.items.find(({ name }) => name === "salaveca_cepure")) {
+        intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString("salaveca_cepure")}**`));
+        return { edit: true };
       }
 
-      dialogs.onClick(async (int, state) => {
-        const { customId, componentType } = int;
+      const { ok, values } = await mongoTransaction((session) => [
+        () => addItems(userId, guildId, { salaveca_cepure: -1 }, session),
+        () =>
+          editItemAttribute(
+            userId,
+            guildId,
+            petnieksInInv._id!,
+            { ...petnieksInInv.attributes, hat: "salaveca_cepure" },
+            session,
+          ),
+      ]);
 
-        const user = await findUser(userId, guildId);
-        if (!user) return { error: true };
+      if (!ok) return { error: true };
 
-        if (customId === "use_different" && componentType === ComponentType.StringSelect) {
-          return useDifferentItemHandler(user, "petnieks", int);
-        }
+      const { user: userAfter, newItem } = values[1];
 
-        const petnieksInInv = user.specialItems.find(({ _id }) => _id === specialItem!._id);
-        if (!petnieksInInv) {
-          return {
-            end: true,
-            after: () => intReply(int, ephemeralReply("Kļūda, šis pētnieks vairs nav tavā inventārā")),
-          };
-        }
+      state.user = userAfter;
+      state.attributes = newItem.attributes;
 
-        state.user = user;
-        state.attributes = petnieksInInv.attributes;
+      intReply(int, smallEmbed(`Tu pētniekam uzvilki **${itemString("salaveca_cepure", null, true)}**`, color));
+      return { edit: true };
+    }
 
-        if (customId === ComponentId.AddHat && componentType === ComponentType.Button) {
-          if (!user.items.find(({ name }) => name === "salaveca_cepure")) {
-            intReply(int, ephemeralReply(`Tavā inventārā nav **${itemString("salaveca_cepure")}**`));
-            return { edit: true };
-          }
+    if (customId === ComponentId.RemoveHat && componentType === ComponentType.Button) {
+      if (petnieksInInv.attributes.hat !== "salaveca_cepure") {
+        intReply(int, ephemeralReply("Kļūda, šim pētniekam nav uzvilkta cepure"));
+        return { edit: true };
+      }
 
-          const { ok, values } = await mongoTransaction((session) => [
-            () => addItems(userId, guildId, { salaveca_cepure: -1 }, session),
-            () =>
-              editItemAttribute(
-                userId,
-                guildId,
-                petnieksInInv._id!,
-                { ...petnieksInInv.attributes, hat: "salaveca_cepure" },
-                session,
-              ),
-          ]);
+      if (!countFreeInvSlots(user)) {
+        intReply(int, ephemeralReply("Tu nevari pētniekam novilkt cepuri, jo tev ir pilns inventārs"));
+        return { edit: true };
+      }
 
-          if (!ok) return { error: true };
-
-          const { user: userAfter, newItem } = values[1];
-
-          state.user = userAfter;
-          state.attributes = newItem.attributes;
-
-          intReply(int, smallEmbed(`Tu pētniekam uzvilki **${itemString("salaveca_cepure", null, true)}**`, color));
-          return { edit: true };
-        }
-
-        if (customId === ComponentId.RemoveHat && componentType === ComponentType.Button) {
-          if (petnieksInInv.attributes.hat !== "salaveca_cepure") {
-            intReply(int, ephemeralReply("Kļūda, šim pētniekam nav uzvilkta cepure"));
-            return { edit: true };
-          }
-
-          if (!countFreeInvSlots(user)) {
-            intReply(int, ephemeralReply("Tu nevari pētniekam novilkt cepuri, jo tev ir pilns inventārs"));
-            return { edit: true };
-          }
-
-          // prettier-ignore
-          const { ok, values } = await mongoTransaction(session => [
+      // prettier-ignore
+      const { ok, values } = await mongoTransaction(session => [
             () => addItems(userId, guildId, { salaveca_cepure: 1 }, session),
             () => editItemAttribute(userId, guildId, petnieksInInv._id!, { ...petnieksInInv.attributes, hat: '' }, session),
           ]);
 
-          if (!ok) return { error: true };
+      if (!ok) return { error: true };
 
-          const { user: userAfter, newItem } = values[1];
+      const { user: userAfter, newItem } = values[1];
 
-          state.user = userAfter;
-          state.attributes = newItem.attributes;
+      state.user = userAfter;
+      state.attributes = newItem.attributes;
 
-          // prettier-ignore
-          intReply(int, smallEmbed(
-            `Tu pētniekam novilki **${itemString('salaveca_cepure', null, true)}**, ` +
-            `un tā tika pievienota tavam inventāram`,
-            color,
-          ));
-          return { edit: true };
-        }
-      });
-    },
-  };
+      // prettier-ignore
+      intReply(int, smallEmbed(
+        `Tu pētniekam novilki **${itemString('salaveca_cepure', null, true)}**, ` +
+        `un tā tika pievienota tavam inventāram`,
+        color,
+      ));
+      return { edit: true };
+    }
+  });
 };
 
 const petnieks = item<

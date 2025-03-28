@@ -3,12 +3,11 @@ import makskere, { makskereCustomValue } from "@/items/shared/makskere";
 import { AttributeItem, item, ItemCategory, TirgusItem } from "@/types/Item";
 import emoji from "@/utils/emoji";
 
-const luznu_makskere = item<
-  // prettier-ignore
-  AttributeItem<{
-    durability: number;
-  }> & TirgusItem
->({
+type Attributes = {
+  durability: number;
+};
+
+const luznu_makskere = item<AttributeItem<Attributes> & TirgusItem>({
   info:
     "Ja mīlēsi metāllūžņus, tie visnotaļ mīlēs arī tevi!\n" +
     "Par cik šī makšķere knapi turās kopā, to nav iespējams salabot",

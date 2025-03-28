@@ -3,12 +3,11 @@ import makskere, { makskereCustomValue } from "@/items/shared/makskere";
 import { AttributeItem, item, ItemCategory, TirgusItem } from "@/types/Item";
 import emoji from "@/utils/emoji";
 
-const loto_makskere = item<
-  // prettier-ignore
-  AttributeItem<{
-    durability: number;
-  }> & TirgusItem
->({
+type Attributes = {
+  durability: number;
+};
+
+const loto_makskere = item<AttributeItem<Attributes> & TirgusItem>({
   info:
     "Šī makšķere ir īpaši veidota tieši azartspēļu atkarības cietušajiem\n" +
     "Iegādājies to, ja nevari atturēties no aparāta un loto biļetēm",

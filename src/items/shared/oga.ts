@@ -1,6 +1,10 @@
 import itemString from "@/utils/strings/itemString";
 import { UsableItemFunc } from "@/types/Item";
 import { ItemKey } from "@/utils/itemList";
+import intReply from "@/utils/intReply";
+import mainEmbed from "@/utils/embeds/mainEmbed";
+import commandColors from "@/utils/commandColors";
+import izmantotTitle from "@/utils/strings/izmantotTitle";
 
 export type BerryProperties = {
   saldums: number;
@@ -50,6 +54,8 @@ export const berryProperties: Record<ItemKey, BerryProperties> = {
 };
 
 export function ogaInfo(key: ItemKey) {
+  // te jāatgriež funkcija, jo citādāk bļauj par itemList importu
+  // nav smuki, bet neko darīt
   return () =>
     `Ogas var iegūt no **${itemString("ogu_krums")}**\n` +
     `No ogām var vārīt **${itemString("ievarijums", null, true)}**, ` +
@@ -61,8 +67,14 @@ export function ogaInfo(key: ItemKey) {
       .join("\n");
 }
 
-export default function oga(key: ItemKey): UsableItemFunc {
-  return () => ({
-    text: `Oga`,
-  });
-}
+const oga: UsableItemFunc = (i, _, itemKey) => {
+  // prettier-ignore
+  intReply(i, mainEmbed({ 
+    i, 
+    color: commandColors.izmantot, 
+    title: izmantotTitle(itemKey),
+    description: ogaInfo(itemKey)()
+  }));
+};
+
+export default oga;

@@ -58,9 +58,8 @@ const nabagloto = item<UsableItem & LotoItem>({
   imgLink: null, // TODO
   categories: [ItemCategory.LOTO],
   value: 10,
-  removedOnUse: false,
   lotoOptions,
-  use: loto("nabagloto", lotoOptions),
+  use: loto(lotoOptions),
 });
 
 export default nabagloto;

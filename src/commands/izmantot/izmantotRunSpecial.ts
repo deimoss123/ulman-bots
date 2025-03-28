@@ -2,10 +2,8 @@ import {
   ActionRowBuilder,
   BaseInteraction,
   ButtonBuilder,
-  ButtonInteraction,
   ButtonStyle,
-  ChatInputCommandInteraction,
-  ComponentType,
+  RepliableInteraction,
   StringSelectMenuBuilder,
 } from "discord.js";
 import findUser from "@/db/findUser";
@@ -14,35 +12,17 @@ import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import { displayAttributes } from "@/utils/strings/displayAttributes";
 import itemString, { itemStringCustom } from "@/utils/strings/itemString";
-import Item, { AttributeItem, NotSellableItem } from "@/types/Item";
-import UsableItemReturn from "@/types/UsableItemReturn";
-import { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
+import { AttributeItem, NotSellableItem } from "@/types/Item";
+import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
 import itemList, { ItemKey } from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 import { attributeItemSort } from "@/commands/inventars/inventars";
 import { Dialogs } from "@/utils/dialogs";
 
-function makeEmbed(
-  i: ChatInputCommandInteraction | ButtonInteraction,
-  itemObj: Item,
-  selectedItem: SpecialItemInProfile,
-  useRes: Extract<UsableItemReturn, { text: string }>,
-  embedColor: number,
-) {
-  return mainEmbed({
-    i,
-    color: embedColor,
-    title: `Izmantot: ${itemString(itemObj, null, true, selectedItem.attributes)}`,
-    description: useRes.text,
-    fields: useRes.fields || [],
-  });
-}
-
 type State = {
   itemsInInv: SpecialItemInProfile[];
   itemObj: AttributeItem<ItemAttributes>;
   selectedId: string | null;
-  embedColor: number;
 };
 
 const enum ComponentId {
@@ -106,7 +86,7 @@ function view(state: State, i: BaseInteraction) {
 
   return mainEmbed({
     i,
-    color: state.embedColor,
+    color: 0x000000,
     description:
       `Tavā inventārā ir **${itemString(state.itemObj, state.itemsInInv.length)}**\n` +
       `No saraksta izvēlies kuru tu gribi izmantot`,
@@ -115,29 +95,26 @@ function view(state: State, i: BaseInteraction) {
 }
 
 export default async function izmantotRunSpecial(
-  i: ChatInputCommandInteraction | ButtonInteraction,
+  i: RepliableInteraction,
   itemKey: ItemKey,
   itemsInInv: SpecialItemInProfile[],
-  embedColor: number,
+  user: UserProfile,
 ): Promise<any> {
   const userId = i.user.id;
   const guildId = i.guildId!;
 
-  const itemObj = itemList[itemKey] as AttributeItem<ItemAttributes> | NotSellableItem;
+  const itemObj = itemList[itemKey] as AttributeItem | NotSellableItem;
 
+  // ja inventārā tikai viena manta, tad izmanto pa taisno
   if (itemsInInv.length === 1) {
     const selectedItem = itemsInInv[0];
-    const useRes = await itemObj.use(userId, guildId, itemKey, selectedItem);
-    if ("error" in useRes) return intReply(i, errorEmbed);
-    if ("custom" in useRes) return useRes.custom(i, embedColor);
-    return intReply(i, makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
+    return itemObj.use(i, user, itemKey, selectedItem);
   }
 
   const initialState: State = {
     itemsInInv,
     itemObj,
     selectedId: null,
-    embedColor,
   };
 
   const dialogs = new Dialogs(i, initialState, view, "izmantot", { time: 60000 });
@@ -149,13 +126,12 @@ export default async function izmantotRunSpecial(
   dialogs.onClick(async (int, state) => {
     const { customId } = int;
 
-    if (customId === ComponentId.Select) {
-      if (int.componentType !== ComponentType.StringSelect) return;
-      state.selectedId = int.values[0]!;
+    if (customId === ComponentId.Select && int.isStringSelectMenu()) {
+      state.selectedId = int.values[0];
       return { update: true };
     }
 
-    if (int.componentType !== ComponentType.Button) return;
+    if (!int.isButton()) return;
 
     if (customId === ComponentId.Confirm) {
       const user = await findUser(userId, guildId);
@@ -171,26 +147,15 @@ export default async function izmantotRunSpecial(
         return { edit: true };
       }
 
-      const useRes = await itemObj.use(userId, guildId, itemKey, selectedItem);
-
-      return {
-        end: true,
-        after: () => {
-          if ("error" in useRes) return intReply(int, errorEmbed);
-          if ("custom" in useRes) return useRes.custom(int, embedColor);
-
-          intReply(int, makeEmbed(i, itemObj, selectedItem, useRes, embedColor));
-        },
-      };
+      itemObj.use(int, user, itemKey, selectedItem);
+      return { end: true };
     }
 
     if (customId === ComponentId.UseMany) {
-      if (!itemObj.useMany) return;
+      if (!itemObj.useMany) return { error: true };
 
-      return {
-        end: true,
-        after: () => itemObj.useMany!.runFunc(int),
-      };
+      itemObj.useMany!.runFunc(int);
+      return { end: true };
     }
   });
 }

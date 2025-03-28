@@ -1,7 +1,14 @@
 import { statusList } from "@/commands/profils";
+import addItems from "@/db/addItems";
 import addStatus from "@/db/addStatus";
 import { item, ItemCategory, ShopItem, UsableItem } from "@/types/Item";
+import commandColors from "@/utils/commandColors";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import emoji from "@/utils/emoji";
+import intReply from "@/utils/intReply";
+import mongoTransaction from "@/utils/mongoTransaction";
+import izmantotTitle from "@/utils/strings/izmantotTitle";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 
 export const NAZIS_STATUS_TIME = 3_600_000; // 1h
@@ -21,18 +28,28 @@ const nazis = item<UsableItem & ShopItem>({
   imgLink: "https://www.ulmanbots.lv/images/items/nazis.png",
   categories: [ItemCategory.VEIKALS],
   value: 125,
-  removedOnUse: true,
   allowDiscount: true,
-  use: async (userId, guildId) => {
-    const user = await addStatus(userId, guildId, { laupitajs: NAZIS_STATUS_TIME });
-    if (!user) return { error: true };
+  use: async (i) => {
+    const userId = i.user.id;
+    const guildId = i.guildId!;
 
-    return {
-      text:
+    const { ok, values } = await mongoTransaction((session) => [
+      () => addItems(userId, guildId, { nazis: -1 }, session),
+      () => addStatus(userId, guildId, { laupitajs: NAZIS_STATUS_TIME }, session),
+    ]);
+
+    if (!ok) return intReply(i, errorEmbed);
+
+    // prettier-ignore
+    return intReply(i, mainEmbed({
+      i,
+      color: commandColors.izmantot,
+      title: izmantotTitle("nazis"),
+      description: 
         `Tu izvilki nazi un ieguvi statusu **"${statusList.laupitajs}"**\n` +
         `Tev zagšanai ir palielināta efektivitāte: \n` +
-        `\`\`\`${millisToReadableTime(user.status.laupitajs - Date.now())}\`\`\``,
-    };
+        `\`\`\`${millisToReadableTime(values.at(-1)!.status.laupitajs - Date.now())}\`\`\``,
+    }));
   },
 });
 

@@ -1,6 +1,7 @@
 import { BerryProperties } from "@/items/shared/oga";
 import { item, AttributeItem, ItemCategory } from "@/types/Item";
 import emoji from "@/utils/emoji";
+import intReply from "@/utils/intReply";
 import { ItemKey } from "@/utils/itemList";
 
 /* 
@@ -38,13 +39,13 @@ export function calcIevarijumsPrice(properties: BerryProperties) {
   return { distance, value, normalizedDistance: 1 - distance / MAX_POSSIBLE_DISTANCE };
 }
 
-const ievarijums = item<
-  AttributeItem<{
-    properties?: BerryProperties;
-    ogas?: Record<ItemKey, number>;
-    distance?: number;
-  }>
->({
+type Attributes = {
+  properties: BerryProperties;
+  ogas: Record<ItemKey, number>;
+  distance: number;
+};
+
+const ievarijums = item<AttributeItem<Attributes>>({
   info: "", //TODO
   addedInVersion: "4.3",
   nameNomVsk: "ievārījums",
@@ -67,11 +68,7 @@ const ievarijums = item<
     distance: 0,
   }),
   sortBy: { distance: 1 },
-  use: (userId, guildId, _, specialItem) => {
-    return {
-      text: `tu izmantoji ievārījumu`, //TODO
-    };
-  },
+  use: (i) => intReply(i, "TODO"),
 });
 
 export default ievarijums;

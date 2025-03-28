@@ -1,36 +1,49 @@
 import addItems from "@/db/addItems";
-import findUser from "@/db/findUser";
 import increaseInvCap from "@/db/increaseInvCap";
 import { UsableItemFunc, item, UsableItem, ShopItem, ItemCategory } from "@/types/Item";
+import commandColors from "@/utils/commandColors";
+import ephemeralReply from "@/utils/embeds/ephemeralReply";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import emoji from "@/utils/emoji";
-import itemList from "@/utils/itemList";
+import intReply from "@/utils/intReply";
+import mongoTransaction from "@/utils/mongoTransaction";
 import itemString from "@/utils/strings/itemString";
+import izmantotTitle from "@/utils/strings/izmantotTitle";
 
 export const INCREASE_CAP_1 = 100;
 export const INV_INCREASE_AMOUNT_1 = 5;
 
-const use: UsableItemFunc = async (userId, guildId) => {
-  const user = await findUser(userId, guildId);
-  if (!user) return { error: true };
+const use: UsableItemFunc = async (i, user) => {
+  const userId = i.user.id;
+  const guildId = i.guildId!;
 
   if (user.itemCap >= INCREASE_CAP_1) {
-    return {
-      text:
-        `Tu esi sasniedzis maksīmālo inventāra ietilpību ko var iegūt izmantojot ` +
-        `${itemString(itemList.mugursoma, null, true)}: **${INCREASE_CAP_1}** vietas\n` +
-        `Izmanto **${itemString(itemList.divaina_mugursoma, null, true)}** ` +
-        `lai iegūtu papildus inventāra vietas`,
-    };
+    // prettier-ignore
+    return intReply(i, ephemeralReply(
+      `Tu esi sasniedzis maksīmālo inventāra ietilpību ko var iegūt izmantojot ` +
+      `${itemString('mugursoma', null, true)}: **${INCREASE_CAP_1}** vietas\n` +
+      `Izmanto **${itemString('divaina_mugursoma', null, true)}** ` +
+      `lai iegūtu papildus inventāra vietas`,
+    ));
   }
 
-  await addItems(userId, guildId, { mugursoma: -1 });
-  await increaseInvCap(userId, guildId, INV_INCREASE_AMOUNT_1);
+  const { ok, values } = await mongoTransaction((session) => [
+    () => addItems(userId, guildId, { mugursoma: -1 }, session),
+    () => increaseInvCap(userId, guildId, INV_INCREASE_AMOUNT_1, session),
+  ]);
 
-  return {
-    text:
+  if (!ok) return intReply(i, errorEmbed);
+
+  // prettier-ignore
+  return intReply(i, mainEmbed({
+    i,
+    color: commandColors.izmantot,
+    title: izmantotTitle("mugursoma"),
+    description: 
       `Inventāra maksimālā ietilpība palielināta ` +
-      `no **${user.itemCap}** uz **${user.itemCap + INV_INCREASE_AMOUNT_1}**`,
-  };
+      `no **${user.itemCap}** uz **${values.at(-1)!.itemCap}**`,
+  }));
 };
 
 const mugursoma = item<UsableItem & ShopItem>({
@@ -48,7 +61,6 @@ const mugursoma = item<UsableItem & ShopItem>({
   categories: [ItemCategory.VEIKALS],
   value: 175,
   allowDiscount: true,
-  removedOnUse: false,
   use,
 });
 

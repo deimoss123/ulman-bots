@@ -1,6 +1,7 @@
-import { BaseInteraction, ButtonInteraction, StringSelectMenuInteraction } from "discord.js";
+import { BaseInteraction } from "discord.js";
 import { IpasumiState } from "@/commands/ipasumi/ipasumi";
 import mainEmbed from "@/utils/embeds/mainEmbed";
+import { Dialogs } from "@/utils/dialogs";
 
 type State = {};
 
@@ -19,8 +20,8 @@ function view(state: IpasumiState, i: BaseInteraction) {
   });
 }
 
-async function handler(i: ButtonInteraction | StringSelectMenuInteraction, state: IpasumiState) {
+const handler: Parameters<Dialogs<IpasumiState>["onClick"]>[0] = async (i, state) => {
   return;
-}
+};
 
 export { init, State, defaultState, view, handler };

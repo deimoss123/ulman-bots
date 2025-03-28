@@ -14,8 +14,7 @@ const brivgriez10 = item<UsableItem>({
   imgLink: "https://www.ulmanbots.lv/images/items/brivgriez10.png",
   categories: [ItemCategory.BRIVGRIEZIENS],
   value: 2,
-  removedOnUse: false,
-  use: brivgrieziens(10),
+  use: brivgrieziens,
 });
 
 export default brivgriez10;

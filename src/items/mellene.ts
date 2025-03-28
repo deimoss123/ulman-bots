@@ -14,8 +14,7 @@ const mellene = item<UsableItem>({
   imgLink: null,
   categories: [ItemCategory.OTHER],
   value: 15,
-  removedOnUse: false,
-  use: oga("mellene"),
+  use: oga,
 });
 
 export default mellene;

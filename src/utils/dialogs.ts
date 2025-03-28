@@ -1,14 +1,14 @@
 import {
   ActionRowBuilder,
+  AnySelectMenuInteraction,
+  BaseInteraction,
   ButtonBuilder,
   ButtonInteraction,
-  ChatInputCommandInteraction,
   ComponentType,
-  InteractionEditReplyOptions,
   InteractionReplyOptions,
   Message,
   MessageFlags,
-  ModalSubmitInteraction,
+  RepliableInteraction,
   StringSelectMenuBuilder,
   StringSelectMenuInteraction,
 } from "discord.js";
@@ -16,13 +16,6 @@ import intReply from "@/utils/intReply";
 import chalk from "chalk";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import interactionCache, { InteractionInCache } from "@/utils/interactionCache";
-
-// apvienots tips visiem iespējamiem interactioniem, kam var izmantot šo klasi
-type InteractionType =
-  | ChatInputCommandInteraction
-  | ButtonInteraction
-  | StringSelectMenuInteraction
-  | ModalSubmitInteraction;
 
 // objekts, ko atgriež onClick handleris
 export type DialogsOnClickCallbackReturn = {
@@ -59,7 +52,7 @@ export class Dialogs<T extends { [key: string]: any }> {
 
   constructor(
     // sākotnējais interaction, piemēram, no komandas
-    private primaryInteraction: InteractionType,
+    private primaryInteraction: RepliableInteraction,
 
     // viss dialoga "state", šis ir jāmaina pa tiešo, bez setteriem
     public state: T,
@@ -67,7 +60,7 @@ export class Dialogs<T extends { [key: string]: any }> {
     // funkcija, kas atgriež embedus/pogas, atkarīga no state
     private viewFunc: (
       state: T,
-      interaction: InteractionType,
+      interaction: BaseInteraction,
     ) => Omit<InteractionReplyOptions & { withResponse: true }, "ephemeral">,
 
     private name: string,
@@ -127,7 +120,7 @@ export class Dialogs<T extends { [key: string]: any }> {
   // ja nebūs palaista start() metode, šis neko nedarīs
   public onClick(
     callback: (
-      componentInteraction: ButtonInteraction | StringSelectMenuInteraction,
+      componentInteraction: AnySelectMenuInteraction | ButtonInteraction,
       state: T,
     ) => Promise<DialogsOnClickCallbackReturn | void>,
   ) {

@@ -3,7 +3,7 @@ import editItemAttribute from "@/db/editItemAttribute";
 import editMultipleItemAttributes from "@/db/editMultipleItemAttributes";
 import findUser from "@/db/findUser";
 import countFreeInvSlots from "@/utils/countFreeInvSlots";
-import { UseManyType, UsableItemFunc, item, AttributeItem, TirgusItem, ItemCategory } from "@/types/Item";
+import { UseManyType, item, AttributeItem, TirgusItem, ItemCategory, UsableAttributeItemFunc } from "@/types/Item";
 import commandColors from "@/utils/commandColors";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
@@ -13,6 +13,8 @@ import intReply from "@/utils/intReply";
 import itemList from "@/utils/itemList";
 import itemString from "@/utils/strings/itemString";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
+import mongoTransaction from "@/utils/mongoTransaction";
+import izmantotTitle from "@/utils/strings/izmantotTitle";
 
 // 24 stundas
 export const KAFIJAS_APARATS_COOLDOWN = 86_400_000;
@@ -82,54 +84,69 @@ const useMany: UseManyType = {
   },
 };
 
-const use: UsableItemFunc = async (userId, guildId, _, specialItem) => {
-  const lastUsed = specialItem!.attributes.lastUsed!;
+// TODO: sakārtot smukāk
+const use: UsableAttributeItemFunc = async (i, user, _, specialItem) => {
+  const userId = i.user.id;
+  const guildId = i.guildId!;
+
+  console.log("viens");
+
+  const lastUsed = specialItem.attributes.lastUsed!;
   if (Date.now() - lastUsed < KAFIJAS_APARATS_COOLDOWN) {
-    return {
-      text:
-        `Tu nevari uztaisīt ${itemString(itemList.kafija, null, true)}, jo tā tiek gatavota\n` +
-        `Nākamā kafija pēc \`${millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - Date.now() + lastUsed)}\``,
-    };
+    // prettier-ignore
+    return intReply(i, ephemeralReply(
+      `Tu nevari uztaisīt ${itemString(itemList.kafija, null, true)}, jo tā tiek gatavota\n` +
+      `Nākamā kafija pēc \`${millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - Date.now() + lastUsed)}\``,
+    ))
   }
-  const user = await findUser(userId, guildId);
-  if (!user) return { error: true };
 
+  console.log("divi");
   if (!countFreeInvSlots(user)) {
-    return {
-      text:
-        `Lai uztaisītu **${itemString(itemList.kafija, null, true)}** ` +
-        `tev ir nepieciešama vismaz **1** brīva vieta inventārā`,
-    };
+    // prettier-ignore
+    return intReply(i, ephemeralReply(
+      `Lai uztaisītu **${itemString(itemList.kafija, null, true)}** ` +
+      `tev ir nepieciešama vismaz **1** brīva vieta inventārā`,
+    ))
   }
-  await editItemAttribute(userId, guildId, specialItem!._id!, { lastUsed: Date.now() });
-  const userAfter = await addItems(userId, guildId, { kafija: 1 });
-  if (!userAfter) return { error: true };
 
-  const itemCount = userAfter.items.find((item) => item.name === "kafija")?.amount || 1;
+  console.log("trīs");
+  const { ok, values } = await mongoTransaction((session) => [
+    () => editItemAttribute(userId, guildId, specialItem._id!, { lastUsed: Date.now() }, session),
+    () => addItems(userId, guildId, { kafija: 1 }, session),
+  ]);
 
-  return {
-    text: `Nākamā kafija pēc \`${millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - 1)}\``,
-    fields: [
-      {
-        name: "Tu uztaisīji",
-        value: `${itemString(itemList.kafija, 1, true)}`,
-        inline: true,
-      },
-      {
-        name: "Tev tagad ir",
-        value: `${itemString(itemList.kafija, itemCount)}`,
-        inline: true,
-      },
-    ],
-  };
+  if (!ok) return intReply(i, errorEmbed);
+
+  const itemCount = values[1].items.find((item) => item.name === "kafija")?.amount || 1;
+
+  return intReply(
+    i,
+    mainEmbed({
+      i,
+      color: commandColors.izmantot,
+      title: izmantotTitle("kafijas_aparats"),
+      description: `Nākamā kafija pēc \`${millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - 1)}\``,
+      fields: [
+        {
+          name: "Tu uztaisīji",
+          value: `${itemString(itemList.kafija, 1, true)}`,
+          inline: true,
+        },
+        {
+          name: "Tev tagad ir",
+          value: `${itemString(itemList.kafija, itemCount)}`,
+          inline: true,
+        },
+      ],
+    }),
+  );
 };
 
-const kafijas_aparats = item<
-  AttributeItem<{
-    lastUsed: number;
-  }> &
-    TirgusItem
->({
+type Attributes = {
+  lastUsed: number;
+};
+
+const kafijas_aparats = item<AttributeItem<Attributes> & TirgusItem>({
   info:
     `Kafijas aparāts ik \`24h\` uztaisīs kafiju, kuru var iegūt kafijas aparātu izmantojot\n\n` +
     "_Nevienam vēljoprojām nav zināms kā šis kafijas aparāts ir spējīgs bezgalīgi taisīt kafiju bez pupiņām, vai ūdens, vai ... elektrības_",
@@ -144,9 +161,7 @@ const kafijas_aparats = item<
   categories: [ItemCategory.TIRGUS],
   value: 200,
   tirgusPrice: { items: { kafija: 15, metalluznis: 3 } },
-  defaultAttributes: (): {
-    lastUsed: number;
-  } => ({
+  defaultAttributes: () => ({
     lastUsed: 0,
   }),
   sortBy: { lastUsed: -1 },

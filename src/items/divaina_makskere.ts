@@ -3,12 +3,11 @@ import makskere, { makskereCustomValue } from "@/items/shared/makskere";
 import { AttributeItem, item, ItemCategory, ShopItem } from "@/types/Item";
 import emoji from "@/utils/emoji";
 
-const divaina_makskere = item<
-  // prettier-ignore
-  AttributeItem<{
-    durability: number;
-  }> & ShopItem
->({
+type Attributes = {
+  durability: number;
+};
+
+const divaina_makskere = item<AttributeItem<Attributes> & ShopItem>({
   info:
     "Koka makšķere ir pārāk lēna?\nTā pārāk bieži lūzt?\nNenes pietiekami lielu pelņu?\n" +
     "Tad ir laiks investēt dīvainajā maksķerē!!!",

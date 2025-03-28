@@ -14,7 +14,6 @@ const velo_kede = item<UsableItem>({
   imgLink: "https://www.ulmanbots.lv/images/items/velo_kede.png",
   categories: [ItemCategory.OTHER],
   value: 10,
-  removedOnUse: false,
   use: velo,
 });
 

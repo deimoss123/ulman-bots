@@ -68,9 +68,8 @@ const ulmanloto = item<UsableItem & LotoItem>({
   imgLink: null, // TODO
   categories: [ItemCategory.LOTO],
   value: 500,
-  removedOnUse: false,
   lotoOptions: lotoOptions,
-  use: loto("ulmanloto", lotoOptions),
+  use: loto(lotoOptions),
 });
 
 export default ulmanloto;

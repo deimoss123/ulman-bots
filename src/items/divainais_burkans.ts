@@ -1,8 +1,9 @@
 import addLati from "@/db/addLati";
 import editItemAttribute from "@/db/editItemAttribute";
 import findUser from "@/db/findUser";
-import { item, AttributeItem, ShopItem, ItemCategory, UsableItemFunc } from "@/types/Item";
+import { item, AttributeItem, ShopItem, ItemCategory, UsableAttributeItemFunc } from "@/types/Item";
 import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
+import commandColors from "@/utils/commandColors";
 import { Dialogs } from "@/utils/dialogs";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
@@ -13,13 +14,13 @@ import intReply from "@/utils/intReply";
 import mongoTransaction from "@/utils/mongoTransaction";
 import daudzskaitlis from "@/utils/strings/daudzkaitlis";
 import itemString from "@/utils/strings/itemString";
+import izmantotTitle from "@/utils/strings/izmantotTitle";
 import latiString from "@/utils/strings/latiString";
 import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
   ModalSubmitInteraction,
-  ComponentType,
   ModalBuilder,
   ModalActionRowComponentBuilder,
   TextInputBuilder,
@@ -43,8 +44,9 @@ const enum ComponentId {
 function view({ user, attributes }: State, i: BaseInteraction) {
   return mainEmbed({
     i,
-    color: 0x000000,
-    title: `Izmantot: ${itemString("divainais_burkans", null, true, attributes)}`,
+    color: commandColors.izmantot,
+    // stulbi sanāk, jo es neglabāju pašu mantu, tāpēc jātaisa objekts pašam
+    title: izmantotTitle({ name: "divainais_burkans", attributes }),
     description:
       "Tu nokodies dīvaino burkānu, **mmmm** tas bija ļoti garšīgs\n" +
       `Šis burkāns ir nokosts **${attributes.timesUsed}** ` +
@@ -126,100 +128,96 @@ async function handleModal(
   return { newItem, user: newUser };
 }
 
-const use: UsableItemFunc = async (userId, guildId, _, specialItem) => {
-  return {
-    custom: async (i) => {
-      const res = await editItemAttribute(userId, guildId, specialItem!._id!, {
-        ...specialItem!.attributes,
-        timesUsed: specialItem!.attributes.timesUsed! + 1,
-      });
-      if (!res) return intReply(i, errorEmbed);
+const use: UsableAttributeItemFunc = async (i, _, __, specialItem) => {
+  const userId = i.user.id;
+  const guildId = i.guildId!;
 
-      const initialState: State = {
-        user: res.user,
-        itemId: res.newItem._id!,
-        attributes: res.newItem.attributes,
-        currTime: Date.now(),
-      };
+  const res = await editItemAttribute(userId, guildId, specialItem._id!, {
+    ...specialItem.attributes,
+    timesUsed: specialItem.attributes.timesUsed! + 1,
+  });
+  if (!res) return intReply(i, errorEmbed);
 
-      const dialogs = new Dialogs(i, initialState, view, "izmantot", { time: 30000 });
+  const initialState: State = {
+    user: res.user,
+    itemId: res.newItem._id!,
+    attributes: res.newItem.attributes,
+    currTime: Date.now(),
+  };
 
-      if (!(await dialogs.start())) {
-        return intReply(i, errorEmbed);
+  const dialogs = new Dialogs(i, initialState, view, "izmantot", { time: 30000 });
+
+  if (!(await dialogs.start())) {
+    return intReply(i, errorEmbed);
+  }
+
+  dialogs.onClick(async (int, state) => {
+    const user = await findUser(userId, guildId);
+    if (!user) return { error: true };
+
+    const itemInInv = user.specialItems.find(({ _id }) => _id === specialItem?._id);
+    if (!itemInInv) {
+      intReply(int, ephemeralReply(`Šis **${itemString("divainais_burkans")}** vairs nav tavā inventārā`));
+      return { end: true };
+    }
+
+    if (int.customId === ComponentId.ChangeName && int.isButton()) {
+      if (user.lati < BURKANS_CHANGE_NAME_COST) {
+        intReply(
+          int,
+          ephemeralReply(`Tev nepietiek naudas, lai nomainītu burkāna nosaukumu\nTev ir ${latiString(user.lati)}`),
+        );
+        return { end: true };
       }
 
-      dialogs.onClick(async (int, state) => {
-        const { customId, componentType } = int;
+      const modalId = `burkans_modal_${specialItem!._id}_${state.currTime}`;
 
-        const user = await findUser(userId, guildId);
-        if (!user) return { error: true };
+      await int.showModal(
+        new ModalBuilder()
+          .setCustomId(modalId)
+          .setTitle("Mainīt dīvainā burkāna nosaukumu")
+          .addComponents(
+            new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
+              new TextInputBuilder()
+                .setCustomId("burkans_modal_input")
+                .setLabel("Jaunais nosaukums")
+                .setStyle(TextInputStyle.Short)
+                .setMinLength(1)
+                .setMaxLength(10),
+            ),
+          ),
+      );
 
-        const itemInInv = user.specialItems.find(({ _id }) => _id === specialItem?._id);
-        if (!itemInInv) {
-          intReply(int, ephemeralReply(`Šis **${itemString("divainais_burkans")}** vairs nav tavā inventārā`));
-          return { end: true };
+      try {
+        const modalInt = await int.awaitModalSubmit({
+          filter: (i) => i.customId == modalId,
+          time: 50000,
+        });
+
+        const res = await handleModal(modalInt, state.currTime);
+        if (!res) {
+          return {};
         }
 
-        if (customId === ComponentId.ChangeName && componentType === ComponentType.Button) {
-          if (user.lati < BURKANS_CHANGE_NAME_COST) {
-            intReply(
-              int,
-              ephemeralReply(`Tev nepietiek naudas, lai nomainītu burkāna nosaukumu\nTev ir ${latiString(user.lati)}`),
-            );
-            return { end: true };
-          }
+        state.user = res.user;
+        state.attributes = res.newItem.attributes;
+      } catch (_) {
+        return {};
+      }
 
-          const modalId = `burkans_modal_${specialItem!._id}_${state.currTime}`;
+      state.currTime = Date.now();
 
-          await int.showModal(
-            new ModalBuilder()
-              .setCustomId(modalId)
-              .setTitle("Mainīt dīvainā burkāna nosaukumu")
-              .addComponents(
-                new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-                  new TextInputBuilder()
-                    .setCustomId("burkans_modal_input")
-                    .setLabel("Jaunais nosaukums")
-                    .setStyle(TextInputStyle.Short)
-                    .setMinLength(1)
-                    .setMaxLength(10),
-                ),
-              ),
-          );
-
-          try {
-            const modalInt = await int.awaitModalSubmit({
-              filter: (i) => i.customId == modalId,
-              time: 50000,
-            });
-
-            const res = await handleModal(modalInt, state.currTime);
-            if (!res) {
-              return {};
-            }
-
-            state.user = res.user;
-            state.attributes = res.newItem.attributes;
-          } catch (_) {
-            return {};
-          }
-
-          state.currTime = Date.now();
-
-          return { edit: true };
-        }
-      });
-    },
-  };
+      return { edit: true };
+    }
+  });
 };
 
-const divainais_burkans = item<
-  AttributeItem<{
-    timesUsed: number;
-    customName: string;
-  }> &
-    ShopItem
->({
+type Attributes = {
+  timesUsed: number;
+  customName: string;
+};
+
+const divainais_burkans = item<AttributeItem<Attributes> & ShopItem>({
   info:
     "Šis burkāns ir ne tikai dīvains, bet arī garšīgs!\n" +
     "Burkānam piemīt atrībuts, kas uzskaita cik reizes tas ir bijis nokosts (izmantots)\n\n" +

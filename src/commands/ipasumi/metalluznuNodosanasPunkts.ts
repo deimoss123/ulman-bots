@@ -3,10 +3,8 @@ import {
   AttachmentBuilder,
   BaseInteraction,
   ButtonBuilder,
-  ButtonInteraction,
   ButtonStyle,
   resolveColor,
-  StringSelectMenuInteraction,
 } from "discord.js";
 import { IpasumiState } from "@/commands/ipasumi/ipasumi";
 import mainEmbed from "@/utils/embeds/mainEmbed";
@@ -423,7 +421,7 @@ async function updateDb(
   const { userId, guildId, user } = state;
 
   const currTime = Date.now();
-  let { lastTemp, currentLati, lastUpdateTime } = user.properties.metalluznuNodosanasPunkts;
+  const { lastTemp, currentLati, lastUpdateTime } = user.properties.metalluznuNodosanasPunkts;
 
   const elapsedMs = currTime - lastUpdateTime;
 
@@ -576,10 +574,7 @@ function view(state: IpasumiState, i: BaseInteraction) {
   });
 }
 
-async function handler(
-  i: ButtonInteraction | StringSelectMenuInteraction,
-  state: IpasumiState,
-): ReturnType<Parameters<Dialogs<IpasumiState>["onClick"]>[0]> {
+const handler: Parameters<Dialogs<IpasumiState>["onClick"]>[0] = async (i, state) => {
   if (!i.isButton()) return;
 
   const userId = i.user.id;
@@ -633,6 +628,6 @@ async function handler(
   }
 
   return;
-}
+};
 
 export { init, State, defaultState, view, handler };

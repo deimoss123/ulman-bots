@@ -1,12 +1,15 @@
 import { item, AttributeItem, TirgusItem, ItemCategory } from "@/types/Item";
+import commandColors from "@/utils/commandColors";
+import mainEmbed from "@/utils/embeds/mainEmbed";
 import emoji from "@/utils/emoji";
+import intReply from "@/utils/intReply";
+import izmantotTitle from "@/utils/strings/izmantotTitle";
 
-const naudas_maiss = item<
-  // prettier-ignore
-  AttributeItem<{
-    latiCollected: number;
-  }> & TirgusItem
->({
+type Attributes = {
+  latiCollected: number;
+};
+
+const naudas_maiss = item<AttributeItem<Attributes> & TirgusItem>({
   info:
     "Kļūt par bankas zagli ir viegli, bet kur liksi nolaupīto naudu?\n\n" +
     "Naudas maiss glabā no Valsts Bankas (UlmaņBota) nozagto naudu, " +
@@ -30,11 +33,17 @@ const naudas_maiss = item<
     latiCollected: 0,
   }),
   sortBy: { latiCollected: 1 },
-  use: () => ({
-    text:
-      `Naudas maiss glabā no Valsts bankas (UlmaņBota) nozagto naudu\n\n` +
-      "Lai zagtu no valsts bankas izmanto komandu `/zagt @UlmaņBots` un pārliecinies ka tavā inventārā ir **tukšs** naudas maiss",
-  }),
+  use: async (i) => {
+    // prettier-ignore
+    intReply(i, mainEmbed({
+      i,
+      color: commandColors.izmantot,
+      title: izmantotTitle("naudas_maiss"),
+      description: 
+        "Naudas maiss glabā no Valsts bankas (UlmaņBota) nozagto naudu\n\n" +
+        "Lai zagtu no valsts bankas izmanto komandu `/zagt @UlmaņBots` un pārliecinies ka tavā inventārā ir **tukšs** naudas maiss",
+    }));
+  },
 });
 
 export default naudas_maiss;

@@ -14,8 +14,7 @@ const vinoga = item<UsableItem>({
   imgLink: null,
   categories: [ItemCategory.OTHER],
   value: 15,
-  removedOnUse: false,
-  use: oga("vinoga"),
+  use: oga,
 });
 
 export default vinoga;
