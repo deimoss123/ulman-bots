@@ -5,6 +5,7 @@ import {
   ButtonBuilder,
   ButtonInteraction,
   ComponentType,
+  InteractionEditReplyOptions,
   InteractionReplyOptions,
   Message,
   MessageFlags,
@@ -85,7 +86,22 @@ export class Dialogs<T extends { [key: string]: any }> {
 
   // funkcija, kas pirmo reizi atbild uz interaction
   // atgriež statusu -> true = izdevās atbildēt, false = neizdevās
-  public async start(): Promise<boolean> {
+  // primaryMsg lielākoties ir domāts, ja defero iepriekš un dialogu gribi sākt ar editu nevis reply
+  // piemēru var redzēt top.ts
+  public async start(primaryMsg?: Message): Promise<boolean> {
+    if (primaryMsg) {
+      try {
+        await this.primaryInteraction.editReply(
+          this.viewFunc(this.state, this.primaryInteraction) as InteractionEditReplyOptions,
+        );
+        this.primaryMsg = primaryMsg;
+        return true;
+      } catch (e) {
+        console.error(e);
+        return false;
+      }
+    }
+
     const res = await intReply(this.primaryInteraction, this.viewFunc(this.state, this.primaryInteraction));
     if (!res || !res.resource?.message) return false;
 
@@ -107,7 +123,9 @@ export class Dialogs<T extends { [key: string]: any }> {
   // rediģē ziņu
   public async edit(): Promise<boolean> {
     try {
-      await this.primaryInteraction.editReply(this.viewFunc(this.state, this.primaryInteraction));
+      await this.primaryInteraction.editReply(
+        this.viewFunc(this.state, this.primaryInteraction) as InteractionEditReplyOptions,
+      );
       return true;
     } catch (e) {
       console.error(e);
