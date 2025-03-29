@@ -1,8 +1,7 @@
-import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from "discord.js";
 import addItems from "@/db/addItems";
 import addXp from "@/db/addXp";
 import findUser from "@/db/findUser";
-import buttonHandler from "@/utils/buttonHandler";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import itemString from "@/utils/strings/itemString";
@@ -13,6 +12,9 @@ import intReply from "@/utils/intReply";
 import itemList, { ItemKey } from "@/utils/itemList";
 import emoji from "@/utils/emoji";
 import commandColors from "@/utils/commandColors";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
+import errorEmbed from "@/utils/embeds/errorEmbed";
+import mongoTransaction from "@/utils/mongoTransaction";
 
 const VELO_XP = 10;
 
@@ -27,32 +29,57 @@ const requiredItems: Record<ItemKey, number> = {
   velo_sture: 1,
 };
 
-function makeEmbed(i: BaseInteraction, reqItemsInv: Record<ItemKey, number>, color: number) {
-  const maxLength = Math.max(...Object.values(reqItemsInv)).toString().length;
+type State = {
+  hasAll: boolean;
+  items: Record<ItemKey, number>;
+};
+
+const enum ComponentId {
+  Sataisit = "sataisit_velosipedu",
+}
+
+const view: DialogsViewFunc<State> = (state, i) => {
+  const maxLength = Math.max(...Object.values(state.items)).toString().length;
+
+  const components = [
+    new ActionRowBuilder<ButtonBuilder>().addComponents(
+      new ButtonBuilder()
+        .setCustomId(ComponentId.Sataisit)
+        .setLabel("Sataisīt velosipēdu")
+        .setStyle(state.hasAll ? ButtonStyle.Primary : ButtonStyle.Secondary)
+        .setDisabled(!state.hasAll),
+    ),
+  ];
 
   return mainEmbed({
     i,
-    description: `Ar velosipēda detaļām tu vari sataisīt **${itemString(itemList["velosipeds"], null, true)}**`,
+    title: `Taisīt ${itemString("velosipeds", null, true)}`,
+    description:
+      `Ar velosipēda detaļām tu vari sataisīt **${itemString("velosipeds", null, true)}**\n` +
+      `Velosipēda izveide dod **10** UlmaņPunktus`,
     fields: [
       {
         name: "Nepieciešamās detaļas:",
-        value: Object.entries(reqItemsInv)
-          .map(([key, amount]) => {
-            return (
+        value: Object.entries(state.items)
+          .map(
+            ([key, amount]) =>
               `${amount >= requiredItems[key] ? emoji("icon_check1") : emoji("icon_cross")} ` +
               `\` ${" ".repeat(maxLength - `${amount}`.length)}${amount}/${requiredItems[key]} \` ` +
-              itemString(itemList[key])
-            );
-          })
+              itemString(key),
+          )
           .join("\n"),
         inline: false,
       },
     ],
-    color,
-  }).embeds!;
-}
+    components,
+    color: commandColors.izmantot,
+  });
+};
 
-function calcReqItems(items: ItemInProfile[]) {
+function calcReqItems(items: ItemInProfile[]): {
+  items: Record<ItemKey, number>;
+  hasAll: boolean;
+} {
   const reqItemsInv: Record<ItemKey, number> = {};
   let hasAll = true;
 
@@ -68,83 +95,59 @@ function calcReqItems(items: ItemInProfile[]) {
   };
 }
 
-function makeComponents(hasAll: boolean) {
-  return [
-    new ActionRowBuilder<ButtonBuilder>().addComponents(
-      new ButtonBuilder()
-        .setCustomId("izveidot_velosipedu")
-        .setLabel("Sataisīt velosipēdu")
-        .setStyle(hasAll ? ButtonStyle.Primary : ButtonStyle.Secondary)
-        .setDisabled(!hasAll),
-    ),
-  ];
-}
-
 const velo: UsableItemFunc = async (i, user) => {
   const userId = i.user.id;
   const guildId = i.guildId!;
 
-  const reqItemsInv = calcReqItems(user.items);
+  const initialState: State = calcReqItems(user.items);
+  const dialogs = new Dialogs(i, initialState, view, "izmantot");
 
-  const msg = await intReply(i, {
-    embeds: makeEmbed(i, reqItemsInv.items, commandColors.izmantot),
-    components: makeComponents(reqItemsInv.hasAll),
-    fetchReply: true,
-  });
+  if (!(await dialogs.start())) {
+    return intReply(i, errorEmbed);
+  }
 
-  if (!msg) return;
+  dialogs.onClick(async (int, state) => {
+    if (int.customId === ComponentId.Sataisit && int.isButton()) {
+      const user = await findUser(userId, guildId);
+      if (!user) return { error: true };
 
-  buttonHandler(
-    i,
-    "izmantot_velo",
-    msg,
-    async (int) => {
-      const { customId } = int;
-      if (int.componentType !== ComponentType.Button) return;
-
-      if (customId === "izveidot_velosipedu") {
-        const user = await findUser(userId, guildId);
-        if (!user) return { error: true };
-
-        const { hasAll } = calcReqItems(user.items);
-        if (!hasAll) {
-          intReply(int, ephemeralReply("Tev nav nepieciešamās detaļas, inventāra saturs ir mainījies"));
-          return { end: true };
-        }
-
-        const itemsToRemove: Record<ItemKey, number> = {};
-        for (const [key, value] of Object.entries(requiredItems)) {
-          itemsToRemove[key] = -value;
-        }
-
-        const userAfter = await addItems(userId, guildId, { ...itemsToRemove, velosipeds: 1 });
-        const userAfterXP = await addXp(userId, guildId, VELO_XP);
-        if (!userAfter || !userAfterXP) {
-          return { error: true };
-        }
-
-        const { items: items2, hasAll: hasAll2 } = calcReqItems(userAfter.items);
-
-        return {
-          edit: {
-            embeds: makeEmbed(i, items2, commandColors.izmantot),
-            components: makeComponents(hasAll2),
-          },
-          after: () => {
-            intReply(int, {
-              embeds: [
-                new EmbedBuilder()
-                  .setDescription(`No velosipēda detaļām tu sataisīji **${itemString(itemList.velosipeds, 1, true)}**`)
-                  .setColor(commandColors.izmantot),
-                xpAddedEmbed(userAfterXP, VELO_XP, "Par velosipēda sataisīšanu tu ieguvi"),
-              ],
-            });
-          },
-        };
+      const { hasAll, items } = calcReqItems(user.items);
+      state.hasAll = hasAll;
+      state.items = items;
+      if (!state.hasAll) {
+        intReply(int, ephemeralReply("Tev nav visas nepieciešamās detaļas, inventāra saturs ir mainījies"));
+        return { edit: true, end: true };
       }
-    },
-    30_000,
-  );
+
+      const itemsToRemove: Record<ItemKey, number> = {};
+      for (const [key, value] of Object.entries(requiredItems)) {
+        itemsToRemove[key] = -value;
+      }
+
+      const { ok, values } = await mongoTransaction((session) => [
+        () => addXp(userId, guildId, VELO_XP, session),
+        () => addItems(userId, guildId, { ...itemsToRemove, velosipeds: 1 }, session),
+      ]);
+
+      if (!ok) return { error: true };
+      const [userAfterXp, userAfter] = values;
+
+      const { hasAll: hasAll2, items: items2 } = calcReqItems(userAfter.items);
+      state.hasAll = hasAll2;
+      state.items = items2;
+
+      intReply(int, {
+        embeds: [
+          new EmbedBuilder()
+            .setDescription(`No velosipēda detaļām tu sataisīji **${itemString(itemList.velosipeds, 1, true)}**`)
+            .setColor(commandColors.izmantot),
+          xpAddedEmbed(userAfterXp, VELO_XP, "Par velosipēda sataisīšanu tu ieguvi"),
+        ],
+      });
+
+      return { edit: true, end: !state.hasAll };
+    }
+  });
 };
 
 export default velo;
