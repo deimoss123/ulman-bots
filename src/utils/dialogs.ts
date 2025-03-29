@@ -21,18 +21,18 @@ import interactionCache, { InteractionInCache } from "@/utils/interactionCache";
 // objekts, ko atgriež onClick handleris
 export type DialogsOnClickCallbackReturn = {
   // atbildēt ar kļūdas paziņojumu
-  error?: true;
+  error?: boolean;
 
   // tiks palaista update metode
   // šim ir prioritāte virs edit, bet abus nav jēga likt objektā,
   // jo abi dara vienu un to pašu - rediģē ziņu, tikai update to dara atbildot uz interaction
-  update?: true;
+  update?: boolean;
 
   // tiks palaista edit metode
-  edit?: true;
+  edit?: boolean;
 
   // pārtrauks šī dialoga collectori un atspējos visas pogas
-  end?: true;
+  end?: boolean;
 
   // funkcija, kas tiks palaista pēc beigām
   // piemēram, feniksam spiežot "griezt vēlreiz" tiek palaista feniksa komanda vēlreiz
