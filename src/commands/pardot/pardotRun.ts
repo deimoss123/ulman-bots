@@ -6,7 +6,6 @@ import {
   ButtonStyle,
   ChatInputCommandInteraction,
   ComponentType,
-  InteractionReplyOptions,
 } from "discord.js";
 import addItems from "@/db/addItems";
 import addLati from "@/db/addLati";
@@ -26,7 +25,7 @@ import { emptyInvEmbed, PIRKT_PARDOT_NODOKLIS } from "@/commands/pardot/pardot";
 import removeItemsById from "@/db/removeItemsById";
 import intReply from "@/utils/intReply";
 import mongoTransaction from "@/utils/mongoTransaction";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 
 interface ItemsToSell {
   name: string;
@@ -84,7 +83,7 @@ const enum ComponentId {
   No = "pardot_visu_no",
 }
 
-function pardotVisuView(state: State, i: BaseInteraction): InteractionReplyOptions & { withResponse: true } {
+const pardotVisuView: DialogsViewFunc<State> = (state, i) => {
   if (state.selected === "ja") {
     return pardotEmbed(i, state.user, state.itemsToSell, state.soldItemsValue, state.currTime);
   }
@@ -113,7 +112,7 @@ function pardotVisuView(state: State, i: BaseInteraction): InteractionReplyOptio
     withResponse: true,
     components,
   };
-}
+};
 
 export default async function pardotRun(
   i: ChatInputCommandInteraction | ButtonInteraction,

@@ -1,9 +1,9 @@
-import { ActionRowBuilder, BaseInteraction, ComponentType, StringSelectMenuBuilder } from "discord.js";
+import { ActionRowBuilder, ComponentType, StringSelectMenuBuilder } from "discord.js";
 import findUser from "@/db/findUser";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import Command from "@/types/Command";
 import UserProfile from "@/types/UserProfile";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import intReply from "@/utils/intReply";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
@@ -34,7 +34,7 @@ const ALL_PROPERTIES = {
     emoji: string;
     init: (state: IpasumiState) => Promise<{ ok: boolean }>;
     defaultState: () => Record<string, unknown>;
-    view: Dialogs<IpasumiState>["viewFunc"];
+    view: DialogsViewFunc<IpasumiState>;
     handler: Parameters<Dialogs<IpasumiState>["onClick"]>[0]; // Dialogs.onClick callback
   }
 >;
@@ -56,7 +56,7 @@ const enum ComponentId {
   Select = "ipasumi_select",
 }
 
-function ipasumiView(state: IpasumiState, i: BaseInteraction) {
+const ipasumiView: DialogsViewFunc<IpasumiState> = (state, i) => {
   if (state.screen !== "default") {
     return ALL_PROPERTIES[state.screen].view(state, i);
   }
@@ -83,7 +83,7 @@ function ipasumiView(state: IpasumiState, i: BaseInteraction) {
       ),
     ],
   });
-}
+};
 
 const ipasumi: Command = {
   description: () => "...",

@@ -6,7 +6,7 @@ import countFreeInvSlots from "@/utils/countFreeInvSlots";
 import { UseManyType, item, AttributeItem, TirgusItem, ItemCategory, UsableAttributeItemFunc } from "@/types/Item";
 import UserProfile, { ItemAttributes } from "@/types/UserProfile";
 import commandColors from "@/utils/commandColors";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import mainEmbed from "@/utils/embeds/mainEmbed";
@@ -18,7 +18,7 @@ import mongoTransaction from "@/utils/mongoTransaction";
 import itemString from "@/utils/strings/itemString";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import { useDifferentItemSelectMenu, useDifferentItemHandler } from "@/utils/useDifferentItem";
-import { BaseInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
 import wrapString from "@/utils/strings/wrapString";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 
@@ -115,7 +115,7 @@ const enum ComponentId {
   RemoveHat = "petnieks_remove_hat",
 }
 
-function view(state: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = (state, i) => {
   const { hat } = state.attributes;
 
   const components = [];
@@ -145,7 +145,7 @@ function view(state: State, i: BaseInteraction) {
     color: commandColors.izmantot,
     components,
   });
-}
+};
 
 const use: UsableAttributeItemFunc = async (i, user, _, specialItem) => {
   const userId = i.user.id;

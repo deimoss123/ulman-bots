@@ -1,7 +1,6 @@
 import Command from "@/types/Command";
 import {
   ActionRowBuilder,
-  BaseInteraction,
   ButtonBuilder,
   ButtonStyle,
   ComponentType,
@@ -13,7 +12,7 @@ import findUser from "@/db/findUser";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import intReply from "@/utils/intReply";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import UserProfile from "@/types/UserProfile";
 import smallEmbed from "@/utils/embeds/smallEmbed";
 import setJobPosition from "@/db/setJobPosition";
@@ -69,7 +68,7 @@ const enum ComponentId {
   ChangeProfession = "vakances_change_profession",
 }
 
-function view({ user, chosenJob, currentJob }: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = ({ user, chosenJob, currentJob }, i) => {
   const options: SelectMenuComponentOptionData[] = Object.entries(JobPositions)
     .filter(([key, value]) => key !== currentJob && user.level >= value.minLevel)
     .map(([key, value]) => ({
@@ -108,7 +107,7 @@ function view({ user, chosenJob, currentJob }: State, i: BaseInteraction) {
       ),
     ],
   });
-}
+};
 
 const vakances: Command = {
   description: () =>

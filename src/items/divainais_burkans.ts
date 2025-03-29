@@ -4,7 +4,7 @@ import findUser from "@/db/findUser";
 import { item, AttributeItem, ShopItem, ItemCategory, UsableAttributeItemFunc } from "@/types/Item";
 import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
 import commandColors from "@/utils/commandColors";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import mainEmbed from "@/utils/embeds/mainEmbed";
@@ -26,7 +26,6 @@ import {
   ModalActionRowComponentBuilder,
   TextInputBuilder,
   TextInputStyle,
-  BaseInteraction,
 } from "discord.js";
 
 const BURKANS_CHANGE_NAME_COST = 250;
@@ -42,7 +41,7 @@ const enum ComponentId {
   ChangeName = "divainais_burkans_change_name",
 }
 
-function view({ user, attributes }: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = ({ user, attributes }, i) => {
   return mainEmbed({
     i,
     color: commandColors.izmantot,
@@ -62,7 +61,7 @@ function view({ user, attributes }: State, i: BaseInteraction) {
       ),
     ],
   });
-}
+};
 
 async function handleModal(
   i: ModalSubmitInteraction,

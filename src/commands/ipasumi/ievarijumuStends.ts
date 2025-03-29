@@ -1,7 +1,6 @@
-import { BaseInteraction } from "discord.js";
 import { IpasumiState } from "@/commands/ipasumi/ipasumi";
 import mainEmbed from "@/utils/embeds/mainEmbed";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 
 type State = {};
 
@@ -13,12 +12,12 @@ function defaultState(): State {
   return {};
 }
 
-function view(state: IpasumiState, i: BaseInteraction) {
+const view: DialogsViewFunc<IpasumiState> = (state, i) => {
   return mainEmbed({
     i,
     content: "ievarijumuStends",
   });
-}
+};
 
 const handler: Parameters<Dialogs<IpasumiState>["onClick"]>[0] = async (i, state) => {
   return;

@@ -6,7 +6,7 @@ import countFreeInvSlots from "@/utils/countFreeInvSlots";
 import { item, AttributeItem, ItemCategory, UsableAttributeItemFunc } from "@/types/Item";
 import UserProfile from "@/types/UserProfile";
 import commandColors from "@/utils/commandColors";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import mainEmbed from "@/utils/embeds/mainEmbed";
@@ -16,7 +16,7 @@ import itemList, { ItemKey } from "@/utils/itemList";
 import mongoTransaction from "@/utils/mongoTransaction";
 import itemString from "@/utils/strings/itemString";
 import { useDifferentItemSelectMenu, useDifferentItemHandler } from "@/utils/useDifferentItem";
-import { BaseInteraction, ActionRowBuilder, StringSelectMenuBuilder, ComponentType } from "discord.js";
+import { ActionRowBuilder, StringSelectMenuBuilder, ComponentType } from "discord.js";
 import wrapString from "@/utils/strings/wrapString";
 
 const fishCountChance: ChanceRecord = {
@@ -49,7 +49,7 @@ type State = {
   isSpinning: boolean;
 };
 
-function view(state: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = (state, i) => {
   const emptyEmoji = emoji("blank");
   const arrow_1_left = emoji("icon_arrow_1_left");
   const arrow_1_right = emoji("icon_arrow_1_right");
@@ -88,7 +88,7 @@ function view(state: State, i: BaseInteraction) {
         ],
     components,
   });
-}
+};
 
 const use: UsableAttributeItemFunc = async (i, user, _, specialItem) => {
   const userId = i.user.id;

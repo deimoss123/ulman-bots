@@ -1,11 +1,4 @@
-import {
-  ActionRowBuilder,
-  AttachmentBuilder,
-  BaseInteraction,
-  ButtonBuilder,
-  ButtonStyle,
-  resolveColor,
-} from "discord.js";
+import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, resolveColor } from "discord.js";
 import { IpasumiState } from "@/commands/ipasumi/ipasumi";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import UserProfile from "@/types/UserProfile";
@@ -13,7 +6,7 @@ import setUser from "@/db/setUser";
 import findUser from "@/db/findUser";
 import emoji from "@/utils/emoji";
 import { writeFile, readFile } from "fs/promises";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import mongoTransaction from "@/utils/mongoTransaction";
 import addLati from "@/db/addLati";
 import intReply from "@/utils/intReply";
@@ -516,7 +509,7 @@ function getData(user: UserProfile) {
   };
 }
 
-function view(state: IpasumiState, i: BaseInteraction) {
+const view: DialogsViewFunc<IpasumiState> = (state, i) => {
   const data = getData(state.user);
 
   const row = new ActionRowBuilder<ButtonBuilder>();
@@ -572,7 +565,7 @@ function view(state: IpasumiState, i: BaseInteraction) {
       : undefined,
     image: state.metalluznuNodosanasPunkts.chart ? "attachment://granulu_katls_grafiks.png" : undefined,
   });
-}
+};
 
 const handler: Parameters<Dialogs<IpasumiState>["onClick"]>[0] = async (i, state) => {
   if (!i.isButton()) return;

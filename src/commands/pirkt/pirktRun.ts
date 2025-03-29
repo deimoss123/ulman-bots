@@ -1,6 +1,5 @@
 import {
   ActionRowBuilder,
-  BaseInteraction,
   ButtonBuilder,
   ButtonInteraction,
   ButtonStyle,
@@ -27,7 +26,7 @@ import Item from "@/types/Item";
 import commandColors from "@/utils/commandColors";
 import UserProfile from "@/types/UserProfile";
 import mongoTransaction from "@/utils/mongoTransaction";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 
 type State = {
   user: UserProfile;
@@ -42,7 +41,7 @@ const enum ComponentId {
   Izmantot = "pirkt_izmantot",
 }
 
-function view(state: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = (state, i) => {
   const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setCustomId(ComponentId.Izmantot)
@@ -70,7 +69,7 @@ function view(state: State, i: BaseInteraction) {
     ],
     components: state.isUsable ? [actionRow] : [],
   });
-}
+};
 
 export default async function pirktRun(
   i: ChatInputCommandInteraction | ButtonInteraction,

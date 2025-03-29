@@ -1,7 +1,7 @@
-import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import Command from "@/types/Command";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import intReply from "@/utils/intReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 
@@ -15,7 +15,7 @@ const enum ComponentId {
   Tests = "iestatit_testa_poga",
 }
 
-function view(state: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = (state, i) => {
   return mainEmbed({
     i,
     description: `${state.text}\n${state.count}`,
@@ -26,7 +26,7 @@ function view(state: State, i: BaseInteraction) {
       ),
     ],
   });
-}
+};
 
 const iestatit: Command = {
   devOnly: true,

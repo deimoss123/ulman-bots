@@ -1,4 +1,4 @@
-import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle, EmbedField, User } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedField, User } from "discord.js";
 import UserProfile from "@/types/UserProfile";
 import { INV_PAGE_SIZE, ItemType, itemTypes } from "@/commands/inventars/inventars";
 import latiString from "@/utils/strings/latiString";
@@ -8,6 +8,7 @@ import commandColors from "@/utils/commandColors";
 import btnPaginationRow from "@/utils/embeds/btnPaginationRow";
 import itemList from "@/utils/itemList";
 import daudzskaitlis from "@/utils/strings/daudzkaitlis";
+import { DialogsViewFunc } from "@/utils/dialogs";
 
 export type InventarsState = {
   targetDiscordUser: User;
@@ -54,7 +55,7 @@ function sellRow({ items }: UserProfile, buttonsPressed: Set<"visas" | "neizmant
   return row;
 }
 
-export function inventarsView(state: InventarsState, i: BaseInteraction) {
+const inventarsView: DialogsViewFunc<InventarsState> = (state, i) => {
   const { items, specialItems, itemCap, userId } = state.targetUser;
 
   const fieldsToShow = state.fields.slice(state.currentPage * INV_PAGE_SIZE, (state.currentPage + 1) * INV_PAGE_SIZE);
@@ -90,4 +91,6 @@ export function inventarsView(state: InventarsState, i: BaseInteraction) {
     fields: fieldsToShow,
     components: rows,
   });
-}
+};
+
+export default inventarsView;

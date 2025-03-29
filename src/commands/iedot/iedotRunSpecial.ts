@@ -1,6 +1,5 @@
 import {
   ActionRowBuilder,
-  BaseInteraction,
   ButtonBuilder,
   ButtonStyle,
   ChatInputCommandInteraction,
@@ -25,7 +24,7 @@ import itemList, { ItemKey } from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 import { attributeItemSort } from "@/commands/inventars/inventars";
 import { cantPayTaxEmbed } from "@/commands/iedot/iedot";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import mongoTransaction from "@/utils/mongoTransaction";
 
@@ -88,7 +87,7 @@ const enum ComponentId {
   Confirm = "iedot_special_confirm",
 }
 
-function view(state: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = (state, i) => {
   const selectedIds = state.selectedItems.map((item) => item._id!);
 
   const components = [
@@ -168,7 +167,7 @@ function view(state: State, i: BaseInteraction) {
             `(${Math.floor(state.user.giveTax * 100)}% no mantu kopējās vērtības)`),
     components,
   });
-}
+};
 
 function checkTargetInv(targetUser: UserProfile, amountToGive: number): boolean {
   if (amountToGive > countFreeInvSlots(targetUser)) return false;

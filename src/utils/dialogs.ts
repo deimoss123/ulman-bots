@@ -39,6 +39,11 @@ export type DialogsOnClickCallbackReturn = {
   after?: () => any;
 };
 
+export type DialogsViewFunc<T> = (
+  state: T,
+  interaction: BaseInteraction,
+) => Omit<InteractionReplyOptions & { withResponse: true }, "ephemeral">;
+
 // jaunā klase interactioniem/pogām/embediem, kas aizvieto drausmīgo buttonHandler
 // plāns ir izveidot kaut ko līdzīgu elm arhitektūrai
 // šo nākotnē vajadzētu integrēt visur
@@ -59,10 +64,7 @@ export class Dialogs<T extends { [key: string]: any }> {
     public state: T,
 
     // funkcija, kas atgriež embedus/pogas, atkarīga no state
-    private viewFunc: (
-      state: T,
-      interaction: BaseInteraction,
-    ) => Omit<InteractionReplyOptions & { withResponse: true }, "ephemeral">,
+    private viewFunc: DialogsViewFunc<T>,
 
     private name: string,
 

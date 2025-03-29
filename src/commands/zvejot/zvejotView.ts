@@ -1,6 +1,5 @@
 import {
   ActionRowBuilder,
-  BaseInteraction,
   bold,
   ButtonBuilder,
   ButtonStyle,
@@ -22,6 +21,7 @@ import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import { AttributeItem, ItemCategory } from "@/types/Item";
 import { calcRepairCost } from "@/commands/zvejot/zvejot";
 import { makskereDisplayAttributes } from "@/items/shared/makskere";
+import { DialogsViewFunc } from "@/utils/dialogs";
 
 function zvejaEmojiString() {
   return (
@@ -173,7 +173,7 @@ function components(state: ZvejotState): ActionRowBuilder<ButtonBuilder | String
   return actionRows;
 }
 
-export default function zvejotView(state: ZvejotState, i: BaseInteraction) {
+const zvejotView: DialogsViewFunc<ZvejotState> = (state, i) => {
   const { fishing } = state.user;
   const { selectedRod, usesLeft, caughtFishes, lastCaughtFish, futureFishList, maxCapacity } = fishing;
 
@@ -237,4 +237,6 @@ export default function zvejotView(state: ZvejotState, i: BaseInteraction) {
     fields,
     components: components(state),
   });
-}
+};
+
+export default zvejotView;

@@ -1,4 +1,4 @@
-import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import UserProfile from "@/types/UserProfile";
 import { KazinoLikme } from "@/commands/rulete/rulete";
 import { CalcSpinRes } from "@/commands/feniks/calcSpin";
@@ -8,6 +8,7 @@ import feniksLaimesti from "@/commands/feniks/feniksLaimesti";
 import commandColors from "@/utils/commandColors";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import itemList, { ItemKey } from "@/utils/itemList";
+import { DialogsViewFunc } from "@/utils/dialogs";
 
 export type FeniksState = {
   likme: KazinoLikme;
@@ -40,7 +41,7 @@ export const FreeSpinIds: Record<string, ComponentId> = {
   brivgriez100: ComponentId.FreeSpin100,
 };
 
-export default function feniksView(state: FeniksState, i: BaseInteraction) {
+const feniksView: DialogsViewFunc<FeniksState> = (state, i) => {
   const emptyEmoji = emoji("blank");
   const arrow_1_left = emoji("icon_arrow_1_left");
   const arrow_1_right = emoji("icon_arrow_1_right");
@@ -140,4 +141,6 @@ export default function feniksView(state: FeniksState, i: BaseInteraction) {
       (state.isFree ? "**(brīvgrieziens)**" : typeof state.likme !== "number" ? `(${state.likme})` : ""),
     components,
   });
-}
+};
+
+export default feniksView;

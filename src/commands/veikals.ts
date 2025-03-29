@@ -1,7 +1,6 @@
 import Command from "@/types/Command";
 import {
   ActionRowBuilder,
-  BaseInteraction,
   ButtonBuilder,
   ButtonStyle,
   ComponentType,
@@ -25,7 +24,7 @@ import intReply from "@/utils/intReply";
 import Item, { ItemCategory } from "@/types/Item";
 import UserProfile from "@/types/UserProfile";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 
 type ShopItem = {
   key: ItemKey;
@@ -49,7 +48,9 @@ const enum ComponentId {
   SelectAmount = "veikals_select_amount",
 }
 
-function view({ user, shopItems, chosenItem, chosenAmount, resetTime, timeUntilReset }: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = (state, i) => {
+  const { user, shopItems, chosenItem, chosenAmount, resetTime, timeUntilReset } = state;
+
   const fields = shopItems.map((item) => {
     let name = itemString(item.key);
     if (item.discount) {
@@ -148,7 +149,7 @@ function view({ user, shopItems, chosenItem, chosenAmount, resetTime, timeUntilR
       buttonRow,
     ],
   });
-}
+};
 
 const veikals: Command = {
   description: () =>

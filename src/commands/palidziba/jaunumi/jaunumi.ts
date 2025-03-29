@@ -1,6 +1,5 @@
 import {
   ActionRowBuilder,
-  BaseInteraction,
   ChatInputCommandInteraction,
   ComponentType,
   EmbedField,
@@ -10,7 +9,7 @@ import commandColors from "@/utils/commandColors";
 import mainEmbed, { ULMANBOTA_VERSIJA } from "@/utils/embeds/mainEmbed";
 import intReply from "@/utils/intReply";
 import updatesList, { VersionString } from "@/commands/palidziba/jaunumi/updatesList";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 
 type State = {
@@ -21,7 +20,7 @@ const enum ComponentId {
   Select = "jaunumi_select",
 }
 
-function view(state: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = (state, i) => {
   const { date, description, fields } = updatesList[state.selectedVersion]();
 
   const updates = Object.entries(updatesList).map(([k, v]) => [k, v()] as const);
@@ -46,7 +45,7 @@ function view(state: State, i: BaseInteraction) {
     fields: fields as EmbedField[],
     components,
   });
-}
+};
 
 export default async function jaunumi(i: ChatInputCommandInteraction) {
   const dialogs = new Dialogs<State>(i, { selectedVersion: ULMANBOTA_VERSIJA }, view, "palidziba", { time: 300000 });

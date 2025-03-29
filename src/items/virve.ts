@@ -3,7 +3,7 @@ import findUser from "@/db/findUser";
 import setLati from "@/db/setLati";
 import { item, ItemCategory, ShopItem, UsableItem, UsableItemFunc } from "@/types/Item";
 import commandColors from "@/utils/commandColors";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import mainEmbed from "@/utils/embeds/mainEmbed";
@@ -41,7 +41,7 @@ function embed(i: BaseInteraction, description: string, hasComponents = false) {
   });
 }
 
-function view(state: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = (state, i) => {
   if (state.cancelled) {
     return embed(i, "Tu izvēlējies dzīvot");
   }
@@ -55,7 +55,7 @@ function view(state: State, i: BaseInteraction) {
   }
 
   return embed(i, "Vai tu vēlies pakārties? (ļoti bīstami)", true);
-}
+};
 
 const use: UsableItemFunc = async (i, user) => {
   const userId = i.user.id;

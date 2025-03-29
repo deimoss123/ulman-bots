@@ -22,7 +22,7 @@ import itemList, { ItemKey } from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 import { attributeItemSort } from "@/commands/inventars/inventars";
 import { PIRKT_PARDOT_NODOKLIS } from "@/commands/pardot/pardot";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import mongoTransaction from "@/utils/mongoTransaction";
 import commandColors from "@/utils/commandColors";
 
@@ -68,7 +68,7 @@ const enum ComponentId {
   Confirm = "pardot_special_confirm",
 }
 
-function view(state: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = (state, i) => {
   if (state.didSell) {
     return soldEmbed(i, state.user, state.itemObj, state.soldItems, state.soldValue, state.currTime);
   }
@@ -125,7 +125,7 @@ function view(state: State, i: BaseInteraction) {
       `No saraksta izvēlies vienu vai vairākas mantas ko pārdot`,
     components,
   });
-}
+};
 
 export default async function pardotRunSpecial(
   i: ChatInputCommandInteraction,

@@ -1,4 +1,4 @@
-import { ActionRowBuilder, BaseInteraction, bold, ButtonBuilder, ButtonStyle } from "discord.js";
+import { ActionRowBuilder, bold, ButtonBuilder, ButtonStyle } from "discord.js";
 import maksekeresData from "@/commands/zvejot/makskeresData";
 import { calcRepairCost } from "@/commands/zvejot/zvejot";
 import addLati from "@/db/addLati";
@@ -15,7 +15,7 @@ import intReply from "@/utils/intReply";
 import itemList, { ItemKey } from "@/utils/itemList";
 import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
 import mainEmbed from "@/utils/embeds/mainEmbed";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import mongoTransaction from "@/utils/mongoTransaction";
 
@@ -51,7 +51,7 @@ const enum ComponentId {
   FixFishingRod = "izmantot_makskere_fix_fishing_rod",
 }
 
-function view(state: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = (state, i) => {
   const { repairable, maxDurability } = maksekeresData[state.itemKey];
 
   const { durability } = state.makskereInProfile.attributes!;
@@ -88,7 +88,7 @@ function view(state: State, i: BaseInteraction) {
     color: commandColors.izmantot,
     components: durability! < maxDurability ? components : [],
   });
-}
+};
 
 const makskere: UsableAttributeItemFunc = async (i, user, itemKey, specialItem) => {
   const userId = i.user.id;

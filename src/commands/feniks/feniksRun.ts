@@ -1,4 +1,4 @@
-import { ButtonInteraction, ChatInputCommandInteraction, ComponentType, RepliableInteraction } from "discord.js";
+import { ComponentType, RepliableInteraction } from "discord.js";
 import addItems from "@/db/addItems";
 import addLati from "@/db/addLati";
 import findUser from "@/db/findUser";

@@ -6,7 +6,7 @@ import { calcIevarijumsPrice } from "@/items/ievarijums";
 import Item, { item, AttributeItem, TirgusItem, ItemCategory, UsableAttributeItemFunc } from "@/types/Item";
 import UserProfile from "@/types/UserProfile";
 import commandColors from "@/utils/commandColors";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import mainEmbed from "@/utils/embeds/mainEmbed";
@@ -16,7 +16,7 @@ import intReply from "@/utils/intReply";
 import itemList, { ItemKey } from "@/utils/itemList";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import itemString from "@/utils/strings/itemString";
-import { BaseInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } from "discord.js";
 import mongoTransaction from "@/utils/mongoTransaction";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import wrapString from "@/utils/strings/wrapString";
@@ -100,7 +100,7 @@ const enum ComponentId {
   Boil = "plits_boil_ievarijums",
 }
 
-function view(state: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = (state, i) => {
   if (!state.selectedMenu) {
     return mainEmbed({
       i,
@@ -245,7 +245,7 @@ function view(state: State, i: BaseInteraction) {
 
   // šim nekad nevajadzētu notikt, bet atgriežu, lai TS nebļauj
   return mainEmbed({ i, description: "ja tu redzi šo ziņu, tad kaut kas ir nogājis galīgi greizi" });
-}
+};
 
 const use: UsableAttributeItemFunc = async (i, user, _, specialItem) => {
   const berriesInInv: BerryInInv[] = [];

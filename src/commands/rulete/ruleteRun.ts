@@ -1,6 +1,5 @@
 import {
   ActionRowBuilder,
-  BaseInteraction,
   ButtonBuilder,
   ButtonInteraction,
   ButtonStyle,
@@ -24,7 +23,7 @@ import { RulColors, RulPosition, rulPositions } from "@/commands/rulete/ruleteDa
 import emoji from "@/utils/emoji";
 import UserProfile from "@/types/UserProfile";
 import mongoTransaction from "@/utils/mongoTransaction";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 
 const colorsLat: Record<RulColors, string> = {
   black: "melns",
@@ -53,7 +52,7 @@ const enum ComponentId {
   SpinAgain = "rulete_spin_again",
 }
 
-function view(state: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = (state, i) => {
   const { num, color, didWin, multiplier } = state.rulRes;
 
   const canSpinAgain =
@@ -107,7 +106,7 @@ function view(state: State, i: BaseInteraction) {
     ],
     components,
   });
-}
+};
 
 export default async function ruleteRun(
   i: ChatInputCommandInteraction | ButtonInteraction,

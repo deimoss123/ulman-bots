@@ -7,13 +7,13 @@ import errorEmbed from "@/utils/embeds/errorEmbed";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import itemString from "@/utils/strings/itemString";
 import shuffleArray from "@/utils/shuffleArray";
-import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle, ComponentEmojiResolvable } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentEmojiResolvable } from "discord.js";
 import addLati from "@/db/addLati";
 import addItems from "@/db/addItems";
 import smallEmbed from "@/utils/embeds/smallEmbed";
 import commandColors from "@/utils/commandColors";
 import emoji from "@/utils/emoji";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -142,7 +142,7 @@ type State = {
   lotoInInv: number;
 };
 
-function view(state: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = (state, i) => {
   const { itemKey, totalWin, lotoArray, lotoArrayWon, scratchesLeft, lotoOptions, isActive, lotoInInv } = state;
 
   const latiArr = lotoArrayWon.filter((item) => item.reward?.lati);
@@ -228,7 +228,7 @@ function view(state: State, i: BaseInteraction) {
     ],
     components: actionRows,
   });
-}
+};
 
 function loto(options: LotoOptions): UsableItemFunc {
   return async (i, _, itemKey) => {

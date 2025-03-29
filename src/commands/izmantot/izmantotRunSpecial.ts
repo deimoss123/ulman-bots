@@ -1,6 +1,5 @@
 import {
   ActionRowBuilder,
-  BaseInteraction,
   ButtonBuilder,
   ButtonStyle,
   RepliableInteraction,
@@ -16,7 +15,7 @@ import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserP
 import itemList, { ItemKey } from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 import { attributeItemSort } from "@/commands/inventars/inventars";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 
 type State = {
   itemsInInv: SpecialItemInProfile[];
@@ -31,7 +30,7 @@ const enum ComponentId {
   Select = "izmantot_special_select",
 }
 
-function view(state: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = (state, i) => {
   const buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setCustomId(ComponentId.Confirm)
@@ -96,7 +95,7 @@ function view(state: State, i: BaseInteraction) {
       `No saraksta izvēlies kuru tu gribi izmantot`,
     components,
   });
-}
+};
 
 export default async function izmantotRunSpecial(
   i: RepliableInteraction,

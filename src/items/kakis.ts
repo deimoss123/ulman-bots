@@ -5,7 +5,7 @@ import countFreeInvSlots from "@/utils/countFreeInvSlots";
 import { item, AttributeItem, TirgusItem, ItemCategory, UsableAttributeItemFunc } from "@/types/Item";
 import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
 import commandColors from "@/utils/commandColors";
-import { Dialogs } from "@/utils/dialogs";
+import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import mainEmbed from "@/utils/embeds/mainEmbed";
@@ -19,7 +19,6 @@ import itemString from "@/utils/strings/itemString";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import { useDifferentItemSelectMenu, useDifferentItemHandler } from "@/utils/useDifferentItem";
 import {
-  BaseInteraction,
   ActionRowBuilder,
   ButtonBuilder,
   StringSelectMenuBuilder,
@@ -114,7 +113,7 @@ const enum ComponentId {
   RemoveHat = "kakis_remove_hat",
 }
 
-function view(state: State, i: BaseInteraction) {
+const view: DialogsViewFunc<State> = (state, i) => {
   const { createdAt, fedUntil, hat } = state.attributes;
   const isDead = fedUntil! < state.currTime;
 
@@ -220,7 +219,7 @@ function view(state: State, i: BaseInteraction) {
         `(${catFedPercentage(fedUntil!, state.currTime)})`,
     components,
   });
-}
+};
 
 async function handleModal(
   i: ModalSubmitInteraction,

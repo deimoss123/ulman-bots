@@ -15,7 +15,7 @@ import { INCREASE_CAP_1 } from "@/items/mugursoma";
 import { INCREASE_CAP_2 } from "@/items/divaina_mugursoma";
 import intReply from "@/utils/intReply";
 import emoji from "@/utils/emoji";
-import { ComponentId, InventarsState, inventarsView } from "@/commands/inventars/inventarsView";
+import inventarsView, { ComponentId, InventarsState } from "@/commands/inventars/inventarsView";
 import { Dialogs } from "@/utils/dialogs";
 
 export type ItemType = "not_usable" | "usable" | "special" | "not_sellable";
