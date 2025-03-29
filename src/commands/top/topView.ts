@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction } from "discord.js";
+import { BaseInteraction } from "discord.js";
 import commandColors from "@/utils/commandColors";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import StatsProfile from "@/types/StatsProfile";
@@ -7,15 +7,28 @@ import { displayPlace } from "@/commands/statistika/statistika";
 import { SortDataProfileEntry } from "@/commands/top/sortData";
 import { TOP_USERS_PER_PAGE } from "@/commands/top/top";
 import emoji from "@/utils/emoji";
+import btnPaginationRow from "@/utils/embeds/btnPaginationRow";
 
-export default function topEmbed<T extends UserProfile | StatsProfile>(
-  i: ChatInputCommandInteraction,
-  title: string,
-  currentPage: number,
-  sortedUsers: T[],
-  { displayValue, totalReduceFunc, partOfTotal, topDescription }: SortDataProfileEntry<T>,
-) {
-  const total = totalReduceFunc && sortedUsers.reduce(totalReduceFunc, 0);
+export type TopState<T extends UserProfile | StatsProfile> = {
+  title: string;
+  currentPage: number;
+  totalPages: number;
+  total: number | null;
+  sortedUsers: T[];
+  hasComponents: boolean;
+  sortDataObj: SortDataProfileEntry<T>;
+};
+
+export const enum TopComponentId {
+  FirstPage = "top_first_page",
+  PrevPage = "top_prev_page",
+  NextPage = "top_next_page",
+  LastPage = "top_last_page",
+}
+
+function topView<T extends UserProfile | StatsProfile>(state: TopState<T>, i: BaseInteraction) {
+  const { sortDataObj, total, sortedUsers, currentPage, title, hasComponents, totalPages } = state;
+  const { displayValue, partOfTotal, topDescription } = sortDataObj;
 
   const offset = TOP_USERS_PER_PAGE * currentPage;
   const slicedUsers = sortedUsers.slice(offset, offset + TOP_USERS_PER_PAGE);
@@ -54,5 +67,8 @@ export default function topEmbed<T extends UserProfile | StatsProfile>(
     color: commandColors.top,
     title: `Servera tops | ${title}`,
     fields,
+    components: hasComponents ? [btnPaginationRow("top", currentPage, totalPages)] : [],
   });
 }
+
+export default topView;
