@@ -18,12 +18,11 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
 
-await loadEmojis().then(() => console.log(chalk.green("Emojis loaded")));
-
-const mongoPromise = mongo();
+const emojiPromise = loadEmojis().then(() => console.log(chalk.green("Emojis loaded")));
+const mongoPromise = mongo().then(() => console.log("Connected to MongoDB"));
 
 client.once("ready", async (bot) => {
-  await mongoPromise.then(() => console.log("Connected to MongoDB"));
+  await Promise.all([emojiPromise, mongoPromise]);
 
   setBotPresence(bot);
   setInterval(() => setBotPresence(bot), 3_600_000);
