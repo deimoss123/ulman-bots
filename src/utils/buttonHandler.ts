@@ -25,6 +25,8 @@ export interface CallbackReturn {
   error?: boolean;
 }
 
+// NEKĀDĀ GADĪJUMĀ ŠITO NEIZMANTOT
+// pogām izmanto dialogs.ts
 export default async function buttonHandler(
   interaction: ChatInputCommandInteraction | ButtonInteraction | SelectMenuInteraction | ModalSubmitInteraction,
   interactionName: string,
