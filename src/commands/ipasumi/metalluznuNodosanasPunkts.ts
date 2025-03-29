@@ -22,7 +22,7 @@ import latiString from "@/utils/strings/latiString";
 import { Canvas, createCanvas, GlobalFonts, SKRSContext2D } from "@napi-rs/canvas";
 import { join } from "path";
 
-const fontPath = join(__dirname, "..", "..", "..", "..", "assets", "fonts");
+const fontPath = join(__dirname, "..", "..", "..", "assets", "fonts");
 
 // fontos beigās 2, lai pārliecinātos, ka izmanto ielādētos, nevis sistēmas
 GlobalFonts.registerFromPath(join(fontPath, "Inter-VariableFont_opsz,wght.ttf"), "Inter2");
