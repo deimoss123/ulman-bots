@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, EmbedField } from "discord.js";
+import { ApplicationCommandOptionType, EmbedField, InteractionEditReplyOptions } from "discord.js";
 import findUser from "@/db/findUser";
 import getAllUsers from "@/db/getAllUsers";
 import getStatsMany from "@/db/stats/getStatsMany";
@@ -75,7 +75,7 @@ const statistika: Command = {
     const user = await findUser(target.id, guildId);
     if (!user) {
       await defer;
-      return i.editReply(errorEmbed).catch((_) => _);
+      return i.editReply(errorEmbed as InteractionEditReplyOptions).catch((_) => _);
     }
 
     const chosenCategory = i.options.getString("kategorija");
@@ -87,7 +87,7 @@ const statistika: Command = {
       const allUsers = await getAllUsers(i.client.user.id, guildId, projection);
       if (!allUsers) {
         await defer;
-        return i.editReply(errorEmbed).catch((_) => _);
+        return i.editReply(errorEmbed as InteractionEditReplyOptions).catch((_) => _);
       }
 
       const names = { maks: "Maks", inv: "Inventāra vērtība", total: "Kopējā vērtība", level: "Līmenis" };
@@ -109,13 +109,13 @@ const statistika: Command = {
       const allUserStats = await getStatsMany(i.client.user.id, guildId, projection);
       if (!allUserStats) {
         await defer;
-        return i.editReply(errorEmbed).catch((_) => _);
+        return i.editReply(errorEmbed as InteractionEditReplyOptions).catch((_) => _);
       }
 
       const userStats = allUserStats.find((u) => u.userId === target.id);
       if (!userStats) {
         await defer;
-        return i.editReply(errorEmbed).catch((_) => _);
+        return i.editReply(errorEmbed as InteractionEditReplyOptions).catch((_) => _);
       }
 
       Object.entries(entries).forEach(([key, { name, displayValue }]) => {
@@ -144,7 +144,7 @@ const statistika: Command = {
           // @ts-ignore
           this.data.options[0].choices.find((c) => c.value === chosenCategory).name,
         fields,
-      }),
+      }) as InteractionEditReplyOptions,
     );
   },
 };
