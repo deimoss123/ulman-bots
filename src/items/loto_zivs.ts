@@ -182,7 +182,7 @@ const loto_zivs = item<AttributeItem<Attributes>>({
     holdsFishCount: generateFishCount(),
   }),
   displayAttributes: ({ holdsFishCount }, inline) => `Satur ${wrapString(holdsFishCount, "**", !inline)} zivis`,
-  sortBy: { holdsFishCount: 1 },
+  sortBy: (attrA, attrB) => attrA.holdsFishCount - attrB.holdsFishCount,
   use,
 });
 

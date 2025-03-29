@@ -122,8 +122,8 @@ export interface AttributeItem<A extends Partial<ItemAttributes> = ItemAttribute
   displayAttributes: (attributes: A, inline: boolean, currTime: number) => string;
 
   // pēc kādiem atribūtiem kārtot mantas inventārā un izvēlnēs
-  // 1 ir no lielākā uz mazāko, -1 ir no mazākā uz lielāko
-  sortBy: Partial<Record<keyof A, 1 | -1>>;
+  // šī funkcija tiks padota sort funkcijai, piemēram, inventārā vai izvēlnē
+  sortBy: (attrA: A, attrB: A) => number;
 
   // dinamiskā mantas vērtība, piem. makšķeres izturība ietekmē vērtību
   dynamicValue?: (attributes: A) => number;

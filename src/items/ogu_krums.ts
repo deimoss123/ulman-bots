@@ -311,7 +311,7 @@ const ogu_krums = item<AttributeItem<Attributes>>({
     return `Krūms vēl aug... ${wrapString(izaugsanasProg, "**", !inline)}%, `;
   },
   use,
-  sortBy: { berryType: 1 },
+  sortBy: (attrA, attrB) => attrA.berryType.localeCompare(attrB.berryType),
 });
 
 export default ogu_krums;

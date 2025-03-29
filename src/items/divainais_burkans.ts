@@ -248,7 +248,7 @@ const divainais_burkans = item<AttributeItem<Attributes> & ShopItem>({
   }),
   displayAttributes: ({ timesUsed }, inline) =>
     `Nokosts ${wrapString(timesUsed, "**", !inline)} ${daudzskaitlis(timesUsed, "reizi", "reizes")}`,
-  sortBy: { timesUsed: 1 },
+  sortBy: (attrA, attrB) => attrB.timesUsed - attrA.timesUsed,
   allowDiscount: true,
   use,
 });

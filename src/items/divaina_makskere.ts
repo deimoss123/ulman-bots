@@ -1,5 +1,5 @@
 import maksekeresData from "@/commands/zvejot/makskeresData";
-import makskere, { makskereDisplayAttributes, makskereDynamicValue } from "@/items/shared/makskere";
+import makskere, { makskereDisplayAttributes, makskereDynamicValue, makskereSort } from "@/items/shared/makskere";
 import { AttributeItem, item, ItemCategory, ShopItem } from "@/types/Item";
 import emoji from "@/utils/emoji";
 
@@ -26,7 +26,7 @@ const divaina_makskere = item<AttributeItem<Attributes> & ShopItem>({
     durability: maksekeresData.divaina_makskere.maxDurability,
   }),
   displayAttributes: makskereDisplayAttributes("divaina_makskere"),
-  sortBy: { durability: 1 },
+  sortBy: makskereSort,
   allowDiscount: true,
   use: makskere,
 });

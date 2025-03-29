@@ -20,7 +20,6 @@ import { AttributeItem } from "@/types/Item";
 import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
 import itemList, { ItemKey } from "@/utils/itemList";
 import intReply from "@/utils/intReply";
-import { attributeItemSort } from "@/commands/inventars/inventars";
 import { PIRKT_PARDOT_NODOKLIS } from "@/commands/pardot/pardot";
 import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import mongoTransaction from "@/utils/mongoTransaction";
@@ -88,8 +87,9 @@ const view: DialogsViewFunc<State> = (state, i) => {
             .sort((a, b) => {
               const valueA = itemObj.dynamicValue ? itemObj.dynamicValue(a.attributes) : itemObj.value;
               const valueB = itemObj.dynamicValue ? itemObj.dynamicValue(b.attributes) : itemObj.value;
+
               if (valueA === valueB) {
-                return attributeItemSort(a.attributes, b.attributes, itemObj.sortBy);
+                return itemObj.sortBy(a.attributes, b.attributes);
               }
 
               return valueB - valueA;

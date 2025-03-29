@@ -68,7 +68,7 @@ const ievarijums = item<AttributeItem<Attributes>>({
     distance: 0,
   }),
   displayAttributes: () => "...",
-  sortBy: { distance: 1 },
+  sortBy: (attrA, attrB) => attrA.distance - attrB.distance,
   use: (i) => intReply(i, "TODO"),
 });
 

@@ -38,6 +38,10 @@ export function makskereDynamicValue(itemKey: string): AttributeItem<ItemAttribu
   };
 }
 
+export function makskereSort(attrA: ItemAttributes, attrB: ItemAttributes): number {
+  return attrA.durability! - attrB.durability!;
+}
+
 type State = {
   user: UserProfile;
   itemKey: ItemKey;

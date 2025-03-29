@@ -43,34 +43,6 @@ export const itemTypes: Record<ItemType, { text: string; textCompact: string; em
   },
 };
 
-export function attributeItemSort(
-  attrA: ItemAttributes,
-  attrB: ItemAttributes,
-  sortByObj: Partial<Record<keyof ItemAttributes, 1 | -1>>,
-  index = 0,
-): number {
-  if (index >= Object.keys(sortByObj).length) return 0;
-
-  const [currentAttr, sortDirection] = Object.entries(sortByObj)[index] as [keyof ItemAttributes, 1 | -1];
-  const valueA = attrA[currentAttr];
-  const valueB = attrB[currentAttr];
-
-  if (valueA === valueB) {
-    return attributeItemSort(attrA, attrB, sortByObj, index + 1);
-  }
-
-  switch (typeof valueA) {
-    case "string":
-      return valueA ? -1 : 1;
-    case "number":
-      return ((valueB as number) - valueA) * sortDirection;
-    case "boolean":
-      return valueA ? -1 : 1;
-  }
-
-  return 0;
-}
-
 function mapItems({ items, specialItems }: UserProfile, currTime: number) {
   const itemTypesInInv = new Set<ItemType>();
 
@@ -84,17 +56,13 @@ function mapItems({ items, specialItems }: UserProfile, currTime: number) {
         const valueB = itemB.dynamicValue ? itemB.dynamicValue(b.attributes) : itemB.value;
 
         if (a.name === b.name && valueA === valueB) {
-          const { sortBy } = itemA;
-
-          return attributeItemSort(a.attributes, b.attributes, sortBy);
+          return itemA.sortBy(a.attributes, b.attributes);
         }
 
         return valueB - valueA;
-      } else if ("notSellable" in itemB) {
-        return 1;
       }
 
-      return -1;
+      return "notSellable" in itemB ? 1 : -1;
     })
     .map((specialItem) => {
       const { name, attributes } = specialItem;

@@ -568,7 +568,7 @@ const kakis = item<AttributeItem<Attributes> & TirgusItem>({
 
     return str;
   },
-  sortBy: { createdAt: -1 },
+  sortBy: (attrA, attrB) => attrA.createdAt - attrB.createdAt,
   use,
 });
 

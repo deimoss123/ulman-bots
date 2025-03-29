@@ -22,7 +22,6 @@ import checkUserSpecialItems from "@/utils/checkUserSpecialItems";
 import countFreeInvSlots from "@/utils/countFreeInvSlots";
 import itemList, { ItemKey } from "@/utils/itemList";
 import intReply from "@/utils/intReply";
-import { attributeItemSort } from "@/commands/inventars/inventars";
 import { cantPayTaxEmbed } from "@/commands/iedot/iedot";
 import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 import errorEmbed from "@/utils/embeds/errorEmbed";
@@ -89,6 +88,7 @@ const enum ComponentId {
 
 const view: DialogsViewFunc<State> = (state, i) => {
   const selectedIds = state.selectedItems.map((item) => item._id!);
+  const { itemObj } = state;
 
   const components = [
     new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
@@ -102,15 +102,11 @@ const view: DialogsViewFunc<State> = (state, i) => {
           state.itemsInInv
             .slice(0, 25)
             .sort((a, b) => {
-              const valueA = state.itemObj.dynamicValue
-                ? state.itemObj.dynamicValue(a.attributes)
-                : state.itemObj.value;
-              const valueB = state.itemObj.dynamicValue
-                ? state.itemObj.dynamicValue(b.attributes)
-                : state.itemObj.value;
+              const valueA = itemObj.dynamicValue ? itemObj.dynamicValue(a.attributes) : itemObj.value;
+              const valueB = itemObj.dynamicValue ? itemObj.dynamicValue(b.attributes) : itemObj.value;
 
               if (valueA === valueB) {
-                return attributeItemSort(a.attributes, b.attributes, state.itemObj.sortBy);
+                return itemObj.sortBy(a.attributes, b.attributes);
               }
 
               return valueB - valueA;

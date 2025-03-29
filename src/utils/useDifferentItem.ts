@@ -2,7 +2,6 @@ import { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuInteraction 
 import UserProfile, { ItemAttributes } from "@/types/UserProfile";
 import itemList, { ItemKey } from "@/utils/itemList";
 import { AttributeItem } from "@/types/Item";
-import { attributeItemSort } from "@/commands/inventars/inventars";
 import itemString, { itemStringCustom } from "@/utils/strings/itemString";
 import { DialogsOnClickCallbackReturn } from "@/utils/dialogs";
 import intReply from "@/utils/intReply";
@@ -28,8 +27,9 @@ export function useDifferentItemSelectMenu(
           .toSorted((a, b) => {
             const valueA = itemObj.dynamicValue ? itemObj.dynamicValue(a.attributes) : itemObj.value;
             const valueB = itemObj.dynamicValue ? itemObj.dynamicValue(b.attributes) : itemObj.value;
+
             if (valueA === valueB) {
-              return attributeItemSort(a.attributes, b.attributes, itemObj.sortBy);
+              return itemObj.sortBy(a.attributes, b.attributes);
             }
 
             return valueB - valueA;

@@ -20,7 +20,7 @@ const patriota_piespraude = item<AttributeItem<{ piespraudeNum: number }> & NotS
     piespraudeNum: 0,
   }),
   displayAttributes: ({ piespraudeNum }, inline) => wrapString(`Nr. ${piespraudeNum}`, "**", !inline),
-  sortBy: { piespraudeNum: 1 },
+  sortBy: (attrA, attrB) => (attrA.piespraudeNum ?? 0) - (attrB.piespraudeNum ?? 0),
   use: (i) => intReply(i, "..."),
 });
 

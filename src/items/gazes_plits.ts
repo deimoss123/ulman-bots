@@ -464,7 +464,7 @@ const gazes_plits = item<AttributeItem<Attributes> & TirgusItem>({
       );
       */
   },
-  sortBy: { actionType: -1 },
+  sortBy: (attrA, attrB) => attrB.actionType.localeCompare(attrA.actionType),
   use,
 });
 

@@ -14,7 +14,6 @@ import { AttributeItem, NotSellableItem } from "@/types/Item";
 import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
 import itemList, { ItemKey } from "@/utils/itemList";
 import intReply from "@/utils/intReply";
-import { attributeItemSort } from "@/commands/inventars/inventars";
 import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
 
 type State = {
@@ -31,6 +30,8 @@ const enum ComponentId {
 }
 
 const view: DialogsViewFunc<State> = (state, i) => {
+  const { itemObj } = state;
+
   const buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setCustomId(ComponentId.Confirm)
@@ -39,8 +40,8 @@ const view: DialogsViewFunc<State> = (state, i) => {
       .setStyle(state.selectedId ? ButtonStyle.Primary : ButtonStyle.Secondary),
   );
 
-  if (state.itemObj.useMany) {
-    const usableItems = state.itemsInInv.filter(({ attributes }) => state.itemObj.useMany!.filter(attributes));
+  if (itemObj.useMany) {
+    const usableItems = state.itemsInInv.filter(({ attributes }) => itemObj.useMany!.filter(attributes));
 
     if (usableItems.length) {
       buttonRow.addComponents(
@@ -61,14 +62,11 @@ const view: DialogsViewFunc<State> = (state, i) => {
           state.itemsInInv
             .slice(0, 25)
             .sort((a, b) => {
-              const valueA = state.itemObj.dynamicValue
-                ? state.itemObj.dynamicValue(a.attributes)
-                : state.itemObj.value;
-              const valueB = state.itemObj.dynamicValue
-                ? state.itemObj.dynamicValue(b.attributes)
-                : state.itemObj.value;
+              const valueA = itemObj.dynamicValue ? itemObj.dynamicValue(a.attributes) : itemObj.value;
+              const valueB = itemObj.dynamicValue ? itemObj.dynamicValue(b.attributes) : itemObj.value;
+
               if (valueA === valueB) {
-                return attributeItemSort(a.attributes, b.attributes, state.itemObj.sortBy);
+                return itemObj.sortBy(a.attributes, b.attributes);
               }
 
               return valueB - valueA;

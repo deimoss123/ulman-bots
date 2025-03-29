@@ -41,7 +41,7 @@ const naudas_maiss = item<AttributeItem<Attributes> & TirgusItem>({
 
     return wrapString("Maiss ir tukšs", "**", !inline);
   },
-  sortBy: { latiCollected: 1 },
+  sortBy: (attrA, attrB) => attrA.latiCollected - attrB.latiCollected,
   use: async (i) => {
     // prettier-ignore
     intReply(i, mainEmbed({

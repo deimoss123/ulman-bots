@@ -173,7 +173,7 @@ const kafijas_aparats = item<AttributeItem<Attributes> & TirgusItem>({
     const timeStr = millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - currTime + lastUsed);
     return `Gatavo: ${wrapString(timeStr, "`", !inline)}`;
   },
-  sortBy: { lastUsed: -1 },
+  sortBy: (attrA, attrB) => attrA.lastUsed - attrB.lastUsed,
   use,
   useMany,
 });

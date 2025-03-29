@@ -342,7 +342,7 @@ const petnieks = item<
 
     return str;
   },
-  sortBy: { lastUsed: -1 },
+  sortBy: (attrA, attrB) => attrA.lastUsed - attrB.lastUsed,
   use,
   useMany,
 });
