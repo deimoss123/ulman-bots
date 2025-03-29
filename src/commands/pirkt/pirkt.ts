@@ -44,15 +44,13 @@ const pirkt: Command = {
     if (!itemToBuy) return intReply(i, wrongKeyEmbed);
 
     if (!itemToBuy.categories.includes(ItemCategory.VEIKALS)) {
-      return intReply(
-        i,
-        ephemeralReply(
-          `**${itemString(itemToBuy)}** nav ` + (itemToBuy.isVirsiesuDzimte ? "nopērkams" : "nopērkama") + " veikalā",
-        ),
-      );
+      // prettier-ignore
+      return intReply(i, ephemeralReply(
+        `**${itemString(itemToBuy)}** nav ${itemToBuy.isVirsiesuDzimte ? "nopērkams" : "nopērkama"} veikalā`,
+      ));
     }
 
-    await pirktRun(i, itemToBuyKey, amount, this.color);
+    pirktRun(i, itemToBuyKey, amount);
   },
 };
 

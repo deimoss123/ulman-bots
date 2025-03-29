@@ -201,12 +201,8 @@ const veikals: Command = {
       }
 
       if (customId === ComponentId.Buy && type === ComponentType.Button) {
-        return {
-          end: true,
-          after: () => {
-            pirktRun(int, dialogs.state.chosenItem, dialogs.state.chosenAmount, commandColors.pirkt);
-          },
-        };
+        pirktRun(int, dialogs.state.chosenItem, dialogs.state.chosenAmount);
+        return { end: true };
       }
     });
   },
