@@ -16,6 +16,7 @@ import daudzskaitlis from "@/utils/strings/daudzkaitlis";
 import itemString from "@/utils/strings/itemString";
 import izmantotTitle from "@/utils/strings/izmantotTitle";
 import latiString from "@/utils/strings/latiString";
+import wrapString from "@/utils/strings/wrapString";
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -246,6 +247,8 @@ const divainais_burkans = item<AttributeItem<Attributes> & ShopItem>({
     timesUsed: 0,
     customName: "",
   }),
+  displayAttributes: ({ timesUsed }, inline) =>
+    `Nokosts ${wrapString(timesUsed, "**", !inline)} ${daudzskaitlis(timesUsed, "reizi", "reizes")}`,
   sortBy: { timesUsed: 1 },
   allowDiscount: true,
   use,

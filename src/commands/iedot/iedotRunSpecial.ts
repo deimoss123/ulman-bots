@@ -15,7 +15,6 @@ import setStats from "@/db/stats/setStats";
 import commandColors from "@/utils/commandColors";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
-import { displayAttributes } from "@/utils/strings/displayAttributes";
 import itemString, { itemStringCustom } from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import Item, { AttributeItem } from "@/types/Item";
@@ -37,7 +36,8 @@ function makeEmbedAfter(
   targetUser: UserProfile,
   itemsToGive: SpecialItemInProfile[],
   hasJuridisks: boolean,
-  itemObj: Item,
+  itemObj: AttributeItem,
+  currTime: number,
 ) {
   return mainEmbed({
     i,
@@ -60,7 +60,8 @@ function makeEmbedAfter(
         return {
           name: itemString(itemObj, null, true, item.attributes),
           value:
-            ("notSellable" in itemObj ? "" : `Vērtība: ${latiString(lati, false, true)}\n`) + displayAttributes(item),
+            ("notSellable" in itemObj ? "" : `Vērtība: ${latiString(lati, false, true)}\n`) +
+            itemObj.displayAttributes(item.attributes, false, currTime),
           inline: false,
         };
       }),
@@ -78,6 +79,8 @@ type State = {
   selectedItems: SpecialItemInProfile[];
   totalTax: number;
   hasGiven: boolean;
+
+  currTime: number;
 };
 
 const enum ComponentId {
@@ -122,7 +125,8 @@ function view(state: State, i: BaseInteraction) {
               return {
                 label: itemStringCustom(state.itemObj, item.attributes?.customName),
                 description:
-                  ("notSellable" in state.itemObj ? "" : `${latiString(lati)} | `) + displayAttributes(item, true),
+                  ("notSellable" in state.itemObj ? "" : `${latiString(lati)} | `) +
+                  state.itemObj.displayAttributes(item.attributes, true, state.currTime),
                 value: item._id!,
                 emoji:
                   (state.itemObj.dynamicEmoji ? state.itemObj.dynamicEmoji(item.attributes) : state.itemObj.emoji()) ||
@@ -193,6 +197,8 @@ export default async function iedotRunSpecial(
 
   let totalTax: number;
 
+  const currTime = Date.now();
+
   if (itemsInInv.length === 1) {
     const hasInvSpace = checkTargetInv(targetUser, 1);
     if (!hasInvSpace) {
@@ -239,7 +245,7 @@ export default async function iedotRunSpecial(
 
     if (!ok) return intReply(i, errorEmbed);
 
-    return intReply(i, makeEmbedAfter(i, totalTax, user, targetUser, itemsInInv, hasJuridisks, itemObj));
+    return intReply(i, makeEmbedAfter(i, totalTax, user, targetUser, itemsInInv, hasJuridisks, itemObj, currTime));
   }
 
   const initialState: State = {
@@ -252,6 +258,8 @@ export default async function iedotRunSpecial(
     selectedItems: [],
     totalTax: 0,
     hasGiven: false,
+
+    currTime,
   };
 
   const dialogs = new Dialogs(i, initialState, view, "iedot", { time: 60000 });
@@ -354,7 +362,16 @@ export default async function iedotRunSpecial(
         after: () => {
           intReply(
             int,
-            makeEmbedAfter(i, state.totalTax, state.user, targetUser, state.selectedItems, hasJuridisks, itemObj),
+            makeEmbedAfter(
+              i,
+              state.totalTax,
+              state.user,
+              targetUser,
+              state.selectedItems,
+              hasJuridisks,
+              itemObj,
+              state.currTime,
+            ),
           );
         },
       };

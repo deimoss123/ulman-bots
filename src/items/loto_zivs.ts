@@ -17,6 +17,7 @@ import mongoTransaction from "@/utils/mongoTransaction";
 import itemString from "@/utils/strings/itemString";
 import { useDifferentItemSelectMenu, useDifferentItemHandler } from "@/utils/useDifferentItem";
 import { BaseInteraction, ActionRowBuilder, StringSelectMenuBuilder, ComponentType } from "discord.js";
+import wrapString from "@/utils/strings/wrapString";
 
 const fishCountChance: ChanceRecord = {
   3: { chance: "*" }, // 0.25
@@ -180,6 +181,7 @@ const loto_zivs = item<AttributeItem<Attributes>>({
   defaultAttributes: () => ({
     holdsFishCount: generateFishCount(),
   }),
+  displayAttributes: ({ holdsFishCount }, inline) => `Satur ${wrapString(holdsFishCount, "**", !inline)} zivis`,
   sortBy: { holdsFishCount: 1 },
   use,
 });

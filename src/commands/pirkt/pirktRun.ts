@@ -175,7 +175,7 @@ export default async function pirktRun(
         return {
           end: true,
           edit: { components: [componentRow] },
-          after: () => izmantotRun(int, itemToBuyKey, embedColor),
+          after: () => izmantotRun(int, itemToBuyKey),
         };
       }
 

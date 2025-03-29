@@ -19,9 +19,9 @@ import itemList from "@/utils/itemList";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import emoji from "@/utils/emoji";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
-import { displayAttributes } from "@/utils/strings/displayAttributes";
 import { AttributeItem, ItemCategory } from "@/types/Item";
 import { calcRepairCost } from "@/commands/zvejot/zvejot";
+import { makskereDisplayAttributes } from "@/items/shared/makskere";
 
 function zvejaEmojiString() {
   return (
@@ -121,7 +121,7 @@ function components(state: ZvejotState): ActionRowBuilder<ButtonBuilder | String
                 label: capitalizeFirst(itemList[item.name].nameNomVsk),
                 value: `${item.name} ${item._id}`,
                 emoji: itemList[item.name].emoji() ?? "❓",
-                description: displayAttributes(item, true),
+                description: makskereDisplayAttributes(item.name)(item.attributes),
                 default: state.selectedFishingRodId === item._id,
               })),
           ),

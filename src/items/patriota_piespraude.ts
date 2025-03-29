@@ -1,6 +1,7 @@
 import { item, AttributeItem, NotSellableItem, ItemCategory } from "@/types/Item";
 import emoji from "@/utils/emoji";
 import intReply from "@/utils/intReply";
+import wrapString from "@/utils/strings/wrapString";
 
 const patriota_piespraude = item<AttributeItem<{ piespraudeNum: number }> & NotSellableItem>({
   info: "...",
@@ -18,6 +19,7 @@ const patriota_piespraude = item<AttributeItem<{ piespraudeNum: number }> & NotS
   defaultAttributes: () => ({
     piespraudeNum: 0,
   }),
+  displayAttributes: ({ piespraudeNum }, inline) => wrapString(`Nr. ${piespraudeNum}`, "**", !inline),
   sortBy: { piespraudeNum: 1 },
   use: (i) => intReply(i, "..."),
 });

@@ -17,7 +17,6 @@ import commandColors from "@/utils/commandColors";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
-import { displayAttributes } from "@/utils/strings/displayAttributes";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import Item from "@/types/Item";
@@ -37,7 +36,13 @@ interface ItemsToSell {
   _id?: string;
 }
 
-export function pardotEmbed(i: BaseInteraction, user: UserProfile, itemsToSell: ItemsToSell[], soldItemsValue: number) {
+export function pardotEmbed(
+  i: BaseInteraction,
+  user: UserProfile,
+  itemsToSell: ItemsToSell[],
+  soldItemsValue: number,
+  currTime: number,
+) {
   return mainEmbed({
     i,
     color: commandColors.pardot,
@@ -46,9 +51,9 @@ export function pardotEmbed(i: BaseInteraction, user: UserProfile, itemsToSell: 
       ">>> " +
       itemsToSell
         .map(
-          ({ name, item, amount, attributes }) =>
+          ({ item, amount, attributes }) =>
             `${itemString(item, amount, true, attributes)}` +
-            (attributes ? `\n${displayAttributes({ name, attributes })}` : ""),
+            (attributes && "displayAttributes" in item ? item.displayAttributes(attributes, false, currTime) : ""),
         )
         .join("\n"),
     fields: [
@@ -71,6 +76,7 @@ type State = {
   itemsToSell: ItemsToSell[];
   soldItemsValue: number;
   selected: "ja" | "ne" | null;
+  currTime: number;
 };
 
 const enum ComponentId {
@@ -80,7 +86,7 @@ const enum ComponentId {
 
 function pardotVisuView(state: State, i: BaseInteraction): InteractionReplyOptions & { withResponse: true } {
   if (state.selected === "ja") {
-    return pardotEmbed(i, state.user, state.itemsToSell, state.soldItemsValue);
+    return pardotEmbed(i, state.user, state.itemsToSell, state.soldItemsValue, state.currTime);
   }
 
   const components = [
@@ -121,6 +127,8 @@ export default async function pardotRun(
 
   const { items, specialItems } = user;
 
+  const currTime = Date.now();
+
   if (!items.length && !specialItems.length) {
     return intReply(i, emptyInvEmbed());
   }
@@ -148,7 +156,7 @@ export default async function pardotRun(
 
     if (!ok) return intReply(i, errorEmbed);
 
-    return intReply(i, pardotEmbed(i, values[3], itemsToSell, soldItemsValue));
+    return intReply(i, pardotEmbed(i, values[3], itemsToSell, soldItemsValue, currTime));
   }
 
   // visas
@@ -161,6 +169,7 @@ export default async function pardotRun(
     itemsToSell: [],
     soldItemsValue: 0,
     selected: null,
+    currTime,
   };
 
   const dialogs = new Dialogs(i, initialState, pardotVisuView, "pardot", { time: 30000 });

@@ -39,16 +39,22 @@ export type UsableAttributeItemFunc = (
 export interface BaseItem {
   // īss apraksts par mantu
   info?: string | (() => string);
+
   // kurā ulmaņbota versijā šī manta pievienota
   addedInVersion: VersionString;
+
   // nominatīvs vienskaitlis
   nameNomVsk: string;
+
   // nominatīvs daudzskaitlis
   nameNomDsk: string;
+
   // akuzatīvs vienskaitlis
   nameAkuVsk: string;
+
   // akuzatīvs daudzskaitlis
   nameAkuDsk: string;
+
   // vai ir vīriešu dzimtes lietvārds
   isVirsiesuDzimte: boolean;
 
@@ -57,8 +63,10 @@ export interface BaseItem {
 
   // bildes links
   imgLink: string | null;
+
   // kategorijas - veikals, zivis utt
   categories: categories;
+
   // mantas vērtība
   value: number;
 }
@@ -84,7 +92,6 @@ interface TirgusCategories extends Array<ItemCategory> {
 }
 export interface TirgusItem {
   categories: TirgusCategories;
-  // cena tirgum
   tirgusPrice: { items: Record<ItemKey, number>; lati?: number };
 }
 
@@ -96,6 +103,7 @@ export interface UsableItem extends BaseItem {
 export type UseManyType = {
   // filtrs lai parādītu cik daudzi ir izmantojami
   filter: (attr: ItemAttributes) => boolean;
+
   // funkcija kas tiks palaista izmantojot vairākus
   runFunc: (i: ButtonInteraction) => any;
 };
@@ -103,15 +111,26 @@ export type UseManyType = {
 export interface AttributeItem<A extends Partial<ItemAttributes> = ItemAttributes> extends Omit<UsableItem, "use"> {
   // ko manta darīs lietojot /izmantot komandu
   use: UsableAttributeItemFunc;
+
   // noklusējuma mantu atribūti, piemēram kaķa vecums vai burkāna nosaukums
   defaultAttributes: (currTime: number) => A;
+
+  // kā atribūti tiek attēloti inventārā/izvēlnēs
+  // inline būs true, ja tiks attēlots izvēlnē
+  // discord izvēlnes tekstā neļauj izmantot formatēšanu (bold, italic, utt.) kā arī custom emoji
+  // tiek padots laiks, lai nebūtu visur jāsauc Date.now() un būtu problēmas ar sinhronizāciju, piemēram, inventārā
+  displayAttributes: (attributes: A, inline: boolean, currTime: number) => string;
+
   // pēc kādiem atribūtiem kārtot mantas inventārā un izvēlnēs
   // 1 ir no lielākā uz mazāko, -1 ir no mazākā uz lielāko
   sortBy: Partial<Record<keyof A, 1 | -1>>;
-  // speciāla vērtība, piem. makšķeres izturība ietekmē vērtību
+
+  // dinamiskā mantas vērtība, piem. makšķeres izturība ietekmē vērtību
   dynamicValue?: (attributes: A) => number;
-  // speciāls emoji kas mainās atkarībā no atribūtiem
+
+  // dinamisks emoji kas mainās atkarībā no atribūtiem
   dynamicEmoji?: (attributes: A) => string;
+
   // izmantot vairākus vienlaicīgi
   useMany?: UseManyType;
 }

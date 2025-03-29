@@ -7,7 +7,6 @@ import findUser from "@/db/findUser";
 import commandColors from "@/utils/commandColors";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import capitalizeFirst from "@/utils/strings/capitalizeFirst";
-import { displayAttributes } from "@/utils/strings/displayAttributes";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import smallEmbed from "@/utils/embeds/smallEmbed";
@@ -19,6 +18,10 @@ import mainEmbed from "@/utils/embeds/mainEmbed";
 import { Dialogs } from "@/utils/dialogs";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import mongoTransaction from "@/utils/mongoTransaction";
+
+export function makskereDisplayAttributes(itemKey: ItemKey) {
+  return ({ durability }: ItemAttributes) => `Izturība: ${durability}/${maksekeresData[itemKey].maxDurability}`;
+}
 
 export function makskereDynamicValue(itemKey: string): AttributeItem<ItemAttributes>["dynamicValue"] {
   return ({ durability }) => {
@@ -38,6 +41,7 @@ export function makskereDynamicValue(itemKey: string): AttributeItem<ItemAttribu
 type State = {
   user: UserProfile;
   itemKey: ItemKey;
+  itemObj: AttributeItem;
   makskereInProfile: SpecialItemInProfile;
   repairCost: number;
   hasRepaired: boolean;
@@ -48,7 +52,6 @@ const enum ComponentId {
 }
 
 function view(state: State, i: BaseInteraction) {
-  const itemObj = itemList[state.itemKey];
   const { repairable, maxDurability } = maksekeresData[state.itemKey];
 
   const { durability } = state.makskereInProfile.attributes!;
@@ -61,14 +64,14 @@ function view(state: State, i: BaseInteraction) {
         .setCustomId(ComponentId.FixFishingRod)
         .setLabel(
           repairable
-            ? `Salabot ${itemObj.nameAkuVsk} - ${latiString(state.repairCost)}${!canAfford ? " (nevari atļauties)" : ""}`
-            : `${capitalizeFirst(itemObj.nameNomVsk)} nav salabojama`,
+            ? `Salabot ${state.itemObj.nameAkuVsk} - ${latiString(state.repairCost)}${!canAfford ? " (nevari atļauties)" : ""}`
+            : `${capitalizeFirst(state.itemObj.nameNomVsk)} nav salabojama`,
         )
         .setStyle(
           state.hasRepaired ? ButtonStyle.Success : repairable && canAfford ? ButtonStyle.Primary : ButtonStyle.Danger,
         )
         .setDisabled(state.hasRepaired || !repairable || !canAfford)
-        .setEmoji(itemObj.emoji() || "❓"),
+        .setEmoji(state.itemObj.emoji() || "❓"),
     ),
   ];
 
@@ -95,11 +98,12 @@ const makskere: UsableAttributeItemFunc = async (i, user, itemKey, specialItem) 
   const { maxDurability, repairable } = maksekeresData[itemKey];
 
   const repairCost = calcRepairCost(itemKey, attributes.durability!);
-  const itemObj = itemList[itemKey];
+  const itemObj = itemList[itemKey] as AttributeItem;
 
   const initialState: State = {
     user,
     itemKey,
+    itemObj,
     makskereInProfile: specialItem,
     repairCost,
     hasRepaired: false,
@@ -151,7 +155,7 @@ const makskere: UsableAttributeItemFunc = async (i, user, itemKey, specialItem) 
       int,
       smallEmbed(
         `Tu salaboji ${bold(itemString(itemObj, null, true))} - ${latiString(repairCost)}\n` +
-          displayAttributes(userAfter.newItem),
+          itemObj.displayAttributes(userAfter.newItem.attributes, false, Date.now()),
         commandColors.izmantot,
       ),
     );

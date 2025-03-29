@@ -10,7 +10,6 @@ import findUser from "@/db/findUser";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
-import { displayAttributes } from "@/utils/strings/displayAttributes";
 import itemString, { itemStringCustom } from "@/utils/strings/itemString";
 import { AttributeItem, NotSellableItem } from "@/types/Item";
 import UserProfile, { ItemAttributes, SpecialItemInProfile } from "@/types/UserProfile";
@@ -23,6 +22,7 @@ type State = {
   itemsInInv: SpecialItemInProfile[];
   itemObj: AttributeItem<ItemAttributes>;
   selectedId: string | null;
+  currTime: number;
 };
 
 const enum ComponentId {
@@ -76,7 +76,7 @@ function view(state: State, i: BaseInteraction) {
             })
             .map((item) => ({
               label: itemStringCustom(state.itemObj, item.attributes?.customName),
-              description: displayAttributes(item, true),
+              description: state.itemObj.displayAttributes(item.attributes, true, state.currTime),
               value: item._id!,
               emoji:
                 (state.itemObj.dynamicEmoji ? state.itemObj.dynamicEmoji(item.attributes) : state.itemObj.emoji()) ||
@@ -119,6 +119,7 @@ export default async function izmantotRunSpecial(
     itemsInInv,
     itemObj,
     selectedId: null,
+    currTime: Date.now(),
   };
 
   const dialogs = new Dialogs(i, initialState, view, "izmantot", { time: 60000 });

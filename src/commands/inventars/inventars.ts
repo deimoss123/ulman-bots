@@ -10,7 +10,6 @@ import itemString from "@/utils/strings/itemString";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import UserProfile, { ItemAttributes, ItemInProfile } from "@/types/UserProfile";
 import Item, { AttributeItem, NotSellableItem } from "@/types/Item";
-import { displayAttributes } from "@/utils/strings/displayAttributes";
 import pardotRun from "@/commands/pardot/pardotRun";
 import { INCREASE_CAP_1 } from "@/items/mugursoma";
 import { INCREASE_CAP_2 } from "@/items/divaina_mugursoma";
@@ -72,11 +71,11 @@ export function attributeItemSort(
   return 0;
 }
 
-function mapItems({ items, specialItems }: UserProfile) {
+function mapItems({ items, specialItems }: UserProfile, currTime: number) {
   const itemTypesInInv = new Set<ItemType>();
 
   const specialItemsFields = specialItems
-    .sort((a, b) => {
+    .toSorted((a, b) => {
       const itemA = itemList[a.name] as AttributeItem<ItemAttributes> | NotSellableItem;
       const itemB = itemList[b.name] as AttributeItem<ItemAttributes> | NotSellableItem;
 
@@ -111,7 +110,7 @@ function mapItems({ items, specialItems }: UserProfile) {
         value:
           `${itemTypes[currentItemType].emoji()} ` +
           `${currentItemType === "not_sellable" ? "??? lati" : latiString(value)}\n` +
-          displayAttributes(specialItem),
+          item.displayAttributes(attributes, false, currTime),
         inline: true,
       };
     });
@@ -187,7 +186,9 @@ const inventars: Command = {
       return intReply(i, ephemeralReply("Tu nevari apskatīt Valsts Bankas inventāru"));
     }
 
-    const { fields, itemTypesInv } = mapItems(targetUser);
+    const currTime = Date.now();
+
+    const { fields, itemTypesInv } = mapItems(targetUser, currTime);
 
     const totalPages = Math.ceil(fields.length / INV_PAGE_SIZE);
 

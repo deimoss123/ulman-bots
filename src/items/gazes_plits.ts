@@ -18,6 +18,8 @@ import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import itemString from "@/utils/strings/itemString";
 import { BaseInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } from "discord.js";
 import mongoTransaction from "@/utils/mongoTransaction";
+import millisToReadableTime from "@/utils/strings/millisToReadableTime";
+import wrapString from "@/utils/strings/wrapString";
 
 export type GazesPlitsActionType = "" | "cook" | "boil_ievarijums" | "boil_special_ievarijums";
 
@@ -416,6 +418,52 @@ const gazes_plits = item<AttributeItem<Attributes> & TirgusItem>({
   defaultAttributes: () => ({
     actionType: "",
   }),
+  displayAttributes: (attr, inline, currTime) => {
+    const { actionType } = attr;
+
+    if (actionType === "boil_ievarijums") {
+      const boilIevarijums = attr.boilIevarijums!;
+
+      if (boilIevarijums.boilStarttime + boilIevarijums.boilDuration < currTime) {
+        return "Ievārījums ir izvārīts!";
+      }
+
+      let str = "Vāra ievārījumu...\n";
+
+      if (!inline) {
+        str +=
+          Object.entries(boilIevarijums.berries)
+            .map(([name, amount]) => `${amount} ${itemList[name].emoji() || "❓"}`)
+            .join(", ") + "\n";
+      }
+
+      const millis = millisToReadableTime(boilIevarijums.boilStarttime + boilIevarijums.boilDuration - currTime);
+
+      str += `Gatavs pēc: ${wrapString(millis, "", !inline)}`;
+
+      return str;
+    }
+
+    return "Tukšs!";
+
+    /*
+      const { output, time } = cookableItems.find(({ input }) => input === cookingItem)!;
+      const timeWhenDone = cookingStartedTime! + time;
+      const isDoneCooking = timeWhenDone < currTime;
+
+      const itemStr = (key: ItemKey) => (inline ? capitalizeFirst(itemList[key].nameNomVsk) : `**${itemString(key)}**`);
+
+      if (isDoneCooking) {
+        return `Izcepts: ${itemStr(output)}`;
+      }
+
+      return (
+        `Cepjas: ${itemStr(cookingItem)}` +
+        (inline ? `, ` : '\n') +
+        `Gatavs pēc: ${inline ? '' : '`'}${millisToReadableTime(timeWhenDone - currTime)}${inline ? '' : '`'}`
+      );
+      */
+  },
   sortBy: { actionType: -1 },
   use,
 });

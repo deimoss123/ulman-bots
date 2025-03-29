@@ -14,7 +14,6 @@ import setStats from "@/db/stats/setStats";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
-import { displayAttributes } from "@/utils/strings/displayAttributes";
 import itemString, { itemStringCustom } from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import { AttributeItem } from "@/types/Item";
@@ -25,10 +24,10 @@ import { attributeItemSort } from "@/commands/inventars/inventars";
 import { PIRKT_PARDOT_NODOKLIS } from "@/commands/pardot/pardot";
 import { Dialogs } from "@/utils/dialogs";
 import mongoTransaction from "@/utils/mongoTransaction";
+import commandColors from "@/utils/commandColors";
 
 type State = {
   user: UserProfile;
-  color: number;
   itemsInInv: SpecialItemInProfile[];
   itemObj: AttributeItem<ItemAttributes>;
   selectedIds: string[];
@@ -36,7 +35,33 @@ type State = {
   didSell: boolean;
   soldItems: SpecialItemInProfile[];
   soldValue: number;
+
+  currTime: number;
 };
+
+function soldEmbed(
+  i: BaseInteraction,
+  user: UserProfile,
+  itemObj: AttributeItem,
+  soldItems: SpecialItemInProfile[],
+  soldValue: number,
+  currTime: number,
+) {
+  return mainEmbed({
+    i,
+    title: "Tu pārdevi:",
+    color: commandColors.pardot,
+    fields: [
+      ...soldItems.map((item) => ({
+        name: itemString(itemList[item.name], null, false, item.attributes),
+        value: itemObj.displayAttributes(item.attributes, false, currTime),
+        inline: false,
+      })),
+      { name: "Tu ieguvi", value: latiString(soldValue, true), inline: true },
+      { name: "Tev tagad ir", value: latiString(user.lati), inline: true },
+    ],
+  });
+}
 
 const enum ComponentId {
   Select = "pardot_special_select",
@@ -45,7 +70,7 @@ const enum ComponentId {
 
 function view(state: State, i: BaseInteraction) {
   if (state.didSell) {
-    return soldEmbed(i, state.user, state.soldItems, state.soldValue, state.color);
+    return soldEmbed(i, state.user, state.itemObj, state.soldItems, state.soldValue, state.currTime);
   }
 
   const { itemObj, itemsInInv, selectedIds } = state;
@@ -76,7 +101,7 @@ function view(state: State, i: BaseInteraction) {
                   "dynamicValue" in itemObj && itemObj.dynamicValue
                     ? itemObj.dynamicValue(item.attributes)
                     : itemObj.value,
-                )} | ` + displayAttributes(item, true),
+                )} | ` + itemObj.displayAttributes(item.attributes, true, state.currTime),
               value: item._id!,
               emoji: (itemObj.dynamicEmoji ? itemObj.dynamicEmoji(item.attributes) : itemObj.emoji()) || "❓",
               default: !!selectedIds.length && selectedIds!.includes(item._id!),
@@ -94,34 +119,11 @@ function view(state: State, i: BaseInteraction) {
 
   return mainEmbed({
     i,
-    color: state.color,
+    color: commandColors.pardot,
     description:
       `Tavā inventārā ir **${itemString(itemObj, itemsInInv.length)}**\n` +
       `No saraksta izvēlies vienu vai vairākas mantas ko pārdot`,
     components,
-  });
-}
-
-function soldEmbed(
-  i: BaseInteraction,
-  user: UserProfile,
-  soldItems: SpecialItemInProfile[],
-  soldValue: number,
-  color: number,
-) {
-  return mainEmbed({
-    i,
-    title: "Tu pārdevi:",
-    color,
-    fields: [
-      ...soldItems.map((item) => ({
-        name: itemString(itemList[item.name], null, false, item.attributes),
-        value: displayAttributes(item),
-        inline: false,
-      })),
-      { name: "Tu ieguvi", value: latiString(soldValue, true), inline: true },
-      { name: "Tev tagad ir", value: latiString(user.lati), inline: true },
-    ],
   });
 }
 
@@ -130,12 +132,13 @@ export default async function pardotRunSpecial(
   user: UserProfile,
   itemKey: ItemKey,
   itemsInInv: SpecialItemInProfile[],
-  embedColor: number,
 ) {
   const userId = i.user.id;
   const guildId = i.guildId!;
 
   const itemObj = itemList[itemKey] as AttributeItem<ItemAttributes>;
+
+  const currTime = Date.now();
 
   if (itemsInInv.length === 1) {
     const soldValue =
@@ -154,12 +157,11 @@ export default async function pardotRunSpecial(
 
     if (!ok) return intReply(i, errorEmbed);
 
-    return intReply(i, soldEmbed(i, values[3], itemsInInv, soldValue, embedColor));
+    return intReply(i, soldEmbed(i, values[3], itemObj, itemsInInv, soldValue, currTime));
   }
 
   const initialState: State = {
     user,
-    color: embedColor,
     itemsInInv,
     itemObj,
     selectedIds: [],
@@ -167,6 +169,8 @@ export default async function pardotRunSpecial(
     didSell: false,
     soldItems: [],
     soldValue: 0,
+
+    currTime,
   };
 
   const dialogs = new Dialogs(i, initialState, view, "pardot", { time: 60000 });

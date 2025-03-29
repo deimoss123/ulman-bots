@@ -9,7 +9,6 @@ import setFishing from "@/db/setFishing";
 import commandColors from "@/utils/commandColors";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
-import { displayAttributes } from "@/utils/strings/displayAttributes";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import xpAddedEmbed from "@/utils/embeds/xpAddedEmbed";
@@ -24,6 +23,7 @@ import syncFishing from "@/commands/zvejot/syncFishing";
 import { Dialogs } from "@/utils/dialogs";
 import zvejotView, { ComponentId, ZvejotState } from "@/commands/zvejot/zvejotView";
 import mongoTransaction from "@/utils/mongoTransaction";
+import { AttributeItem } from "@/types/Item";
 
 export function calcRepairCost(itemKey: ItemKey, usesLeft: number) {
   const price = itemList[itemKey].value * 2;
@@ -211,13 +211,15 @@ const zvejot: Command = {
           state.selectedFishingRodId = null;
           state.user = values[values.length - 1];
 
+          const itemObj = itemList[selectedRod] as AttributeItem;
+
           intReply(int, {
             embeds: [
               new EmbedBuilder()
                 .setDescription("Tavam inventāram tika pievienota:")
                 .setFields({
-                  name: itemString(itemList[selectedRod]),
-                  value: displayAttributes(specialItemObj),
+                  name: itemString(itemObj),
+                  value: itemObj.displayAttributes(specialItemObj.attributes, false, Date.now()),
                 })
                 .setColor(this.color),
             ],

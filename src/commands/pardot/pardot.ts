@@ -84,7 +84,7 @@ const pardot: Command = {
       const itemToSellId = i.options.getString("nosaukums")!;
       const amountToSell = i.options.getInteger("daudzums") ?? 1;
 
-      const validateRes = await pardotValidate(i, user, itemToSellId, amountToSell, this.color);
+      const validateRes = await pardotValidate(i, user, itemToSellId, amountToSell);
       if (!validateRes) return;
 
       const { key, amount, item } = validateRes;
@@ -102,7 +102,7 @@ const pardot: Command = {
 
       if (!ok) return intReply(i, errorEmbed);
 
-      intReply(i, pardotEmbed(i, values[2], itemsToSell, soldItemsValue));
+      intReply(i, pardotEmbed(i, values[2], itemsToSell, soldItemsValue, Date.now()));
     }
   },
 };

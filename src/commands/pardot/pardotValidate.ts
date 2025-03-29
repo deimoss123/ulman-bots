@@ -20,7 +20,6 @@ async function pardotValidate(
   user: UserProfile,
   itemToSellKey: string,
   amountToSell: number,
-  embedColor: number,
 ): Promise<PardotValidateReturn | undefined> {
   if (itemToSellKey === "no-items-inv") {
     await intReply(i, emptyInvEmbed());
@@ -47,7 +46,7 @@ async function pardotValidate(
       return;
     }
 
-    await pardotRunSpecial(i, user, itemToSellKey, specialItemsInv, embedColor);
+    await pardotRunSpecial(i, user, itemToSellKey, specialItemsInv);
     return;
   }
 

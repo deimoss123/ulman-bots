@@ -10,9 +10,11 @@ import mainEmbed from "@/utils/embeds/mainEmbed";
 import smallEmbed from "@/utils/embeds/smallEmbed";
 import emoji from "@/utils/emoji";
 import intReply from "@/utils/intReply";
-import { ItemKey } from "@/utils/itemList";
+import itemList, { ItemKey } from "@/utils/itemList";
+import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 import itemString from "@/utils/strings/itemString";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
+import wrapString from "@/utils/strings/wrapString";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
 
 //šis pavisam noteikti nebūs labs kods (ja salīdzina ar pārējo)
@@ -286,6 +288,28 @@ const ogu_krums = item<AttributeItem<Attributes>>({
     iestadits: currTime,
     apliesanasReizes: getRandomApliesanasReizes(),
   }),
+  displayAttributes: (attributes, inline, currTime) => {
+    const item = { name: "ogu_krums", attributes };
+    const { maxBerries, berryType } = attributes;
+
+    const { cikNakamaOga, sobridOgas } = dabutOguInfo(item, currTime);
+    const { izaudzis, izaugsanasProg, vajagApliet } = dabutKrumaInfo(item, currTime);
+    const cikOgasRadit = Math.min(sobridOgas, maxBerries!);
+
+    if (izaudzis) {
+      return (
+        `Audzē - ${wrapString(capitalizeFirst(itemList[berryType].nameAkuDsk), "**", !inline)} ` +
+        `${cikOgasRadit}/${maxBerries} ` +
+        `${sobridOgas < maxBerries! ? millisToReadableTime(cikNakamaOga) : ""}`
+      );
+    }
+
+    if (vajagApliet) {
+      return `Krūms ir izslāpis! 🥵 ${izaugsanasProg}%`;
+    }
+
+    return `Krūms vēl aug... ${wrapString(izaugsanasProg, "**", !inline)}%, `;
+  },
   use,
   sortBy: { berryType: 1 },
 });

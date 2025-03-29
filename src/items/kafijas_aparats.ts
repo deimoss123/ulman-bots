@@ -15,6 +15,7 @@ import itemString from "@/utils/strings/itemString";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import mongoTransaction from "@/utils/mongoTransaction";
 import izmantotTitle from "@/utils/strings/izmantotTitle";
+import wrapString from "@/utils/strings/wrapString";
 
 // 24 stundas
 export const KAFIJAS_APARATS_COOLDOWN = 86_400_000;
@@ -164,6 +165,14 @@ const kafijas_aparats = item<AttributeItem<Attributes> & TirgusItem>({
   defaultAttributes: () => ({
     lastUsed: 0,
   }),
+  displayAttributes: ({ lastUsed }, inline, currTime) => {
+    if (currTime - lastUsed >= KAFIJAS_APARATS_COOLDOWN) {
+      return wrapString("Kafija gatava!", "**", !inline);
+    }
+
+    const timeStr = millisToReadableTime(KAFIJAS_APARATS_COOLDOWN - currTime + lastUsed);
+    return `Gatavo: ${wrapString(timeStr, "`", !inline)}`;
+  },
   sortBy: { lastUsed: -1 },
   use,
   useMany,

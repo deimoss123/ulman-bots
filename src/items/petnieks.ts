@@ -19,6 +19,8 @@ import itemString from "@/utils/strings/itemString";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
 import { useDifferentItemSelectMenu, useDifferentItemHandler } from "@/utils/useDifferentItem";
 import { BaseInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
+import wrapString from "@/utils/strings/wrapString";
+import capitalizeFirst from "@/utils/strings/capitalizeFirst";
 
 function getRandFreeSpin() {
   const spins: ItemKey[] = ["brivgriez10", "brivgriez25", "brivgriez50"];
@@ -318,6 +320,28 @@ const petnieks = item<
     foundItemKey: getRandFreeSpin(),
     hat: "",
   }),
+  displayAttributes: ({ foundItemKey, hat, lastUsed }, inline, currTime) => {
+    let str = "";
+
+    if (currTime - lastUsed >= PETNIEKS_COOLDOWN) {
+      str += wrapString("Nopētījis: ", "**", !inline);
+
+      if (inline) str += itemList[foundItemKey].nameAkuVsk;
+      else str += itemList[foundItemKey].emoji();
+    } else {
+      const timeStr = millisToReadableTime(PETNIEKS_COOLDOWN - currTime + lastUsed);
+      str += `Pēta: ${wrapString(timeStr, "`", !inline)}`;
+    }
+
+    if (hat) {
+      str += `${inline ? ", " : "\n"}Cepure: `;
+
+      if (inline) str += capitalizeFirst(itemList[hat].nameNomVsk);
+      else str += itemList[hat].emoji();
+    }
+
+    return str;
+  },
   sortBy: { lastUsed: -1 },
   use,
   useMany,

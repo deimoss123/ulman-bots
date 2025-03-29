@@ -32,6 +32,7 @@ import {
   TextInputStyle,
   time,
 } from "discord.js";
+import wrapString from "@/utils/strings/wrapString";
 
 export const kakisFedState: {
   time: number;
@@ -547,6 +548,27 @@ const kakis = item<AttributeItem<Attributes> & TirgusItem>({
     isCooked: false,
     hat: "",
   }),
+  displayAttributes: ({ hat, fedUntil, createdAt }, inline, currTime) => {
+    let str = "";
+
+    if (fedUntil < currTime) {
+      str += `${wrapString("MIRIS", ["_**", "**_"], !inline)} ⚰️`;
+    } else {
+      str +=
+        `Vecums: ${wrapString(millisToReadableTime(currTime - createdAt), "**", !inline)}` +
+        (inline ? ", " : "\n") +
+        wrapString(kakisFedState.find((s) => fedUntil! - currTime > s.time)!.name, "**", !inline);
+    }
+
+    if (hat) {
+      str += `${inline ? ", " : "\n"}Cepure: `;
+
+      if (inline) str += capitalizeFirst(itemList[hat].nameNomVsk);
+      else str += itemList[hat].emoji();
+    }
+
+    return str;
+  },
   sortBy: { createdAt: -1 },
   use,
 });

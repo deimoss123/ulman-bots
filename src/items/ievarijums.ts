@@ -67,6 +67,7 @@ const ievarijums = item<AttributeItem<Attributes>>({
     ogas: {},
     distance: 0,
   }),
+  displayAttributes: () => "...",
   sortBy: { distance: 1 },
   use: (i) => intReply(i, "TODO"),
 });

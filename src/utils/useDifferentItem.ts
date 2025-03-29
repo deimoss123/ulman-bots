@@ -4,7 +4,6 @@ import itemList, { ItemKey } from "@/utils/itemList";
 import { AttributeItem } from "@/types/Item";
 import { attributeItemSort } from "@/commands/inventars/inventars";
 import itemString, { itemStringCustom } from "@/utils/strings/itemString";
-import { displayAttributes } from "@/utils/strings/displayAttributes";
 import { DialogsOnClickCallbackReturn } from "@/utils/dialogs";
 import intReply from "@/utils/intReply";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
@@ -37,7 +36,7 @@ export function useDifferentItemSelectMenu(
           })
           .map((item) => ({
             label: itemStringCustom(itemObj, item.attributes?.customName),
-            description: displayAttributes(item, true),
+            description: itemObj.displayAttributes(item.attributes, true, Date.now()),
             value: item._id!,
             emoji: (itemObj.dynamicEmoji ? itemObj.dynamicEmoji(item.attributes) : itemObj.emoji()) || "❓",
           })),

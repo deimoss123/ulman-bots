@@ -8,7 +8,6 @@ import commandColors from "@/utils/commandColors";
 import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
-import { displayAttributes } from "@/utils/strings/displayAttributes";
 import itemString from "@/utils/strings/itemString";
 import latiString from "@/utils/strings/latiString";
 import millisToReadableTime from "@/utils/strings/millisToReadableTime";
@@ -17,6 +16,8 @@ import itemList from "@/utils/itemList";
 import intReply from "@/utils/intReply";
 import { statusList } from "@/commands/profils";
 import emoji from "@/utils/emoji";
+import { AttributeItem } from "@/types/Item";
+import mongoTransaction from "@/utils/mongoTransaction";
 
 const ZAGT_MIN_LATI = 100;
 const ZAGT_MAX_LATI = 1000;
@@ -72,7 +73,8 @@ const zagt: Command = {
     const [user, targetUser] = await Promise.all([findUser(i.user.id, guildId), findUser(target.id, guildId)]);
     if (!user || !targetUser) return intReply(i, errorEmbed);
 
-    const currentTime = Date.now();
+    const currTime = Date.now();
+    const itemObj = itemList.naudas_maiss as AttributeItem;
 
     // zagt no valsts bankas
     if (target.id === i.client.user!.id) {
@@ -89,21 +91,27 @@ const zagt: Command = {
       if (!maiss) {
         return intReply(
           i,
-          ephemeralReply(`Lai apzagtu Valsts banku tev ir nepieciešams tukšs **${itemString(itemList.naudas_maiss)}**`),
+          ephemeralReply(`Lai apzagtu Valsts banku tev ir nepieciešams tukšs **${itemString(itemObj)}**`),
         );
       }
 
       const maxSteal = targetUser.lati > MAX_BANKA_STEAL ? MAX_BANKA_STEAL : targetUser.lati;
       const stolenAmount = Math.floor(Math.random() * (maxSteal - MIN_BANKA_STEAL)) + MIN_BANKA_STEAL;
 
-      const [userAfter, bankaUser] = await Promise.all([
-        editItemAttribute(i.user.id, guildId, maiss._id!, { latiCollected: stolenAmount }),
-        addLati(i.client.user!.id, guildId, -stolenAmount),
-      ]);
-      if (!userAfter || !bankaUser) return intReply(i, errorEmbed);
-
       await addTimeCooldown(i.user.id, guildId, "zagt");
       await setStats(i.user.id, guildId, { stolenFromBanka: stolenAmount });
+
+      const { ok, values } = await mongoTransaction((session) => [
+        () => addLati(i.client.user!.id, guildId, -stolenAmount, session),
+        () => editItemAttribute(i.user.id, guildId, maiss._id!, { latiCollected: stolenAmount }, session),
+        () => addTimeCooldown(i.user.id, guildId, "zagt", session),
+        () => setStats(i.user.id, guildId, { stolenFromBanka: stolenAmount }, session),
+      ]);
+
+      if (!ok) return intReply(i, errorEmbed);
+
+      const { newItem } = values[1];
+      const bankaAfter = values[0];
 
       return intReply(
         i,
@@ -114,11 +122,11 @@ const zagt: Command = {
           description:
             `No Valsts bankas tu nozagi ${latiString(stolenAmount, true, true)}\n\n` +
             `Tavam inventāram tika pievienots:\n` +
-            `**${itemString(itemList.naudas_maiss)}** (${displayAttributes(userAfter.newItem)})`,
+            `**${itemString(itemObj)}** (${itemObj.displayAttributes(newItem.attributes, false, currTime)})`,
           fields: [
             {
               name: "Valsts bankai palika",
-              value: latiString(bankaUser.lati),
+              value: latiString(bankaAfter.lati),
               inline: true,
             },
           ],
@@ -126,11 +134,11 @@ const zagt: Command = {
       );
     }
 
-    if (targetUser.status.aizsargats > currentTime) {
+    if (targetUser.status.aizsargats > currTime) {
       return intReply(i, ephemeralReply(`Tu nevari zagt kamēr ${target} ir **"${statusList.aizsargats}"** statuss`));
     }
 
-    if (user.status.aizsargats > currentTime) {
+    if (user.status.aizsargats > currTime) {
       return intReply(i, ephemeralReply(`Tu nevari zagt kamēr tev ir **"${statusList.aizsargats}"** statuss`));
     }
 
@@ -159,18 +167,22 @@ const zagt: Command = {
 
     const stolenAmount = Math.floor(Math.random() * (maxSteal - ZAGT_MIN_LATI)) + ZAGT_MIN_LATI;
 
-    const hasLaupitajs = user.status.laupitajs > currentTime;
+    const hasLaupitajs = user.status.laupitajs > currTime;
     const stealChance = hasLaupitajs ? NAZIS_STEAL_CHANCE : BASE_STEAL_CHANCE;
     const didSteal = Math.random() < stealChance;
+    const statsToAdd = didSteal ? { stolenLati: stolenAmount } : { lostStealingLati: stolenAmount };
 
-    await addTimeCooldown(i.user.id, guildId, "zagt");
-
-    const [userAfter, targetUserAfter] = await Promise.all([
-      addLati(i.user.id, guildId, stolenAmount * (didSteal ? 1 : -1)),
-      addLati(target.id, guildId, stolenAmount * (didSteal ? -1 : 1)),
-      setStats(i.user.id, guildId, didSteal ? { stolenLati: stolenAmount } : { lostStealingLati: stolenAmount }),
+    const { ok, values } = await mongoTransaction((session) => [
+      () => addTimeCooldown(i.user.id, guildId, "zagt", session),
+      () => addLati(i.user.id, guildId, stolenAmount * (didSteal ? 1 : -1), session),
+      () => addLati(target.id, guildId, stolenAmount * (didSteal ? -1 : 1), session),
+      () => setStats(i.user.id, guildId, statsToAdd, session),
     ]);
-    if (!userAfter || !targetUserAfter) return intReply(i, errorEmbed);
+
+    if (!ok) return intReply(i, errorEmbed);
+
+    const userAfter = values[1];
+    const targetUserAfter = values[2];
 
     const text = didSteal
       ? `Tev izdevās nozagt ${latiString(stolenAmount, true, true)} no ${target}`

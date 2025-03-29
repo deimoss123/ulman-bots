@@ -4,6 +4,8 @@ import mainEmbed from "@/utils/embeds/mainEmbed";
 import emoji from "@/utils/emoji";
 import intReply from "@/utils/intReply";
 import izmantotTitle from "@/utils/strings/izmantotTitle";
+import latiString from "@/utils/strings/latiString";
+import wrapString from "@/utils/strings/wrapString";
 
 type Attributes = {
   latiCollected: number;
@@ -32,6 +34,13 @@ const naudas_maiss = item<AttributeItem<Attributes> & TirgusItem>({
   defaultAttributes: () => ({
     latiCollected: 0,
   }),
+  displayAttributes: ({ latiCollected }, inline) => {
+    if (latiCollected) {
+      return `Maisā ir ${latiString(latiCollected, false, !inline)}`;
+    }
+
+    return wrapString("Maiss ir tukšs", "**", !inline);
+  },
   sortBy: { latiCollected: 1 },
   use: async (i) => {
     // prettier-ignore
