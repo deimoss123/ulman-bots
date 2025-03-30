@@ -1,4 +1,3 @@
-import { AkcijaId } from "@/commands/akcijas/akcijasList";
 import { ItemKey } from "@/utils/itemList";
 import { GazesPlitsActionType } from "@/items/gazes_plits";
 import { BerryProperties } from "@/items/shared/oga";
@@ -110,32 +109,6 @@ interface UserTirgus {
   itemsBought: ItemKey[];
 }
 
-export const enum StocksTransactionType {
-  BUY = 0,
-  SELL = 1,
-}
-
-interface UserStocksTransaction {
-  akcijaId: AkcijaId;
-  // millis
-  timestamp: number;
-  type: StocksTransactionType;
-  // akciju daudzums
-  amount: number;
-  // tā laika akcijas cena
-  price: number;
-}
-
-interface UserStocks {
-  owned: {
-    latvijasPiens: number;
-    latvijasRadio: number;
-    martinsonaVelo: number;
-    bachaKazino: number;
-  };
-  transactions: UserStocksTransaction[];
-}
-
 interface UserProperties {
   metalluznuNodosanasPunkts: {
     lastTemp: number;
@@ -151,7 +124,6 @@ interface UserProfile {
   xp: number;
   level: number;
   jobPosition: string | null;
-  adventeClaimedDate: string | null;
 
   itemCap: number;
   items: ItemInProfile[];
@@ -171,8 +143,6 @@ interface UserProfile {
   fishing: UserFishing;
 
   tirgus: UserTirgus;
-
-  stocks: UserStocks;
 
   properties: UserProperties;
 }

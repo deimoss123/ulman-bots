@@ -112,11 +112,6 @@ export const userSchema = new Schema<UserProfile>({
     default: null,
   },
 
-  adventeClaimedDate: {
-    type: String,
-    default: null,
-  },
-
   itemCap: {
     type: Number,
     default: 50,
@@ -233,27 +228,6 @@ export const userSchema = new Schema<UserProfile>({
     },
     itemsBought: {
       type: [String],
-      default: [],
-    },
-  },
-
-  stocks: {
-    owned: {
-      latvijasPiens: NumberDefaultZero,
-      latvijasRadio: NumberDefaultZero,
-      martinsonaVelo: NumberDefaultZero,
-      bachaKazino: NumberDefaultZero,
-    },
-    transactions: {
-      type: [
-        {
-          akcijaId: String,
-          timestamp: Number,
-          type: Number,
-          amount: Number,
-          price: Number,
-        },
-      ],
       default: [],
     },
   },

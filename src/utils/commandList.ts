@@ -25,7 +25,6 @@ import statistika from "@/commands/statistika/statistika";
 import palidziba from "@/commands/palidziba/palidziba";
 import rulete from "@/commands/rulete/rulete";
 import pabalsts from "@/commands/pabalsts";
-import izsole from "@/commands/_izsole/izsole";
 import iestatit from "@/commands/_iestatit/iestatit";
 import ipasumi from "@/commands/ipasumi/ipasumi";
 // import kamPieder from './economyCommands/kamPieder/kamPieder';
@@ -36,7 +35,6 @@ export const commandList: Command[] = [
   _addItem,
   _addXP,
   _clearCache,
-  izsole,
   iestatit,
 
   maks,
