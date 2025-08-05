@@ -18,28 +18,28 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^22.4.0",
+    "@types/node": "^22.17.0",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
-    "bun-types": "^1.1.24",
-    "eslint": "^8.57.0",
+    "bun-types": "^1.2.19",
+    "eslint": "^8.57.1",
     "eslint-config-node": "^4.1.0",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "^9.1.2",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "prettier": "^3.3.3",
-    "typescript": "^5.5.4"
+    "eslint-plugin-prettier": "^5.5.3",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@discordjs/rest": "^2.3.0",
-    "@napi-rs/canvas": "^0.1.68",
-    "axios": "^1.7.4",
+    "@discordjs/rest": "^2.5.1",
+    "@napi-rs/canvas": "^0.1.76",
+    "axios": "^1.11.0",
     "chalk": "4.1.2",
-    "chart.js": "^3.5.1",
-    "discord-api-types": "^0.37.94",
-    "discord.js": "^14.15.3",
+    "chart.js": "^3.9.1",
+    "discord-api-types": "^0.37.120",
+    "discord.js": "^14.21.0",
     "fast-fuzzy": "^1.12.0",
-    "mongoose": "^8.5.3"
+    "mongoose": "^8.17.0"
   },
   "eslintIgnore": [
     "node_modules",

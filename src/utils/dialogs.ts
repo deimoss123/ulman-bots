@@ -1,8 +1,10 @@
 import {
-  ActionRowBuilder,
   AnySelectMenuInteraction,
+  APIComponentInContainer,
+  APIComponentInMessageActionRow,
+  APITextDisplayComponent,
+  APITextInputComponent,
   BaseInteraction,
-  ButtonBuilder,
   ButtonInteraction,
   ComponentType,
   InteractionEditReplyOptions,
@@ -10,8 +12,8 @@ import {
   Message,
   MessageFlags,
   RepliableInteraction,
-  StringSelectMenuBuilder,
   StringSelectMenuInteraction,
+  TopLevelComponent,
 } from "discord.js";
 import intReply from "@/utils/intReply";
 import chalk from "chalk";
@@ -229,34 +231,62 @@ export class Dialogs<T extends { [key: string]: any }> {
         return;
       }
 
-      // atiestata componentus
-
-      // pārbauda ziņai ir pogas
+      // pārbauda ziņai ir komponenti
       if (!currentMessage?.components || !currentMessage.components.length) return;
 
       let areAllComponentsAlreadyDisabled = true;
 
-      const editedMessageComponents: ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] = [];
+      const newComponents: TopLevelComponent[] = [];
 
-      // iziet cauri visām pogām/izvēlnēm message objektā un atspējo tās
-      currentMessage.components.forEach((row) => {
-        const editedRow = new ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>();
-        row.components.forEach((component) => {
-          if (!component.data.disabled) areAllComponentsAlreadyDisabled = false;
-
-          if (component.type === ComponentType.Button) {
-            editedRow.addComponents(ButtonBuilder.from(component).setDisabled(true));
-          } else if (component.type === ComponentType.StringSelect) {
-            editedRow.addComponents(StringSelectMenuBuilder.from(component).setDisabled(true));
-          }
-        });
-        editedMessageComponents.push(editedRow);
+      currentMessage.components.forEach((component) => {
+        const newComponent = component.toJSON();
+        if ("components" in newComponent) {
+          areAllComponentsAlreadyDisabled = innerDisable(newComponent.components, areAllComponentsAlreadyDisabled);
+        }
+        newComponents.push(newComponent as TopLevelComponent);
       });
 
       // rediģē ziņu ar atspējotajām pogām, ja tās jau nav atspējotas
       if (!areAllComponentsAlreadyDisabled) {
-        await this.primaryInteraction.editReply({ components: editedMessageComponents }).catch(console.log);
+        this.primaryInteraction.editReply({ components: newComponents }).catch(console.log);
       }
     });
   }
+}
+
+function innerDisable(
+  components:
+    | APIComponentInContainer[]
+    | APITextDisplayComponent[]
+    | (APIComponentInMessageActionRow | APITextInputComponent)[],
+  areAlreadyDisabled: boolean,
+) {
+  let areDisabled = areAlreadyDisabled;
+
+  for (const component of components) {
+    if ("components" in component) {
+      const res = innerDisable(component.components, areDisabled);
+      if (!res) areDisabled = false;
+    }
+
+    if (
+      [
+        ComponentType.Button,
+        ComponentType.StringSelect,
+        ComponentType.ChannelSelect,
+        ComponentType.UserSelect,
+        ComponentType.RoleSelect,
+        ComponentType.MentionableSelect,
+      ].includes(component.type)
+    ) {
+      // @ts-ignore aizveries
+      if (!component.disabled) {
+        // @ts-ignore aizveries
+        component.disabled = true;
+        areDisabled = false; 
+      }
+    }
+  }
+
+  return areDisabled;
 }

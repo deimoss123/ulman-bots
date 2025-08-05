@@ -1,16 +1,14 @@
 import {
-  ActionRowBuilder,
   ButtonBuilder,
   ButtonInteraction,
   ButtonStyle,
   ChatInputCommandInteraction,
   ComponentType,
+  TextDisplayBuilder,
 } from "discord.js";
 import addLati from "@/db/addLati";
 import findUser from "@/db/findUser";
 import setStats from "@/db/stats/setStats";
-import commandColors from "@/utils/commandColors";
-import mainEmbed from "@/utils/embeds/mainEmbed";
 import ephemeralReply from "@/utils/embeds/ephemeralReply";
 import errorEmbed from "@/utils/embeds/errorEmbed";
 import itemString from "@/utils/strings/itemString";
@@ -24,6 +22,7 @@ import emoji from "@/utils/emoji";
 import UserProfile from "@/types/UserProfile";
 import mongoTransaction from "@/utils/mongoTransaction";
 import { Dialogs, DialogsViewFunc } from "@/utils/dialogs";
+import { CommandDisplayBox } from "@/utils/embeds/commandDisplayBox";
 
 const colorsLat: Record<RulColors, string> = {
   black: "melns",
@@ -34,7 +33,7 @@ const colorsLat: Record<RulColors, string> = {
 const rulColor = {
   winBig: 0xc337fa,
   win: 0x4eed54,
-  lose: 0x9d2235,
+  lose: 0xff4230,
 };
 
 const RULETE_MIN_LIKME = 20;
@@ -65,47 +64,49 @@ const view: DialogsViewFunc<State> = (state, i) => {
     if (j === 3) emojisStr += "\n";
   }
 
-  const components = [
-    new ActionRowBuilder<ButtonBuilder>().addComponents(
-      new ButtonBuilder()
-        .setCustomId(ComponentId.SpinAgain)
-        .setDisabled(state.isSpinning || !canSpinAgain)
-        .setStyle(state.isSpinning ? ButtonStyle.Secondary : canSpinAgain ? ButtonStyle.Primary : ButtonStyle.Danger)
-        .setLabel(
-          `Griezt vēlreiz | ` +
-            `${typeof state.position === "number" ? state.position : rulPositions[state.position].shortName} | ` +
-            `${typeof state.likme === "number" ? latiString(state.likme) : state.likme}`,
-        ),
-    ),
-  ];
+  let containerColor;
+  let title = "Griežas...";
+  let displayLati = state.user.lati - state.likmeLati * multiplier;
 
-  return mainEmbed({
-    i,
-    content: "\u200B",
-    color: state.isSpinning
-      ? commandColors.rulete
-      : didWin
-        ? typeof state.position === "number" && state.position === num
-          ? rulColor.winBig
-          : rulColor.win
-        : rulColor.lose,
-    title: state.isSpinning
-      ? "Griežas..."
-      : didWin
-        ? `Tu laimēji ${latiString(state.likmeLati * multiplier, true)} (${multiplier}x)`
-        : "Tu neko nelaimēji (nākamreiz paveiksies)",
-    fields: [
-      {
-        name: state.isSpinning ? "\u200B" : `${num} ${colorsLat[color]}`,
-        value:
-          `${emojisStr}\n\n` +
-          `**Likme:** ${latiString(state.likmeLati)} ${typeof state.likme !== "number" ? `(${state.likme})` : ""} \n` +
-          `**Pozīcija:** ${typeof state.position === "number" ? state.position : rulPositions[state.position as RulPosition].name}`,
-        inline: false,
-      },
-    ],
-    components,
-  });
+  if (!state.isSpinning) {
+    containerColor = didWin
+      ? typeof state.position === "number" && state.position === num
+        ? rulColor.winBig
+        : rulColor.win
+      : rulColor.lose;
+
+    title = didWin
+      ? `Tu laimēji ${latiString(state.likmeLati * multiplier, true)} (${multiplier}x)`
+      : "Tu neko nelaimēji";
+
+    displayLati = state.user.lati;
+  }
+
+  const box = new CommandDisplayBox(i, { title, commandName: "rulete", color: containerColor });
+
+  const text =
+    `${emojisStr} \n` +
+    // `-# ${state.isSpinning ? "_ _" : `${num} ${colorsLat[color]}`} \n` +
+    `-# _ _ \n` +
+    `**Pozīcija:** ${typeof state.position === "number" ? state.position : rulPositions[state.position as RulPosition].name} \n` +
+    `**Likme:** ${latiString(state.likmeLati)} ${typeof state.likme !== "number" ? `(${state.likme})` : ""} \n` +
+    `**Maks:** ${latiString(displayLati)}`;
+
+  box.container.addTextDisplayComponents(new TextDisplayBuilder().setContent(text));
+
+  const btn = new ButtonBuilder()
+    .setCustomId(ComponentId.SpinAgain)
+    .setDisabled(state.isSpinning || !canSpinAgain)
+    .setStyle(state.isSpinning ? ButtonStyle.Secondary : canSpinAgain ? ButtonStyle.Primary : ButtonStyle.Danger)
+    .setLabel(
+      `Griezt vēlreiz | ` +
+        `${typeof state.position === "number" ? state.position : rulPositions[state.position].shortName} | ` +
+        `${typeof state.likme === "number" ? latiString(state.likme) : state.likme}`,
+    );
+
+  box.container.addActionRowComponents((row) => row.addComponents(btn));
+
+  return box.viewReturn();
 };
 
 export default async function ruleteRun(

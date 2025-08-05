@@ -1,14 +1,13 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+import { ButtonBuilder, ButtonStyle, SeparatorBuilder, TextDisplayBuilder } from "discord.js";
 import UserProfile from "@/types/UserProfile";
 import { KazinoLikme } from "@/commands/rulete/rulete";
 import { CalcSpinRes } from "@/commands/feniks/calcSpin";
 import emoji from "@/utils/emoji";
 import latiString from "@/utils/strings/latiString";
 import feniksLaimesti from "@/commands/feniks/feniksLaimesti";
-import commandColors from "@/utils/commandColors";
-import mainEmbed from "@/utils/embeds/mainEmbed";
 import itemList, { ItemKey } from "@/utils/itemList";
 import { DialogsViewFunc } from "@/utils/dialogs";
+import { CommandDisplayBox } from "@/utils/embeds/commandDisplayBox";
 
 export type FeniksState = {
   likme: KazinoLikme;
@@ -55,8 +54,8 @@ const feniksView: DialogsViewFunc<FeniksState> = (state, i) => {
   if (!state.isSpinning) {
     const { emojiGroups, totalMultiplier } = state.spinRes!;
 
-    if (!totalMultiplier) title = "Šodien nepaveicās, tu neko nelaimēji";
-    else title = `Tu laimēji ${latiString(state.wonLati, true)} | ${totalMultiplier}x`;
+    if (!totalMultiplier) title = "Tu neko nelaimēji";
+    else title = `Tu laimēji ${latiString(state.wonLati, true)} (${totalMultiplier}x)`;
 
     const emojiArr: string[] = [];
     const multiplierArr: string[] = [];
@@ -82,65 +81,73 @@ const feniksView: DialogsViewFunc<FeniksState> = (state, i) => {
     multiplierRow = multiplierArr.join("");
   }
 
-  const buttons: ButtonBuilder[] = state.freeSpinsInInv.map(([name, amount]) =>
-    new ButtonBuilder()
-      .setCustomId(FreeSpinIds[name] || "_")
-      .setStyle(state.isSpinning ? ButtonStyle.Secondary : ButtonStyle.Primary)
-      .setLabel(`${itemList[name].nameNomVsk} (${amount})`)
-      .setEmoji(itemList[name].emoji() || "❓")
-      .setDisabled(state.isSpinning),
-  );
+  let color;
 
-  if (!state.isFree) {
-    buttons.unshift(
-      new ButtonBuilder()
-        .setCustomId("feniks_spin_again")
-        .setDisabled(state.isSpinning || !state.canSpinAgain)
-        .setStyle(
-          state.isSpinning ? ButtonStyle.Secondary : state.canSpinAgain ? ButtonStyle.Primary : ButtonStyle.Danger,
-        )
-        .setLabel(`Griezt vēlreiz | ${typeof state.likme === "number" ? latiString(state.likme) : state.likme}`),
-    );
+  let displayLati = state.user.lati - state.wonLati;
+
+  if (!state.isSpinning) {
+    const colors = [
+      [15, 0xf066ff],
+      [8, 0x9966ff],
+      [5, 0x66ffc2],
+      [2, 0x96ff66],
+      [1.1, 0xe0ff66],
+      [0.9, 0xffff66],
+      [0.7, 0xffd166],
+      [0.3, 0xff8f66],
+      [0.05, 0xff7a66],
+      [0, 0xff4230],
+    ];
+
+    color = colors.find(([m]) => state.spinRes.totalMultiplier >= m)?.[1] || colors.at(-1)![1];
+
+    displayLati = state.user.lati;
   }
 
-  const components = buttons.length ? [new ActionRowBuilder<ButtonBuilder>().addComponents(buttons)] : [];
+  const box = new CommandDisplayBox(i, { title, commandName: "feniks", color });
 
-  const m = state.spinRes?.totalMultiplier;
-
-  return mainEmbed({
-    i,
-    title,
-    content: "\u200B",
-    color: state.isSpinning
-      ? commandColors.feniks
-      : m >= 15
-        ? 0xf066ff
-        : m >= 8
-          ? 0x9966ff
-          : m >= 5
-            ? 0x66ffc2
-            : m >= 2
-              ? 0x96ff66
-              : m >= 1.1
-                ? 0xe0ff66
-                : m >= 0.9
-                  ? 0xffff66
-                  : m >= 0.7
-                    ? 0xffd166
-                    : m >= 0.3
-                      ? 0xff8f66
-                      : m > 0
-                        ? 0xff7a66
-                        : 0xff4230,
-    description:
-      (state.isSpinning ? arrow_1_right : arrow_2_right) +
+  const text = new TextDisplayBuilder().setContent(
+    (state.isSpinning ? arrow_1_right : arrow_2_right) +
       `${emptyEmoji}${emojiRow}${emptyEmoji}` +
       (state.isSpinning ? arrow_1_left : arrow_2_left) +
-      `\n${emptyEmoji.repeat(2)}${multiplierRow}${emptyEmoji.repeat(2)}\n\n` +
+      `\n${emptyEmoji.repeat(2)}${multiplierRow}${emptyEmoji.repeat(2)}\n` +
+      `-# _ _ \n` +
       `**Likme:** ${latiString(state.likmeLati)} ` +
-      (state.isFree ? "**(brīvgrieziens)**" : typeof state.likme !== "number" ? `(${state.likme})` : ""),
-    components,
-  });
+      (state.isFree ? "**(brīvgrieziens)**" : typeof state.likme !== "number" ? `(${state.likme})` : "") +
+      `\n**Maks:** ${latiString(displayLati)}`,
+  );
+
+  box.container.addTextDisplayComponents(text);
+
+  if (!state.isFree) {
+    const btn = new ButtonBuilder()
+      .setCustomId(ComponentId.SpinAgain)
+      .setDisabled(state.isSpinning || !state.canSpinAgain)
+      .setStyle(
+        state.isSpinning ? ButtonStyle.Secondary : state.canSpinAgain ? ButtonStyle.Primary : ButtonStyle.Danger,
+      )
+      .setLabel(`Griezt vēlreiz | ${typeof state.likme === "number" ? latiString(state.likme) : state.likme}`);
+
+    box.container.addActionRowComponents((row) => row.addComponents(btn));
+  }
+
+  if (state.freeSpinsInInv.length) {
+    box.container.addSeparatorComponents(new SeparatorBuilder());
+    box.container.addTextDisplayComponents(new TextDisplayBuilder().setContent("Izmantot brīvgriezienu:"));
+
+    const buttons: ButtonBuilder[] = state.freeSpinsInInv.map(([name, amount]) =>
+      new ButtonBuilder()
+        .setCustomId(FreeSpinIds[name])
+        .setStyle(state.isSpinning ? ButtonStyle.Secondary : ButtonStyle.Secondary)
+        .setLabel(`(${amount})`)
+        .setEmoji(itemList[name].emoji() || "❓")
+        .setDisabled(state.isSpinning),
+    );
+
+    box.container.addActionRowComponents((row) => row.addComponents(buttons));
+  }
+
+  return box.viewReturn();
 };
 
 export default feniksView;
